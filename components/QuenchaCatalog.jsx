@@ -3087,3 +3087,6 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
     </div>
   )
 }
+
+// Syntax fix: closes the component/module block that was left open during the previous patch.
+}
