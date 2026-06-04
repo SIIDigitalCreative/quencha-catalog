@@ -308,15 +308,18 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .add-row{display:flex;gap:8px}
 .add-btn{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tr);flex-shrink:0}
 .add-btn:hover{background:var(--tl2)}
-.color-table-head{display:grid;grid-template-columns:122px 1fr 68px 1fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 6px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:4px}
-.color-row{display:grid;grid-template-columns:122px 1fr 68px 1fr 28px;gap:8px;align-items:center;margin-bottom:6px}
-.cp{width:34px;height:34px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:none}
-.multi-swatch-edit{display:flex;align-items:center;gap:4px;flex-wrap:wrap;min-height:34px}
-.swatch-input-wrap{position:relative;width:34px;height:34px;flex-shrink:0}
-.swatch-input-wrap .cp{width:34px;height:34px}
-.swatch-rm{position:absolute;right:-5px;top:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ef4444;color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.swatch-add{width:28px;height:28px;border-radius:6px;border:1.5px dashed rgba(39,153,137,.45);background:rgba(185,220,210,.35);color:var(--tl);font-size:16px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.color-table-head{display:grid;grid-template-columns:210px 1fr 68px 1fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 6px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:4px}
+.color-row{display:grid;grid-template-columns:210px 1fr 68px 1fr 28px;gap:8px;align-items:start;margin-bottom:8px}
+.cp{width:26px;height:26px;border:none;border-radius:6px;cursor:pointer;padding:1px;background:none;flex-shrink:0}
+.multi-swatch-edit{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;min-height:34px}
+.swatch-input-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid rgba(185,220,210,.55);border-radius:7px;padding:3px 6px 3px 3px;flex-shrink:0}
+.swatch-input-wrap .cp{width:26px;height:26px}
+.swatch-rm{position:absolute;right:-6px;top:-6px;width:15px;height:15px;border-radius:50%;border:none;background:#ef4444;color:#fff;font-size:9px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.swatch-add{width:30px;height:30px;border-radius:7px;border:1.5px dashed rgba(39,153,137,.45);background:rgba(185,220,210,.35);color:var(--tl);font-size:16px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);margin-top:2px}
 .swatch-add:hover{background:rgba(45,204,211,.18);border-color:var(--tl)}
+.hex-in{width:78px;border:none;background:transparent;font-family:monospace;font-size:11px;font-weight:700;color:var(--gr);outline:none;text-transform:uppercase;padding:3px 0}
+.hex-in:focus{color:var(--tl)}
+@media(max-width:768px){.color-table-head{grid-template-columns:1fr}.color-table-head span:not(:first-child){display:none}.color-row{grid-template-columns:1fr;gap:6px;background:#fff;border:1px solid rgba(185,220,210,.45);border-radius:8px;padding:10px}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
 .rm-btn{background:none;border:none;cursor:pointer;color:rgba(239,68,68,.5);font-size:16px;transition:var(--tr)}
@@ -468,10 +471,26 @@ function groupColorsByCollection(colors) {
   return ordered
 }
 
+function normalizeHexValue(value, fallback = '') {
+  if (!value) return fallback
+  let v = String(value).trim().replace(/[^0-9a-fA-F#]/g, '')
+  if (!v) return fallback
+  if (!v.startsWith('#')) v = `#${v}`
+  if (/^#[0-9a-fA-F]{3}$/.test(v)) {
+    v = `#${v[1]}${v[1]}${v[2]}${v[2]}${v[3]}${v[3]}`
+  }
+  return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : fallback
+}
+
+function extractHexValues(value) {
+  const matches = String(value || '').match(/#?[0-9a-fA-F]{6}|#?[0-9a-fA-F]{3}/g) || []
+  return matches.map(v => normalizeHexValue(v)).filter(Boolean)
+}
+
 function getColorHexes(color) {
-  const hexes = Array.isArray(color?.hexes) ? color.hexes.filter(Boolean) : []
+  const hexes = Array.isArray(color?.hexes) ? color.hexes.map(h => normalizeHexValue(h)).filter(Boolean) : []
   if (hexes.length) return hexes
-  return [color?.hex || '#B9DCD2']
+  return [normalizeHexValue(color?.hex, '#B9DCD2')]
 }
 
 function normalizeColorVariant(color) {
@@ -1010,11 +1029,15 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── API HELPERS ──
   const apiCreateProduct = useCallback(async (product) => {
-    await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) }).catch(console.error)
+    const res = await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) })
+    if (!res.ok) throw new Error('Create product failed')
+    return res.json().catch(() => product)
   }, [])
 
   const apiSaveProduct = useCallback(async (id, data) => {
-    await fetch('/api/products/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(console.error)
+    const res = await fetch('/api/products/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) })
+    if (!res.ok) throw new Error('Save product failed')
+    return res.json().catch(() => data)
   }, [])
 
   // ── IMAGE UPLOAD via Vercel Blob ──
@@ -1095,25 +1118,44 @@ ${message.trim()}` : 'Message / Notes:',
     setEditOpen(true)
   }
 
-  const saveProduct = () => {
+  const saveProduct = async () => {
     if (!ef.name.trim()) { alert('Product name is required.'); return }
     const srp = parseFloat(ef.srp)
     if (!srp || srp <= 0) { alert('Valid price is required.'); return }
-    const data = { ...ef, srp, packing: parseInt(ef.packing) || 0, dimensions: ef.dimensions, barcode: ef.barcode||'', barcodeImage: ef.barcodeImage||'', qrCode: ef.qrCode||'', qrImage: ef.qrImage||'', youtube: ef.youtube||'' }
-    if (editTarget) {
-      const saved = { ...editTarget, ...data }
-      const updated = products.map(p => p.id === editTarget.id ? saved : p)
-      setProducts(updated)
-      apiSaveProduct(editTarget.id, saved)
-      setEditOpen(false)
-      setViewProduct(saved)
-      setVmImg(0)
-      setYtPlaying(false)
-    } else {
-      const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length }
-      setProducts([...products, saved])
-      apiCreateProduct(saved)
-      setEditOpen(false)
+
+    const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
+    const data = {
+      ...ef,
+      colors: normalizedColors,
+      srp,
+      packing: parseInt(ef.packing) || 0,
+      dimensions: ef.dimensions,
+      barcode: ef.barcode||'',
+      barcodeImage: ef.barcodeImage||'',
+      qrCode: ef.qrCode||'',
+      qrImage: ef.qrImage||'',
+      youtube: ef.youtube||''
+    }
+
+    try {
+      if (editTarget) {
+        const saved = { ...editTarget, ...data, updatedAt: new Date().toISOString() }
+        const updated = products.map(p => p.id === editTarget.id ? saved : p)
+        setProducts(updated)
+        await apiSaveProduct(editTarget.id, saved)
+        setEditOpen(false)
+        setViewProduct(saved)
+        setVmImg(0)
+        setYtPlaying(false)
+      } else {
+        const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+        setProducts([...products, saved])
+        await apiCreateProduct(saved)
+        setEditOpen(false)
+      }
+    } catch (err) {
+      console.error(err)
+      alert('Could not save this product. Please check the API route or internet connection, then try again.')
     }
   }
 
@@ -1163,9 +1205,20 @@ ${message.trim()}` : 'Message / Notes:',
   const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
   const updateColorHex = (i, hexIndex, value) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
     if (j !== i) return c
-    const hexes = getColorHexes(c).map((h,idx)=>idx===hexIndex?value:h)
+    const hexValue = normalizeHexValue(value, getColorHexes(c)[hexIndex] || '#B9DCD2')
+    const hexes = getColorHexes(c).map((h,idx)=>idx===hexIndex?hexValue:h)
     return normalizeColorVariant({...c,hex:hexes[0],hexes})
   })}))
+  const pasteColorHex = (i, hexIndex, value) => {
+    const parsed = extractHexValues(value)
+    if (!parsed.length) return
+    setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+      if (j !== i) return c
+      const current = getColorHexes(c)
+      const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
+      return normalizeColorVariant({...c,hex:hexes[0],hexes})
+    })}))
+  }
   const addColorHex = (i) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
     if (j !== i) return c
     const hexes = [...getColorHexes(c), '#B9DCD2']
@@ -1177,9 +1230,19 @@ ${message.trim()}` : 'Message / Notes:',
     return normalizeColorVariant({...c,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
   })}))
   const updateNewColorHex = (hexIndex, value) => setNewColor(n=>{
-    const hexes = getColorHexes(n).map((h,idx)=>idx===hexIndex?value:h)
+    const hexValue = normalizeHexValue(value, getColorHexes(n)[hexIndex] || '#B9DCD2')
+    const hexes = getColorHexes(n).map((h,idx)=>idx===hexIndex?hexValue:h)
     return normalizeColorVariant({...n,hex:hexes[0],hexes})
   })
+  const pasteNewColorHex = (hexIndex, value) => {
+    const parsed = extractHexValues(value)
+    if (!parsed.length) return
+    setNewColor(n=>{
+      const current = getColorHexes(n)
+      const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
+      return normalizeColorVariant({...n,hex:hexes[0],hexes})
+    })
+  }
   const addNewColorHex = () => setNewColor(n=>{
     const hexes = [...getColorHexes(n), '#B9DCD2']
     return normalizeColorVariant({...n,hex:hexes[0],hexes})
@@ -1870,7 +1933,7 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'colors' && (
               <div className="em-panel">
-                <div className="f-hint">Each color variant gets its own SKU. Use + beside the swatch to add 2 or more colors to one variant.</div>
+                <div className="f-hint">Each color variant gets its own SKU. Use + beside the swatch to add 2 or more colors, then paste hex codes directly into the HEX fields.</div>
                 <div style={{background:'var(--bg)',borderRadius:8,padding:12}}>
                   <div className="color-table-head"><span>Swatch</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
                   {ef.colors.length === 0
@@ -1881,6 +1944,14 @@ ${message.trim()}` : 'Message / Notes:',
                           {getColorHexes(c).map((hex, hi)=>(
                             <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
                               <input type="color" className="cp" value={hex} onChange={e=>updateColorHex(i,hi,e.target.value)}/>
+                              <input
+                                className="hex-in"
+                                value={hex}
+                                onChange={e=>pasteColorHex(i,hi,e.target.value)}
+                                onPaste={e=>{e.preventDefault(); pasteColorHex(i,hi,e.clipboardData.getData('text'))}}
+                                placeholder="#HEX"
+                                spellCheck={false}
+                              />
                               {getColorHexes(c).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeColorHex(i,hi)}>×</button>}
                             </span>
                           ))}
@@ -1901,6 +1972,14 @@ ${message.trim()}` : 'Message / Notes:',
                       {getColorHexes(newColor).map((hex, hi)=>(
                         <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
                           <input type="color" className="cp" value={hex} onChange={e=>updateNewColorHex(hi,e.target.value)}/>
+                          <input
+                            className="hex-in"
+                            value={hex}
+                            onChange={e=>pasteNewColorHex(hi,e.target.value)}
+                            onPaste={e=>{e.preventDefault(); pasteNewColorHex(hi,e.clipboardData.getData('text'))}}
+                            placeholder="#HEX"
+                            spellCheck={false}
+                          />
                           {getColorHexes(newColor).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeNewColorHex(hi)}>×</button>}
                         </span>
                       ))}
