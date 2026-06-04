@@ -150,8 +150,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 
 /* PRODUCT GRID — 4 layouts */
 .pgrid{display:grid;gap:18px;margin-bottom:8px}
+.pgrid.col-4{grid-template-columns:repeat(4,1fr)}
 .pgrid.col-2{grid-template-columns:repeat(2,1fr)!important}
 .pgrid.col-1{grid-template-columns:1fr!important}
+@media(max-width:900px){.pgrid.col-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.pgrid.col-4{grid-template-columns:1fr}}
 
 /* PRODUCT CARD */
 .pcard{background:var(--wh);border:1px solid rgba(185,220,210,.4);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:var(--tr);cursor:pointer;display:flex;flex-direction:column;position:relative}
@@ -881,7 +884,7 @@ export default function QuenchaCatalog() {
   const [filterPMax, setFilterPMax] = useState(null)
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('default')
-  const [view, setView] = useState('col-2')
+  const [view, setView] = useState('col-4')
   const [showMobileFilter, setShowMobileFilter] = useState(false)
 
   // ── AUTH — once unlocked, stays for session ──
@@ -1233,8 +1236,9 @@ export default function QuenchaCatalog() {
               <option value="name-asc">Name: A → Z</option>
             </select>
             <div className="vbtns">
-              <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>setView('col-2')} title="2 columns">⊟ 2</button>
-              <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>setView('col-1')} title="1 column">▬ 1</button>
+              <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>setView('col-4')} title="4 columns">⊞</button>
+              <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>setView('col-2')} title="2 columns">⊟</button>
+              <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>setView('col-1')} title="1 column">▬</button>
             </div>
           </div>
 
