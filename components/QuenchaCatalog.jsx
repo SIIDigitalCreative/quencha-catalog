@@ -1232,8 +1232,8 @@ export default function QuenchaCatalog() {
       if (settings.heroTitle)                    setHeroTitle(settings.heroTitle)
       if (settings.heroSub)                      setHeroSub(settings.heroSub)
       if (settings.brandLogo !== undefined)      setBrandLogo(settings.brandLogo || '')
-      if (settings.brandName !== undefined)      setBrandName(settings.brandName || 'Quencha')
-      if (settings.brandTagline !== undefined)   setBrandTagline(settings.brandTagline || 'Sip · Savor · Go')
+      if (settings.brandName !== undefined)      setBrandName(settings.brandName ?? 'Quencha')
+      if (settings.brandTagline !== undefined)   setBrandTagline(settings.brandTagline ?? 'Sip · Savor · Go')
       if (Array.isArray(settings.colorCollections)) {
         setColorCollections(settings.colorCollections)
       } else if (typeof window !== 'undefined') {
@@ -1904,11 +1904,11 @@ ${message.trim()}` : 'Message / Notes:',
           className="tb-brand"
           href="#"
           onClick={(e)=>{ if(editMode){ e.preventDefault(); setBrandEditOpen(true) } }}
-          title={editMode ? 'Edit brand logo and topbar text' : (brandName || 'Quencha')}
+          title={editMode ? 'Edit brand logo and topbar text' : (brandName || brandTagline || 'Brand')}
         >
           {brandLogo ? <img className="tb-logo" src={brandLogo} alt={brandName || 'Brand logo'}/> : (editMode ? <span className="tb-logo-placeholder">+</span> : null)}
-          <span className="tb-wm">{brandName || 'Quencha'}</span>
-          <span className="tb-tg">{brandTagline || 'Sip · Savor · Go'}</span>
+          {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
+          {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
           {editMode && <span className="tb-brand-edit">Edit</span>}
         </a>
         <div className="tb-search-wrap">
@@ -2925,8 +2925,8 @@ function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNa
             <div style={{fontSize:10,fontWeight:900,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--tl)',marginBottom:8}}>Preview</div>
             <div style={{height:50,background:'var(--tl)',borderRadius:9,display:'flex',alignItems:'center',padding:'0 16px',gap:8,overflow:'hidden'}}>
               {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:26,maxWidth:110,objectFit:'contain'}}/>}
-              <span style={{fontSize:20,fontWeight:900,letterSpacing:'.08em',color:'#fff',textTransform:'uppercase',whiteSpace:'nowrap'}}>{brandName || 'Quencha'}</span>
-              <span style={{fontSize:11,color:'rgba(255,255,255,.6)',letterSpacing:'.06em',fontStyle:'italic',whiteSpace:'nowrap'}}>{brandTagline || 'Sip · Savor · Go'}</span>
+              {brandName?.trim() && <span style={{fontSize:20,fontWeight:900,letterSpacing:'.08em',color:'#fff',textTransform:'uppercase',whiteSpace:'nowrap'}}>{brandName}</span>}
+              {brandTagline?.trim() && <span style={{fontSize:11,color:'rgba(255,255,255,.6)',letterSpacing:'.06em',fontStyle:'italic',whiteSpace:'nowrap'}}>{brandTagline}</span>}
             </div>
           </div>
         </div>
