@@ -43,6 +43,12 @@ const DEFAULT_CATS = [
   {value:'go',          label:'GO — Bags & Carry',     icon:'👜'},
   {value:'accessories', label:'Accessories',           icon:'⚙️'},
 ]
+const DEFAULT_EXTS = [
+  {value:'core',  label:'Quencha Core',  color:'#279989'},
+  {value:'kids',  label:'Quencha Kids',  color:'#5891c4'},
+  {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
+  {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
+]
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
@@ -889,6 +895,9 @@ export default function QuenchaCatalog() {
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
   const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
+  const [exts, setExts] = useState(DEFAULT_EXTS)
+  const [extMgrOpen, setExtMgrOpen] = useState(false)
+  const [newExt, setNewExt] = useState({value:'',label:'',color:'#279989'})
   const [filterPMin, setFilterPMin] = useState(null)
   const [filterPMax, setFilterPMax] = useState(null)
   const [search, setSearch] = useState('')
@@ -960,6 +969,10 @@ export default function QuenchaCatalog() {
   const [badgeInput, setBadgeInput] = useState('')
   const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',sku:'' })
   const [uploadErr, setUploadErr] = useState('')
+  const [addingNewExt, setAddingNewExt] = useState(false)
+  const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
+  const [addingNewCat, setAddingNewCat] = useState(false)
+  const [inlineNewCat, setInlineNewCat] = useState({label:'',icon:'🏷️'})
   const fileRef = useRef(null)
 
   // ── PASSWORD FLOW ──
@@ -994,13 +1007,13 @@ export default function QuenchaCatalog() {
   const openEdit = (p) => {
     setEditTarget(p)
     setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>({...c})),images:[...(p.images||[])],dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr('')
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
   const openNewProduct = () => {
     setEditTarget(null)
     setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr('')
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
 
@@ -1107,11 +1120,15 @@ export default function QuenchaCatalog() {
       </div>
       <div className="sb-sec">
         <span className="sb-lbl">Extension</span>
-        {[{v:'all',l:'All Products',d:'var(--cy)'},{v:'core',l:'Quencha Core',d:'var(--tl)'},{v:'kids',l:'Quencha Kids',d:'#88C4E8'},{v:'pets',l:'Quencha Pets',d:'#D4894A'},{v:'tech',l:'Quencha Tech',d:'#2B4C5E'}].map(o=>(
-          <button key={o.v} className={`fb ${filterExt===o.v?'on':''}`} style={{borderLeftColor:filterExt===o.v?o.d:'transparent'}} onClick={()=>setFilterExt(o.v)}>
-            <span className="fb-dot" style={{background:o.d}}/><span className="fb-lbl">{o.l}</span><span className="fb-cnt">{counts.ext[o.v]||0}</span>
+        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>setFilterExt('all')}>
+          <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Products</span><span className="fb-cnt">{counts.ext['all']||0}</span>
+        </button>
+        {exts.map(o=>(
+          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>setFilterExt(o.value)}>
+            <span className="fb-dot" style={{background:o.color}}/><span className="fb-lbl">{o.label}</span><span className="fb-cnt">{counts.ext[o.value]||0}</span>
           </button>
         ))}
+        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>setExtMgrOpen(true)}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Extensions</span></button>}
       </div>
       <hr className="sb-div"/>
       <div className="sb-sec">
@@ -1144,14 +1161,15 @@ export default function QuenchaCatalog() {
     const mainImg = p.images?.[0]
     const colors = p.colors.slice(0, 6)
     const extra = p.colors.length > 6 ? p.colors.length - 6 : 0
-    const extColor = EXT_COLORS[p.ext]
-    const extClass = {kids:'kids',pets:'pets',tech:'tech'}[p.ext]
+    const extEntry = exts.find(x=>x.value===p.ext)
+    const extColor = extEntry?.color || EXT_COLORS[p.ext] || 'var(--gr)'
+    const showExtTag = !!p.ext && p.ext !== 'core'
     return (
       <div className={`pcard ${editMode?'em':''}`}
         onClick={editMode ? undefined : () => { setViewProduct(p); setVmImg(0); setYtPlaying(false) }}>
 
         <div className="c-img-wrap">
-          {extClass && <span className="c-etag" style={{background:extColor}}>{p.ext.charAt(0).toUpperCase()+p.ext.slice(1)}</span>}
+          {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
           {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
         </div>
 
@@ -1329,7 +1347,7 @@ export default function QuenchaCatalog() {
           <div className="modal">
             <div className="m-hdr" style={{background:'var(--sf4)'}}>
               <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{EXT_LABELS[viewProduct.ext]} · {cats.find(c=>c.value===viewProduct.cat)?.label||viewProduct.cat}</div>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{exts.find(x=>x.value===viewProduct.ext)?.label||viewProduct.ext} · {cats.find(c=>c.value===viewProduct.cat)?.label||viewProduct.cat}</div>
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{viewProduct.name}</div>
                 {viewProduct.colors[0]?.sku && (
                   <code
@@ -1497,19 +1515,72 @@ export default function QuenchaCatalog() {
                 <div className="f-row">
                   <div className="f-col">
                     <label className="f-lbl">Extension</label>
-                    <select className="f-sel" value={ef.ext} onChange={e=>setEf(f=>({...f,ext:e.target.value}))}>
-                      {['core','kids','pets','tech'].map(o=><option key={o} value={o}>{o.charAt(0).toUpperCase()+o.slice(1)}</option>)}
-                    </select>
+                    {addingNewExt ? (
+                      <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
+                        <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Extension</div>
+                        <div style={{display:'flex',gap:6,alignItems:'center'}}>
+                          <input type="color" value={inlineNewExt.color} onChange={e=>setInlineNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                          <input value={inlineNewExt.label} onChange={e=>setInlineNewExt(n=>({...n,label:e.target.value}))} placeholder="Extension name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
+                        </div>
+                        <div style={{display:'flex',gap:6}}>
+                          <button onClick={()=>{
+                            const val = inlineNewExt.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                            if(!inlineNewExt.label.trim()||exts.some(x=>x.value===val)) return
+                            const newEntry = {value:val,label:inlineNewExt.label.trim(),color:inlineNewExt.color}
+                            setExts(prev=>[...prev,newEntry])
+                            setEf(f=>({...f,ext:val}))
+                            setInlineNewExt({label:'',color:'#279989'})
+                            setAddingNewExt(false)
+                          }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
+                          <button onClick={()=>{setAddingNewExt(false);setInlineNewExt({label:'',color:'#279989'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <select className="f-sel" value={ef.ext} onChange={e=>{
+                        if(e.target.value==='__add_new__'){setAddingNewExt(true)}
+                        else{setEf(f=>({...f,ext:e.target.value}))}
+                      }}>
+                        <option value="">— No Extension —</option>
+                        {exts.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+                        <option value="__add_new__">+ Add new extension…</option>
+                      </select>
+                    )}
                   </div>
                   <div className="f-col">
                     <label className="f-lbl">Category <span style={{fontWeight:400,color:'var(--gr)'}}>— optional</span></label>
-                    <div style={{display:'flex',gap:6}}>
-                      <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>setEf(f=>({...f,cat:e.target.value}))}>
-                        <option value="">— No Category —</option>
-                        {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
-                      </select>
-                      {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
-                    </div>
+                    {addingNewCat ? (
+                      <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
+                        <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Category</div>
+                        <div style={{display:'flex',gap:6,alignItems:'center'}}>
+                          <input value={inlineNewCat.icon} onChange={e=>setInlineNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:36,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
+                          <input value={inlineNewCat.label} onChange={e=>setInlineNewCat(n=>({...n,label:e.target.value}))} placeholder="Category name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
+                        </div>
+                        <div style={{display:'flex',gap:6}}>
+                          <button onClick={()=>{
+                            const val = inlineNewCat.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                            if(!inlineNewCat.label.trim()||cats.some(c=>c.value===val)) return
+                            const newEntry = {value:val,label:inlineNewCat.label.trim(),icon:inlineNewCat.icon||'🏷️'}
+                            setCats(prev=>[...prev,newEntry])
+                            setEf(f=>({...f,cat:val}))
+                            setInlineNewCat({label:'',icon:'🏷️'})
+                            setAddingNewCat(false)
+                          }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
+                          <button onClick={()=>{setAddingNewCat(false);setInlineNewCat({label:'',icon:'🏷️'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{display:'flex',gap:6}}>
+                        <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>{
+                          if(e.target.value==='__add_new__'){setAddingNewCat(true)}
+                          else{setEf(f=>({...f,cat:e.target.value}))}
+                        }}>
+                          <option value="">— No Category —</option>
+                          {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
+                          <option value="__add_new__">+ Add new category…</option>
+                        </select>
+                        {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="f-row">
@@ -1742,6 +1813,52 @@ export default function QuenchaCatalog() {
         </div>
       )}
 
+      {/* EXTENSION MANAGER MODAL */}
+      {extMgrOpen && (
+        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setExtMgrOpen(false)}}>
+          <div className="modal" style={{maxWidth:480}}>
+            <div className="m-hdr" style={{background:'var(--sf4)'}}>
+              <div>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
+                <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Extensions</div>
+              </div>
+              <button className="m-close" onClick={()=>setExtMgrOpen(false)}>✕</button>
+            </div>
+            <div className="m-body" style={{gap:10}}>
+              {exts.map((x,i)=>(
+                <div key={x.value} style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
+                  <input type="color" value={x.color} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,color:e.target.value}:o))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                  <input value={x.label} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,label:e.target.value}:o))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
+                  <input value={x.value} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,value:e.target.value}:o))} placeholder="key" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                  <button onClick={()=>setExts(exts.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                </div>
+              ))}
+              <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Extension</div>
+                <div style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr auto',gap:8,alignItems:'center'}}>
+                  <input type="color" value={newExt.color} onChange={e=>setNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                  <input value={newExt.label} onChange={e=>setNewExt(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
+                  <input value={newExt.value} onChange={e=>setNewExt(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                  <button onClick={()=>{
+                    const val = newExt.value || newExt.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                    if(!newExt.label.trim()||exts.some(x=>x.value===val)) return
+                    setExts([...exts,{value:val,label:newExt.label.trim(),color:newExt.color}])
+                    setNewExt({value:'',label:'',color:'#279989'})
+                  }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
+                </div>
+              </div>
+            </div>
+            <div className="m-footer">
+              <div/>
+              <div className="m-footer-r">
+                <button className="cancel-btn" onClick={()=>setExtMgrOpen(false)}>Cancel</button>
+                <button className="save-btn" onClick={()=>setExtMgrOpen(false)}>✓ Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* EDIT BAR */}
       {editMode && (
         <div className="edit-bar">
@@ -1751,6 +1868,8 @@ export default function QuenchaCatalog() {
             <span className="eb-cnt">{products.length} products</span>
           </div>
           <div style={{display:'flex',gap:8}}>
+            <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
+            <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
             <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
           </div>
