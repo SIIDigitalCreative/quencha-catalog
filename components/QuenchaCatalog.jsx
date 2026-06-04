@@ -1277,24 +1277,53 @@ export default function QuenchaCatalog() {
               <h3 style={{fontSize:18,fontWeight:700,color:'var(--bk)',marginBottom:6}}>No products found</h3>
               <p>Try a different filter or search term.</p>
             </div>
-          ) : EXT_ORDER.map(ext => !grouped[ext] ? null : cats.map(catObj => {
-            const cat = catObj.value
-            const prods = grouped[ext]?.[cat]; if (!prods?.length) return null
+          ) : (() => {
+            // Build render order: no-ext bucket first, then known exts, then any unknown ext keys
+            const knownExtVals = exts.map(x=>x.value)
+            const allExtKeys = Object.keys(grouped)
+            const noExtProds = grouped[''] || {}
+            const unknownExtKeys = allExtKeys.filter(k => k !== '' && !knownExtVals.includes(k))
+            const orderedExtKeys = [...knownExtVals, ...unknownExtKeys]
+
+            // All cat values to iterate (known cats + '' for no-cat + any unknown cat keys)
+            const knownCatVals = cats.map(c=>c.value)
+            const allCatKeysInGrouped = [...new Set(Object.values(grouped).flatMap(g=>Object.keys(g)))]
+            const unknownCatKeys = allCatKeysInGrouped.filter(k => k !== '' && !knownCatVals.includes(k))
+            const orderedCatKeys = ['', ...knownCatVals, ...unknownCatKeys]
+
+            const renderSection = (ext, cat, prods) => {
+              if (!prods?.length) return null
+              const catLabel = cat === '' ? null : (cats.find(c=>c.value===cat)?.label || cat)
+              const extEntry = exts.find(x=>x.value===ext)
+              const extLabel = ext === '' ? null : (extEntry?.label || ext)
+              const extColor = extEntry?.color || EXT_COLORS[ext] || 'var(--gr)'
+              return (
+                <div key={`${ext||'none'}-${cat||'none'}`}>
+                  <div className="cat-hdr">
+                    <div className="cat-line"/>
+                    {catLabel && <span className="cat-nm">{catLabel}</span>}
+                    {extLabel && <span className="ext-tag" style={{background:extColor}}>{extLabel}</span>}
+                    <span className="cat-cnt">{prods.length} item{prods.length>1?'s':''}</span>
+                    <div className="cat-line"/>
+                  </div>
+                  <div className={`pgrid ${view}`}>
+                    {prods.map(p => <Card key={p.id} p={p}/>)}
+                  </div>
+                </div>
+              )
+            }
+
             return (
-              <div key={`${ext}-${cat}`}>
-                <div className="cat-hdr">
-                  <div className="cat-line"/>
-                  <span className="cat-nm">{cats.find(c=>c.value===cat)?.label||cat}</span>
-                  {ext !== 'core' && <span className="ext-tag" style={{background:EXT_COLORS[ext]}}>{EXT_LABELS[ext]}</span>}
-                  <span className="cat-cnt">{prods.length} item{prods.length>1?'s':''}</span>
-                  <div className="cat-line"/>
-                </div>
-                <div className={`pgrid ${view}`}>
-                  {prods.map(p => <Card key={p.id} p={p}/>)}
-                </div>
-              </div>
+              <>
+                {/* No-ext products first */}
+                {orderedCatKeys.map(cat => renderSection('', cat, noExtProds[cat]))}
+                {/* Known + unknown ext products */}
+                {orderedExtKeys.map(ext => !grouped[ext] ? null :
+                  orderedCatKeys.map(cat => renderSection(ext, cat, grouped[ext][cat]))
+                )}
+              </>
             )
-          }))}
+          })()}
         </main>
       </div>
 
