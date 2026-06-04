@@ -913,6 +913,28 @@ export default function QuenchaCatalog() {
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
   const { copy, copied } = useCopy()
 
+  const openBulkInquiryEmail = useCallback((product = null) => {
+    const email = 'design@sunbeamsimpexinc.com'
+    const subject = 'Quencha Bulk Inquiry'
+    const skuBase = product?.colors?.[0]?.sku ? product.colors[0].sku.split('-').slice(0, 2).join('-') : ''
+    const body = [
+      'Hi Quencha Team,',
+      '',
+      'I would like to inquire about bulk orders / corporate gifting / UV printing.',
+      product ? `Product: ${product.name}` : '',
+      skuBase ? `SKU: ${skuBase}` : '',
+      '',
+      'Quantity:',
+      'Company / Name:',
+      'Contact Number:',
+      'Message:',
+      '',
+      'Thank you.'
+    ].filter(line => line !== '').join('\n')
+
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }, [])
+
   // ── API HELPERS ──
   const apiCreateProduct = useCallback(async (product) => {
     await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) }).catch(console.error)
@@ -1487,7 +1509,7 @@ export default function QuenchaCatalog() {
                 <button className="vm-pencil-btn" onClick={()=>{ setViewProduct(null); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
                 </button>
-                <button className="vm-inq-btn" onClick={()=>{ setViewProduct(null); setInqOpen(true) }}>📩 Bulk Inquiry</button>
+                <button className="vm-inq-btn" onClick={()=>{ const product = vp; setViewProduct(null); openBulkInquiryEmail(product) }}>📩 Bulk Inquiry</button>
               </div>
             </div>
           </div>
@@ -1760,10 +1782,13 @@ export default function QuenchaCatalog() {
               <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
             </div>
             <div className="m-body" style={{gap:10}}>
-              <p style={{fontSize:14,color:'var(--gr)'}}>For bulk orders, UV printing, and corporate gifting, reach out through any of these channels.</p>
-              {[['🛍','Shopee','shopee.ph/quenchaph','https://shopee.ph/quenchaph'],['🛒','Lazada','lazada.com.ph/shop/quencha','https://lazada.com.ph/shop/quencha'],['📱','TikTok Shop','@quenchaph','#'],['🌐','Corporate','sunbeamsimpexinc.com','https://sunbeamsimpexinc.com']].map(([ico,n,l,href])=>(
-                <a key={n} className="inq-link" href={href} target="_blank" rel="noreferrer">{ico} {n} — {l}</a>
-              ))}
+              <p style={{fontSize:14,color:'var(--gr)'}}>For bulk orders, UV printing, and corporate gifting, send us an email and our team will assist you.</p>
+              <a
+                className="inq-link"
+                href={`mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent('Quencha Bulk Inquiry')}&body=${encodeURIComponent('Hi Quencha Team,\n\nI would like to inquire about bulk orders / corporate gifting / UV printing.\n\nQuantity:\nCompany / Name:\nContact Number:\nMessage:\n\nThank you.')}`}
+              >
+                📩 Send Email — design@sunbeamsimpexinc.com
+              </a>
             </div>
           </div>
         </div>
