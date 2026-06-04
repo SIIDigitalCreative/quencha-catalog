@@ -893,6 +893,27 @@ function DimensionsEditor({ value, onChange }) {
 }
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
+
+
+// ─── CATALOG PREFERENCES AUTOSAVE ─────────────────────────────────────────────
+const CATALOG_PREFS_KEY = 'qnh-catalog-preferences'
+function getSavedCatalogPrefs() {
+  if (typeof window === 'undefined') return {}
+  try {
+    const raw = localStorage.getItem(CATALOG_PREFS_KEY)
+    if (!raw) return {}
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? parsed : {}
+  } catch {
+    return {}
+  }
+}
+function savedNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null
+  const num = Number(value)
+  return Number.isFinite(num) ? num : null
+}
+
 export default function QuenchaCatalog() {
   useEffect(() => {
     const id = 'qnh-styles'
@@ -942,21 +963,35 @@ export default function QuenchaCatalog() {
   }, [])
 
   // ── FILTERS ──
-  const [filterExt, setFilterExt] = useState('all')
-  const [filterCat, setFilterCat] = useState(null)
+  const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
+  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
   const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
   const [exts, setExts] = useState(DEFAULT_EXTS)
   const [extMgrOpen, setExtMgrOpen] = useState(false)
   const [newExt, setNewExt] = useState({value:'',label:'',color:'#279989'})
-  const [filterPMin, setFilterPMin] = useState(null)
-  const [filterPMax, setFilterPMax] = useState(null)
+  const [filterPMin, setFilterPMin] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMin))
+  const [filterPMax, setFilterPMax] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMax))
   const [search, setSearch] = useState('')
-  const [sort, setSort] = useState('default')
+  const [sort, setSort] = useState(() => savedCatalogPrefsRef.current.sort || 'default')
   const [dragProductId, setDragProductId] = useState(null)
-  const [view, setView] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4')
+  const [view, setView] = useState(() => savedCatalogPrefsRef.current.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
   const [showMobileFilter, setShowMobileFilter] = useState(false)
+
+  // Autosave selected filters, sort, and view layout to this browser.
+  // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
+      filterExt,
+      filterCat,
+      filterPMin,
+      filterPMax,
+      sort,
+      view,
+    }))
+  }, [filterExt, filterCat, filterPMin, filterPMax, sort, view])
 
   // ── AUTH — once unlocked, stays for session ──
   const [isAuthed, setIsAuthed] = useState(false)
