@@ -930,6 +930,9 @@ export default function QuenchaCatalog() {
   const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
   const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
 
+  // Load saved catalog preferences once so filter/sort state can initialize safely.
+  const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
+
   // Fetch all data on mount — auto-seed if empty
   useEffect(() => {
     Promise.all([
