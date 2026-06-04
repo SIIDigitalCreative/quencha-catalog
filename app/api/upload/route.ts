@@ -1,16 +1,57 @@
-import { put } from '@vercel/blob'
 import { NextResponse } from 'next/server'
+import { put } from '@vercel/blob'
 
 export async function POST(req: Request) {
   try {
-    const form = await req.formData()
-    const file = form.get('file') as File
-    if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 })
-    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-    if (!['jpg','jpeg','png','webp','gif'].includes(ext))
-      return NextResponse.json({ error: 'Invalid type' }, { status: 400 })
-    const filename = `quencha/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const blob = await put(filename, file, { access: 'public' })
+    const formData = await req.formData()
+    const file = formData.get('file') as File | null
+
+    if (!file) {
+      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
+    }
+
+    const allowedTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'image/webp',
+      'image/svg+xml'
+    ]
+
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: `Unsupported file type: ${file.type}` },
+        { status: 400 }
+      )
+    }
+
+    const maxSize = 5 * 1024 * 1024 // 5MB
+
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { error: 'File too large. Max size is 5MB.' },
+        { status: 400 }
+      )
+    }
+
+    const cleanName = file.name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9._-]/g, '')
+
+    const pathname = `quencha/uploads/${Date.now()}-${cleanName}`
+
+    const blob = await put(pathname, file, {
+      access: 'public',
+      addRandomSuffix: false
+    })
+
     return NextResponse.json({ url: blob.url })
-  } catch { return NextResponse.json({ error: 'Upload failed' }, { status: 500 }) }
+  } catch (error) {
+    console.error('Upload error:', error)
+    return NextResponse.json(
+      { error: 'Upload failed on server' },
+      { status: 500 }
+    )
+  }
 }
