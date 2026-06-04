@@ -1376,7 +1376,14 @@ export default function QuenchaCatalog() {
           <div className="modal">
             <div className="m-hdr" style={{background:'var(--sf4)'}}>
               <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{exts.find(x=>x.value===viewProduct.ext)?.label||viewProduct.ext} · {cats.find(c=>c.value===viewProduct.cat)?.label||viewProduct.cat}</div>
+                {(() => {
+                  const extLabel = exts.find(x=>x.value===viewProduct.ext)?.label || viewProduct.ext || ''
+                  const catLabel = cats.find(c=>c.value===viewProduct.cat)?.label || viewProduct.cat || ''
+                  const parts = [extLabel, catLabel].filter(Boolean)
+                  return parts.length > 0 ? (
+                    <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{parts.join(' · ')}</div>
+                  ) : null
+                })()}
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{viewProduct.name}</div>
                 {viewProduct.colors[0]?.sku && (
                   <code
@@ -1753,8 +1760,8 @@ export default function QuenchaCatalog() {
       {/* LOADING */}
       {loading && (
         <div style={{position:'fixed',inset:0,zIndex:999,background:'var(--sf4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
-          <div style={{fontSize:24,fontWeight:900,color:'var(--tl)',letterSpacing:'-.01em',fontFamily:'var(--fn)'}}>QUENCHA</div>
-          <div style={{width:40,height:40,border:'3px solid rgba(39,153,137,.2)',borderTop:'3px solid var(--tl)',borderRadius:'50%',animation:'spin 0.8s linear infinite'}}/>
+          <div style={{fontSize:24,fontWeight:900,color:'var(--tl)',letterSpacing:'-.01em',fontFamily:'var(--fn)',textAlign:'center'}}>QUENCHA</div>
+          <div style={{width:40,height:40,border:'3px solid rgba(39,153,137,.2)',borderTop:'3px solid var(--tl)',borderRadius:'50%',animation:'spin 0.8s linear infinite',margin:'0 auto'}}/>
           <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
         </div>
       )}
