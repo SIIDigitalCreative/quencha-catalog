@@ -205,9 +205,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 /* TOPBAR */
 .qnh-topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nh);background:var(--tl);display:flex;align-items:center;padding:0 20px;gap:12px;transition:background var(--tr)}
 .qnh-topbar.edit-on{background:#92400e}
-.tb-brand{display:flex;align-items:baseline;gap:8px;flex-shrink:0;text-decoration:none;cursor:pointer}
-.tb-wm{font-size:20px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase}
-.tb-tg{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.06em;font-style:italic}
+.tb-brand{display:flex;align-items:center;gap:8px;flex-shrink:0;text-decoration:none;cursor:pointer;min-width:0}
+.tb-logo{height:26px;width:auto;max-width:110px;object-fit:contain;display:block;flex-shrink:0}
+.tb-logo-placeholder{height:26px;width:26px;border-radius:7px;background:rgba(255,255,255,.18);border:1px dashed rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:900;flex-shrink:0}
+.tb-wm{font-size:20px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+.tb-tg{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.06em;font-style:italic;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.tb-brand-edit{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:2px 7px;white-space:nowrap}
 .tb-search-wrap{flex:1;max-width:420px;position:relative;margin:0 auto}
 .tb-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none;color:#fff}
 .tb-search{width:100%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 36px;font-family:var(--fn);font-size:13px;color:#fff;outline:none;transition:var(--tr)}
@@ -814,7 +817,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
   const ytId = getYouTubeId(heroVideoUrl)
   const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '')
   const hasVideo = !!ytId
-  const showVideoCard = true
+  const showVideoCard = hasVideo || editMode
   const showBannerCard = banners.length > 0 || editMode
   const isTwoColumn = showBannerCard && showVideoCard
   const bannerFirst = mediaOrder !== 'video-banner'
@@ -957,12 +960,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
                 </div>
               ) : editMode ? (
                 <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
-              ) : (
-                <div className="hero-empty-card" style={{cursor:'default',flexDirection:'column',gap:6}}>
-                  <span style={{fontSize:22}}>▶</span>
-                  <span>Video coming soon</span>
-                </div>
-              )}
+              ) : null}
             </div>
           )}
         </div>
@@ -1233,6 +1231,9 @@ export default function QuenchaCatalog() {
       if (settings.heroMediaOrder)                  setHeroMediaOrder(settings.heroMediaOrder)
       if (settings.heroTitle)                    setHeroTitle(settings.heroTitle)
       if (settings.heroSub)                      setHeroSub(settings.heroSub)
+      if (settings.brandLogo !== undefined)      setBrandLogo(settings.brandLogo || '')
+      if (settings.brandName !== undefined)      setBrandName(settings.brandName || 'Quencha')
+      if (settings.brandTagline !== undefined)   setBrandTagline(settings.brandTagline || 'Sip · Savor · Go')
       if (Array.isArray(settings.colorCollections)) {
         setColorCollections(settings.colorCollections)
       } else if (typeof window !== 'undefined') {
@@ -1301,6 +1302,10 @@ export default function QuenchaCatalog() {
   const [heroVideoUrl, setHeroVideoUrl] = useState('')
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
+  const [brandEditOpen, setBrandEditOpen] = useState(false)
+  const [brandLogo, setBrandLogo] = useState('')
+  const [brandName, setBrandName] = useState('Quencha')
+  const [brandTagline, setBrandTagline] = useState('Sip · Savor · Go')
 
 
   const syncSettings = useCallback((patch) => {
@@ -1314,6 +1319,9 @@ export default function QuenchaCatalog() {
   const saveHeroVideoUrl = useCallback((v) => { setHeroVideoUrl(v); syncSettings({ heroVideoUrl: v }) }, [syncSettings])
   const saveHeroVideoThumbnail = useCallback((v) => { setHeroVideoThumbnail(v); syncSettings({ heroVideoThumbnail: v }) }, [syncSettings])
   const saveHeroMediaOrder = useCallback((v) => { setHeroMediaOrder(v); syncSettings({ heroMediaOrder: v }) }, [syncSettings])
+  const saveBrandLogo = useCallback((v) => { setBrandLogo(v); syncSettings({ brandLogo: v }) }, [syncSettings])
+  const saveBrandName = useCallback((v) => { setBrandName(v); syncSettings({ brandName: v }) }, [syncSettings])
+  const saveBrandTagline = useCallback((v) => { setBrandTagline(v); syncSettings({ brandTagline: v }) }, [syncSettings])
   const saveColorCollections = useCallback((next) => {
     setColorCollections(next)
     if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
@@ -1892,7 +1900,17 @@ ${message.trim()}` : 'Message / Notes:',
     <div>
       {/* TOPBAR */}
       <header className={`qnh-topbar ${editMode?'edit-on':''}`}>
-        <a className="tb-brand" href="#"><span className="tb-wm">Quencha</span><span className="tb-tg">Sip · Savor · Go</span></a>
+        <a
+          className="tb-brand"
+          href="#"
+          onClick={(e)=>{ if(editMode){ e.preventDefault(); setBrandEditOpen(true) } }}
+          title={editMode ? 'Edit brand logo and topbar text' : (brandName || 'Quencha')}
+        >
+          {brandLogo ? <img className="tb-logo" src={brandLogo} alt={brandName || 'Brand logo'}/> : (editMode ? <span className="tb-logo-placeholder">+</span> : null)}
+          <span className="tb-wm">{brandName || 'Quencha'}</span>
+          <span className="tb-tg">{brandTagline || 'Sip · Savor · Go'}</span>
+          {editMode && <span className="tb-brand-edit">Edit</span>}
+        </a>
         <div className="tb-search-wrap">
           <svg className="tb-search-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           <input className="tb-search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search products, SKUs…"/>
@@ -2528,6 +2546,19 @@ ${message.trim()}` : 'Message / Notes:',
       )}
 
       {/* BANNER EDIT MODAL */}
+      {brandEditOpen && (
+        <BrandEditModal
+          brandLogo={brandLogo}
+          brandName={brandName}
+          brandTagline={brandTagline}
+          onLogoChange={saveBrandLogo}
+          onNameChange={saveBrandName}
+          onTaglineChange={saveBrandTagline}
+          onUpload={uploadImageToBlob}
+          onClose={()=>setBrandEditOpen(false)}
+        />
+      )}
+
       {bannerEditOpen && (
         <BannerEditModal
           banners={banners}
@@ -2801,7 +2832,97 @@ ${message.trim()}` : 'Message / Notes:',
       )}
     </div>
   )
-}function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
+
+}
+
+function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNameChange, onTaglineChange, onUpload, onClose }) {
+  const fileRef = useRef(null)
+  const [uploading, setUploading] = useState(false)
+  const [err, setErr] = useState('')
+
+  const handleLogoFile = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setErr('Please upload an image file.')
+      return
+    }
+    setErr('')
+    setUploading(true)
+    try {
+      const url = await onUpload(file)
+      onLogoChange(url)
+    } catch (error) {
+      setErr('Logo upload failed. Please try again.')
+    } finally {
+      setUploading(false)
+      e.target.value = ''
+    }
+  }
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="modal-bg" onClick={onClose}>
+      <div className="modal banner-modal" onClick={e=>e.stopPropagation()}>
+        <div className="m-hdr" style={{background:'var(--sf4)'}}>
+          <div>
+            <div style={{fontSize:10,fontWeight:900,letterSpacing:'.12em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Top bar branding</div>
+            <div style={{fontSize:20,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Brand Logo & Text</div>
+          </div>
+          <button className="m-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="m-body" style={{gap:18}}>
+          <div className="f-col">
+            <label className="f-lbl">Brand Logo</label>
+            <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
+              <div style={{height:58,minWidth:120,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',padding:'8px 14px',overflow:'hidden'}}>
+                {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{maxHeight:42,maxWidth:160,objectFit:'contain',display:'block'}}/> : <span style={{color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.08em'}}>NO LOGO</span>}
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:8,flex:1,minWidth:0}}>
+                <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                  <button className="add-btn" onClick={()=>fileRef.current?.click()} disabled={uploading} style={{opacity:uploading?.6:1}}>{uploading ? 'Uploading…' : 'Upload Logo'}</button>
+                  {brandLogo && <button className="cancel-btn" onClick={()=>onLogoChange('')}>Remove Logo</button>}
+                </div>
+                <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleLogoFile}/>
+                <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG/SVG-style logo. It will appear beside the brand name on the top-left bar.</div>
+              </div>
+            </div>
+            {err && <div className="f-error">{err}</div>}
+          </div>
+
+          <div className="f-row">
+            <div className="f-col">
+              <label className="f-lbl">Brand Name</label>
+              <input className="f-in" value={brandName} onChange={e=>onNameChange(e.target.value)} placeholder="Quencha"/>
+            </div>
+            <div className="f-col">
+              <label className="f-lbl">Text beside brand name</label>
+              <input className="f-in" value={brandTagline} onChange={e=>onTaglineChange(e.target.value)} placeholder="Sip · Savor · Go"/>
+            </div>
+          </div>
+
+          <div style={{background:'var(--sf4)',borderRadius:10,padding:14,border:'1px solid rgba(185,220,210,.6)'}}>
+            <div style={{fontSize:10,fontWeight:900,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--tl)',marginBottom:8}}>Preview</div>
+            <div style={{height:50,background:'var(--tl)',borderRadius:9,display:'flex',alignItems:'center',padding:'0 16px',gap:8,overflow:'hidden'}}>
+              {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:26,maxWidth:110,objectFit:'contain'}}/>}
+              <span style={{fontSize:20,fontWeight:900,letterSpacing:'.08em',color:'#fff',textTransform:'uppercase',whiteSpace:'nowrap'}}>{brandName || 'Quencha'}</span>
+              <span style={{fontSize:11,color:'rgba(255,255,255,.6)',letterSpacing:'.06em',fontStyle:'italic',whiteSpace:'nowrap'}}>{brandTagline || 'Sip · Savor · Go'}</span>
+            </div>
+          </div>
+        </div>
+        <div className="m-footer">
+          <div style={{fontSize:12,color:'var(--gr)'}}>Changes autosave to site settings.</div>
+          <div className="m-footer-r"><button className="save-btn" onClick={onClose}>Done</button></div>
+        </div>
+      </div>
+    </div>
+  )
+function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
   const fileRef = useRef(null)
   const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
 
