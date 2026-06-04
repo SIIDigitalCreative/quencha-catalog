@@ -5,6 +5,7 @@ import { SEED_PRODUCTS } from '@/lib/data'
 function safeParse(value: unknown) {
   if (!value) return null
   if (typeof value === 'object') return value as any
+
   try {
     return JSON.parse(String(value))
   } catch {
@@ -16,7 +17,6 @@ export async function GET() {
   try {
     const now = new Date().toISOString()
 
-    // Get existing products first so we can preserve uploaded images
     const existingRaw = await redis.hgetall(KEYS.products)
     const existingById: Record<string, any> = {}
 
@@ -30,24 +30,27 @@ export async function GET() {
     const entries: Record<string, string> = {}
 
     SEED_PRODUCTS.forEach((product, index) => {
-      const existing = existingById[product.id]
+      const seedProduct = product as any
+      const id = seedProduct.id || `qnh-product-${index + 1}`
+      const existing = existingById[id]
 
       const normalized = {
         ...existing,
-        ...product,
-        id: product.id || `qnh-product-${index + 1}`,
+        ...seedProduct,
+        id,
 
-        // IMPORTANT: preserve existing images if seed has no images
         images:
-          product.images && product.images.length > 0
-            ? product.images
+          seedProduct.images && seedProduct.images.length > 0
+            ? seedProduct.images
             : existing?.images || [],
 
-        // Preserve these too, unless seed has values
-        barcodeImage: product.barcodeImage || existing?.barcodeImage || '',
-        qrImage: product.qrImage || existing?.qrImage || '',
+        barcode: seedProduct.barcode || existing?.barcode || '',
+        barcodeImage: seedProduct.barcodeImage || existing?.barcodeImage || '',
+        qrCode: seedProduct.qrCode || existing?.qrCode || '',
+        qrImage: seedProduct.qrImage || existing?.qrImage || '',
+        youtube: seedProduct.youtube || existing?.youtube || '',
 
-        createdAt: existing?.createdAt || product.createdAt || now,
+        createdAt: existing?.createdAt || seedProduct.createdAt || now,
         updatedAt: now,
       }
 
@@ -62,6 +65,7 @@ export async function GET() {
     })
   } catch (error) {
     console.error(error)
+
     return NextResponse.json(
       { error: 'Failed to seed products' },
       { status: 500 }
