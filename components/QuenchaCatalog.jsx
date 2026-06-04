@@ -308,18 +308,33 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .add-row{display:flex;gap:8px}
 .add-btn{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tr);flex-shrink:0}
 .add-btn:hover{background:var(--tl2)}
-.color-table-head{display:grid;grid-template-columns:210px 1fr 68px 1fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 6px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:4px}
-.color-row{display:grid;grid-template-columns:210px 1fr 68px 1fr 28px;gap:8px;align-items:start;margin-bottom:8px}
-.cp{width:26px;height:26px;border:none;border-radius:6px;cursor:pointer;padding:1px;background:none;flex-shrink:0}
-.multi-swatch-edit{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;min-height:34px}
-.swatch-input-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid rgba(185,220,210,.55);border-radius:7px;padding:3px 6px 3px 3px;flex-shrink:0}
-.swatch-input-wrap .cp{width:26px;height:26px}
-.swatch-rm{position:absolute;right:-6px;top:-6px;width:15px;height:15px;border-radius:50%;border:none;background:#ef4444;color:#fff;font-size:9px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.swatch-add{width:30px;height:30px;border-radius:7px;border:1.5px dashed rgba(39,153,137,.45);background:rgba(185,220,210,.35);color:var(--tl);font-size:16px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);margin-top:2px}
+.color-collection-panel{background:var(--sf4);border:1px solid rgba(185,220,210,.65);border-radius:10px;padding:12px;margin-bottom:12px}
+.collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.collection-title{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--tl)}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.collection-item{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid rgba(185,220,210,.55);border-radius:8px;padding:7px}
+.collection-item input[type=color]{width:28px;height:28px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0}
+.collection-name{flex:1;min-width:0;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);border:1px solid rgba(185,220,210,.55);border-radius:6px;padding:6px 8px;outline:none;background:var(--bg)}
+.collection-name:focus{border-color:var(--tl);background:#fff}
+.collection-add-row{display:flex;gap:7px;margin-top:8px}
+.collection-add-row input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
+.collection-add-row input[type=text]{flex:1;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.65);border-radius:7px;padding:8px 10px;outline:none;background:#fff}
+.collection-add-row button{background:var(--tl);color:#fff;border:none;border-radius:7px;padding:8px 12px;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.color-table-head{display:grid;grid-template-columns:180px 128px 1fr 72px 1.25fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 8px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:8px}
+.color-row{display:grid;grid-template-columns:180px 128px 1fr 72px 1.25fr 28px;gap:8px;align-items:start;margin-bottom:8px;background:#fff;border:1px solid rgba(185,220,210,.45);border-radius:10px;padding:10px}
+.cp{width:34px;height:34px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:none}
+.multi-swatch-edit{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-height:34px}
+.swatch-input-wrap{position:relative;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:6px;background:var(--bg);border:1px solid rgba(185,220,210,.55);border-radius:8px;padding:4px 8px 4px 4px;min-width:0}
+.swatch-input-wrap .cp{width:28px;height:28px}
+.swatch-rm{position:absolute;right:-6px;top:-6px;width:16px;height:16px;border-radius:50%;border:none;background:#ef4444;color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.swatch-add{width:100%;height:30px;border-radius:8px;border:1.5px dashed rgba(39,153,137,.45);background:rgba(185,220,210,.35);color:var(--tl);font-size:12px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:var(--tr)}
+.swatch-add::after{content:' color';font-size:11px;font-weight:800;letter-spacing:.02em}
 .swatch-add:hover{background:rgba(45,204,211,.18);border-color:var(--tl)}
-.hex-in{width:78px;border:none;background:transparent;font-family:monospace;font-size:11px;font-weight:700;color:var(--gr);outline:none;text-transform:uppercase;padding:3px 0}
+.hex-in{width:100%;min-width:0;border:none;background:transparent;font-family:monospace;font-size:11px;font-weight:800;color:var(--gr);outline:none;text-transform:uppercase;padding:3px 0}
 .hex-in:focus{color:var(--tl)}
-@media(max-width:768px){.color-table-head{grid-template-columns:1fr}.color-table-head span:not(:first-child){display:none}.color-row{grid-template-columns:1fr;gap:6px;background:#fff;border:1px solid rgba(185,220,210,.45);border-radius:8px;padding:10px}}
+.collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
+.collection-select:focus{border-color:var(--tl);background:#fff}
+@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
 .rm-btn{background:none;border:none;cursor:pointer;color:rgba(239,68,68,.5);font-size:16px;transition:var(--tr)}
@@ -448,26 +463,33 @@ const COLOR_COLLECTION_MAP = {
   'Sky': 'Bloom', 'Meadow': 'Bloom', 'Coral': 'Bloom', 'Blossom': 'Bloom',
   'Bubbly': 'Poply', 'Minty': 'Poply', 'Purpy': 'Poply', 'Rosy': 'Poply',
 }
-const COLLECTION_ORDER = ['OG', 'XPRESS', 'Horizon', 'Bloom', 'Poply']
-const COLLECTION_COLORS = {
-  OG: 'var(--gr)',
-  XPRESS: 'var(--tl)',
-  Horizon: '#9B7EA8',
-  Bloom: '#5CB8A0',
-  Poply: '#E070A0',
+const DEFAULT_COLOR_COLLECTIONS = [
+  { value:'OG',      label:'OG',      color:'#63666A' },
+  { value:'XPRESS',  label:'XPRESS',  color:'#279989' },
+  { value:'Horizon', label:'Horizon', color:'#9B7EA8' },
+  { value:'Bloom',   label:'Bloom',   color:'#5CB8A0' },
+  { value:'Poply',   label:'Poply',   color:'#E070A0' },
+]
+
+function defaultColorCollection(color) {
+  return color?.collection || COLOR_COLLECTION_MAP[color?.name] || 'Other'
 }
 
-function groupColorsByCollection(colors) {
+function groupColorsByCollection(colors, collections = DEFAULT_COLOR_COLLECTIONS) {
   const groups = {}
-  colors.forEach(clr => {
-    const col = COLOR_COLLECTION_MAP[clr.name] || 'Other'
+  ;(colors || []).forEach(clr => {
+    const col = defaultColorCollection(clr)
     if (!groups[col]) groups[col] = []
     groups[col].push(clr)
   })
-  // Return in defined order, then any "Other"
   const ordered = []
-  COLLECTION_ORDER.forEach(name => { if (groups[name]) ordered.push({ name, colors: groups[name] }) })
-  if (groups['Other']) ordered.push({ name: 'Other', colors: groups['Other'] })
+  const knownValues = collections.map(c=>c.value)
+  collections.forEach(col => {
+    if (groups[col.value]) ordered.push({ name: col.label, value: col.value, color: col.color, colors: groups[col.value] })
+  })
+  Object.keys(groups).forEach(key => {
+    if (!knownValues.includes(key)) ordered.push({ name: key, value: key, color: '#B9DCD2', colors: groups[key] })
+  })
   return ordered
 }
 
@@ -495,7 +517,7 @@ function getColorHexes(color) {
 
 function normalizeColorVariant(color) {
   const hexes = getColorHexes(color)
-  return { ...color, hex: hexes[0] || '#B9DCD2', hexes }
+  return { ...color, hex: hexes[0] || '#B9DCD2', hexes, collection: defaultColorCollection(color) }
 }
 
 function swatchBackground(color) {
@@ -884,6 +906,8 @@ export default function QuenchaCatalog() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
+  const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
 
   // Fetch all data on mount — auto-seed if empty
   useEffect(() => {
@@ -905,6 +929,14 @@ export default function QuenchaCatalog() {
       if (settings.bannerInterval !== undefined) setBannerIntervalVal(settings.bannerInterval)
       if (settings.heroTitle)                    setHeroTitle(settings.heroTitle)
       if (settings.heroSub)                      setHeroSub(settings.heroSub)
+      if (Array.isArray(settings.colorCollections)) {
+        setColorCollections(settings.colorCollections)
+      } else if (typeof window !== 'undefined') {
+        try {
+          const storedCollections = JSON.parse(localStorage.getItem('qnh-color-collections') || 'null')
+          if (Array.isArray(storedCollections)) setColorCollections(storedCollections)
+        } catch {}
+      }
       setLoading(false)
     }).catch(() => { setProducts(SEED); setLoading(false) })
   }, [])
@@ -955,6 +987,11 @@ export default function QuenchaCatalog() {
   const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
   const [bannerInterval, setBannerIntervalVal] = useState(4.5)
   const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); syncSettings({ bannerInterval: v }) }, [syncSettings])
+  const saveColorCollections = useCallback((next) => {
+    setColorCollections(next)
+    if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
+    syncSettings({ colorCollections: next })
+  }, [syncSettings])
 
   const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
   const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
@@ -1068,7 +1105,7 @@ ${message.trim()}` : 'Message / Notes:',
   const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
   const [editTab, setEditTab] = useState('details')
   const [badgeInput, setBadgeInput] = useState('')
-  const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:'' })
+  const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
   const [uploadErr, setUploadErr] = useState('')
   const [addingNewExt, setAddingNewExt] = useState(false)
   const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
@@ -1108,13 +1145,13 @@ ${message.trim()}` : 'Message / Notes:',
   const openEdit = (p) => {
     setEditTarget(p)
     setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:[...(p.images||[])],dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
   const openNewProduct = () => {
     setEditTarget(null)
     setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
 
@@ -1198,8 +1235,8 @@ ${message.trim()}` : 'Message / Notes:',
     const { name, code, sku } = newColor
     const hexes = getColorHexes(newColor)
     if (!name || !code || !sku) { alert('Name, code, and SKU required.'); return }
-    setEf(f=>({...f,colors:[...f.colors,{name,code:code.toUpperCase(),hex:hexes[0]||'#B9DCD2',hexes,sku:sku.toUpperCase()}]}))
-    setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:'' })
+    setEf(f=>({...f,colors:[...f.colors,normalizeColorVariant({name,code:code.toUpperCase(),hex:hexes[0]||'#B9DCD2',hexes,collection:newColor.collection||'OG',sku:sku.toUpperCase()})]}))
+    setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
   }
   const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
   const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
@@ -1251,6 +1288,19 @@ ${message.trim()}` : 'Message / Notes:',
     const hexes = getColorHexes(n).filter((_,idx)=>idx!==hexIndex)
     return normalizeColorVariant({...n,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
   })
+
+  const updateCollection = (value, patch) => {
+    const next = colorCollections.map(c=>c.value===value?{...c,...patch}:c)
+    saveColorCollections(next)
+  }
+  const addCollection = () => {
+    const label = newCollection.label.trim()
+    if (!label) return
+    const value = label.replace(/\s+/g,' ').trim()
+    if (colorCollections.some(c=>c.value.toLowerCase()===value.toLowerCase())) return
+    saveColorCollections([...colorCollections,{value,label,color:newCollection.color||'#279989'}])
+    setNewCollection({label:'',color:'#279989'})
+  }
 
   // SKU Base — bulk-edit all color variant SKUs from Details tab
   const getEditableSkuBase = () => {
@@ -1732,10 +1782,10 @@ ${message.trim()}` : 'Message / Notes:',
               {vp.colors.length > 0 && (
                 <div>
                   <span className="vm-color-sec-lbl">Colors</span>
-                  {groupColorsByCollection(vp.colors).map(group=>(
+                  {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
                     <div key={group.name} style={{marginBottom:10}}>
                       <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
-                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:COLLECTION_COLORS[group.name]||'var(--gr)',background:`${COLLECTION_COLORS[group.name]||'var(--gr)'}18`,border:`1px solid ${COLLECTION_COLORS[group.name]||'var(--gr)'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
+                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
                         <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
                       </div>
                       <div className="vm-color-grid">
@@ -1933,9 +1983,27 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'colors' && (
               <div className="em-panel">
-                <div className="f-hint">Each color variant gets its own SKU. Use + beside the swatch to add 2 or more colors, then paste hex codes directly into the HEX fields.</div>
-                <div style={{background:'var(--bg)',borderRadius:8,padding:12}}>
-                  <div className="color-table-head"><span>Swatch</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
+                <div className="f-hint">Each color variant gets its own SKU. Add multiple HEX colors inside one variant for parts like body, lid, handle, button, or boot. Choose the collection/group title for each variant.</div>
+                <div className="color-collection-panel">
+                  <div className="collection-head">
+                    <span className="collection-title">Color collections / group titles</span>
+                  </div>
+                  <div className="collection-grid">
+                    {colorCollections.map(col=>(
+                      <div key={col.value} className="collection-item">
+                        <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
+                        <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="collection-add-row">
+                    <input type="color" value={newCollection.color} onChange={e=>setNewCollection(n=>({...n,color:e.target.value}))}/>
+                    <input type="text" value={newCollection.label} onChange={e=>setNewCollection(n=>({...n,label:e.target.value}))} placeholder="Add group title, e.g. Seasonal, Pastel, Male, Female" onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addCollection()}}}/>
+                    <button type="button" onClick={addCollection}>+ Add Group</button>
+                  </div>
+                </div>
+                <div style={{background:'var(--bg)',borderRadius:10,padding:12}}>
+                  <div className="color-table-head"><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
                   {ef.colors.length === 0
                     ? <p style={{fontSize:12,color:'var(--gr)',padding:'4px 0'}}>No colors yet. Add one below.</p>
                     : ef.colors.map((c,i)=>(
@@ -1955,8 +2023,12 @@ ${message.trim()}` : 'Message / Notes:',
                               {getColorHexes(c).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeColorHex(i,hi)}>×</button>}
                             </span>
                           ))}
-                          <button type="button" className="swatch-add" title="Add another color to this variant" onClick={()=>addColorHex(i)}>+</button>
+                          <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={()=>addColorHex(i)}>+</button>
                         </div>
+                        <select className="collection-select" value={c.collection || defaultColorCollection(c)} onChange={e=>updateColor(i,'collection',e.target.value)}>
+                          {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
+                          <option value="Other">Other</option>
+                        </select>
                         <input className="in-sm" value={c.name} onChange={e=>updateColor(i,'name',e.target.value)} placeholder="Name"/>
                         <input className="in-sm" value={c.code} onChange={e=>updateColor(i,'code',e.target.value)} placeholder="Code" maxLength={4}/>
                         <input className="in-sm" value={c.sku} onChange={e=>updateColor(i,'sku',e.target.value)} placeholder="SKU"/>
@@ -1967,6 +2039,7 @@ ${message.trim()}` : 'Message / Notes:',
                 </div>
                 <div className="add-color-form">
                   <div className="sub-hd">Add Color Variant</div>
+                  <div className="color-table-head"><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
                   <div className="color-row">
                     <div className="multi-swatch-edit">
                       {getColorHexes(newColor).map((hex, hi)=>(
@@ -1983,8 +2056,12 @@ ${message.trim()}` : 'Message / Notes:',
                           {getColorHexes(newColor).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeNewColorHex(hi)}>×</button>}
                         </span>
                       ))}
-                      <button type="button" className="swatch-add" title="Add another color to this variant" onClick={addNewColorHex}>+</button>
+                      <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={addNewColorHex}>+</button>
                     </div>
+                    <select className="collection-select" value={newColor.collection || 'OG'} onChange={e=>setNewColor(n=>({...n,collection:e.target.value}))}>
+                      {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
+                      <option value="Other">Other</option>
+                    </select>
                     <input className="in-sm" value={newColor.name} onChange={e=>setNewColor(n=>({...n,name:e.target.value}))} placeholder="Name"/>
                     <input className="in-sm" value={newColor.code} onChange={e=>setNewColor(n=>({...n,code:e.target.value.toUpperCase()}))} placeholder="Code" maxLength={4}/>
                     <input className="in-sm" value={newColor.sku} onChange={e=>setNewColor(n=>({...n,sku:e.target.value.toUpperCase()}))} placeholder="Full SKU"/>
