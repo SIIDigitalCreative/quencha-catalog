@@ -97,36 +97,36 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 
 /* LAYOUT */
 .qnh-layout{display:flex;margin-top:var(--nh);min-height:calc(100vh - var(--nh))}
-.qnh-sidebar{width:var(--sw);background:var(--bk);position:fixed;top:var(--nh);bottom:0;left:0;overflow-y:auto;z-index:100}
+.qnh-sidebar{width:var(--sw);background:#E6F4F1;position:fixed;top:var(--nh);bottom:0;left:0;overflow-y:auto;z-index:100;border-right:1px solid rgba(185,220,210,.75);box-shadow:2px 0 14px rgba(39,153,137,.06)}
 .qnh-sidebar::-webkit-scrollbar{width:4px}
-.qnh-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-.sb-hero{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
-.sb-hl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.25);text-transform:uppercase;margin-bottom:2px}
-.sb-total{font-size:28px;font-weight:900;color:var(--cy);line-height:1}
-.sb-sub{font-size:11px;color:rgba(255,255,255,.3)}
+.qnh-sidebar::-webkit-scrollbar-thumb{background:rgba(39,153,137,.25);border-radius:2px}
+.sb-hero{padding:20px 20px 16px;border-bottom:1px solid rgba(39,153,137,.12);background:rgba(255,255,255,.35)}
+.sb-hl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(39,153,137,.55);text-transform:uppercase;margin-bottom:2px}
+.sb-total{font-size:28px;font-weight:900;color:var(--tl);line-height:1}
+.sb-sub{font-size:11px;color:rgba(39,153,137,.6)}
 .sb-sec{padding:12px 12px 4px}
-.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.2);text-transform:uppercase;display:block;padding:4px 8px 8px}
-.fb{display:flex;width:100%;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:2px solid transparent;background:transparent;cursor:pointer;color:rgba(255,255,255,.45);font-family:var(--fn);font-size:12px;font-weight:500;transition:var(--tr);text-align:left;margin-bottom:1px}
-.fb:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.8)}
-.fb.on{background:rgba(45,204,211,.1);color:var(--cy);border-left-color:var(--cy)!important}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(39,153,137,.55);text-transform:uppercase;display:block;padding:4px 8px 8px}
+.fb{display:flex;width:100%;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:2px solid transparent;background:transparent;cursor:pointer;color:rgba(58,58,58,.62);font-family:var(--fn);font-size:12px;font-weight:500;transition:var(--tr);text-align:left;margin-bottom:1px}
+.fb:hover{background:rgba(255,255,255,.55);color:var(--tl)}
+.fb.on{background:rgba(255,255,255,.72);color:var(--tl);border-left-color:var(--tl)!important;box-shadow:0 2px 10px rgba(39,153,137,.08)}
 .fb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .fb-ico{font-size:13px;flex-shrink:0}
 .fb-lbl{flex:1}
-.fb-cnt{font-size:10px;padding:1px 6px;border-radius:999px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.3)}
-.fb.on .fb-cnt{background:rgba(45,204,211,.18);color:var(--cy)}
-.sb-div{border:none;border-top:1px solid rgba(255,255,255,.06);margin:6px 16px}
+.fb-cnt{font-size:10px;padding:1px 6px;border-radius:999px;background:rgba(39,153,137,.08);color:rgba(39,153,137,.65)}
+.fb.on .fb-cnt{background:rgba(45,204,211,.18);color:var(--tl)}
+.sb-div{border:none;border-top:1px solid rgba(39,153,137,.12);margin:6px 16px}
 .pc-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 10px}
-.pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
-.pc:hover{border-color:var(--cy);color:var(--cy)}
-.pc.on{background:rgba(45,204,211,.15);border-color:var(--cy);color:var(--cy)}
-.clear-filters{display:block;margin:8px 16px 0;width:calc(100% - 32px);background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:rgba(255,255,255,.35);font-family:var(--fn);font-size:11px;font-weight:700;padding:7px;cursor:pointer;transition:var(--tr)}
-.clear-filters:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7)}
+.pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.48);border:1px solid rgba(39,153,137,.12);color:rgba(58,58,58,.62);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
+.pc:hover{border-color:var(--tl);color:var(--tl);background:#fff}
+.pc.on{background:rgba(45,204,211,.15);border-color:var(--tl);color:var(--tl)}
+.clear-filters{display:block;margin:8px 16px 0;width:calc(100% - 32px);background:rgba(255,255,255,.42);border:1px solid rgba(39,153,137,.15);border-radius:6px;color:rgba(39,153,137,.62);font-family:var(--fn);font-size:11px;font-weight:700;padding:7px;cursor:pointer;transition:var(--tr)}
+.clear-filters:hover{border-color:var(--tl);color:var(--tl);background:#fff}
 
 /* MOBILE */
 .mob-filter-btn{display:none;position:fixed;bottom:80px;left:16px;z-index:150;background:var(--tl);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(39,153,137,.4);align-items:center;gap:6px}
 .mob-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.4);backdrop-filter:blur(2px)}
-.mob-drawer{position:absolute;top:0;left:0;bottom:0;width:280px;background:var(--bk);overflow-y:auto;padding-top:44px}
-.drawer-close{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.08);border:none;border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,.6);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mob-drawer{position:absolute;top:0;left:0;bottom:0;width:280px;background:#E6F4F1;overflow-y:auto;padding-top:44px}
+.drawer-close{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.65);border:none;border-radius:50%;width:32px;height:32px;color:var(--tl);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
 /* MAIN */
 .qnh-main{margin-left:var(--sw);flex:1;padding:32px 36px 100px;min-width:0}
