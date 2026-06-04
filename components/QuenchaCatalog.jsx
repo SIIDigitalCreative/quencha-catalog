@@ -37,6 +37,12 @@ const EXT_ORDER = ['core','kids','pets','tech']
 const CAT_ORDER = ['sip','savor','go','accessories']
 const EXT_COLORS = {core:'#279989',kids:'#5891c4',pets:'#b06820',tech:'#2B4C5E'}
 const CAT_ICONS = {sip:'💧',savor:'🍱',go:'👜',accessories:'⚙️'}
+const DEFAULT_CATS = [
+  {value:'sip',         label:'SIP — Drinkware',      icon:'💧'},
+  {value:'savor',       label:'SAVOR — Lunch & Food',  icon:'🍱'},
+  {value:'go',          label:'GO — Bags & Carry',     icon:'👜'},
+  {value:'accessories', label:'Accessories',           icon:'⚙️'},
+]
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
@@ -880,6 +886,9 @@ export default function QuenchaCatalog() {
   // ── FILTERS ──
   const [filterExt, setFilterExt] = useState('all')
   const [filterCat, setFilterCat] = useState(null)
+  const [cats, setCats] = useState(DEFAULT_CATS)
+  const [catMgrOpen, setCatMgrOpen] = useState(false)
+  const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
   const [filterPMin, setFilterPMin] = useState(null)
   const [filterPMax, setFilterPMax] = useState(null)
   const [search, setSearch] = useState('')
@@ -1107,11 +1116,12 @@ export default function QuenchaCatalog() {
       <hr className="sb-div"/>
       <div className="sb-sec">
         <span className="sb-lbl">Category</span>
-        {Object.entries(CAT_ICONS).map(([v,ico])=>(
+        {Object.entries(cats.reduce((a,c)=>({...a,[c.value]:c.icon}),{})).map(([v,ico])=>(
           <button key={v} className={`fb ${filterCat===v?'on':''}`} style={{borderLeftColor:filterCat===v?'var(--cy)':'transparent'}} onClick={()=>setFilterCat(filterCat===v?null:v)}>
-            <span className="fb-ico">{ico}</span><span className="fb-lbl">{CAT_LABELS[v]}</span><span className="fb-cnt">{counts.cat[v]||0}</span>
+            <span className="fb-ico">{ico}</span><span className="fb-lbl">{cats.find(c=>c.value===v)?.label||v}</span><span className="fb-cnt">{counts.cat[v]||0}</span>
           </button>
         ))}
+        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>setCatMgrOpen(true)}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Categories</span></button>}
       </div>
       <hr className="sb-div"/>
       <div className="sb-sec">
@@ -1221,7 +1231,7 @@ export default function QuenchaCatalog() {
               else{
                 const cat=link.replace('#','')
                 const cats=['sip','savor','go','accessories']
-                if(cats.includes(cat)){setFilterCat(cat)}
+                if(cats.some(c=>c.value===cat)){setFilterCat(cat)}
               }
             }}
           />
@@ -1249,13 +1259,14 @@ export default function QuenchaCatalog() {
               <h3 style={{fontSize:18,fontWeight:700,color:'var(--bk)',marginBottom:6}}>No products found</h3>
               <p>Try a different filter or search term.</p>
             </div>
-          ) : EXT_ORDER.map(ext => !grouped[ext] ? null : CAT_ORDER.map(cat => {
+          ) : EXT_ORDER.map(ext => !grouped[ext] ? null : cats.map(catObj => {
+            const cat = catObj.value
             const prods = grouped[ext]?.[cat]; if (!prods?.length) return null
             return (
               <div key={`${ext}-${cat}`}>
                 <div className="cat-hdr">
                   <div className="cat-line"/>
-                  <span className="cat-nm">{CAT_LABELS[cat]}</span>
+                  <span className="cat-nm">{cats.find(c=>c.value===cat)?.label||cat}</span>
                   {ext !== 'core' && <span className="ext-tag" style={{background:EXT_COLORS[ext]}}>{EXT_LABELS[ext]}</span>}
                   <span className="cat-cnt">{prods.length} item{prods.length>1?'s':''}</span>
                   <div className="cat-line"/>
@@ -1318,7 +1329,7 @@ export default function QuenchaCatalog() {
           <div className="modal">
             <div className="m-hdr" style={{background:'var(--sf4)'}}>
               <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{EXT_LABELS[viewProduct.ext]} · {CAT_LABELS[viewProduct.cat]}</div>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{EXT_LABELS[viewProduct.ext]} · {cats.find(c=>c.value===viewProduct.cat)?.label||viewProduct.cat}</div>
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{viewProduct.name}</div>
                 {viewProduct.colors[0]?.sku && (
                   <code
@@ -1493,7 +1504,7 @@ export default function QuenchaCatalog() {
                   <div className="f-col">
                     <label className="f-lbl">Category</label>
                     <select className="f-sel" value={ef.cat} onChange={e=>setEf(f=>({...f,cat:e.target.value}))}>
-                      {[['sip','SIP — Drinkware'],['savor','SAVOR — Lunch'],['go','GO — Bags'],['accessories','Accessories']].map(([v,l])=><option key={v} value={v}>{l}</option>)}
+                      {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
                     </select>
                   </div>
                 </div>
@@ -1674,6 +1685,54 @@ export default function QuenchaCatalog() {
               {[['🛍','Shopee','shopee.ph/quenchaph','https://shopee.ph/quenchaph'],['🛒','Lazada','lazada.com.ph/shop/quencha','https://lazada.com.ph/shop/quencha'],['📱','TikTok Shop','@quenchaph','#'],['🌐','Corporate','sunbeamsimpexinc.com','https://sunbeamsimpexinc.com']].map(([ico,n,l,href])=>(
                 <a key={n} className="inq-link" href={href} target="_blank" rel="noreferrer">{ico} {n} — {l}</a>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CATEGORY MANAGER MODAL */}
+      {catMgrOpen && (
+        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setCatMgrOpen(false)}}>
+          <div className="modal" style={{maxWidth:480}}>
+            <div className="m-hdr" style={{background:'var(--sf4)'}}>
+              <div>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
+                <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Categories</div>
+              </div>
+              <button className="m-close" onClick={()=>setCatMgrOpen(false)}>✕</button>
+            </div>
+            <div className="m-body" style={{gap:10}}>
+              {/* Existing categories */}
+              {cats.map((c,i)=>(
+                <div key={c.value} style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
+                  <input value={c.icon} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,icon:e.target.value}:x))} style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'4px 0',background:'#fff',outline:'none'}}/>
+                  <input value={c.label} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,label:e.target.value}:x))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
+                  <input value={c.value} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,value:e.target.value}:x))} placeholder="value (no spaces)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                  <button onClick={()=>setCats(cats.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                </div>
+              ))}
+              {/* Add new category */}
+              <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Category</div>
+                <div style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr auto',gap:8,alignItems:'center'}}>
+                  <input value={newCat.icon} onChange={e=>setNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
+                  <input value={newCat.label} onChange={e=>setNewCat(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
+                  <input value={newCat.value} onChange={e=>setNewCat(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                  <button onClick={()=>{
+                    const val = newCat.value || newCat.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                    if(!newCat.label.trim()||cats.some(c=>c.value===val)) return
+                    setCats([...cats,{value:val,label:newCat.label,icon:newCat.icon||'🏷️'}])
+                    setNewCat({value:'',label:'',icon:'🏷️'})
+                  }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
+                </div>
+              </div>
+            </div>
+            <div className="m-footer">
+              <div/>
+              <div className="m-footer-r">
+                <button className="cancel-btn" onClick={()=>setCatMgrOpen(false)}>Cancel</button>
+                <button className="save-btn" onClick={()=>setCatMgrOpen(false)}>✓ Done</button>
+              </div>
             </div>
           </div>
         </div>
