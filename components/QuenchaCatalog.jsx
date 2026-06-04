@@ -1502,10 +1502,14 @@ export default function QuenchaCatalog() {
                     </select>
                   </div>
                   <div className="f-col">
-                    <label className="f-lbl">Category</label>
-                    <select className="f-sel" value={ef.cat} onChange={e=>setEf(f=>({...f,cat:e.target.value}))}>
-                      {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
-                    </select>
+                    <label className="f-lbl">Category <span style={{fontWeight:400,color:'var(--gr)'}}>— optional</span></label>
+                    <div style={{display:'flex',gap:6}}>
+                      <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>setEf(f=>({...f,cat:e.target.value}))}>
+                        <option value="">— No Category —</option>
+                        {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
+                      </select>
+                      {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
+                    </div>
                   </div>
                 </div>
                 <div className="f-row">
