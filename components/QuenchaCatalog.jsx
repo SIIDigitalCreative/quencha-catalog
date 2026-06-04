@@ -1022,6 +1022,7 @@ export default function QuenchaCatalog() {
     const srp = parseFloat(ef.srp)
     if (!srp || srp <= 0) { alert('Valid price is required.'); return }
     const data = { ...ef, srp, packing: parseInt(ef.packing) || 0, dimensions: ef.dimensions, barcode: ef.barcode||'', barcodeImage: ef.barcodeImage||'', qrCode: ef.qrCode||'', qrImage: ef.qrImage||'', youtube: ef.youtube||'' }
+    console.log('SAVE ef.youtube:', ef.youtube, '| data.youtube:', data.youtube)
     if (editTarget) {
       const saved = { ...editTarget, ...data }
       const updated = products.map(p => p.id === editTarget.id ? saved : p)
