@@ -308,9 +308,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .add-row{display:flex;gap:8px}
 .add-btn{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tr);flex-shrink:0}
 .add-btn:hover{background:var(--tl2)}
-.color-table-head{display:grid;grid-template-columns:38px 1fr 68px 1fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 6px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:4px}
-.color-row{display:grid;grid-template-columns:38px 1fr 68px 1fr 28px;gap:8px;align-items:center;margin-bottom:6px}
+.color-table-head{display:grid;grid-template-columns:122px 1fr 68px 1fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 6px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:4px}
+.color-row{display:grid;grid-template-columns:122px 1fr 68px 1fr 28px;gap:8px;align-items:center;margin-bottom:6px}
 .cp{width:34px;height:34px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:none}
+.multi-swatch-edit{display:flex;align-items:center;gap:4px;flex-wrap:wrap;min-height:34px}
+.swatch-input-wrap{position:relative;width:34px;height:34px;flex-shrink:0}
+.swatch-input-wrap .cp{width:34px;height:34px}
+.swatch-rm{position:absolute;right:-5px;top:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ef4444;color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.swatch-add{width:28px;height:28px;border-radius:6px;border:1.5px dashed rgba(39,153,137,.45);background:rgba(185,220,210,.35);color:var(--tl);font-size:16px;font-weight:900;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.swatch-add:hover{background:rgba(45,204,211,.18);border-color:var(--tl)}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
 .rm-btn{background:none;border:none;cursor:pointer;color:rgba(239,68,68,.5);font-size:16px;transition:var(--tr)}
@@ -460,6 +466,25 @@ function groupColorsByCollection(colors) {
   COLLECTION_ORDER.forEach(name => { if (groups[name]) ordered.push({ name, colors: groups[name] }) })
   if (groups['Other']) ordered.push({ name: 'Other', colors: groups['Other'] })
   return ordered
+}
+
+function getColorHexes(color) {
+  const hexes = Array.isArray(color?.hexes) ? color.hexes.filter(Boolean) : []
+  if (hexes.length) return hexes
+  return [color?.hex || '#B9DCD2']
+}
+
+function normalizeColorVariant(color) {
+  const hexes = getColorHexes(color)
+  return { ...color, hex: hexes[0] || '#B9DCD2', hexes }
+}
+
+function swatchBackground(color) {
+  const hexes = getColorHexes(color)
+  if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
+  const step = 100 / hexes.length
+  const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
+  return `linear-gradient(90deg, ${stops})`
 }
 
 // ─── YOUTUBE HELPER ──────────────────────────────────────────────────────────
@@ -1020,7 +1045,7 @@ ${message.trim()}` : 'Message / Notes:',
   const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
   const [editTab, setEditTab] = useState('details')
   const [badgeInput, setBadgeInput] = useState('')
-  const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',sku:'' })
+  const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:'' })
   const [uploadErr, setUploadErr] = useState('')
   const [addingNewExt, setAddingNewExt] = useState(false)
   const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
@@ -1059,14 +1084,14 @@ ${message.trim()}` : 'Message / Notes:',
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
     setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>({...c})),images:[...(p.images||[])],dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:[...(p.images||[])],dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
   const openNewProduct = () => {
     setEditTarget(null)
     setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
 
@@ -1128,13 +1153,41 @@ ${message.trim()}` : 'Message / Notes:',
 
   // Colors
   const addColor = () => {
-    const { name, code, hex, sku } = newColor
+    const { name, code, sku } = newColor
+    const hexes = getColorHexes(newColor)
     if (!name || !code || !sku) { alert('Name, code, and SKU required.'); return }
-    setEf(f=>({...f,colors:[...f.colors,{name,code:code.toUpperCase(),hex,sku:sku.toUpperCase()}]}))
-    setNewColor({ name:'',code:'',hex:'#B9DCD2',sku:'' })
+    setEf(f=>({...f,colors:[...f.colors,{name,code:code.toUpperCase(),hex:hexes[0]||'#B9DCD2',hexes,sku:sku.toUpperCase()}]}))
+    setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],sku:'' })
   }
   const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
-  const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?{...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}:c)}))
+  const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
+  const updateColorHex = (i, hexIndex, value) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+    if (j !== i) return c
+    const hexes = getColorHexes(c).map((h,idx)=>idx===hexIndex?value:h)
+    return normalizeColorVariant({...c,hex:hexes[0],hexes})
+  })}))
+  const addColorHex = (i) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+    if (j !== i) return c
+    const hexes = [...getColorHexes(c), '#B9DCD2']
+    return normalizeColorVariant({...c,hex:hexes[0],hexes})
+  })}))
+  const removeColorHex = (i, hexIndex) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+    if (j !== i) return c
+    const hexes = getColorHexes(c).filter((_,idx)=>idx!==hexIndex)
+    return normalizeColorVariant({...c,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
+  })}))
+  const updateNewColorHex = (hexIndex, value) => setNewColor(n=>{
+    const hexes = getColorHexes(n).map((h,idx)=>idx===hexIndex?value:h)
+    return normalizeColorVariant({...n,hex:hexes[0],hexes})
+  })
+  const addNewColorHex = () => setNewColor(n=>{
+    const hexes = [...getColorHexes(n), '#B9DCD2']
+    return normalizeColorVariant({...n,hex:hexes[0],hexes})
+  })
+  const removeNewColorHex = (hexIndex) => setNewColor(n=>{
+    const hexes = getColorHexes(n).filter((_,idx)=>idx!==hexIndex)
+    return normalizeColorVariant({...n,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
+  })
 
   // SKU Base — bulk-edit all color variant SKUs from Details tab
   const getEditableSkuBase = () => {
@@ -1305,7 +1358,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div className="c-desc">{p.desc}</div>
           <div className="c-badges">{p.badges.slice(0,3).map(b=><span key={b} className="c-badge">{b}</span>)}</div>
           <div className="c-colors">
-            {colors.map(c=><span key={c.code} className="c-dot" style={{background:c.hex}} title={c.name}/>)}
+            {colors.map(c=><span key={c.code} className="c-dot" style={{background:swatchBackground(c)}} title={getColorHexes(c).length > 1 ? `${c.name} (${getColorHexes(c).length} colors)` : c.name}/>) }
             {extra > 0 && <span className="c-more">+{extra}</span>}
           </div>
           {/* Footer: SRP and Packing same font/size */}
@@ -1625,7 +1678,7 @@ ${message.trim()}` : 'Message / Notes:',
                       <div className="vm-color-grid">
                         {group.colors.map(clr=>(
                           <div key={clr.sku} className={`vm-color-item copyable ${copied===clr.sku?'sku-copied':''}`} onClick={()=>copy(clr.sku)} title={`Copy ${clr.sku}`}>
-                            <span className="vm-color-swatch" style={{background:clr.hex}}/>
+                            <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
                             <div className="vm-color-info">
                               <span className="vm-color-name">{clr.name}</span>
                               <span className="vm-color-sku">{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
@@ -1817,14 +1870,22 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'colors' && (
               <div className="em-panel">
-                <div className="f-hint">Each color variant gets its own SKU. Format: BASE-COLORCODE (e.g. QNH-IT550-WT)</div>
+                <div className="f-hint">Each color variant gets its own SKU. Use + beside the swatch to add 2 or more colors to one variant.</div>
                 <div style={{background:'var(--bg)',borderRadius:8,padding:12}}>
                   <div className="color-table-head"><span>Swatch</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
                   {ef.colors.length === 0
                     ? <p style={{fontSize:12,color:'var(--gr)',padding:'4px 0'}}>No colors yet. Add one below.</p>
                     : ef.colors.map((c,i)=>(
                       <div key={i} className="color-row">
-                        <input type="color" className="cp" value={c.hex} onChange={e=>updateColor(i,'hex',e.target.value)}/>
+                        <div className="multi-swatch-edit">
+                          {getColorHexes(c).map((hex, hi)=>(
+                            <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
+                              <input type="color" className="cp" value={hex} onChange={e=>updateColorHex(i,hi,e.target.value)}/>
+                              {getColorHexes(c).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeColorHex(i,hi)}>×</button>}
+                            </span>
+                          ))}
+                          <button type="button" className="swatch-add" title="Add another color to this variant" onClick={()=>addColorHex(i)}>+</button>
+                        </div>
                         <input className="in-sm" value={c.name} onChange={e=>updateColor(i,'name',e.target.value)} placeholder="Name"/>
                         <input className="in-sm" value={c.code} onChange={e=>updateColor(i,'code',e.target.value)} placeholder="Code" maxLength={4}/>
                         <input className="in-sm" value={c.sku} onChange={e=>updateColor(i,'sku',e.target.value)} placeholder="SKU"/>
@@ -1836,7 +1897,15 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="add-color-form">
                   <div className="sub-hd">Add Color Variant</div>
                   <div className="color-row">
-                    <input type="color" className="cp" value={newColor.hex} onChange={e=>setNewColor(n=>({...n,hex:e.target.value}))}/>
+                    <div className="multi-swatch-edit">
+                      {getColorHexes(newColor).map((hex, hi)=>(
+                        <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
+                          <input type="color" className="cp" value={hex} onChange={e=>updateNewColorHex(hi,e.target.value)}/>
+                          {getColorHexes(newColor).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeNewColorHex(hi)}>×</button>}
+                        </span>
+                      ))}
+                      <button type="button" className="swatch-add" title="Add another color to this variant" onClick={addNewColorHex}>+</button>
+                    </div>
                     <input className="in-sm" value={newColor.name} onChange={e=>setNewColor(n=>({...n,name:e.target.value}))} placeholder="Name"/>
                     <input className="in-sm" value={newColor.code} onChange={e=>setNewColor(n=>({...n,code:e.target.value.toUpperCase()}))} placeholder="Code" maxLength={4}/>
                     <input className="in-sm" value={newColor.sku} onChange={e=>setNewColor(n=>({...n,sku:e.target.value.toUpperCase()}))} placeholder="Full SKU"/>
