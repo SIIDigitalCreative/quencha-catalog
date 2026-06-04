@@ -623,55 +623,27 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
 
 
 // ─── YOUTUBE BLOCK COMPONENT ─────────────────────────────────────────────────
-function YouTubeBlock({ ytUrl, ytPlaying, setYtPlaying }) {
+function YouTubeBlock({ ytUrl }) {
   if (!ytUrl) return null
   const ytId = getYouTubeId(ytUrl)
   if (!ytId) return null
   const watchUrl = `https://www.youtube.com/watch?v=${ytId}`
   return (
-    <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(185,220,210,.4)',background:'#000'}}>
-      {ytPlaying ? (
-        <div style={{position:'relative',width:'100%',paddingBottom:'56.25%'}}>
-          <iframe
-            style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}}
-            src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`}
-            title="Product video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
-        </div>
-      ) : (
-        <div
-          onClick={()=>setYtPlaying(true)}
-          style={{position:'relative',width:'100%',paddingBottom:'56.25%',cursor:'pointer',background:'#111'}}
-        >
-          <img
-            src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`}
-            alt="Product video"
-            style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',objectFit:'cover',opacity:.85}}
-            onError={e=>{e.target.style.opacity=0}}
-          />
-          <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <div style={{width:68,height:68,borderRadius:'50%',background:'#FF0000',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 24px rgba(0,0,0,.5)'}}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
-            </div>
-          </div>
-          <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'24px 14px 10px',background:'linear-gradient(to bottom,transparent,rgba(0,0,0,.72))'}}>
-            <div style={{color:'#fff',fontSize:12,fontWeight:700,letterSpacing:'.04em'}}>▶ WATCH PRODUCT VIDEO</div>
-          </div>
-        </div>
-      )}
-      <a
-        href={watchUrl}
-        target="_blank"
-        rel="noreferrer"
-        style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.65)',fontSize:12,fontWeight:600,textDecoration:'none',borderTop:'1px solid rgba(255,255,255,.1)'}}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF0000"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v1.9C.7 15.2 1 17.3 1 17.3s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.6 21.5 12 21.5 12 21.5s4.2 0 6.8-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-1.9C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
-        Open on YouTube →
-      </a>
-    </div>
+    <a
+      href={watchUrl}
+      target="_blank"
+      rel="noreferrer"
+      style={{display:'flex',alignItems:'center',gap:16,padding:'16px 20px',background:'#111',borderRadius:10,border:'1px solid rgba(185,220,210,.2)',textDecoration:'none',cursor:'pointer'}}
+    >
+      <div style={{width:52,height:52,borderRadius:'50%',background:'#FF0000',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 2px 12px rgba(255,0,0,.4)'}}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+      </div>
+      <div>
+        <div style={{color:'#fff',fontSize:13,fontWeight:700,letterSpacing:'.02em',marginBottom:3}}>Watch Product Video</div>
+        <div style={{color:'rgba(255,255,255,.45)',fontSize:11,fontFamily:'monospace'}}>youtube.com/watch?v={ytId}</div>
+      </div>
+      <div style={{marginLeft:'auto',color:'rgba(255,255,255,.3)',fontSize:18}}>↗</div>
+    </a>
   )
 }
 
@@ -1409,15 +1381,7 @@ export default function QuenchaCatalog() {
                 )}
               </div>
               {vp.youtube && getYouTubeId(vp.youtube) && (
-                <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(185,220,210,.4)',marginBottom:12,width:'100%',height:320,background:'#000'}}>
-                  <iframe
-                    style={{width:'100%',height:'100%',border:'none',display:'block'}}
-                    src={`https://www.youtube.com/embed/${getYouTubeId(vp.youtube)}?rel=0&modestbranding=1`}
-                    title="Product video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
+                <YouTubeBlock ytUrl={vp.youtube}/>
               )}
               <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
               <p className="vm-desc">{vp.desc}</p>
