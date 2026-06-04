@@ -567,15 +567,17 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hero-media-action{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:var(--tr)}
 .hero-media-action:hover{background:var(--tl2)}
 .hero-video-card{display:flex;min-height:100%}
-.hero-video-frame{position:relative;width:100%;aspect-ratio:16/9;background:#101010;display:flex;align-items:center;justify-content:center}
+.hero-video-frame{position:relative;width:100%;aspect-ratio:16/9;background:#101010;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hero-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 .hero-video-thumb{position:absolute;inset:0;width:100%;height:100%;border:none;background:#111;cursor:pointer;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hero-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.96)}
+.hero-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;filter:saturate(.96)}
 .hero-video-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.32));z-index:1}
 .hero-play-btn{position:relative;z-index:2;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:var(--tl);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 32px rgba(0,0,0,.28);padding-left:4px;transition:var(--tr)}
 .hero-video-thumb:hover .hero-play-btn{transform:scale(1.08);background:#fff}
+.hero-video-edit-btn{position:absolute;top:10px;right:10px;z-index:5;background:rgba(255,255,255,.92);border:1px solid rgba(39,153,137,.18);border-radius:999px;padding:6px 11px;font-family:var(--fn);font-size:11px;font-weight:900;color:var(--tl);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);transition:var(--tr)}
+.hero-video-edit-btn:hover{background:#fff;transform:translateY(-1px)}
 .hero-video-empty{position:relative;z-index:2;color:#fff;font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
-.hero-empty-card{width:100%;height:100%;min-height:180px;border:none;background:var(--sf4);color:var(--tl);font-family:var(--fn);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.hero-empty-card{width:100%;aspect-ratio:16/9;min-height:0;border:none;background:var(--sf4);color:var(--tl);font-family:var(--fn);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
 .hero-empty-card:hover{background:var(--sf7)}
 @media(max-width:1000px){.hero-media-grid{grid-template-columns:1fr}.hero-video-card{min-height:auto}}
 
@@ -928,6 +930,15 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
 
           {showVideoCard && (
             <div className="hero-media-card hero-video-card" style={{order: bannerFirst ? 2 : 1}}>
+              {editMode && hasVideo && (
+                <button
+                  className="hero-video-edit-btn"
+                  onClick={(e)=>{ e.stopPropagation(); setVideoPlaying(false); onEditClick() }}
+                  title="Edit or replace video"
+                >
+                  ✏️ Edit Video
+                </button>
+              )}
               {hasVideo ? (
                 <div className="hero-video-frame">
                   {videoPlaying ? (
@@ -2839,7 +2850,35 @@ ${message.trim()}` : 'Message / Notes:',
                 <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Custom Thumbnail URL (optional)</div>
                 <input value={heroVideoThumbnail||''} onChange={e=>onHeroVideoThumbnailChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="Leave blank to use YouTube thumbnail automatically"/>
               </div>
-              <div style={{fontSize:10,color:'var(--gr)'}}>Paste a YouTube watch, shorts, youtu.be, or embed link. The video becomes playable on the catalog page.</div>
+              {getYouTubeId(heroVideoUrl) && (
+                <div style={{border:'1px solid rgba(185,220,210,.65)',borderRadius:8,overflow:'hidden',background:'#111'}}>
+                  <div style={{position:'relative',width:'100%',aspectRatio:'16 / 9',overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <img
+                      src={heroVideoThumbnail || `https://img.youtube.com/vi/${getYouTubeId(heroVideoUrl)}/hqdefault.jpg`}
+                      alt="Video thumbnail preview"
+                      style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',display:'block'}}
+                    />
+                    <span style={{position:'relative',zIndex:1,width:42,height:42,borderRadius:'50%',background:'rgba(255,255,255,.9)',color:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,paddingLeft:3}}>▶</span>
+                  </div>
+                </div>
+              )}
+              <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                <button
+                  type="button"
+                  onClick={()=>{ onHeroVideoUrlChange(''); onHeroVideoThumbnailChange('') }}
+                  style={{border:'1px solid rgba(239,68,68,.25)',background:'rgba(239,68,68,.06)',color:'#b91c1c',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
+                >
+                  Remove Video
+                </button>
+                <button
+                  type="button"
+                  onClick={()=>onHeroVideoThumbnailChange('')}
+                  style={{border:'1px solid var(--sf7)',background:'#fff',color:'var(--tl)',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
+                >
+                  Use Auto Thumbnail
+                </button>
+              </div>
+              <div style={{fontSize:10,color:'var(--gr)'}}>Paste or replace the YouTube link anytime. Thumbnail preview is locked to a 16:9 frame and will crop neatly if needed.</div>
             </div>
           </div>
 
