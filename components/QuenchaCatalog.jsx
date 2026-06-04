@@ -913,27 +913,46 @@ export default function QuenchaCatalog() {
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
   const { copy, copied } = useCopy()
 
-  const openBulkInquiryEmail = useCallback((product = null) => {
-    const email = 'design@sunbeamsimpexinc.com'
-    const subject = 'Quencha Bulk Inquiry'
-    const skuBase = product?.colors?.[0]?.sku ? product.colors[0].sku.split('-').slice(0, 2).join('-') : ''
-    const body = [
+  const getSkuBase = useCallback((product = null) => {
+    if (!product?.colors?.[0]?.sku) return ''
+    return product.colors[0].sku.split('-').slice(0, -1).join('-') || product.colors[0].sku
+  }, [])
+
+  const buildInquiryText = useCallback((product, packs, message) => {
+    const cleanPacks = parseInt(packs, 10) || 0
+    const packing = parseInt(product?.packing, 10) || 0
+    const totalUnits = cleanPacks && packing ? cleanPacks * packing : ''
+    const skuBase = getSkuBase(product)
+
+    return [
       'Hi Quencha Team,',
       '',
       'I would like to inquire about bulk orders / corporate gifting / UV printing.',
-      product ? `Product: ${product.name}` : '',
-      skuBase ? `SKU: ${skuBase}` : '',
       '',
-      'Quantity:',
+      product ? `Product: ${product.name}` : 'Product / SKU:',
+      skuBase ? `SKU Base: ${skuBase}` : '',
+      product?.srp ? `SRP: ₱${Number(product.srp).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '',
+      packing ? `Packing: ${packing} pcs per pack` : 'Packing:',
+      cleanPacks ? `Requested Packs: ${cleanPacks}` : 'Requested Packs:',
+      totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
+      '',
       'Company / Name:',
       'Contact Number:',
-      'Message:',
+      'Delivery Area:',
+      '',
+      message?.trim() ? `Message / Notes:
+${message.trim()}` : 'Message / Notes:',
       '',
       'Thank you.'
     ].filter(line => line !== '').join('\n')
+  }, [getSkuBase])
 
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  }, [])
+  const buildInquiryHref = useCallback((product, packs, message) => {
+    const email = 'design@sunbeamsimpexinc.com'
+    const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
+    const body = buildInquiryText(product, packs, message)
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }, [buildInquiryText])
 
   // ── API HELPERS ──
   const apiCreateProduct = useCallback(async (product) => {
@@ -955,7 +974,17 @@ export default function QuenchaCatalog() {
   const [editOpen, setEditOpen] = useState(false)
   const [editTarget, setEditTarget] = useState(null) // null = new
   const [inqOpen, setInqOpen] = useState(false)
+  const [inqProduct, setInqProduct] = useState(null)
+  const [inqPacks, setInqPacks] = useState('1')
+  const [inqMessage, setInqMessage] = useState('')
   const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
+
+  const openInquiry = useCallback((product = null) => {
+    setInqProduct(product)
+    setInqPacks(product ? '1' : '')
+    setInqMessage('')
+    setInqOpen(true)
+  }, [])
 
   // Edit form
   const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
@@ -1212,6 +1241,7 @@ export default function QuenchaCatalog() {
           {search && <button className="tb-clear" onClick={()=>setSearch('')}>✕</button>}
         </div>
         <div className="tb-actions">
+          <button className="tb-inq" onClick={()=>openInquiry(null)}>📩 Bulk Inquiry</button>
           {/* Edit mode — secondary, subtle */}
           <button className={`tb-edit-btn ${editMode?'on':''}`} onClick={editMode ? exitEdit : ()=>requestAuth('topbar')} title={editMode ? 'Save & Exit' : 'Edit Mode'}>
             {editMode ? <span style={{fontSize:14,fontWeight:900,lineHeight:1}}>✕</span> : <PencilIcon/>}
@@ -1509,7 +1539,7 @@ export default function QuenchaCatalog() {
                 <button className="vm-pencil-btn" onClick={()=>{ setViewProduct(null); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
                 </button>
-                <button className="vm-inq-btn" onClick={()=>{ const product = vp; setViewProduct(null); openBulkInquiryEmail(product) }}>📩 Bulk Inquiry</button>
+                <button className="vm-inq-btn" onClick={()=>{ const product = vp; setViewProduct(null); openInquiry(product) }}>📩 Bulk Inquiry</button>
               </div>
             </div>
           </div>
@@ -1771,28 +1801,76 @@ export default function QuenchaCatalog() {
       )}
 
       {/* INQUIRY MODAL */}
-      {inqOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
-          <div className="modal" style={{maxWidth:500}}>
-            <div className="m-hdr" style={{background:'var(--sf4)'}}>
-              <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Corporate & Wholesale</div>
-                <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Bulk Inquiry</div>
+      {inqOpen && (() => {
+        const packsNum = parseInt(inqPacks, 10) || 0
+        const packingNum = parseInt(inqProduct?.packing, 10) || 0
+        const totalUnits = packsNum && packingNum ? packsNum * packingNum : 0
+        const inquiryHref = buildInquiryHref(inqProduct, inqPacks, inqMessage)
+        const inquiryText = buildInquiryText(inqProduct, inqPacks, inqMessage)
+
+        return (
+          <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
+            <div className="modal" style={{maxWidth:560}}>
+              <div className="m-hdr" style={{background:'var(--sf4)'}}>
+                <div>
+                  <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Corporate & Wholesale</div>
+                  <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Bulk Inquiry</div>
+                </div>
+                <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
               </div>
-              <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
-            </div>
-            <div className="m-body" style={{gap:10}}>
-              <p style={{fontSize:14,color:'var(--gr)'}}>For bulk orders, UV printing, and corporate gifting, send us an email and our team will assist you.</p>
-              <a
-                className="inq-link"
-                href={`mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent('Quencha Bulk Inquiry')}&body=${encodeURIComponent('Hi Quencha Team,\n\nI would like to inquire about bulk orders / corporate gifting / UV printing.\n\nQuantity:\nCompany / Name:\nContact Number:\nMessage:\n\nThank you.')}`}
-              >
-                📩 Send Email — design@sunbeamsimpexinc.com
-              </a>
+              <div className="m-body" style={{gap:14}}>
+                <p style={{fontSize:14,color:'var(--gr)'}}>Review the quantity and packing first, then open an email draft with the inquiry summary.</p>
+
+                <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
+                  <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
+                  <div style={{fontSize:16,fontWeight:900,color:'var(--bk)',lineHeight:1.25}}>{inqProduct?.name || 'General Quencha bulk inquiry'}</div>
+                  {inqProduct?.colors?.[0]?.sku && <div style={{fontSize:12,color:'var(--gr)'}}>SKU Base: <strong style={{color:'var(--tl)'}}>{getSkuBase(inqProduct)}</strong></div>}
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:4}}>
+                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Packing</div>
+                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{packingNum ? `${packingNum} pcs` : 'TBC'}</div>
+                    </div>
+                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Estimated Total</div>
+                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalUnits ? `${totalUnits} pcs` : '—'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="f-col">
+                  <label className="f-lbl">Number of Packs / Cartons</label>
+                  <input
+                    className="f-in"
+                    type="number"
+                    min="1"
+                    value={inqPacks}
+                    onChange={e=>setInqPacks(e.target.value)}
+                    placeholder="Example: 5"
+                  />
+                  {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total.</div>}
+                </div>
+
+                <div className="f-col">
+                  <label className="f-lbl">Note / Message</label>
+                  <textarea
+                    className="f-ta"
+                    rows={4}
+                    value={inqMessage}
+                    onChange={e=>setInqMessage(e.target.value)}
+                    placeholder="Add preferred colors, UV printing details, delivery area, deadline, or other notes…"
+                  />
+                </div>
+
+                <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+                  <a className="inq-link" href={inquiryHref} style={{flex:1,justifyContent:'center'}}>📩 Open Email Draft</a>
+                  <button className="cancel-btn" onClick={()=>copy(inquiryText)} style={{flex:1}}>📋 {copied===inquiryText ? 'Copied!' : 'Copy Summary'}</button>
+                </div>
+                <p style={{fontSize:12,color:'var(--gr)',lineHeight:1.5}}>If the email draft does not open, your browser/device may not have a default mail app set. Use “Copy Summary” and paste it into Gmail instead.</p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {/* CATEGORY MANAGER MODAL */}
       {catMgrOpen && (
