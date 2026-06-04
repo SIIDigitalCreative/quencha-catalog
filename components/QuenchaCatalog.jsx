@@ -173,6 +173,10 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .pcard:not(.em):hover{transform:translateY(-3px);box-shadow:var(--shh);border-color:rgba(45,204,211,.3)}
 .pcard.em{border:1.5px dashed rgba(245,158,11,.35)}
 .pcard.em:hover{transform:none;box-shadow:var(--sh);border-color:rgba(245,158,11,.55)}
+.pcard.dragging{opacity:.45;transform:scale(.98);box-shadow:none}
+.c-drag-handle{position:absolute;top:10px;right:10px;z-index:4;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.92);color:var(--tl);border:1px solid rgba(39,153,137,.2);border-radius:999px;padding:3px 8px;cursor:grab;box-shadow:0 2px 8px rgba(39,153,137,.12)}
+.c-drag-handle:active{cursor:grabbing}
+.reorder-hint{font-size:11px;font-weight:700;color:var(--tl);background:var(--sf4);border:1px solid rgba(185,220,210,.6);border-radius:999px;padding:5px 10px}
 
 /* IMAGE WRAP — fixed: position:relative + proper img fill */
 .c-img-wrap{position:relative;overflow:hidden;aspect-ratio:1/1;background:var(--sf4);flex-shrink:0;display:flex;align-items:center;justify-content:center}
@@ -874,6 +878,7 @@ export default function QuenchaCatalog() {
   const [filterPMax, setFilterPMax] = useState(null)
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('default')
+  const [dragProductId, setDragProductId] = useState(null)
   const [view, setView] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4')
   const [showMobileFilter, setShowMobileFilter] = useState(false)
 
@@ -912,6 +917,8 @@ export default function QuenchaCatalog() {
   const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
   const { copy, copied } = useCopy()
+
+  const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
 
   const getSkuBase = useCallback((product = null) => {
     if (!product?.colors?.[0]?.sku) return ''
@@ -1055,7 +1062,7 @@ ${message.trim()}` : 'Message / Notes:',
       setVmImg(0)
       setYtPlaying(false)
     } else {
-      const saved = { ...data, id: 'p' + Date.now() }
+      const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length }
       setProducts([...products, saved])
       apiCreateProduct(saved)
       setEditOpen(false)
@@ -1068,6 +1075,29 @@ ${message.trim()}` : 'Message / Notes:',
     setEditOpen(false); setViewProduct(null)
     await fetch('/api/products/' + id, { method: 'DELETE' }).catch(console.error)
   }
+
+  const moveProductOrder = useCallback((fromId, toId) => {
+    if (!editMode || sort !== 'default' || !fromId || !toId || fromId === toId) return
+    setProducts(prev => {
+      const fromIndex = prev.findIndex(p => p.id === fromId)
+      const toIndex = prev.findIndex(p => p.id === toId)
+      if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return prev
+
+      const next = [...prev]
+      const [moved] = next.splice(fromIndex, 1)
+      next.splice(toIndex, 0, moved)
+
+      const reordered = next.map((p, index) => ({
+        ...p,
+        sortOrder: index,
+        updatedAt: new Date().toISOString()
+      }))
+
+      // Persist the manual order so it stays after refresh/redeploy.
+      reordered.forEach(p => apiSaveProduct(p.id, p))
+      return reordered
+    })
+  }, [editMode, sort, apiSaveProduct])
 
   // Badges
   const addBadge = () => { const b = badgeInput.trim(); if (b && !ef.badges.includes(b)) { setEf(f=>({...f,badges:[...f.badges,b]})); setBadgeInput('') } }
@@ -1082,6 +1112,27 @@ ${message.trim()}` : 'Message / Notes:',
   }
   const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
   const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?{...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}:c)}))
+
+  // SKU Base — bulk-edit all color variant SKUs from Details tab
+  const getEditableSkuBase = () => {
+    const first = ef.colors?.[0]
+    if (!first?.sku) return ''
+    const sku = String(first.sku).toUpperCase()
+    const code = String(first.code || '').toUpperCase()
+    if (code && sku.endsWith(`-${code}`)) return sku.slice(0, -(code.length + 1))
+    return sku.split('-').slice(0, -1).join('-') || sku
+  }
+
+  const updateAllColorSkusFromBase = (base) => {
+    const cleaned = base.toUpperCase().replace(/\s+/g, '')
+    setEf(f => ({
+      ...f,
+      colors: f.colors.map(c => {
+        const code = String(c.code || '').toUpperCase().replace(/\s+/g, '')
+        return { ...c, code, sku: code ? `${cleaned}-${code}` : cleaned }
+      })
+    }))
+  }
 
   // Images
   const handleImgUpload = async (e) => {
@@ -1107,7 +1158,10 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── FILTERED ──
   const filtered = useMemo(() => {
-    let list = [...products]
+    let list = products.map((p, index) => ({
+      ...p,
+      __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
+    }))
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
     if (filterCat) list = list.filter(p => p.cat === filterCat)
     if (filterPMin !== null) list = list.filter(p => p.srp >= filterPMin)
@@ -1116,11 +1170,14 @@ ${message.trim()}` : 'Message / Notes:',
       const q = search.toLowerCase()
       list = list.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.colors.some(c => c.sku.toLowerCase().includes(q)))
     }
+    if (sort === 'default') list.sort((a,b) => a.__manualIndex - b.__manualIndex)
     if (sort === 'price-asc') list.sort((a,b) => a.srp - b.srp)
     if (sort === 'price-desc') list.sort((a,b) => b.srp - a.srp)
     if (sort === 'name-asc') list.sort((a,b) => a.name.localeCompare(b.name))
+    if (sort === 'sku-asc') list.sort((a,b) => getFirstSku(a).localeCompare(getFirstSku(b)))
+    if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
     return list
-  }, [products, filterExt, filterCat, filterPMin, filterPMax, search, sort])
+  }, [products, filterExt, filterCat, filterPMin, filterPMax, search, sort, getFirstSku])
 
   const counts = useMemo(() => {
     const ext = { all: products.length }, cat = {}
@@ -1189,8 +1246,28 @@ ${message.trim()}` : 'Message / Notes:',
     const extColor = extEntry?.color || EXT_COLORS[p.ext] || 'var(--gr)'
     const showExtTag = !!p.ext && p.ext !== 'core'
     return (
-      <div className={`pcard ${editMode?'em':''}`}
-        onClick={editMode ? undefined : () => { setViewProduct(p); setVmImg(0); setYtPlaying(false) }}>
+      <div
+        className={`pcard ${editMode?'em':''} ${dragProductId===p.id?'dragging':''}`}
+        draggable={editMode && sort === 'default'}
+        onDragStart={editMode && sort === 'default' ? (e) => {
+          setDragProductId(p.id)
+          e.dataTransfer.effectAllowed = 'move'
+          e.dataTransfer.setData('text/plain', p.id)
+        } : undefined}
+        onDragOver={editMode && sort === 'default' ? (e) => {
+          e.preventDefault()
+          e.dataTransfer.dropEffect = 'move'
+        } : undefined}
+        onDrop={editMode && sort === 'default' ? (e) => {
+          e.preventDefault()
+          const fromId = e.dataTransfer.getData('text/plain') || dragProductId
+          moveProductOrder(fromId, p.id)
+          setDragProductId(null)
+        } : undefined}
+        onDragEnd={() => setDragProductId(null)}
+        onClick={editMode ? undefined : () => { setViewProduct(p); setVmImg(0); setYtPlaying(false) }}
+      >
+        {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
 
         <div className="c-img-wrap">
           {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
@@ -1241,7 +1318,6 @@ ${message.trim()}` : 'Message / Notes:',
           {search && <button className="tb-clear" onClick={()=>setSearch('')}>✕</button>}
         </div>
         <div className="tb-actions">
-          <button className="tb-inq" onClick={()=>openInquiry(null)}>📩 Bulk Inquiry</button>
           {/* Edit mode — secondary, subtle */}
           <button className={`tb-edit-btn ${editMode?'on':''}`} onClick={editMode ? exitEdit : ()=>requestAuth('topbar')} title={editMode ? 'Save & Exit' : 'Edit Mode'}>
             {editMode ? <span style={{fontSize:14,fontWeight:900,lineHeight:1}}>✕</span> : <PencilIcon/>}
@@ -1284,11 +1360,14 @@ ${message.trim()}` : 'Message / Notes:',
           <div className="toolbar">
             <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
             <select className="sort-sel" value={sort} onChange={e=>setSort(e.target.value)}>
-              <option value="default">Sort: Default</option>
+              <option value="default">Sort: Manual Order</option>
+              <option value="sku-asc">SKU: A → Z</option>
+              <option value="sku-desc">SKU: Z → A</option>
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
               <option value="name-asc">Name: A → Z</option>
             </select>
+            {editMode && sort === 'default' && <span className="reorder-hint">Drag products to rearrange</span>}
             <div className="vbtns">
               <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>setView('col-4')} title="4 columns">⊞</button>
               <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>setView('col-2')} title="2 columns">⊟</button>
@@ -1638,6 +1717,17 @@ ${message.trim()}` : 'Message / Notes:',
                       </div>
                     )}
                   </div>
+                </div>
+                <div className="f-col">
+                  <label className="f-lbl">SKU Base <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                  <input
+                    className="f-in"
+                    value={getEditableSkuBase()}
+                    onChange={e=>updateAllColorSkusFromBase(e.target.value)}
+                    placeholder="e.g. QNH-TWB680"
+                    disabled={!ef.colors?.length}
+                  />
+                  <div className="f-hint" style={{marginTop:6}}>Editing this updates all color SKUs using the color codes. You can still edit each full SKU in the Colors tab.</div>
                 </div>
                 <div className="f-row">
                   <div className="f-col">
