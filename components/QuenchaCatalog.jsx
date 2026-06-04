@@ -1857,7 +1857,14 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── SIDEBAR ──
   const SidebarContent = ({ closeOnSelect = false } = {}) => {
-    const closeMobileSidebar = () => { if (closeOnSelect) setShowMobileFilter(false) }
+    const closeMobileSidebar = () => {
+      if (!closeOnSelect) return
+      setShowMobileFilter(false)
+      // Wait for the mobile drawer overlay to close, then scroll to the products area.
+      window.setTimeout(() => {
+        focusSearchResults()
+      }, 180)
+    }
     return (
     <>
       <div className="sb-hero">
