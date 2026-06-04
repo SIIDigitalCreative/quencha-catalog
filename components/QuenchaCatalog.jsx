@@ -579,9 +579,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hero-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent}
 .hero-video-thumb{position:absolute;inset:0;width:100%;height:100%;border:none;background:var(--sf4);cursor:pointer;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hero-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;filter:saturate(.96)}
-.hero-video-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.32));z-index:1}
-.hero-play-btn{position:relative;z-index:2;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:var(--tl);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 32px rgba(0,0,0,.28);padding-left:4px;transition:var(--tr)}
-.hero-video-thumb:hover .hero-play-btn{transform:scale(1.08);background:#fff}
+.hero-video-thumb::after{content:none}
 .hero-video-edit-btn{position:absolute;top:10px;right:10px;z-index:5;background:rgba(255,255,255,.92);border:1px solid rgba(39,153,137,.18);border-radius:999px;padding:6px 11px;font-family:var(--fn);font-size:11px;font-weight:900;color:var(--tl);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);transition:var(--tr)}
 .hero-video-edit-btn:hover{background:#fff;transform:translateY(-1px)}
 .hero-video-empty{position:relative;z-index:2;color:#fff;font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
@@ -964,7 +962,6 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
                   ) : (
                     <button className="hero-video-thumb" onClick={()=>setVideoPlaying(true)}>
                       {videoThumb ? <img src={videoThumb} alt="YouTube video thumbnail"/> : <span className="hero-video-empty">YouTube</span>}
-                      <span className="hero-play-btn">▶</span>
                     </button>
                   )}
                 </div>
