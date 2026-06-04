@@ -926,7 +926,7 @@ export default function QuenchaCatalog() {
   }, [])
 
   const apiSaveProduct = useCallback(async (id, data) => {
-    await fetch(\`/api/products/\${id}\`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(console.error)
+    await fetch(`/api/products/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(console.error)
   }, [])
 
   // ── IMAGE UPLOAD via Vercel Blob ──
@@ -1016,7 +1016,7 @@ export default function QuenchaCatalog() {
     if (!confirm('Delete this product? This cannot be undone.')) return
     setProducts(products.filter(p => p.id !== id))
     setEditOpen(false); setViewProduct(null)
-    await fetch(\`/api/products/\${id}\`, { method: 'DELETE' }).catch(console.error)
+    await fetch(`/api/products/${id}`, { method: 'DELETE' }).catch(console.error)
   }
 
   // Badges
@@ -2069,7 +2069,7 @@ export default function QuenchaCatalog() {
   }, [])
 
   const apiSaveProduct = useCallback(async (id, data) => {
-    await fetch(\`/api/products/\${id}\`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(console.error)
+    await fetch(`/api/products/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(console.error)
   }, [])
 
   // ── IMAGE UPLOAD via Vercel Blob ──
@@ -2159,7 +2159,7 @@ export default function QuenchaCatalog() {
     if (!confirm('Delete this product? This cannot be undone.')) return
     setProducts(products.filter(p => p.id !== id))
     setEditOpen(false); setViewProduct(null)
-    await fetch(\`/api/products/\${id}\`, { method: 'DELETE' }).catch(console.error)
+    await fetch(`/api/products/${id}`, { method: 'DELETE' }).catch(console.error)
   }
 
   // Badges
