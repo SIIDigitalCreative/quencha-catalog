@@ -1413,16 +1413,14 @@ export default function QuenchaCatalog() {
                 )}
               </div>
               {vp.youtube && getYouTubeId(vp.youtube) && (
-                <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(185,220,210,.4)',marginBottom:12}}>
-                  <div style={{position:'relative',width:'100%',paddingBottom:'56.25%',background:'#000'}}>
-                    <iframe
-                      style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:'none'}}
-                      src={`https://www.youtube.com/embed/${getYouTubeId(vp.youtube)}?rel=0&modestbranding=1`}
-                      title="Product video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
+                <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(185,220,210,.4)',marginBottom:12,width:'100%',height:320,background:'#000'}}>
+                  <iframe
+                    style={{width:'100%',height:'100%',border:'none',display:'block'}}
+                    src={`https://www.youtube.com/embed/${getYouTubeId(vp.youtube)}?rel=0&modestbranding=1`}
+                    title="Product video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
               )}
               <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
