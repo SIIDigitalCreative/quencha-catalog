@@ -567,9 +567,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hero-media-action{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:var(--tr)}
 .hero-media-action:hover{background:var(--tl2)}
 .hero-video-card{display:flex;min-height:100%}
-.hero-video-frame{position:relative;width:100%;aspect-ratio:16/9;background:#101010;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.hero-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-.hero-video-thumb{position:absolute;inset:0;width:100%;height:100%;border:none;background:#111;cursor:pointer;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-video-frame{position:relative;width:100%;aspect-ratio:16/9;background:var(--sf4);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent}
+.hero-video-thumb{position:absolute;inset:0;width:100%;height:100%;border:none;background:var(--sf4);cursor:pointer;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hero-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;filter:saturate(.96)}
 .hero-video-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.32));z-index:1}
 .hero-play-btn{position:relative;z-index:2;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:var(--tl);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 32px rgba(0,0,0,.28);padding-left:4px;transition:var(--tr)}
@@ -812,7 +812,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
   const touchStartY = useRef(null)
   const arClass = aspect === '16:9' ? 'ar-16-9' : aspect === '1:1' ? 'ar-1-1' : 'ar-custom'
   const ytId = getYouTubeId(heroVideoUrl)
-  const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '')
+  const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '')
   const hasVideo = !!ytId
   const showVideoCard = true
   const showBannerCard = banners.length > 0 || editMode
@@ -943,7 +943,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
                 <div className="hero-video-frame">
                   {videoPlaying ? (
                     <iframe
-                      src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
+                      src={`https://www.youtube.com/embed/${ytId}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`}
                       title="Quencha video"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
