@@ -214,11 +214,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .tb-menu-btn{display:none;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.14);color:#fff;font-size:18px;font-weight:900;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .tb-menu-btn:hover{background:rgba(255,255,255,.24)}
 .tb-search-wrap{flex:1;max-width:420px;position:relative;margin:0 auto}
-.tb-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none;color:#fff}
-.tb-search{width:100%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 36px;font-family:var(--fn);font-size:13px;color:#fff;outline:none;transition:var(--tr)}
+.tb-search-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr);padding:0}
+.tb-search-btn:hover{background:rgba(255,255,255,.28);transform:translateY(-50%) scale(1.04)}
+.tb-search-btn:active{transform:translateY(-50%) scale(.96)}
+.tb-search{width:100%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 72px 8px 16px;font-family:var(--fn);font-size:13px;color:#fff;outline:none;transition:var(--tr)}
 .tb-search::placeholder{color:rgba(255,255,255,.45)}
 .tb-search:focus{background:rgba(255,255,255,.2);border-color:var(--cy)}
-.tb-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px}
+.tb-clear{position:absolute;right:42px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:13px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.tb-clear:hover{background:rgba(255,255,255,.14);color:#fff}
 .tb-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
 
 /* Edit mode indicator — subtle, secondary */
@@ -1218,6 +1221,7 @@ export default function QuenchaCatalog() {
 
   // Load saved catalog preferences once so filter/sort state can initialize safely.
   const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
+  const [catalogPrefsHydrated, setCatalogPrefsHydrated] = useState(false)
 
   // Fetch all data on mount — Redis is now the source of truth.
   // Important: this no longer auto-seeds missing products from the local SEED list,
@@ -1252,8 +1256,32 @@ export default function QuenchaCatalog() {
       if (settings.colorCollectionSets && typeof settings.colorCollectionSets === 'object') {
         setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(settings.colorCollectionSets) }))
       }
+
+      // Shared catalog preferences from /api/settings keep desktop and mobile in sync.
+      // Local storage is only a fallback while settings are loading.
+      if (settings.catalogPrefs && typeof settings.catalogPrefs === 'object') {
+        const prefs = settings.catalogPrefs
+        if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
+        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
+        if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
+        if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
+        if (prefs.sort !== undefined) setSort(prefs.sort || 'default')
+        if (prefs.view !== undefined) setView(prefs.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
+            filterExt: prefs.filterExt || 'all',
+            filterCat: prefs.filterCat || null,
+            filterPMin: prefs.filterPMin ?? null,
+            filterPMax: prefs.filterPMax ?? null,
+            sort: prefs.sort || 'default',
+            view: prefs.view || (window.innerWidth <= 768 ? 'col-2' : 'col-4'),
+          }))
+        }
+      }
+
+      setCatalogPrefsHydrated(true)
       setLoading(false)
-    }).catch(() => { setProducts([]); setLoading(false) })
+    }).catch(() => { setProducts([]); setCatalogPrefsHydrated(true); setLoading(false) })
   }, [])
 
   // ── FILTERS ──
@@ -1272,20 +1300,11 @@ export default function QuenchaCatalog() {
   const [dragProductId, setDragProductId] = useState(null)
   const [view, setView] = useState(() => savedCatalogPrefsRef.current.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
   const [showMobileFilter, setShowMobileFilter] = useState(false)
+  const searchInputRef = useRef(null)
+  const resultsRef = useRef(null)
 
-  // Autosave selected filters, sort, and view layout to this browser.
+  // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
   // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
-      filterExt,
-      filterCat,
-      filterPMin,
-      filterPMax,
-      sort,
-      view,
-    }))
-  }, [filterExt, filterCat, filterPMin, filterPMax, sort, view])
 
   // ── AUTH — once unlocked, stays for session ──
   const [isAuthed, setIsAuthed] = useState(false)
@@ -1319,6 +1338,40 @@ export default function QuenchaCatalog() {
   const syncSettings = useCallback((patch) => {
     fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
   }, [])
+
+  const focusSearchResults = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      const target = resultsRef.current
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
+  }, [])
+
+  const runSearch = useCallback(() => {
+    if (!search.trim()) {
+      searchInputRef.current?.focus()
+      return
+    }
+    focusSearchResults()
+  }, [search, focusSearchResults])
+
+  // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
+  useEffect(() => {
+    if (!catalogPrefsHydrated) return
+    const catalogPrefs = {
+      filterExt,
+      filterCat,
+      filterPMin,
+      filterPMax,
+      sort,
+      view,
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+    }
+    syncSettings({ catalogPrefs })
+  }, [catalogPrefsHydrated, filterExt, filterCat, filterPMin, filterPMax, sort, view, syncSettings])
 
   const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
   const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
@@ -1814,7 +1867,9 @@ ${message.trim()}` : 'Message / Notes:',
   }, [filtered])
 
   // ── SIDEBAR ──
-  const SidebarContent = () => (
+  const SidebarContent = ({ closeOnSelect = false } = {}) => {
+    const closeMobileSidebar = () => { if (closeOnSelect) setShowMobileFilter(false) }
+    return (
     <>
       <div className="sb-hero">
         <div className="sb-hl">Catalog</div>
@@ -1823,25 +1878,25 @@ ${message.trim()}` : 'Message / Notes:',
       </div>
       <div className="sb-sec">
         <span className="sb-lbl">Extension</span>
-        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>setFilterExt('all')}>
+        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterExt('all'); closeMobileSidebar()}}>
           <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Products</span><span className="fb-cnt">{counts.ext['all']||0}</span>
         </button>
         {exts.map(o=>(
-          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>setFilterExt(o.value)}>
+          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>{setFilterExt(o.value); closeMobileSidebar()}}>
             <span className="fb-dot" style={{background:o.color}}/><span className="fb-lbl">{o.label}</span><span className="fb-cnt">{counts.ext[o.value]||0}</span>
           </button>
         ))}
-        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>setExtMgrOpen(true)}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Extensions</span></button>}
+        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>{setExtMgrOpen(true); closeMobileSidebar()}}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Extensions</span></button>}
       </div>
       <hr className="sb-div"/>
       <div className="sb-sec">
         <span className="sb-lbl">Category</span>
         {Object.entries(cats.reduce((a,c)=>({...a,[c.value]:c.icon}),{})).map(([v,ico])=>(
-          <button key={v} className={`fb ${filterCat===v?'on':''}`} style={{borderLeftColor:filterCat===v?'var(--cy)':'transparent'}} onClick={()=>setFilterCat(filterCat===v?null:v)}>
+          <button key={v} className={`fb ${filterCat===v?'on':''}`} style={{borderLeftColor:filterCat===v?'var(--cy)':'transparent'}} onClick={()=>{setFilterCat(filterCat===v?null:v); closeMobileSidebar()}}>
             <span className="fb-ico">{ico}</span><span className="fb-lbl">{cats.find(c=>c.value===v)?.label||v}</span><span className="fb-cnt">{counts.cat[v]||0}</span>
           </button>
         ))}
-        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>setCatMgrOpen(true)}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Categories</span></button>}
+        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>{setCatMgrOpen(true); closeMobileSidebar()}}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Categories</span></button>}
       </div>
       <hr className="sb-div"/>
       <div className="sb-sec">
@@ -1849,15 +1904,16 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="pc-wrap">
           {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
             const on = filterPMin===o.mn && filterPMax===o.mx
-            return <button key={o.l} className={`pc ${on?'on':''}`} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} }}>{o.l}</button>
+            return <button key={o.l} className={`pc ${on?'on':''}`} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
           })}
         </div>
       </div>
       {(filterExt!=='all'||filterCat||filterPMin!==null) && (
-        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterPMin(null);setFilterPMax(null)}}>✕ Clear filters</button>
+        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
       )}
     </>
-  )
+    )
+  }
 
   // ── PRODUCT CARD ──
   const Card = ({ p }) => {
@@ -1946,9 +2002,18 @@ ${message.trim()}` : 'Message / Notes:',
           {editMode && <span className="tb-brand-edit">Edit</span>}
         </a>
         <div className="tb-search-wrap">
-          <svg className="tb-search-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input className="tb-search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search products, SKUs…"/>
-          {search && <button className="tb-clear" onClick={()=>setSearch('')}>✕</button>}
+          <input
+            ref={searchInputRef}
+            className="tb-search"
+            value={search}
+            onChange={e=>setSearch(e.target.value)}
+            onKeyDown={e=>{ if(e.key==='Enter') runSearch() }}
+            placeholder="Search products, SKUs…"
+          />
+          {search && <button className="tb-clear" onClick={()=>{setSearch(''); searchInputRef.current?.focus()}} title="Clear search">✕</button>}
+          <button className="tb-search-btn" onClick={runSearch} title="Search and go to results" aria-label="Search and go to results">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.4"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
         </div>
         <div className="tb-actions">
           {/* Edit mode — secondary, subtle */}
@@ -1993,7 +2058,7 @@ ${message.trim()}` : 'Message / Notes:',
           />
 
           {/* Toolbar */}
-          <div className="toolbar">
+          <div className="toolbar" ref={resultsRef}>
             <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
             <select className="sort-sel" value={sort} onChange={e=>setSort(e.target.value)}>
               <option value="default">Sort: Manual Order</option>
@@ -2068,7 +2133,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="mob-overlay" onClick={()=>setShowMobileFilter(false)}>
           <div className="mob-drawer" onClick={e=>e.stopPropagation()}>
             <button className="drawer-close" onClick={()=>setShowMobileFilter(false)}>✕</button>
-            <SidebarContent/>
+            <SidebarContent closeOnSelect/>
           </div>
         </div>
       )}
