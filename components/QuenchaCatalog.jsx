@@ -812,7 +812,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
   const ytId = getYouTubeId(heroVideoUrl)
   const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '')
   const hasVideo = !!ytId
-  const showVideoCard = hasVideo || editMode
+  const showVideoCard = true
   const showBannerCard = banners.length > 0 || editMode
   const isTwoColumn = showBannerCard && showVideoCard
   const bannerFirst = mediaOrder !== 'video-banner'
@@ -944,8 +944,13 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
                     </button>
                   )}
                 </div>
-              ) : (
+              ) : editMode ? (
                 <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
+              ) : (
+                <div className="hero-empty-card" style={{cursor:'default',flexDirection:'column',gap:6}}>
+                  <span style={{fontSize:22}}>▶</span>
+                  <span>Video coming soon</span>
+                </div>
               )}
             </div>
           )}
