@@ -1310,8 +1310,8 @@ export default function QuenchaCatalog() {
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
   const [brandLogo, setBrandLogo] = useState('')
-  const [brandName, setBrandName] = useState('Quencha')
-  const [brandTagline, setBrandTagline] = useState('Sip · Savor · Go')
+  const [brandName, setBrandName] = useState('')
+  const [brandTagline, setBrandTagline] = useState('')
   const [brandEditOpen, setBrandEditOpen] = useState(false)
   const [brandUploadErr, setBrandUploadErr] = useState('')
 
