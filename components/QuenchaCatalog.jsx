@@ -314,6 +314,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
 .collection-item{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid rgba(185,220,210,.55);border-radius:8px;padding:7px}
 .collection-item input[type=color]{width:28px;height:28px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0}
+.collection-actions{display:flex;gap:6px;width:100%;margin-top:6px;grid-column:1/-1}
+.collection-add-set,.collection-save-set{border:none;border-radius:6px;padding:6px 8px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap}
+.collection-add-set{background:var(--tl);color:#fff;flex:1}
+.collection-add-set:hover:not(:disabled){background:var(--tl2)}
+.collection-save-set{background:rgba(39,153,137,.08);color:var(--tl);border:1px solid rgba(39,153,137,.18)}
+.collection-save-set:hover{background:rgba(39,153,137,.14)}
+.collection-add-set:disabled{opacity:.45;cursor:not-allowed;background:rgba(39,153,137,.35)}
+.collection-set-count{font-size:9px;font-weight:900;color:rgba(39,153,137,.6);background:rgba(185,220,210,.35);border-radius:999px;padding:2px 6px;white-space:nowrap}
 .collection-name{flex:1;min-width:0;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);border:1px solid rgba(185,220,210,.55);border-radius:6px;padding:6px 8px;outline:none;background:var(--bg)}
 .collection-name:focus{border-color:var(--tl);background:#fff}
 .collection-add-row{display:flex;gap:7px;margin-top:8px}
@@ -470,6 +478,66 @@ const DEFAULT_COLOR_COLLECTIONS = [
   { value:'Bloom',   label:'Bloom',   color:'#5CB8A0' },
   { value:'Poply',   label:'Poply',   color:'#E070A0' },
 ]
+
+const COLOR_COLLECTION_SETS_KEY = 'qnh-color-collection-sets'
+const DEFAULT_COLOR_COLLECTION_SETS = {
+  OG: [
+    { name:'Snow', code:'WT', hex:'#F5F5F0', hexes:['#F5F5F0'], collection:'OG' },
+    { name:'Sand', code:'TP', hex:'#C8C5BE', hexes:['#C8C5BE'], collection:'OG' },
+    { name:'Stone', code:'GY', hex:'#8A8780', hexes:['#8A8780'], collection:'OG' },
+    { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'OG' },
+  ],
+  XPRESS: [
+    { name:'Snow', code:'WT', hex:'#F5F5F0', hexes:['#F5F5F0'], collection:'XPRESS' },
+    { name:'Sand', code:'TP', hex:'#C8C5BE', hexes:['#C8C5BE'], collection:'XPRESS' },
+    { name:'Stone', code:'GY', hex:'#8A8780', hexes:['#8A8780'], collection:'XPRESS' },
+    { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'XPRESS' },
+    { name:'Autumn Sunset', code:'AS', hex:'#D4894A', hexes:['#D4894A'], collection:'XPRESS' },
+    { name:'Forest Green', code:'FG', hex:'#3D6B4F', hexes:['#3D6B4F'], collection:'XPRESS' },
+    { name:'Twilight Teal', code:'TT', hex:'#2B8090', hexes:['#2B8090'], collection:'XPRESS' },
+    { name:'Coral Oasis', code:'CO', hex:'#E8524A', hexes:['#E8524A'], collection:'XPRESS' },
+  ],
+  Horizon: [
+    { name:'Rose Clay', code:'RC', hex:'#DCB8BC', hexes:['#DCB8BC','#946D72'], collection:'Horizon' },
+    { name:'Forge Slate', code:'FS', hex:'#A2AAAD', hexes:['#A2AAAD','#5A6770'], collection:'Horizon' },
+    { name:'Sage Ash', code:'SA', hex:'#A9ACA1', hexes:['#A9ACA1','#65665E'], collection:'Horizon' },
+    { name:'Warm Dune', code:'WD', hex:'#C6BFB7', hexes:['#C6BFB7','#8C837A'], collection:'Horizon' },
+  ],
+  Bloom: [
+    { name:'Sky', code:'SK', hex:'#88C4E8', hexes:['#88C4E8'], collection:'Bloom' },
+    { name:'Meadow', code:'ME', hex:'#5CBF7A', hexes:['#5CBF7A'], collection:'Bloom' },
+    { name:'Coral', code:'CO', hex:'#FF7A5C', hexes:['#FF7A5C'], collection:'Bloom' },
+    { name:'Blossom', code:'BL', hex:'#F9A8C4', hexes:['#F9A8C4'], collection:'Bloom' },
+  ],
+  Poply: [
+    { name:'Bubbly', code:'BB', hex:'#57C0E8', hexes:['#57C0E8'], collection:'Poply' },
+    { name:'Minty', code:'MT', hex:'#48C8C0', hexes:['#48C8C0'], collection:'Poply' },
+    { name:'Purpy', code:'PP', hex:'#B09AD8', hexes:['#B09AD8'], collection:'Poply' },
+    { name:'Rosy', code:'RO', hex:'#F070A0', hexes:['#F070A0'], collection:'Poply' },
+  ],
+}
+
+function normalizeCollectionSetMap(map) {
+  const source = map && typeof map === 'object' ? map : {}
+  const normalized = {}
+  Object.entries(source).forEach(([key, list]) => {
+    if (!Array.isArray(list)) return
+    normalized[key] = list
+      .map(item => normalizeColorVariant({ ...item, collection: item.collection || key }))
+      .filter(item => item.name && item.code)
+  })
+  return normalized
+}
+
+function getSavedColorCollectionSets() {
+  if (typeof window === 'undefined') return DEFAULT_COLOR_COLLECTION_SETS
+  try {
+    const stored = JSON.parse(localStorage.getItem(COLOR_COLLECTION_SETS_KEY) || 'null')
+    return { ...DEFAULT_COLOR_COLLECTION_SETS, ...normalizeCollectionSetMap(stored) }
+  } catch {
+    return DEFAULT_COLOR_COLLECTION_SETS
+  }
+}
 
 function defaultColorCollection(color) {
   return color?.collection || COLOR_COLLECTION_MAP[color?.name] || 'Other'
@@ -928,6 +996,7 @@ export default function QuenchaCatalog() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
+  const [colorCollectionSets, setColorCollectionSets] = useState(getSavedColorCollectionSets)
   const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
 
   // Load saved catalog preferences once so filter/sort state can initialize safely.
@@ -960,6 +1029,9 @@ export default function QuenchaCatalog() {
           const storedCollections = JSON.parse(localStorage.getItem('qnh-color-collections') || 'null')
           if (Array.isArray(storedCollections)) setColorCollections(storedCollections)
         } catch {}
+      }
+      if (settings.colorCollectionSets && typeof settings.colorCollectionSets === 'object') {
+        setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(settings.colorCollectionSets) }))
       }
       setLoading(false)
     }).catch(() => { setProducts(SEED); setLoading(false) })
@@ -1029,6 +1101,12 @@ export default function QuenchaCatalog() {
     setColorCollections(next)
     if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
     syncSettings({ colorCollections: next })
+  }, [syncSettings])
+
+  const saveColorCollectionSets = useCallback((next) => {
+    setColorCollectionSets(next)
+    if (typeof window !== 'undefined') localStorage.setItem(COLOR_COLLECTION_SETS_KEY, JSON.stringify(next))
+    syncSettings({ colorCollectionSets: next })
   }, [syncSettings])
 
   const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
@@ -1338,6 +1416,65 @@ ${message.trim()}` : 'Message / Notes:',
     if (colorCollections.some(c=>c.value.toLowerCase()===value.toLowerCase())) return
     saveColorCollections([...colorCollections,{value,label,color:newCollection.color||'#279989'}])
     setNewCollection({label:'',color:'#279989'})
+  }
+
+  const collectionSetCount = (value) => (colorCollectionSets[value] || []).length
+
+  const colorWithCurrentSkuBase = (color, skuBase) => {
+    const code = String(color.code || '').toUpperCase().replace(/\s+/g, '')
+    const hexes = getColorHexes(color)
+    return normalizeColorVariant({
+      ...color,
+      code,
+      hex: hexes[0] || color.hex || '#B9DCD2',
+      hexes,
+      sku: skuBase && code ? `${skuBase}-${code}` : String(color.sku || '').toUpperCase(),
+      collection: color.collection || 'Other'
+    })
+  }
+
+  const addCollectionSetToProduct = (collectionValue) => {
+    const set = colorCollectionSets[collectionValue] || []
+    if (!set.length) {
+      alert('No saved colors yet for this collection. Add colors to a product, assign them to this collection, then click Save Set.')
+      return
+    }
+    const skuBase = getEditableSkuBase()
+    if (!skuBase) {
+      alert('Please add or edit the SKU Base in the Details tab first, then try again.')
+      return
+    }
+    setEf(f => {
+      const existing = new Set((f.colors || []).map(c => String(c.code || '').toUpperCase()))
+      const additions = set
+        .map(c => colorWithCurrentSkuBase({ ...c, collection: collectionValue }, skuBase))
+        .filter(c => c.code && !existing.has(c.code))
+      if (!additions.length) return f
+      return { ...f, colors: [...f.colors, ...additions] }
+    })
+  }
+
+  const saveCollectionSetFromCurrentProduct = (collectionValue) => {
+    const variants = (ef.colors || [])
+      .filter(c => (c.collection || defaultColorCollection(c)) === collectionValue)
+      .map(c => {
+        const hexes = getColorHexes(c)
+        return normalizeColorVariant({
+          name: c.name,
+          code: String(c.code || '').toUpperCase(),
+          hex: hexes[0] || '#B9DCD2',
+          hexes,
+          collection: collectionValue
+        })
+      })
+      .filter(c => c.name && c.code)
+
+    if (!variants.length) {
+      alert('No color variants are assigned to this collection yet.')
+      return
+    }
+    saveColorCollectionSets({ ...colorCollectionSets, [collectionValue]: variants })
+    alert('Color collection set saved. You can now quick-add it to other products.')
   }
 
   // SKU Base — bulk-edit all color variant SKUs from Details tab
@@ -2021,18 +2158,26 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'colors' && (
               <div className="em-panel">
-                <div className="f-hint">Each color variant gets its own SKU. Add multiple HEX colors inside one variant for parts like body, lid, handle, button, or boot. Choose the collection/group title for each variant.</div>
+                <div className="f-hint">Each color variant gets its own SKU. Use + Add beside a collection title to quickly add saved colors like Horizon, OG, XPRESS, Bloom, or Poply to this product. Use Save Set after editing a collection’s colors so you can reuse it on other products.</div>
                 <div className="color-collection-panel">
                   <div className="collection-head">
                     <span className="collection-title">Color collections / group titles</span>
                   </div>
                   <div className="collection-grid">
-                    {colorCollections.map(col=>(
-                      <div key={col.value} className="collection-item">
-                        <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
-                        <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
-                      </div>
-                    ))}
+                    {colorCollections.map(col=>{
+                      const savedCount = collectionSetCount(col.value)
+                      return (
+                        <div key={col.value} className="collection-item">
+                          <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
+                          <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
+                          <span className="collection-set-count">{savedCount} colors</span>
+                          <div className="collection-actions">
+                            <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
+                            <button type="button" className="collection-save-set" onClick={()=>saveCollectionSetFromCurrentProduct(col.value)}>Save Set</button>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                   <div className="collection-add-row">
                     <input type="color" value={newCollection.color} onChange={e=>setNewCollection(n=>({...n,color:e.target.value}))}/>
