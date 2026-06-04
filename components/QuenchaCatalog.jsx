@@ -31,7 +31,7 @@ const SEED=[
 ]
 
 const EDIT_PASSWORD = 'quencha2026'
-const EXT_LABELS = {core:'Quencha Core',kids:'Quencha Kids',pets:'Quencha Pets',tech:'Quencha Tech'}
+const EXT_LABELS = {core:'Quencha',kids:'Quencha Kids',pets:'Quencha Pets',tech:'Quencha Tech'}
 const CAT_LABELS = {sip:'SIP — Drinkware',savor:'SAVOR — Lunch & Food',go:'GO — Bags & Carry',accessories:'Accessories'}
 const EXT_ORDER = ['core','kids','pets','tech']
 const CAT_ORDER = ['sip','savor','go','accessories']
@@ -44,7 +44,7 @@ const DEFAULT_CATS = [
   {value:'accessories', label:'Accessories',           icon:'⚙️'},
 ]
 const DEFAULT_EXTS = [
-  {value:'core',  label:'Quencha Core',  color:'#279989'},
+  {value:'core',  label:'Quencha',  color:'#279989'},
   {value:'kids',  label:'Quencha Kids',  color:'#5891c4'},
   {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
   {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
