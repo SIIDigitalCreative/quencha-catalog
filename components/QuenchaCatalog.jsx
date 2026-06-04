@@ -884,7 +884,7 @@ export default function QuenchaCatalog() {
   const [filterPMax, setFilterPMax] = useState(null)
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('default')
-  const [view, setView] = useState('col-4')
+  const [view, setView] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4')
   const [showMobileFilter, setShowMobileFilter] = useState(false)
 
   // ── AUTH — once unlocked, stays for session ──
