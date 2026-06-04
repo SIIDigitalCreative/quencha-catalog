@@ -817,7 +817,6 @@ const PencilIcon = () => (
 function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
   banners = Array.isArray(banners) ? banners : []
   const [slide, setSlide] = useState(0)
-  const [videoPlaying, setVideoPlaying] = useState(false)
   const timerRef = useRef(null)
   const touchStartX = useRef(null)
   const touchStartY = useRef(null)
@@ -838,7 +837,6 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
   }, [banners.length, interval])
 
   useEffect(() => { startTimer(); return () => clearInterval(timerRef.current) }, [startTimer])
-  useEffect(() => { setVideoPlaying(false) }, [heroVideoUrl])
   const go = (dir) => { if (!banners.length) return; setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
 
   const onTouchStart = (e) => {
@@ -944,7 +942,7 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
               {editMode && hasVideo && (
                 <button
                   className="hero-video-edit-btn"
-                  onClick={(e)=>{ e.stopPropagation(); setVideoPlaying(false); onEditClick() }}
+                  onClick={(e)=>{ e.stopPropagation(); onEditClick() }}
                   title="Edit or replace video"
                 >
                   ✏️ Edit Video
@@ -952,18 +950,12 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
               )}
               {hasVideo ? (
                 <div className="hero-video-frame">
-                  {videoPlaying ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${ytId}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`}
-                      title="Quencha video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <button className="hero-video-thumb" onClick={()=>setVideoPlaying(true)}>
-                      {videoThumb ? <img src={videoThumb} alt="YouTube video thumbnail"/> : <span className="hero-video-empty">YouTube</span>}
-                    </button>
-                  )}
+                  <iframe
+                    src={`https://www.youtube.com/embed/${ytId}?controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`}
+                    title="Quencha video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
                 </div>
               ) : editMode ? (
                 <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
