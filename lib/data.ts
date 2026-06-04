@@ -13,6 +13,8 @@ type ProductColor = {
   code: string
   hex: string
   sku: string
+  hexes?: string[]
+  collection?: string
 }
 
 const OG: PaletteColor[] = [
@@ -28,6 +30,41 @@ const XP: PaletteColor[] = [
   { n: 'Forest Green', c: 'FG', h: '#3D6B4F' },
   { n: 'Twilight Teal', c: 'TT', h: '#2B8090' },
   { n: 'Coral Oasis', c: 'CO', h: '#E8524A' },
+]
+
+const HORIZON: ProductColor[] = [
+  {
+    name: 'Rose Clay',
+    code: 'RC',
+    hex: '#DCB8BC',
+    hexes: ['#DCB8BC', '#946D72'],
+    collection: 'Horizon',
+    sku: '',
+  },
+  {
+    name: 'Forge Slate',
+    code: 'FS',
+    hex: '#A2AAAD',
+    hexes: ['#A2AAAD', '#5A6770'],
+    collection: 'Horizon',
+    sku: '',
+  },
+  {
+    name: 'Sage Ash',
+    code: 'SA',
+    hex: '#A9ACA1',
+    hexes: ['#A9ACA1', '#65665E'],
+    collection: 'Horizon',
+    sku: '',
+  },
+  {
+    name: 'Warm Dune',
+    code: 'WD',
+    hex: '#C6BFB7',
+    hexes: ['#C6BFB7', '#8C837A'],
+    collection: 'Horizon',
+    sku: '',
+  },
 ]
 
 const BLOOM: PaletteColor[] = [
@@ -79,6 +116,33 @@ function mk(base: string, pal: PaletteColor[]): ProductColor[] {
   return pal.map(c => ({ name: c.n, code: c.c, hex: c.h, sku: `${base}-${c.c}` }))
 }
 
+function mkHorizon(base: string): ProductColor[] {
+  return HORIZON.map(c => ({
+    ...c,
+    sku: `${base}-${c.code}`,
+  }))
+}
+
+function mergeColors(existing: ProductColor[], additional: ProductColor[]): ProductColor[] {
+  const merged = [...existing]
+
+  additional.forEach(color => {
+    const existingIndex = merged.findIndex(c => c.sku === color.sku)
+
+    if (existingIndex >= 0) {
+      merged[existingIndex] = { ...merged[existingIndex], ...color }
+    } else {
+      merged.push(color)
+    }
+  })
+
+  return merged
+}
+
+function withHorizon(base: string, colors: ProductColor[]): ProductColor[] {
+  return mergeColors(colors, mkHorizon(base))
+}
+
 function product(
   id: string,
   name: string,
@@ -120,8 +184,12 @@ const COOLER_BADGES = ['36h Maintains Cold Temp.', 'Heavy-Duty PP Body', 'Spacio
 
 export const SEED_PRODUCTS: Product[] = [
   // ── SIP / DRINKWARE ───────────────────────────────────────────────
-  product('qnh-dfit550', 'Dual Flow Insulated Tumbler 550ml', 'core', 'sip', 'Insulated tumbler with a 2-way spout lid for hot or cold drinks, designed for everyday hydration and temperature retention.', INSULATED_BADGES, 799.75, 25, mk('QNH-DFIT550', OG)),
-  product('qnh-dfit900', 'Dual Flow Insulated Tumbler 900ml', 'core', 'sip', 'Larger 2-way spout insulated tumbler for all-day hydration with double-wall vacuum insulation.', INSULATED_BADGES, 999.75, 16, mk('QNH-DFIT900', OG)),
+  product('qnh-dfit550', 'Dual Flow Insulated Tumbler 550ml', 'core', 'sip', 'Insulated tumbler with a 2-way spout lid for hot or cold drinks, designed for everyday hydration and temperature retention.', INSULATED_BADGES, 799.75, 25, withHorizon('QNH-DFIT550', mk('QNH-DFIT550', OG))),
+  product('qnh-dfit900', 'Dual Flow Insulated Tumbler 900ml', 'core', 'sip', 'Larger 2-way spout insulated tumbler for all-day hydration with double-wall vacuum insulation.', INSULATED_BADGES, 999.75, 16, withHorizon('QNH-DFIT900', mk('QNH-DFIT900', OG))),
+  product('qnh-imt600', 'Insulated Mug Tumbler 600ml', 'core', 'sip', 'Insulated mug tumbler with handle, designed for coffee, tea, and cold drinks at school, office, or on the go.', INSULATED_BADGES, 799.75, 12, mkHorizon('QNH-IMT600')),
+  product('qnh-imt1200', 'Insulated Mug Tumbler 1200ml', 'core', 'sip', 'Large insulated mug tumbler with handle for extended hydration and temperature retention throughout the day.', INSULATED_BADGES, 999.75, 12, mkHorizon('QNH-IMT1200')),
+  product('qnh-icm420', 'Insulated Coffee Mug 420ml', 'core', 'sip', 'Compact insulated coffee mug designed for hot coffee, tea, and drinks on the go.', INSULATED_BADGES, 799.75, 25, mkHorizon('QNH-ICM420')),
+  product('qnh-wb1000', 'Water Bottle 1000ml', 'core', 'sip', 'Reusable water bottle with secure lid for school, work, gym, and travel hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Polypropylene'], 249.75, 24, mkHorizon('QNH-WB1000')),
   product('qnh-it550', 'Insulated Tumbler 550ml with Silicone Boot', 'core', 'sip', 'Insulated tumbler with protective silicone boot for a non-slip grip and added everyday durability.', INSULATED_BADGES, 799.75, 16, mk('QNH-IT550', XP)),
   product('qnh-it1100', 'Insulated Tumbler 1100ml with Silicone Boot', 'core', 'sip', 'Extra-large insulated tumbler with silicone boot, ideal for gym, school, office, and long workdays.', INSULATED_BADGES, 999.75, 8, mk('QNH-IT1100', XP)),
   product('qnh-imt1100', 'Insulated Mug Tumbler 1100ml', 'core', 'sip', 'Large insulated mug tumbler with handle and straw lid for coffee, tea, and cold beverages.', INSULATED_BADGES, 799.75, 12, mk('QNH-IMT1100', XP)),
@@ -134,7 +202,9 @@ export const SEED_PRODUCTS: Product[] = [
   product('qnh-wb1100', 'Water Bottle 1100ml', 'core', 'sip', 'Large reusable BPA-free plastic water bottle for school, office, workouts, and daily use.', PLASTIC_BOTTLE_BADGES, 199.75, 24, mk('QNH-WB1100', XP)),
   product('qnh-twb680', 'Travel Water Bottle 680ml', 'core', 'sip', 'Travel plastic water bottle with dual spout, built-in straw, rubberized grip, and leak-proof design.', TRAVEL_BOTTLE_BADGES, 299.75, 24, mk('QNH-TWB680', XP)),
   product('qnh-ilb1300', 'Insulated Lunch Box 1300ml', 'core', 'savor', 'Two-layer insulated lunch box that separates food and helps maintain meal temperature while on the go.', LUNCH_STEEL_BADGES, 749.75, 36, mk('QNH-ILB1300', OG)),
-  product('qnh-lb800', 'Lunch Box 800ml', 'core', 'savor', 'Lunch box with stainless steel detachable tray, designed for carrying meals safely and conveniently.', LUNCH_STEEL_BADGES, 549.75, 36, mk('QNH-LB800', XP)),
+  product('qnh-iblb700', 'Insulated Bento Lunch 700ml', 'core', 'savor', 'Insulated bento lunch box with stainless steel detachable tray for compact meal storage and temperature retention.', LUNCH_STEEL_BADGES, 799.75, 36, mkHorizon('QNH-IBLB700')),
+  product('qnh-3llb1400', 'Insulated 3 Layer Lunch Box 1400ml', 'core', 'savor', 'Three-layer insulated lunch box for keeping meals organized, separated, and ready for school, office, or travel.', LUNCH_STEEL_BADGES, 999.75, 36, mkHorizon('QNH-3LLB1400')),
+  product('qnh-lb800', 'Lunch Box 800ml', 'core', 'savor', 'Lunch box with stainless steel detachable tray, designed for carrying meals safely and conveniently.', LUNCH_STEEL_BADGES, 549.75, 36, withHorizon('QNH-LB800', mk('QNH-LB800', XP))),
   product('qnh-lb1200', 'Lunch Box 1200ml', 'core', 'savor', 'Lightweight PP lunch box for meals on the go, made with durable plastic materials and convenient compartments.', LUNCH_PP_BADGES, 349.75, 48, mk('QNH-LB1200', XP)),
   product('qnh-lb1100', 'Lunch Box 1100ml', 'core', 'savor', 'Compact lunch box with secure lid and portion-friendly inner container for daily meals.', ['BPA-Free', 'Leak-Proof', 'Silicone Seal Ring', 'Hot Temp.'], 349.75, 48, mk('QNH-LB1100', OG)),
   product('qnh-pcs', 'Portable Cutlery Set', 'core', 'accessories', 'Compact portable cutlery set with spoon, fork, and case for meals at work, school, travel, and picnics.', ['304 Stainless Steel', 'BPA-Free'], 349.75, 72, mk('QNH-PCS', XP)),
@@ -149,6 +219,10 @@ export const SEED_PRODUCTS: Product[] = [
   product('qnh-cg150', 'Coffee Grinder 150g', 'core', 'accessories', 'Manual coffee grinder for freshly ground coffee with compact everyday-friendly design.', ['Manual Grinder', 'BPA-Free', 'Durable', 'Coffee Essential'], 599.75, 25, mk('QNH-CG150', OG)),
   product('qnh-nbmlin325', 'New Bone Porcelain Mug 325ml — Linear', 'core', 'savor', 'New Bone porcelain mug with linear design, made for elegant everyday coffee and tea moments.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMLIN', XP)),
   product('qnh-nbmdia325', 'New Bone Porcelain Mug 325ml — Diamond', 'core', 'savor', 'New Bone porcelain mug with diamond design, combining durability, elegance, and daily practicality.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMDIA', XP)),
+  product('qnh-nbmche330', 'New Bone Chevron Mug 330ml', 'core', 'savor', 'New Bone porcelain mug with an embossed chevron texture and refined everyday look.', NEW_BONE_BADGES, 149.75, 36, mkHorizon('QNH-NBMCHE')),
+  product('qnh-nbmhrb330', 'New Bone Herringbone Mug 330ml', 'core', 'savor', 'New Bone porcelain mug with an embossed herringbone texture and comfortable grip.', NEW_BONE_BADGES, 149.75, 36, mkHorizon('QNH-NBMHRB')),
+  product('qnh-nbmhex330', 'New Bone Hexa Mug 330ml', 'core', 'savor', 'New Bone porcelain mug with an embossed hexa texture for stylish coffee and tea moments.', NEW_BONE_BADGES, 149.75, 36, mkHorizon('QNH-NBMHEX')),
+  product('qnh-nbmhoc330', 'New Bone Honeycomb Mug 330ml', 'core', 'savor', 'New Bone porcelain mug with an embossed honeycomb texture and elegant everyday finish.', NEW_BONE_BADGES, 149.75, 36, mkHorizon('QNH-NBMHOC')),
   product('qnh-nbmzod325', 'New Bone Zodiac Mug 325ml', 'core', 'savor', 'Black New Bone porcelain zodiac mug with gold zodiac artwork designs.', NEW_BONE_BADGES, 179.75, 36, ZODIAC),
   product('qnh-kdlp', 'Kids Lunch Pack', 'kids', 'go', 'Kids lunch pack designed for carrying lunch essentials with playful colors and school-ready style.', ['BPA-Free', 'Kid-Friendly', 'Portable', 'Easy Carry'], 829.75, 16, mk('QNH-KDLP', BLOOM)),
   product('qnh-kdwb520', 'Kids Water Bottle 520ml — Bloom', 'kids', 'sip', 'Kids water bottle from the Bloom collection with playful colors and easy everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 429.75, 24, mk('QNH-KDWB520', BLOOM)),
@@ -159,11 +233,11 @@ export const SEED_PRODUCTS: Product[] = [
   product('qnh-kdwb650-poply', 'Kids Water Bottle 650ml — Poply', 'kids', 'sip', 'Playful Poply kids water bottle designed for school, outdoor activities, and everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 249.75, 24, mk('QNH-KDWB650', POPLY)),
   product('qnh-kdlb1800-poply', 'Kids Lunch Box 1800ml — Poply', 'kids', 'savor', 'Spacious Poply kids lunch box for baon, snacks, and school meals.', ['BPA-Free', 'Air-Vent', 'Silicone Seal Ring', 'Kid-Friendly'], 799.75, 24, mk('QNH-KDLB1800', POPLY)),
   product('qnh-boots-poply', 'Silicone Boot — Poply', 'kids', 'accessories', 'Protective silicone boot in Poply colors for added grip and bottle protection.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', POPLY)),
-  product('qnh-boots-core', 'Silicone Boot 20oz', 'core', 'accessories', 'Protective silicone boot for tumblers, designed to reduce scratches and add a non-slip base.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', XP)),
-  product('qnh-bootl', 'Silicone Boot 37oz', 'core', 'accessories', 'Large protective silicone boot designed for compatible tumblers, helping prevent dents, scratches, and slips.', SILICONE_BADGES, 149.75, 100, mk('QNH-BOOTL', XP)),
+  product('qnh-boots-core', 'Silicone Boot 20oz', 'core', 'accessories', 'Protective silicone boot for tumblers, designed to reduce scratches and add a non-slip base.', SILICONE_BADGES, 129.75, 100, withHorizon('QNH-BOOTS', mk('QNH-BOOTS', XP))),
+  product('qnh-bootl', 'Silicone Boot 37oz', 'core', 'accessories', 'Large protective silicone boot designed for compatible tumblers, helping prevent dents, scratches, and slips.', SILICONE_BADGES, 149.75, 100, withHorizon('QNH-BOOTL', mk('QNH-BOOTL', XP))),
   product('qnh-lid', 'Lid Cap', 'core', 'accessories', 'Replacement lid cap for compatible Quencha drinkware.', ['BPA-Free', 'Secure Fit', 'Leak-Proof', 'Replacement Part'], 199.75, 100, mk('QNH-LID', XP)),
   product('qnh-cord', 'Paracord Handle', 'core', 'accessories', 'Durable paracord handle accessory for compatible tumblers and bottles.', ['Paracord', 'Durable', 'Portable', 'Easy Carry'], 129.75, 100, mk('QNH-CORD', XP)),
-  product('qnh-coaster', 'Silicone Coaster and Lid Set', 'core', 'accessories', 'Silicone coaster and lid set for added protection, grip, and daily drinkware convenience.', ['BPA-Free', 'Silicone', 'Non-Slip', 'Heat Resistant'], 199.75, 100, mk('QNH-COASTER', XP)),
+  product('qnh-coaster', 'Silicone Coaster and Lid Set', 'core', 'accessories', 'Silicone coaster and lid set for added protection, grip, and daily drinkware convenience.', ['BPA-Free', 'Silicone', 'Non-Slip', 'Heat Resistant'], 199.75, 100, withHorizon('QNH-COASTER', mk('QNH-COASTER', XP))),
   product('qnh-parkey', 'Paracord Keychain', 'core', 'accessories', 'Paracord keychain accessory in Quencha colors for bags, bottles, and daily carry.', ['Paracord', 'Durable', 'Portable'], 199.75, 100, mk('QNH-PARKEY', XP)),
   product('qnh-ittb', 'Insulated Tote Bag', 'core', 'go', 'Insulated tote bag with thermal lining for keeping meals fresh while on the go.', ['Non-Woven Fabric', 'Water Proof', '14L Capacity', 'Temp. Retention'], 299.75, 60, mk('QNH-ITTB', XP)),
   product('qnh-hssb', 'Hard-Shell Sling Bag', 'core', 'go', 'Hard-shell sling bag for organized carry and everyday protection of essentials.', ['Hard Shell', 'Water Proof', 'Durable', 'Easy Carry'], 499.75, 50, mk('QNH-HSSB', XP)),
