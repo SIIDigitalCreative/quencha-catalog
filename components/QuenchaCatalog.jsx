@@ -925,11 +925,29 @@ export default function QuenchaCatalog() {
     return product.colors[0].sku.split('-').slice(0, -1).join('-') || product.colors[0].sku
   }, [])
 
-  const buildInquiryText = useCallback((product, packs, message) => {
-    const cleanPacks = parseInt(packs, 10) || 0
+  const buildInquiryText = useCallback((product, lines, message) => {
     const packing = parseInt(product?.packing, 10) || 0
-    const totalUnits = cleanPacks && packing ? cleanPacks * packing : ''
+    const safeLines = Array.isArray(lines) ? lines : []
+    const requestedLines = safeLines
+      .map((line) => {
+        const packs = parseInt(line?.packs, 10) || 0
+        const color = product?.colors?.find(c => c.code === line?.colorCode) || product?.colors?.[0] || null
+        const units = packs && packing ? packs * packing : 0
+        return { color, packs, units }
+      })
+      .filter(line => line.packs > 0)
+
     const skuBase = getSkuBase(product)
+    const totalPacks = requestedLines.reduce((sum, line) => sum + line.packs, 0)
+    const totalUnits = requestedLines.reduce((sum, line) => sum + line.units, 0)
+    const requestSummary = requestedLines.length
+      ? requestedLines.map((line, index) => {
+          const colorLabel = line.color ? `${line.color.name} (${line.color.code})` : 'Color'
+          const skuLabel = line.color?.sku ? ` | SKU: ${line.color.sku}` : ''
+          const unitsLabel = line.units ? ` | Estimated Units: ${line.units} pcs` : ''
+          return `${index + 1}. ${colorLabel}${skuLabel} | Packs/Cartons: ${line.packs}${unitsLabel}`
+        }).join('\n')
+      : '1. Color / SKU: | Packs/Cartons:'
 
     return [
       'Hi Quencha Team,',
@@ -939,8 +957,12 @@ export default function QuenchaCatalog() {
       product ? `Product: ${product.name}` : 'Product / SKU:',
       skuBase ? `SKU Base: ${skuBase}` : '',
       product?.srp ? `SRP: ₱${Number(product.srp).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '',
-      packing ? `Packing: ${packing} pcs per pack` : 'Packing:',
-      cleanPacks ? `Requested Packs: ${cleanPacks}` : 'Requested Packs:',
+      packing ? `Packing: ${packing} pcs per pack/carton` : 'Packing:',
+      '',
+      'Requested Colors / Quantities:',
+      requestSummary,
+      '',
+      totalPacks ? `Total Packs/Cartons: ${totalPacks}` : '',
       totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
       '',
       'Company / Name:',
@@ -954,10 +976,10 @@ ${message.trim()}` : 'Message / Notes:',
     ].filter(line => line !== '').join('\n')
   }, [getSkuBase])
 
-  const buildInquiryHref = useCallback((product, packs, message) => {
+  const buildInquiryHref = useCallback((product, lines, message) => {
     const email = 'design@sunbeamsimpexinc.com'
     const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
-    const body = buildInquiryText(product, packs, message)
+    const body = buildInquiryText(product, lines, message)
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }, [buildInquiryText])
 
@@ -982,13 +1004,14 @@ ${message.trim()}` : 'Message / Notes:',
   const [editTarget, setEditTarget] = useState(null) // null = new
   const [inqOpen, setInqOpen] = useState(false)
   const [inqProduct, setInqProduct] = useState(null)
-  const [inqPacks, setInqPacks] = useState('1')
+  const [inqLines, setInqLines] = useState([])
   const [inqMessage, setInqMessage] = useState('')
   const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
 
   const openInquiry = useCallback((product = null) => {
+    const firstColorCode = product?.colors?.[0]?.code || ''
     setInqProduct(product)
-    setInqPacks(product ? '1' : '')
+    setInqLines([{ colorCode: firstColorCode, packs: '1' }])
     setInqMessage('')
     setInqOpen(true)
   }, [])
@@ -1892,14 +1915,34 @@ ${message.trim()}` : 'Message / Notes:',
 
       {/* INQUIRY MODAL */}
       {inqOpen && (() => {
-        const packsNum = parseInt(inqPacks, 10) || 0
+        const colors = inqProduct?.colors || []
         const packingNum = parseInt(inqProduct?.packing, 10) || 0
-        const totalUnits = packsNum && packingNum ? packsNum * packingNum : 0
-        const inquiryHref = buildInquiryHref(inqProduct, inqPacks, inqMessage)
+        const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', packs: '1' }]
+        const enrichedLines = activeLines.map((line) => {
+          const selectedColor = colors.find(c => c.code === line.colorCode) || colors[0] || null
+          const packsNum = parseInt(line.packs, 10) || 0
+          const units = packsNum && packingNum ? packsNum * packingNum : 0
+          return { ...line, selectedColor, packsNum, units }
+        })
+        const totalPacks = enrichedLines.reduce((sum, line) => sum + line.packsNum, 0)
+        const totalUnits = enrichedLines.reduce((sum, line) => sum + line.units, 0)
+        const inquiryHref = buildInquiryHref(inqProduct, activeLines, inqMessage)
+        const updateLine = (index, patch) => setInqLines(lines => {
+          const base = lines?.length ? lines : activeLines
+          return base.map((line, i) => i === index ? { ...line, ...patch } : line)
+        })
+        const addLine = () => setInqLines(lines => {
+          const base = lines?.length ? lines : activeLines
+          return [...base, { colorCode: colors[0]?.code || '', packs: '1' }]
+        })
+        const removeLine = (index) => setInqLines(lines => {
+          const base = lines?.length ? lines : activeLines
+          return base.length > 1 ? base.filter((_, i) => i !== index) : base
+        })
 
         return (
           <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
-            <div className="modal" style={{maxWidth:560}}>
+            <div className="modal" style={{maxWidth:640}}>
               <div className="m-hdr" style={{background:'var(--sf4)'}}>
                 <div>
                   <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Corporate & Wholesale</div>
@@ -1908,35 +1951,80 @@ ${message.trim()}` : 'Message / Notes:',
                 <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
               </div>
               <div className="m-body" style={{gap:14}}>
-                <p style={{fontSize:14,color:'var(--gr)'}}>Review the quantity, packing, and notes first, then send the inquiry through email.</p>
+                <p style={{fontSize:14,color:'var(--gr)'}}>Select the preferred color/s and quantity first, then send the inquiry through email.</p>
 
                 <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
                   <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
                   <div style={{fontSize:16,fontWeight:900,color:'var(--bk)',lineHeight:1.25}}>{inqProduct?.name || 'General Quencha bulk inquiry'}</div>
                   {inqProduct?.colors?.[0]?.sku && <div style={{fontSize:12,color:'var(--gr)'}}>SKU Base: <strong style={{color:'var(--tl)'}}>{getSkuBase(inqProduct)}</strong></div>}
-                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:4}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginTop:4}}>
                     <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
                       <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Packing</div>
                       <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{packingNum ? `${packingNum} pcs` : 'TBC'}</div>
                     </div>
                     <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
-                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Estimated Total</div>
+                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Packs</div>
+                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalPacks || '—'}</div>
+                    </div>
+                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Units</div>
                       <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalUnits ? `${totalUnits} pcs` : '—'}</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="f-col">
-                  <label className="f-lbl">Number of Packs / Cartons</label>
-                  <input
-                    className="f-in"
-                    type="number"
-                    min="1"
-                    value={inqPacks}
-                    onChange={e=>setInqPacks(e.target.value)}
-                    placeholder="Example: 5"
-                  />
-                  {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total.</div>}
+                  <label className="f-lbl">Color & Quantity</label>
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {enrichedLines.map((line, index) => (
+                      <div key={index} style={{background:'var(--bg)',border:'1px solid rgba(185,220,210,.55)',borderRadius:10,padding:10,display:'flex',flexDirection:'column',gap:8}}>
+                        <div style={{display:'grid',gridTemplateColumns:'1fr 120px 34px',gap:8,alignItems:'center'}}>
+                          <select
+                            className="f-sel"
+                            value={line.colorCode || ''}
+                            onChange={e=>updateLine(index, { colorCode: e.target.value })}
+                            disabled={!colors.length}
+                          >
+                            {colors.length ? colors.map(color => (
+                              <option key={color.sku || color.code} value={color.code}>{color.name} — {color.code}</option>
+                            )) : <option value="">Select color</option>}
+                          </select>
+                          <input
+                            className="f-in"
+                            type="number"
+                            min="1"
+                            value={line.packs}
+                            onChange={e=>updateLine(index, { packs: e.target.value })}
+                            placeholder="Packs"
+                          />
+                          <button
+                            type="button"
+                            className="rm-btn"
+                            onClick={()=>removeLine(index)}
+                            disabled={enrichedLines.length <= 1}
+                            style={{height:38,border:'1px solid rgba(239,68,68,.2)',borderRadius:8,background:'rgba(239,68,68,.04)',opacity:enrichedLines.length <= 1 ? .35 : 1}}
+                            title="Remove color"
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <div style={{display:'flex',flexWrap:'wrap',gap:8,fontSize:11,color:'var(--gr)'}}>
+                          {line.selectedColor?.hex && <span style={{width:12,height:12,borderRadius:'50%',background:line.selectedColor.hex,border:'1px solid rgba(0,0,0,.1)',display:'inline-block',marginTop:2}}/>}
+                          {line.selectedColor?.sku && <span>SKU: <strong style={{color:'var(--tl)'}}>{line.selectedColor.sku}</strong></span>}
+                          {packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="add-btn"
+                    onClick={addLine}
+                    style={{alignSelf:'flex-start',background:'rgba(39,153,137,.12)',color:'var(--tl)',border:'1px solid rgba(39,153,137,.25)',marginTop:2}}
+                  >
+                    + Add another color
+                  </button>
+                  {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total per color.</div>}
                 </div>
 
                 <div className="f-col">
@@ -1946,7 +2034,7 @@ ${message.trim()}` : 'Message / Notes:',
                     rows={4}
                     value={inqMessage}
                     onChange={e=>setInqMessage(e.target.value)}
-                    placeholder="Add preferred colors, UV printing details, delivery area, deadline, or other notes…"
+                    placeholder="Add UV printing details, delivery area, deadline, or other notes…"
                   />
                 </div>
 
