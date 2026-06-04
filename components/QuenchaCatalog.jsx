@@ -2840,6 +2840,13 @@ function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNa
   const [uploading, setUploading] = useState(false)
   const [err, setErr] = useState('')
 
+  const readLogoAsDataUrl = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+
   const handleLogoFile = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -2847,13 +2854,21 @@ function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNa
       setErr('Please upload an image file.')
       return
     }
+    if (file.size > 2 * 1024 * 1024) {
+      setErr('Logo file is too large. Please upload a PNG/SVG under 2MB.')
+      e.target.value = ''
+      return
+    }
+
     setErr('')
     setUploading(true)
     try {
-      const url = await onUpload(file)
-      onLogoChange(url)
+      // Store the logo directly as a data URL so it does not depend on /api/upload or Vercel Blob.
+      // This is more reliable for small brand logos and still saves through /api/settings.
+      const dataUrl = await readLogoAsDataUrl(file)
+      onLogoChange(dataUrl)
     } catch (error) {
-      setErr('Logo upload failed. Please try again.')
+      setErr('Logo upload failed. Please try a smaller PNG or SVG file.')
     } finally {
       setUploading(false)
       e.target.value = ''
@@ -2889,7 +2904,7 @@ function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNa
                   {brandLogo && <button className="cancel-btn" onClick={()=>onLogoChange('')}>Remove Logo</button>}
                 </div>
                 <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleLogoFile}/>
-                <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG/SVG-style logo. It will appear beside the brand name on the top-left bar.</div>
+                <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG or SVG under 2MB. It saves directly with the top-bar settings.</div>
               </div>
             </div>
             {err && <div className="f-error">{err}</div>}
