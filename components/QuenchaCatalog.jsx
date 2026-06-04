@@ -1139,34 +1139,17 @@ export default function QuenchaCatalog() {
   // Load saved catalog preferences once so filter/sort state can initialize safely.
   const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
 
-  // Fetch all data on mount — auto-seed if empty, and add missing seed products without deleting existing ones
+  // Fetch all data on mount — Redis is now the source of truth.
+  // Important: this no longer auto-seeds missing products from the local SEED list,
+  // so products you delete manually in Upstash will stay deleted.
   useEffect(() => {
-    const skuBase = (product) => {
-      const sku = product?.colors?.[0]?.sku || ''
-      return sku ? sku.replace(/-[^-]+$/, '') : (product?.id || product?.name || '')
-    }
-
     Promise.all([
       fetch('/api/products').then(r=>r.json()),
       fetch('/api/settings').then(r=>r.json()),
-    ]).then(async ([prods, settings]) => {
+    ]).then(([prods, settings]) => {
       const existingProducts = Array.isArray(prods) ? prods : []
-      const existingKeys = new Set(existingProducts.map(p => skuBase(p)).filter(Boolean))
-      const missingSeedProducts = SEED.filter(p => !existingKeys.has(skuBase(p)))
+      setProducts(existingProducts.map(p => ({ youtube: '', ...p })))
 
-      if (existingProducts.length === 0) {
-        await Promise.all(SEED.map(p =>
-          fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(p) })
-        ))
-        setProducts(SEED)
-      } else if (missingSeedProducts.length > 0) {
-        await Promise.all(missingSeedProducts.map(p =>
-          fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(p) })
-        ))
-        setProducts([...existingProducts, ...missingSeedProducts].map(p => ({ youtube: '', ...p })))
-      } else {
-        setProducts(existingProducts.map(p => ({ youtube: '', ...p })))
-      }
       if (settings.banners)                      setBanners(settings.banners)
       if (settings.bannerAspect)                 setBannerAspect(settings.bannerAspect)
       if (settings.bannerInterval !== undefined) setBannerIntervalVal(settings.bannerInterval)
@@ -1184,7 +1167,7 @@ export default function QuenchaCatalog() {
         setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(settings.colorCollectionSets) }))
       }
       setLoading(false)
-    }).catch(() => { setProducts(SEED); setLoading(false) })
+    }).catch(() => { setProducts([]); setLoading(false) })
   }, [])
 
   // ── FILTERS ──
