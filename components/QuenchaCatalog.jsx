@@ -206,11 +206,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .qnh-topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nh);background:var(--tl);display:flex;align-items:center;padding:0 20px;gap:12px;transition:background var(--tr)}
 .qnh-topbar.edit-on{background:#92400e}
 .tb-brand{display:flex;align-items:center;gap:8px;flex-shrink:0;text-decoration:none;cursor:pointer;min-width:0}
-.tb-logo{height:26px;width:auto;max-width:110px;object-fit:contain;display:block;flex-shrink:0}
-.tb-logo-placeholder{height:26px;width:26px;border-radius:7px;background:rgba(255,255,255,.18);border:1px dashed rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:900;flex-shrink:0}
-.tb-wm{font-size:20px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
-.tb-tg{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.06em;font-style:italic;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
-.tb-brand-edit{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:2px 7px;white-space:nowrap}
+.tb-logo{height:28px;width:auto;max-width:120px;object-fit:contain;display:block;flex-shrink:0}
+.tb-logo-placeholder{width:30px;height:30px;border-radius:8px;border:1px dashed rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900;flex-shrink:0}
+.tb-brand-edit{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:2px 7px;flex-shrink:0}
+.tb-wm{font-size:20px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;white-space:nowrap}
+.tb-tg{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.06em;font-style:italic;white-space:nowrap}
+.tb-menu-btn{display:none;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.14);color:#fff;font-size:18px;font-weight:900;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.tb-menu-btn:hover{background:rgba(255,255,255,.24)}
 .tb-search-wrap{flex:1;max-width:420px;position:relative;margin:0 auto}
 .tb-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none;color:#fff}
 .tb-search{width:100%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 36px;font-family:var(--fn);font-size:13px;color:#fff;outline:none;transition:var(--tr)}
@@ -604,7 +606,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 @media(max-width:1024px){
   .qnh-sidebar{display:none}
   .qnh-main{margin-left:0}
-  .mob-filter-btn{display:flex}
+  .mob-filter-btn{display:none}
+  .tb-menu-btn{display:flex}
 }
 @media(max-width:768px){
   .tb-tg{display:none}
@@ -616,6 +619,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 @media(max-width:480px){
   .qnh-topbar{padding:0 12px;gap:8px}
   .tb-wm{font-size:16px}
+  .tb-tg{display:none}
+  .tb-logo{height:24px;max-width:92px}
+  .tb-brand-edit{display:none}
   .tb-edit-btn span:last-child{display:none}
   .qnh-main{padding:16px 14px 100px}
   .hero{padding:20px 16px}
@@ -807,7 +813,8 @@ const PencilIcon = () => (
 )
 
 // ─── HERO CAROUSEL + VIDEO COMPONENT ─────────────────────────────────────────
-function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
+function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
+  banners = Array.isArray(banners) ? banners : []
   const [slide, setSlide] = useState(0)
   const [videoPlaying, setVideoPlaying] = useState(false)
   const timerRef = useRef(null)
@@ -1223,17 +1230,17 @@ export default function QuenchaCatalog() {
       const existingProducts = Array.isArray(prods) ? prods : []
       setProducts(existingProducts.map(p => ({ youtube: '', ...p })))
 
-      if (settings.banners)                      setBanners(settings.banners)
+      if (Array.isArray(settings.banners))          setBanners(settings.banners)
       if (settings.bannerAspect)                 setBannerAspect(settings.bannerAspect)
       if (settings.bannerInterval !== undefined) setBannerIntervalVal(settings.bannerInterval)
       if (settings.heroVideoUrl !== undefined)       setHeroVideoUrl(settings.heroVideoUrl || '')
       if (settings.heroVideoThumbnail !== undefined) setHeroVideoThumbnail(settings.heroVideoThumbnail || '')
       if (settings.heroMediaOrder)                  setHeroMediaOrder(settings.heroMediaOrder)
-      if (settings.heroTitle)                    setHeroTitle(settings.heroTitle)
-      if (settings.heroSub)                      setHeroSub(settings.heroSub)
-      if (settings.brandLogo !== undefined)      setBrandLogo(settings.brandLogo || '')
-      if (settings.brandName !== undefined)      setBrandName(settings.brandName ?? 'Quencha')
-      if (settings.brandTagline !== undefined)   setBrandTagline(settings.brandTagline ?? 'Sip · Savor · Go')
+      if (settings.heroTitle !== undefined)           setHeroTitle(settings.heroTitle || '')
+      if (settings.heroSub !== undefined)             setHeroSub(settings.heroSub || '')
+      if (settings.brandLogo !== undefined)           setBrandLogo(settings.brandLogo || '')
+      if (settings.brandName !== undefined)           setBrandName(settings.brandName || '')
+      if (settings.brandTagline !== undefined)        setBrandTagline(settings.brandTagline || '')
       if (Array.isArray(settings.colorCollections)) {
         setColorCollections(settings.colorCollections)
       } else if (typeof window !== 'undefined') {
@@ -1302,10 +1309,11 @@ export default function QuenchaCatalog() {
   const [heroVideoUrl, setHeroVideoUrl] = useState('')
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
-  const [brandEditOpen, setBrandEditOpen] = useState(false)
   const [brandLogo, setBrandLogo] = useState('')
   const [brandName, setBrandName] = useState('Quencha')
   const [brandTagline, setBrandTagline] = useState('Sip · Savor · Go')
+  const [brandEditOpen, setBrandEditOpen] = useState(false)
+  const [brandUploadErr, setBrandUploadErr] = useState('')
 
 
   const syncSettings = useCallback((patch) => {
@@ -1426,6 +1434,31 @@ ${message.trim()}` : 'Message / Notes:',
     const { url } = await res.json()
     return url
   }, [])
+
+  const handleBrandLogoUpload = useCallback((e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const allowed = ['image/png','image/jpeg','image/webp','image/svg+xml']
+    if (!allowed.includes(file.type)) {
+      setBrandUploadErr('Please upload a PNG, JPG, WebP, or SVG logo.')
+      e.target.value = ''
+      return
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setBrandUploadErr('Logo file is too large. Please keep it under 2MB.')
+      e.target.value = ''
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const url = ev.target?.result || ''
+      saveBrandLogo(url)
+      setBrandUploadErr('')
+    }
+    reader.onerror = () => setBrandUploadErr('Logo upload failed. Please try again.')
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }, [saveBrandLogo])
   const [editOpen, setEditOpen] = useState(false)
   const [editTarget, setEditTarget] = useState(null) // null = new
   const [inqOpen, setInqOpen] = useState(false)
@@ -1900,6 +1933,7 @@ ${message.trim()}` : 'Message / Notes:',
     <div>
       {/* TOPBAR */}
       <header className={`qnh-topbar ${editMode?'edit-on':''}`}>
+        <button className="tb-menu-btn" onClick={()=>setShowMobileFilter(true)} title="Open filters">☰</button>
         <a
           className="tb-brand"
           href="#"
@@ -2527,6 +2561,67 @@ ${message.trim()}` : 'Message / Notes:',
         </div>
       )}
 
+      {/* BRAND LOGO + TOPBAR TEXT MODAL */}
+      {brandEditOpen && (
+        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setBrandEditOpen(false)}}>
+          <div className="modal" style={{maxWidth:560}}>
+            <div className="m-hdr" style={{background:'var(--sf4)'}}>
+              <div>
+                <div style={{fontSize:10,fontWeight:900,letterSpacing:'.12em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Top Bar Branding</div>
+                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.1}}>Brand Logo & Text</div>
+              </div>
+              <button className="m-close" onClick={()=>setBrandEditOpen(false)}>✕</button>
+            </div>
+            <div className="m-body">
+              <div className="f-col">
+                <label className="f-lbl">Brand Logo</label>
+                <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
+                  <div style={{width:120,height:58,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.06em',flexShrink:0}}>
+                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8,background:'rgba(255,255,255,.08)'}}/> : 'NO LOGO'}
+                  </div>
+                  <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
+                    <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                      <label className="add-btn" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'9px 14px',cursor:'pointer'}}>
+                        Upload Logo
+                        <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} onChange={handleBrandLogoUpload}/>
+                      </label>
+                      {brandLogo && <button className="cancel-btn" onClick={()=>{saveBrandLogo('');setBrandUploadErr('')}}>Remove</button>}
+                    </div>
+                    <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG or SVG under 2MB. Leave text fields blank if you want to show logo only.</div>
+                  </div>
+                </div>
+                {brandUploadErr && <div className="f-error">{brandUploadErr}</div>}
+              </div>
+
+              <div className="f-row">
+                <div className="f-col">
+                  <label className="f-lbl">Brand Name</label>
+                  <input className="f-in" value={brandName} onChange={e=>saveBrandName(e.target.value)} placeholder="Leave blank to hide brand name"/>
+                </div>
+                <div className="f-col">
+                  <label className="f-lbl">Text Beside Brand Name</label>
+                  <input className="f-in" value={brandTagline} onChange={e=>saveBrandTagline(e.target.value)} placeholder="Leave blank to hide tagline"/>
+                </div>
+              </div>
+
+              <div className="f-col">
+                <label className="f-lbl">Preview</label>
+                <div style={{background:'var(--tl)',borderRadius:8,padding:'12px 16px',display:'flex',alignItems:'center',gap:8,minHeight:58}}>
+                  {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:30,width:'auto',maxWidth:140,objectFit:'contain'}}/>}
+                  {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
+                  {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
+                  {!brandLogo && !brandName?.trim() && !brandTagline?.trim() && <span style={{color:'rgba(255,255,255,.65)',fontSize:12}}>Nothing will show in the brand area.</span>}
+                </div>
+              </div>
+            </div>
+            <div className="m-footer">
+              <span style={{fontSize:12,color:'var(--gr)'}}>Changes autosave to site settings.</span>
+              <div className="m-footer-r"><button className="save-btn" onClick={()=>setBrandEditOpen(false)}>Done</button></div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CODE LIGHTBOX */}
       {codeLightbox && (
         <CodeLightbox
@@ -2546,19 +2641,6 @@ ${message.trim()}` : 'Message / Notes:',
       )}
 
       {/* BANNER EDIT MODAL */}
-      {brandEditOpen && (
-        <BrandEditModal
-          brandLogo={brandLogo}
-          brandName={brandName}
-          brandTagline={brandTagline}
-          onLogoChange={saveBrandLogo}
-          onNameChange={saveBrandName}
-          onTaglineChange={saveBrandTagline}
-          onUpload={uploadImageToBlob}
-          onClose={()=>setBrandEditOpen(false)}
-        />
-      )}
-
       {bannerEditOpen && (
         <BannerEditModal
           banners={banners}
@@ -2832,112 +2914,7 @@ ${message.trim()}` : 'Message / Notes:',
       )}
     </div>
   )
-
-}
-
-function BrandEditModal({ brandLogo, brandName, brandTagline, onLogoChange, onNameChange, onTaglineChange, onUpload, onClose }) {
-  const fileRef = useRef(null)
-  const [uploading, setUploading] = useState(false)
-  const [err, setErr] = useState('')
-
-  const readLogoAsDataUrl = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-
-  const handleLogoFile = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (!file.type.startsWith('image/')) {
-      setErr('Please upload an image file.')
-      return
-    }
-    if (file.size > 2 * 1024 * 1024) {
-      setErr('Logo file is too large. Please upload a PNG/SVG under 2MB.')
-      e.target.value = ''
-      return
-    }
-
-    setErr('')
-    setUploading(true)
-    try {
-      // Store the logo directly as a data URL so it does not depend on /api/upload or Vercel Blob.
-      // This is more reliable for small brand logos and still saves through /api/settings.
-      const dataUrl = await readLogoAsDataUrl(file)
-      onLogoChange(dataUrl)
-    } catch (error) {
-      setErr('Logo upload failed. Please try a smaller PNG or SVG file.')
-    } finally {
-      setUploading(false)
-      e.target.value = ''
-    }
-  }
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  return (
-    <div className="modal-bg" onClick={onClose}>
-      <div className="modal banner-modal" onClick={e=>e.stopPropagation()}>
-        <div className="m-hdr" style={{background:'var(--sf4)'}}>
-          <div>
-            <div style={{fontSize:10,fontWeight:900,letterSpacing:'.12em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Top bar branding</div>
-            <div style={{fontSize:20,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Brand Logo & Text</div>
-          </div>
-          <button className="m-close" onClick={onClose}>✕</button>
-        </div>
-        <div className="m-body" style={{gap:18}}>
-          <div className="f-col">
-            <label className="f-lbl">Brand Logo</label>
-            <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
-              <div style={{height:58,minWidth:120,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',padding:'8px 14px',overflow:'hidden'}}>
-                {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{maxHeight:42,maxWidth:160,objectFit:'contain',display:'block'}}/> : <span style={{color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.08em'}}>NO LOGO</span>}
-              </div>
-              <div style={{display:'flex',flexDirection:'column',gap:8,flex:1,minWidth:0}}>
-                <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-                  <button className="add-btn" onClick={()=>fileRef.current?.click()} disabled={uploading} style={{opacity:uploading?.6:1}}>{uploading ? 'Uploading…' : 'Upload Logo'}</button>
-                  {brandLogo && <button className="cancel-btn" onClick={()=>onLogoChange('')}>Remove Logo</button>}
-                </div>
-                <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleLogoFile}/>
-                <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG or SVG under 2MB. It saves directly with the top-bar settings.</div>
-              </div>
-            </div>
-            {err && <div className="f-error">{err}</div>}
-          </div>
-
-          <div className="f-row">
-            <div className="f-col">
-              <label className="f-lbl">Brand Name</label>
-              <input className="f-in" value={brandName} onChange={e=>onNameChange(e.target.value)} placeholder="Quencha"/>
-            </div>
-            <div className="f-col">
-              <label className="f-lbl">Text beside brand name</label>
-              <input className="f-in" value={brandTagline} onChange={e=>onTaglineChange(e.target.value)} placeholder="Sip · Savor · Go"/>
-            </div>
-          </div>
-
-          <div style={{background:'var(--sf4)',borderRadius:10,padding:14,border:'1px solid rgba(185,220,210,.6)'}}>
-            <div style={{fontSize:10,fontWeight:900,letterSpacing:'.1em',textTransform:'uppercase',color:'var(--tl)',marginBottom:8}}>Preview</div>
-            <div style={{height:50,background:'var(--tl)',borderRadius:9,display:'flex',alignItems:'center',padding:'0 16px',gap:8,overflow:'hidden'}}>
-              {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:26,maxWidth:110,objectFit:'contain'}}/>}
-              {brandName?.trim() && <span style={{fontSize:20,fontWeight:900,letterSpacing:'.08em',color:'#fff',textTransform:'uppercase',whiteSpace:'nowrap'}}>{brandName}</span>}
-              {brandTagline?.trim() && <span style={{fontSize:11,color:'rgba(255,255,255,.6)',letterSpacing:'.06em',fontStyle:'italic',whiteSpace:'nowrap'}}>{brandTagline}</span>}
-            </div>
-          </div>
-        </div>
-        <div className="m-footer">
-          <div style={{fontSize:12,color:'var(--gr)'}}>Changes autosave to site settings.</div>
-          <div className="m-footer-r"><button className="save-btn" onClick={onClose}>Done</button></div>
-        </div>
-      </div>
-    </div>
-  )
-function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
+}function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
   const fileRef = useRef(null)
   const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
 
@@ -3101,7 +3078,4 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
       </div>
     </div>
   )
-}
-
-// Syntax fix: closes the component/module block that was left open during the previous patch.
 }
