@@ -1271,13 +1271,7 @@ export default function QuenchaCatalog() {
           </div>
 
           {/* Products */}
-          {filtered.length === 0 ? (
-            <div className="empty">
-              <div className="empty-ico">🔍</div>
-              <h3 style={{fontSize:18,fontWeight:700,color:'var(--bk)',marginBottom:6}}>No products found</h3>
-              <p>Try a different filter or search term.</p>
-            </div>
-          ) : (() => {
+          {(() => {
             // Build render order: no-ext bucket first, then known exts, then any unknown ext keys
             const knownExtVals = exts.map(x=>x.value)
             const allExtKeys = Object.keys(grouped)
