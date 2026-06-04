@@ -556,6 +556,29 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 /* Edit overlay button */
 .hero-edit-btn{position:absolute;top:12px;right:12px;z-index:20;background:rgba(255,255,255,.9);border:none;border-radius:8px;padding:7px 12px;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--tl);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:var(--sh);transition:var(--tr)}
 .hero-edit-btn:hover{background:#fff;transform:translateY(-1px)}
+/* HERO TWO-COLUMN MEDIA */
+.hero-media-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:16px;margin-bottom:32px;align-items:stretch}
+.hero-media-grid.is-single{grid-template-columns:1fr}
+.hero-media-card{background:var(--wh);border:1px solid rgba(185,220,210,.4);box-shadow:var(--sh);border-radius:var(--rl);overflow:hidden;min-width:0}
+.hero-banner-card .hero-carousel{border-radius:0;margin-bottom:0;background:var(--sf4)}
+.hero-media-caption{padding:12px 16px;border-top:1px solid rgba(185,220,210,.3);display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff}
+.hero-media-title{font-family:var(--fn);font-size:14px;font-weight:800;color:var(--bk);line-height:1.25;margin-bottom:2px}
+.hero-media-subtitle{font-family:var(--fn);font-size:12px;color:var(--gr);line-height:1.4}
+.hero-media-action{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:var(--tr)}
+.hero-media-action:hover{background:var(--tl2)}
+.hero-video-card{display:flex;min-height:100%}
+.hero-video-frame{position:relative;width:100%;aspect-ratio:16/9;background:#101010;display:flex;align-items:center;justify-content:center}
+.hero-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.hero-video-thumb{position:absolute;inset:0;width:100%;height:100%;border:none;background:#111;cursor:pointer;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.96)}
+.hero-video-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.32));z-index:1}
+.hero-play-btn{position:relative;z-index:2;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);color:var(--tl);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 32px rgba(0,0,0,.28);padding-left:4px;transition:var(--tr)}
+.hero-video-thumb:hover .hero-play-btn{transform:scale(1.08);background:#fff}
+.hero-video-empty{position:relative;z-index:2;color:#fff;font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.hero-empty-card{width:100%;height:100%;min-height:180px;border:none;background:var(--sf4);color:var(--tl);font-family:var(--fn);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.hero-empty-card:hover{background:var(--sf7)}
+@media(max-width:1000px){.hero-media-grid{grid-template-columns:1fr}.hero-video-card{min-height:auto}}
+
 /* Banner edit modal */
 .banner-modal{max-width:600px}
 .aspect-btns{display:flex;gap:8px;flex-wrap:wrap}
@@ -778,13 +801,21 @@ const PencilIcon = () => (
   </svg>
 )
 
-// ─── HERO CAROUSEL COMPONENT ─────────────────────────────────────────────────
-function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick }) {
+// ─── HERO CAROUSEL + VIDEO COMPONENT ─────────────────────────────────────────
+function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
   const [slide, setSlide] = useState(0)
+  const [videoPlaying, setVideoPlaying] = useState(false)
   const timerRef = useRef(null)
   const touchStartX = useRef(null)
   const touchStartY = useRef(null)
   const arClass = aspect === '16:9' ? 'ar-16-9' : aspect === '1:1' ? 'ar-1-1' : 'ar-custom'
+  const ytId = getYouTubeId(heroVideoUrl)
+  const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '')
+  const hasVideo = !!ytId
+  const showVideoCard = hasVideo || editMode
+  const showBannerCard = banners.length > 0 || editMode
+  const isTwoColumn = showBannerCard && showVideoCard
+  const bannerFirst = mediaOrder !== 'video-banner'
 
   const startTimer = useCallback(() => {
     clearInterval(timerRef.current)
@@ -794,7 +825,8 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
   }, [banners.length, interval])
 
   useEffect(() => { startTimer(); return () => clearInterval(timerRef.current) }, [startTimer])
-  const go = (dir) => { setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
+  useEffect(() => { setVideoPlaying(false) }, [heroVideoUrl])
+  const go = (dir) => { if (!banners.length) return; setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
 
   const onTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX
@@ -814,7 +846,7 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
 
   return (
     <>
-      {/* ── HEADLINE + SUBHEADLINE — completely separate from carousel ── */}
+      {/* ── HEADLINE + SUBHEADLINE ── */}
       <div style={{background:'var(--sf4)',borderRadius:'var(--rl)',padding:'20px 28px',marginBottom:12,position:'relative'}}>
         {editMode && (
           <button className="hero-edit-btn" onClick={onEditClick} style={{position:'absolute',top:14,right:14}}>
@@ -845,48 +877,75 @@ function HeroCarousel({ banners, aspect, interval, editMode, onEditClick, heroTi
         )}
       </div>
 
-      {/* ── CAROUSEL — completely separate block, only if banners exist ── */}
-      {banners.length > 0 && (
-        <div style={{borderRadius:'var(--rl)',overflow:'hidden',marginBottom:32,background:'var(--wh)',border:'1px solid rgba(185,220,210,.4)',boxShadow:'var(--sh)'}}>
-          {/* Image area */}
-          <div style={{position:'relative'}}>
-            <div className={`hero-carousel ${arClass}`} style={{borderRadius:0,marginBottom:0}}>
-              <div className="hero-slides" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{userSelect:"none"}}>
-                {banners.map((b,i) => (
-                  <div
-                    key={b.id}
-                    className={`hero-slide ${i===slide?'active':''}`}
-                    onClick={()=>b.link&&onBannerClick(b.link)}
-                    style={{cursor:b.link?'pointer':'default'}}
-                  >
-                    <img src={b.image} alt={b.alt||`Banner ${i+1}`}/>
+      {/* ── TWO-COLUMN MEDIA AREA: banner + YouTube video ── */}
+      {(showBannerCard || showVideoCard) && (
+        <div className={`hero-media-grid ${isTwoColumn ? '' : 'is-single'}`}>
+          {showBannerCard && (
+            <div className="hero-media-card hero-banner-card" style={{order: bannerFirst ? 1 : 2}}>
+              {banners.length > 0 ? (
+                <>
+                  <div style={{position:'relative'}}>
+                    <div className={`hero-carousel ${arClass}`} style={{borderRadius:0,marginBottom:0}}>
+                      <div className="hero-slides" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{userSelect:'none'}}>
+                        {banners.map((b,i) => (
+                          <div
+                            key={b.id}
+                            className={`hero-slide ${i===slide?'active':''}`}
+                            onClick={()=>b.link&&onBannerClick(b.link)}
+                            style={{cursor:b.link?'pointer':'default'}}
+                          >
+                            <img src={b.image} alt={b.alt||`Banner ${i+1}`}/>
+                          </div>
+                        ))}
+                      </div>
+                      {banners.length > 1 && (
+                        <div className="hero-dots">
+                          {banners.map((_,i)=>(
+                            <button key={i} className={`hero-dot ${i===slide?'on':''}`} onClick={e=>{e.stopPropagation();setSlide(i);startTimer()}}/>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                ))}
-              </div>
-              {banners.length > 1 && (
-                <div className="hero-dots">
-                  {banners.map((_,i)=>(
-                    <button key={i} className={`hero-dot ${i===slide?'on':''}`} onClick={e=>{e.stopPropagation();setSlide(i);startTimer()}}/>
-                  ))}
-                </div>
+
+                  {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
+                    <div className="hero-media-caption">
+                      <div>
+                        {currentBanner.title && <div className="hero-media-title">{currentBanner.title}</div>}
+                        {currentBanner.subtitle && <div className="hero-media-subtitle">{currentBanner.subtitle}</div>}
+                      </div>
+                      {currentBanner.link && (
+                        <button onClick={()=>onBannerClick(currentBanner.link)} className="hero-media-action">View →</button>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <button className="hero-empty-card" onClick={onEditClick}>+ Add sliding banner</button>
               )}
             </div>
-          </div>
+          )}
 
-          {/* ── PER-BANNER TEXT — below the image, not overlay ── */}
-          {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
-            <div style={{padding:'16px 20px',borderTop:'1px solid rgba(185,220,210,.3)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:12}}>
-              <div>
-                {currentBanner.title && <div style={{fontFamily:'var(--fn)',fontSize:15,fontWeight:700,color:'var(--bk)',lineHeight:1.3,marginBottom:3}}>{currentBanner.title}</div>}
-                {currentBanner.subtitle && <div style={{fontFamily:'var(--fn)',fontSize:13,color:'var(--gr)',lineHeight:1.5}}>{currentBanner.subtitle}</div>}
-              </div>
-              {currentBanner.link && (
-                <button
-                  onClick={()=>onBannerClick(currentBanner.link)}
-                  style={{background:'var(--tl)',color:'#fff',border:'none',borderRadius:8,padding:'8px 16px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap',flexShrink:0,transition:'var(--tr)'}}
-                >
-                  View →
-                </button>
+          {showVideoCard && (
+            <div className="hero-media-card hero-video-card" style={{order: bannerFirst ? 2 : 1}}>
+              {hasVideo ? (
+                <div className="hero-video-frame">
+                  {videoPlaying ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
+                      title="Quencha video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <button className="hero-video-thumb" onClick={()=>setVideoPlaying(true)}>
+                      {videoThumb ? <img src={videoThumb} alt="YouTube video thumbnail"/> : <span className="hero-video-empty">YouTube</span>}
+                      <span className="hero-play-btn">▶</span>
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
               )}
             </div>
           )}
@@ -1153,6 +1212,9 @@ export default function QuenchaCatalog() {
       if (settings.banners)                      setBanners(settings.banners)
       if (settings.bannerAspect)                 setBannerAspect(settings.bannerAspect)
       if (settings.bannerInterval !== undefined) setBannerIntervalVal(settings.bannerInterval)
+      if (settings.heroVideoUrl !== undefined)       setHeroVideoUrl(settings.heroVideoUrl || '')
+      if (settings.heroVideoThumbnail !== undefined) setHeroVideoThumbnail(settings.heroVideoThumbnail || '')
+      if (settings.heroMediaOrder)                  setHeroMediaOrder(settings.heroMediaOrder)
       if (settings.heroTitle)                    setHeroTitle(settings.heroTitle)
       if (settings.heroSub)                      setHeroSub(settings.heroSub)
       if (Array.isArray(settings.colorCollections)) {
@@ -1220,6 +1282,9 @@ export default function QuenchaCatalog() {
   const [banners, setBanners] = useState([])
   const [bannerAspect, setBannerAspect] = useState('custom')
   const [bannerEditOpen, setBannerEditOpen] = useState(false)
+  const [heroVideoUrl, setHeroVideoUrl] = useState('')
+  const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
+  const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
 
 
   const syncSettings = useCallback((patch) => {
@@ -1230,6 +1295,9 @@ export default function QuenchaCatalog() {
   const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
   const [bannerInterval, setBannerIntervalVal] = useState(4.5)
   const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); syncSettings({ bannerInterval: v }) }, [syncSettings])
+  const saveHeroVideoUrl = useCallback((v) => { setHeroVideoUrl(v); syncSettings({ heroVideoUrl: v }) }, [syncSettings])
+  const saveHeroVideoThumbnail = useCallback((v) => { setHeroVideoThumbnail(v); syncSettings({ heroVideoThumbnail: v }) }, [syncSettings])
+  const saveHeroMediaOrder = useCallback((v) => { setHeroMediaOrder(v); syncSettings({ heroMediaOrder: v }) }, [syncSettings])
   const saveColorCollections = useCallback((next) => {
     setColorCollections(next)
     if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
@@ -1839,6 +1907,9 @@ ${message.trim()}` : 'Message / Notes:',
             heroSub={heroSub}
             onTitleChange={saveHeroTitle}
             onSubChange={saveHeroSub}
+            heroVideoUrl={heroVideoUrl}
+            heroVideoThumbnail={heroVideoThumbnail}
+            mediaOrder={heroMediaOrder}
             onBannerClick={(link)=>{
               if(!link) return
               if(link.startsWith('http')){window.open(link,'_blank');return}
@@ -2445,6 +2516,14 @@ ${message.trim()}` : 'Message / Notes:',
         <BannerEditModal
           banners={banners}
           aspect={bannerAspect}
+          interval={bannerInterval}
+          onIntervalChange={saveBannerInterval}
+          heroVideoUrl={heroVideoUrl}
+          heroVideoThumbnail={heroVideoThumbnail}
+          heroMediaOrder={heroMediaOrder}
+          onHeroVideoUrlChange={saveHeroVideoUrl}
+          onHeroVideoThumbnailChange={saveHeroVideoThumbnail}
+          onHeroMediaOrderChange={saveHeroMediaOrder}
           onAspectChange={saveAspect}
           onAdd={b=>saveBanners([...banners,b])}
           onRemove={id=>saveBanners(banners.filter(b=>b.id!==id))}
@@ -2706,7 +2785,7 @@ ${message.trim()}` : 'Message / Notes:',
       )}
     </div>
   )
-}function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
+}function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
   const fileRef = useRef(null)
   const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
 
@@ -2733,6 +2812,32 @@ ${message.trim()}` : 'Message / Notes:',
         </div>
 
         <div style={{overflow:'auto',padding:24,display:'flex',flexDirection:'column',gap:18,flex:1}}>
+          {/* Media layout */}
+          <div>
+            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Hero Layout</div>
+            <div className="aspect-btns" style={{flexWrap:'wrap',gap:8}}>
+              <button className={`aspect-btn ${heroMediaOrder!=='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('banner-video')}>Banner Left · Video Right</button>
+              <button className={`aspect-btn ${heroMediaOrder==='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('video-banner')}>Video Left · Banner Right</button>
+            </div>
+            <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>Controls the two-column arrangement below the headline.</div>
+          </div>
+
+          {/* YouTube video */}
+          <div>
+            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>YouTube Video</div>
+            <div style={{display:'flex',flexDirection:'column',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:12}}>
+              <div>
+                <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>YouTube Link</div>
+                <input value={heroVideoUrl||''} onChange={e=>onHeroVideoUrlChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="https://www.youtube.com/watch?v=..."/>
+              </div>
+              <div>
+                <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Custom Thumbnail URL (optional)</div>
+                <input value={heroVideoThumbnail||''} onChange={e=>onHeroVideoThumbnailChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="Leave blank to use YouTube thumbnail automatically"/>
+              </div>
+              <div style={{fontSize:10,color:'var(--gr)'}}>Paste a YouTube watch, shorts, youtu.be, or embed link. The video becomes playable on the catalog page.</div>
+            </div>
+          </div>
+
           {/* Aspect ratio */}
           <div>
             <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Aspect Ratio</div>
