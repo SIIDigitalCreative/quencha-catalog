@@ -900,24 +900,24 @@ export default function QuenchaCatalog() {
   const [viewProduct, setViewProduct] = useState(null)
   const [vmImg, setVmImg] = useState(0)
   const [ytPlaying, setYtPlaying] = useState(false)
-  const [banners, setBanners] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('qnh-banners') || '[]') } catch { return [] }
-  })
-  const [bannerAspect, setBannerAspect] = useState(() => {
-    try { return localStorage.getItem('qnh-banner-aspect') || 'custom' } catch { return 'custom' }
-  })
+  const [banners, setBanners] = useState([])
+  const [bannerAspect, setBannerAspect] = useState('custom')
   const [bannerEditOpen, setBannerEditOpen] = useState(false)
+
+
+  const syncSettings = useCallback((patch) => {
+    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
+  }, [])
+
+  const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
+  const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
+  const [bannerInterval, setBannerIntervalVal] = useState(4.5)
+  const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); syncSettings({ bannerInterval: v }) }, [syncSettings])
+
   const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
   const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
   const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
-
-  const saveBanners = useCallback((b) => { setBanners(b); try { localStorage.setItem('qnh-banners', JSON.stringify(b)) } catch {} }, [])
-  const saveAspect = useCallback((a) => { setBannerAspect(a); try { localStorage.setItem('qnh-banner-aspect', a) } catch {} }, [])
-  const [bannerInterval, setBannerIntervalVal] = useState(() => {
-    try { const v = localStorage.getItem('qnh-banner-interval'); return v !== null ? Number(v) : 4.5 } catch { return 4.5 }
-  })
-  const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); try { localStorage.setItem('qnh-banner-interval', String(v)) } catch {} }, [])
   const { copy, copied } = useCopy()
 
   // ── API HELPERS ──
