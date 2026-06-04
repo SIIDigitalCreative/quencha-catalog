@@ -878,7 +878,7 @@ export default function QuenchaCatalog() {
         ))
         setProducts(SEED)
       } else {
-        setProducts(prods)
+        setProducts(prods.map(p => ({ youtube: '', ...p })))
       }
       if (settings.banners)                      setBanners(settings.banners)
       if (settings.bannerAspect)                 setBannerAspect(settings.bannerAspect)
@@ -1030,6 +1030,7 @@ export default function QuenchaCatalog() {
       setEditOpen(false)
       setViewProduct(saved)
       setVmImg(0)
+      setYtPlaying(false)
     } else {
       const saved = { ...data, id: 'p' + Date.now() }
       setProducts([...products, saved])
@@ -1205,6 +1206,11 @@ export default function QuenchaCatalog() {
   }
 
   // ── RENDER ──
+  const vp = viewProduct ? (() => {
+    const fromState = products.find(p => p.id === viewProduct.id)
+    // Merge: prefer viewProduct (freshest after save) but fill gaps from state
+    return { youtube: '', ...(fromState || {}), ...viewProduct }
+  })() : null
   return (
     <div>
       {/* TOPBAR */}
@@ -1365,27 +1371,27 @@ export default function QuenchaCatalog() {
       )}
 
       {/* VIEW MODAL */}
-      {viewProduct && (
+      {vp && (
         <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget){setViewProduct(null);setYtPlaying(false)}}}>
           <div className="modal">
             <div className="m-hdr" style={{background:'var(--sf4)'}}>
               <div>
                 {(() => {
-                  const extLabel = exts.find(x=>x.value===viewProduct.ext)?.label || viewProduct.ext || ''
-                  const catLabel = cats.find(c=>c.value===viewProduct.cat)?.label || viewProduct.cat || ''
+                  const extLabel = exts.find(x=>x.value===vp.ext)?.label || vp.ext || ''
+                  const catLabel = cats.find(c=>c.value===vp.cat)?.label || vp.cat || ''
                   const parts = [extLabel, catLabel].filter(Boolean)
                   return parts.length > 0 ? (
                     <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{parts.join(' · ')}</div>
                   ) : null
                 })()}
-                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{viewProduct.name}</div>
-                {viewProduct.colors[0]?.sku && (
+                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
+                {vp.colors[0]?.sku && (
                   <code
-                    onClick={()=>copy(viewProduct.colors[0].sku.split('-').slice(0,2).join('-'))}
+                    onClick={()=>copy(vp.colors[0].sku.split('-').slice(0,2).join('-'))}
                     style={{fontSize:11,fontWeight:700,fontFamily:'monospace',background:'rgba(39,153,137,.1)',color:'var(--tl)',borderRadius:4,padding:'2px 8px',marginTop:5,display:'inline-block',letterSpacing:'.04em',cursor:'pointer',transition:'background .15s'}}
                     title="Click to copy"
                   >
-                    {copied===viewProduct.colors[0].sku.split('-').slice(0,2).join('-') ? '✓ Copied!' : viewProduct.colors[0].sku.split('-').slice(0,2).join('-')}
+                    {copied===vp.colors[0].sku.split('-').slice(0,2).join('-') ? '✓ Copied!' : vp.colors[0].sku.split('-').slice(0,2).join('-')}
                   </code>
                 )}
               </div>
@@ -1394,11 +1400,11 @@ export default function QuenchaCatalog() {
             <div className="m-body">
               <div>
                 <div className="vm-main-wrap">
-                  {viewProduct.images?.length > 0 ? <img src={viewProduct.images[vmImg]} alt={viewProduct.name}/> : <span className="vm-main-ph">📦</span>}
+                  {vp.images?.length > 0 ? <img src={vp.images[vmImg]} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
                 </div>
-                {viewProduct.images?.length > 1 && (
+                {vp.images?.length > 1 && (
                   <div className="vm-thumbs">
-                    {viewProduct.images.map((u,i) => (
+                    {vp.images.map((u,i) => (
                       <div key={i} className={`vm-thumb ${i===vmImg?'on':''}`} onClick={()=>setVmImg(i)}>
                         <img src={u} alt=""/>
                       </div>
@@ -1406,30 +1412,28 @@ export default function QuenchaCatalog() {
                   </div>
                 )}
               </div>
-              {/* YouTube Video — rendered via sub-component to avoid IIFE */}
-              <YouTubeBlock ytUrl={viewProduct.youtube} ytPlaying={ytPlaying} setYtPlaying={setYtPlaying} />
-              <div className="vm-badges">{viewProduct.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
-              <p className="vm-desc">{viewProduct.desc}</p>
-              {/* Dimensions + Barcode — only if filled */}
-              {(viewProduct.dimensions || viewProduct.barcode) && (
+              <YouTubeBlock ytUrl={vp.youtube} ytPlaying={ytPlaying} setYtPlaying={setYtPlaying} />
+              <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
+              <p className="vm-desc">{vp.desc}</p>
+              {(vp.dimensions || vp.barcode) && (
                 <div className="vm-meta-row">
-                  {viewProduct.dimensions && typeof viewProduct.dimensions==='object' &&
-                    viewProduct.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
+                  {vp.dimensions && typeof vp.dimensions==='object' &&
+                    vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
                     <div className="vm-meta-item" style={{flex:'1 1 100%'}}>
                       <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
                       <div style={{overflowX:'auto'}}>
                         <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
-                          {viewProduct.dimensions.headers.some(h=>h.trim()) && (
+                          {vp.dimensions.headers.some(h=>h.trim()) && (
                             <thead>
                               <tr>
-                                {viewProduct.dimensions.headers.map((h,i)=>(
+                                {vp.dimensions.headers.map((h,i)=>(
                                   <th key={i} style={{background:'var(--tl)',color:'#fff',padding:'6px 12px',textAlign:'left',fontSize:10,letterSpacing:'.08em',fontWeight:700,whiteSpace:'nowrap'}}>{h||'—'}</th>
                                 ))}
                               </tr>
                             </thead>
                           )}
                           <tbody>
-                            {viewProduct.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
+                            {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
                               <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
                                 {row.map((cell,ci)=>(
                                   <td key={ci} style={{padding:'7px 12px',borderBottom:'1px solid rgba(185,220,210,.3)',fontSize:13,fontWeight:ci===0?600:400,color:ci===0?'var(--bk)':'var(--gr)'}}>{cell||'—'}</td>
@@ -1441,54 +1445,54 @@ export default function QuenchaCatalog() {
                       </div>
                     </div>
                   )}
-                  {(viewProduct.barcode || viewProduct.barcodeImage) && (
+                  {(vp.barcode || vp.barcodeImage) && (
                     <div className="vm-meta-item">
                       <span className="vm-meta-lbl">Barcode</span>
-                      {viewProduct.barcodeImage ? (
+                      {vp.barcodeImage ? (
                         <img
-                          src={viewProduct.barcodeImage}
+                          src={vp.barcodeImage}
                           alt="Barcode"
-                          onClick={()=>setCodeLightbox({src:viewProduct.barcodeImage,label:'Barcode'})}
+                          onClick={()=>setCodeLightbox({src:vp.barcodeImage,label:'Barcode'})}
                           style={{maxWidth:'100%',maxHeight:60,objectFit:'contain',marginTop:4,borderRadius:4,cursor:'zoom-in'}}
                           title="Click to enlarge"
                         />
                       ) : (
-                        <code className="vm-meta-code">{viewProduct.barcode}</code>
+                        <code className="vm-meta-code">{vp.barcode}</code>
                       )}
-                      {viewProduct.barcode && viewProduct.barcodeImage && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block'}}>{viewProduct.barcode}</code>
+                      {vp.barcode && vp.barcodeImage && (
+                        <code className="vm-meta-code" style={{marginTop:4,display:'block'}}>{vp.barcode}</code>
                       )}
                     </div>
                   )}
-                  {(viewProduct.qrCode || viewProduct.qrImage) && (
+                  {(vp.qrCode || vp.qrImage) && (
                     <div className="vm-meta-item">
                       <span className="vm-meta-lbl">QR Code</span>
-                      {viewProduct.qrImage && (
+                      {vp.qrImage && (
                         <img
-                          src={viewProduct.qrImage}
+                          src={vp.qrImage}
                           alt="QR Code"
-                          onClick={()=>setCodeLightbox({src:viewProduct.qrImage,label:'QR Code'})}
+                          onClick={()=>setCodeLightbox({src:vp.qrImage,label:'QR Code'})}
                           style={{width:72,height:72,objectFit:'contain',marginTop:4,borderRadius:4,border:'1px solid rgba(185,220,210,.4)',padding:4,background:'#fff',cursor:'zoom-in'}}
                           title="Click to enlarge"
                         />
                       )}
-                      {viewProduct.qrCode && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{viewProduct.qrCode}</code>
+                      {vp.qrCode && (
+                        <code className="vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{vp.qrCode}</code>
                       )}
                     </div>
                   )}
                 </div>
               )}
               <div className="vm-price-row">
-                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{viewProduct.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
+                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
                 <div className="vm-pdiv"/>
-                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{viewProduct.packing} pcs</div></div>
+                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
               </div>
               {/* Color swatches + SKUs */}
-              {viewProduct.colors.length > 0 && (
+              {vp.colors.length > 0 && (
                 <div>
                   <span className="vm-color-sec-lbl">Colors</span>
-                  {groupColorsByCollection(viewProduct.colors).map(group=>(
+                  {groupColorsByCollection(vp.colors).map(group=>(
                     <div key={group.name} style={{marginBottom:10}}>
                       <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
                         <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:COLLECTION_COLORS[group.name]||'var(--gr)',background:`${COLLECTION_COLORS[group.name]||'var(--gr)'}18`,border:`1px solid ${COLLECTION_COLORS[group.name]||'var(--gr)'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
