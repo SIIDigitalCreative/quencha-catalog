@@ -1000,10 +1000,10 @@ export default function QuenchaCatalog() {
     if (editTarget) {
       const saved = { ...editTarget, ...data }
       const updated = products.map(p => p.id === editTarget.id ? saved : p)
-      updateProducts(updated)
+      setProducts(updated)
       apiSaveProduct(editTarget.id, saved)
       setEditOpen(false)
-      setViewProduct(saved)   // reopen view modal with fresh data
+      setViewProduct(saved)
       setVmImg(0)
     } else {
       const saved = { ...data, id: 'p' + Date.now() }
