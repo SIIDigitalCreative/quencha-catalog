@@ -951,7 +951,7 @@ ${message.trim()}` : 'Message / Notes:',
     const email = 'design@sunbeamsimpexinc.com'
     const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
     const body = buildInquiryText(product, packs, message)
-    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }, [buildInquiryText])
 
   // ── API HELPERS ──
@@ -1806,7 +1806,6 @@ ${message.trim()}` : 'Message / Notes:',
         const packingNum = parseInt(inqProduct?.packing, 10) || 0
         const totalUnits = packsNum && packingNum ? packsNum * packingNum : 0
         const inquiryHref = buildInquiryHref(inqProduct, inqPacks, inqMessage)
-        const inquiryText = buildInquiryText(inqProduct, inqPacks, inqMessage)
 
         return (
           <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
@@ -1819,7 +1818,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
               </div>
               <div className="m-body" style={{gap:14}}>
-                <p style={{fontSize:14,color:'var(--gr)'}}>Review the quantity and packing first, then open an email draft with the inquiry summary.</p>
+                <p style={{fontSize:14,color:'var(--gr)'}}>Review the quantity, packing, and notes first, then send the inquiry through email.</p>
 
                 <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
                   <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
@@ -1861,11 +1860,15 @@ ${message.trim()}` : 'Message / Notes:',
                   />
                 </div>
 
-                <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
-                  <a className="inq-link" href={inquiryHref} style={{flex:1,justifyContent:'center'}}>📩 Open Email Draft</a>
-                  <button className="cancel-btn" onClick={()=>copy(inquiryText)} style={{flex:1}}>📋 {copied===inquiryText ? 'Copied!' : 'Copy Summary'}</button>
-                </div>
-                <p style={{fontSize:12,color:'var(--gr)',lineHeight:1.5}}>If the email draft does not open, your browser/device may not have a default mail app set. Use “Copy Summary” and paste it into Gmail instead.</p>
+                <a
+                  className="inq-link"
+                  href={inquiryHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{width:'100%',justifyContent:'center'}}
+                >
+                  📩 Send Inquiry via Email
+                </a>
               </div>
             </div>
           </div>
