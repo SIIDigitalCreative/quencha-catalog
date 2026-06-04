@@ -310,7 +310,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .upload-zone:hover{border-color:var(--tl);background:var(--sf4)}
 .uz-ico{font-size:24px;color:var(--tl)}
 .uz-lbl{font-size:11px;font-weight:700;color:var(--tl)}
-.uz-sub{font-size:10px;color:var(--gr)}
+.uz-sub{font-size:10px;color:var(--gr);margin-top:4px;line-height:1.5}
 .f-error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:10px 14px;font-size:13px;color:#b91c1c}
 .del-btn{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:9px 14px;font-family:var(--fn);font-size:13px;font-weight:700;color:#b91c1c;cursor:pointer;transition:var(--tr)}
 .del-btn:hover{background:rgba(239,68,68,.14)}
@@ -1001,6 +1001,7 @@ export default function QuenchaCatalog() {
       const saved = { ...editTarget, ...data }
       const updated = products.map(p => p.id === editTarget.id ? saved : p)
       updateProducts(updated)
+      apiSaveProduct(editTarget.id, saved)
       setEditOpen(false)
       setViewProduct(saved)   // reopen view modal with fresh data
       setVmImg(0)
