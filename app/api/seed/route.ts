@@ -3,35 +3,44 @@ import { redis, KEYS } from '@/lib/redis'
 
 const SEED_SECRET = process.env.SEED_SECRET
 
-const PRODUCTS_TO_ADD = [
-  // Paste all product objects here
-  // Example:
-  /*
-  {
-    id: 'p20',
-    name: 'Product Name',
-    ext: 'core',
-    cat: 'sip',
-    desc: 'Product description.',
-    badges: ['BPA-Free'],
-    srp: 999.75,
-    packing: 12,
-    colors: [],
-    images: [],
-    dimensions: {
-      headers: [''],
-      rows: [['']]
-    },
-    barcode: '',
-    barcodeImage: '',
-    qrCode: '',
-    qrImage: '',
-    youtube: ''
-  }
-  */
+type ProductColor = {
+  name: string
+  code: string
+  hex: string
+  sku: string
+}
+
+type ProductDimensions = {
+  headers: string[]
+  rows: string[][]
+}
+
+type Product = {
+  id: string
+  name: string
+  ext: string
+  cat: string
+  desc: string
+  badges: string[]
+  srp: number
+  packing: number
+  colors: ProductColor[]
+  images: string[]
+  dimensions: ProductDimensions
+  barcode: string
+  barcodeImage: string
+  qrCode: string
+  qrImage: string
+  youtube: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+const PRODUCTS_TO_ADD: Product[] = [
+  // Paste all product objects here later
 ]
 
-function normalizeProduct(product: any, index: number) {
+function normalizeProduct(product: Product, index: number): Product {
   const now = new Date().toISOString()
 
   return {
