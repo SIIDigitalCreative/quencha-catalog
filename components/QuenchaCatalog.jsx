@@ -829,6 +829,11 @@ function imageMatchesColor(image, color) {
   return imageKeys.some(key => colorKeys.includes(key))
 }
 
+function isGeneralImage(image) {
+  const img = normalizeImageItem(image)
+  return !!img.src && !String(img.colorSku || '').trim() && !String(img.colorCode || '').trim() && !String(img.colorName || '').trim()
+}
+
 function findImageIndexForColor(product, color) {
   const images = normalizeProductImages(product?.images || [])
   return images.findIndex(img => imageMatchesColor(img, color))
@@ -2231,15 +2236,13 @@ ${message.trim()}` : 'Message / Notes:',
   // ── RENDER ──
   const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
   const vpImages = vp ? normalizeProductImages(vp.images || []) : []
-  const defaultVmColor = vp && !vmColorKey ? (vp.colors || []).find(color => hasImageForColor(vp, color)) : null
-  const activeVmColor = vp
-    ? (vmColorKey
-      ? (vp.colors || []).find(color => getColorKey(color) === vmColorKey)
-      : defaultVmColor)
+  const generalVmImages = vpImages.filter(isGeneralImage)
+  const activeVmColor = vp && vmColorKey
+    ? (vp.colors || []).find(color => getColorKey(color) === vmColorKey)
     : null
   const activeVmColorKey = activeVmColor ? getColorKey(activeVmColor) : ''
   const filteredVmImages = activeVmColor ? vpImages.filter(img => imageMatchesColor(img, activeVmColor)) : []
-  const visibleVmImages = activeVmColor && filteredVmImages.length ? filteredVmImages : vpImages
+  const visibleVmImages = activeVmColor ? filteredVmImages : generalVmImages
   const safeVmImg = visibleVmImages.length ? Math.min(vmImg, visibleVmImages.length - 1) : 0
   return (
     <div>
@@ -2472,6 +2475,33 @@ ${message.trim()}` : 'Message / Notes:',
               {vp.colors.length > 0 && (
                 <div>
                   <span className="vm-color-sec-lbl">Colors</span>
+                  {generalVmImages.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => { setVmColorKey(''); setVmImg(0) }}
+                      style={{
+                        width:'100%',
+                        display:'flex',
+                        alignItems:'center',
+                        justifyContent:'space-between',
+                        gap:10,
+                        border:!activeVmColorKey ? '1.5px solid var(--tl)' : '1px solid rgba(185,220,210,.55)',
+                        background:!activeVmColorKey ? 'rgba(45,204,211,.1)' : 'var(--bg)',
+                        color:'var(--tl)',
+                        borderRadius:8,
+                        padding:'9px 12px',
+                        fontFamily:'var(--fn)',
+                        fontSize:12,
+                        fontWeight:800,
+                        cursor:'pointer',
+                        marginBottom:10,
+                      }}
+                      title="Show general product images"
+                    >
+                      <span>General Product Images</span>
+                      <span style={{fontSize:10,fontWeight:900,background:'rgba(39,153,137,.1)',borderRadius:999,padding:'2px 7px'}}>{generalVmImages.length} image{generalVmImages.length===1?'':'s'}</span>
+                    </button>
+                  )}
                   {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
                     <div key={group.name} style={{marginBottom:10}}>
                       <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
