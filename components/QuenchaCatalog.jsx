@@ -1633,6 +1633,42 @@ export default function QuenchaCatalog() {
    focusSearchResults()
  }, [search, focusSearchResults])
  
+ const saveCatalogView = useCallback((nextView) => {
+   setView(nextView)
+   if (!catalogPrefsHydrated) return
+   const catalogPrefs = {
+     filterExt,
+     filterCat,
+     filterColorCollection,
+     filterPMin,
+     filterPMax,
+     sort,
+     view: nextView,
+   }
+   if (typeof window !== 'undefined') {
+     localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+   }
+   syncSettings({ catalogPrefs })
+ }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, syncSettings])
+ 
+ const saveCatalogSort = useCallback((nextSort) => {
+   setSort(nextSort)
+   if (!catalogPrefsHydrated) return
+   const catalogPrefs = {
+     filterExt,
+     filterCat,
+     filterColorCollection,
+     filterPMin,
+     filterPMax,
+     sort: nextSort,
+     view,
+   }
+   if (typeof window !== 'undefined') {
+     localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+   }
+   syncSettings({ catalogPrefs })
+ }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, view, syncSettings])
+ 
  // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
  useEffect(() => {
    if (!catalogPrefsHydrated) return
@@ -2409,7 +2445,13 @@ ${message.trim()}` : 'Message / Notes:',
  
  // ── SIDEBAR ──
  const SidebarContent = ({ closeOnSelect = false } = {}) => {
-   const closeMobileSidebar = () => { if (closeOnSelect) setShowMobileFilter(false) }
+   const closeMobileSidebar = () => {
+     if (!closeOnSelect) return
+     setShowMobileFilter(false)
+     window.setTimeout(() => {
+       focusSearchResults()
+     }, 180)
+   }
    return (
    <>
      <div className="sb-hero">
@@ -2625,7 +2667,7 @@ ${message.trim()}` : 'Message / Notes:',
          {/* Toolbar */}
          <div className="toolbar" ref={resultsRef}>
            <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
-           <select className="sort-sel" value={sort} onChange={e=>setSort(e.target.value)}>
+           <select className="sort-sel" value={sort} onChange={e=>saveCatalogSort(e.target.value)}>
              <option value="default">Sort: Manual Order</option>
              <option value="sku-asc">SKU: A → Z</option>
              <option value="sku-desc">SKU: Z → A</option>
@@ -2635,9 +2677,9 @@ ${message.trim()}` : 'Message / Notes:',
            </select>
            {editMode && sort === 'default' && <span className="reorder-hint">Drag products to rearrange</span>}
            <div className="vbtns">
-             <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>setView('col-4')} title="4 columns">⊞</button>
-             <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>setView('col-2')} title="2 columns">⊟</button>
-             <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>setView('col-1')} title="1 column">▬</button>
+             <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>saveCatalogView('col-4')} title="4 columns">⊞</button>
+             <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>saveCatalogView('col-2')} title="2 columns">⊟</button>
+             <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>saveCatalogView('col-1')} title="1 column">▬</button>
            </div>
          </div>
  
