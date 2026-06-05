@@ -1865,19 +1865,17 @@ ${message.trim()}` : 'Message / Notes:',
     const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
     const normalizedImages = normalizeProductImages(ef.images || [])
     const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
+    const cleanedImages = normalizedImages.filter(img => !String(img?.src || '').startsWith('data:'))
 
     if (temporaryImages.length) {
-      const msg = `${temporaryImages.length} image(s) are temporary browser previews because the upload failed. Please remove and re-upload them before saving.`
-      setUploadErr(msg)
-      alert(msg)
-      setEditTab('images')
-      return
+      setUploadErr(`${temporaryImages.length} failed preview image${temporaryImages.length === 1 ? '' : 's'} removed before saving. Please re-upload those images after saving.`)
+      setEf(f => ({ ...f, images: cleanedImages }))
     }
 
     const data = {
       ...ef,
       colors: normalizedColors,
-      images: normalizedImages,
+      images: cleanedImages,
       srp,
       packing: parseInt(ef.packing) || 0,
       dimensions: ef.dimensions,
@@ -2160,6 +2158,18 @@ ${message.trim()}` : 'Message / Notes:',
       setUploadErr('')
     }
   }
+
+  const getTemporaryImageCount = useCallback(() => {
+    return normalizeProductImages(ef.images || []).filter(img => String(img?.src || '').startsWith('data:')).length
+  }, [ef.images])
+
+  const removeTemporaryImages = useCallback(() => {
+    const current = normalizeProductImages(ef.images || [])
+    const cleaned = current.filter(img => !String(img?.src || '').startsWith('data:'))
+    const removed = current.length - cleaned.length
+    setEf(f => ({ ...f, images: cleaned }))
+    setUploadErr(removed ? `Removed ${removed} failed preview image${removed === 1 ? '' : 's'}. You can now re-upload them.` : '')
+  }, [ef.images])
 
   const removeImg = (i) => setEf(f=>({...f,images:f.images.filter((_,j)=>j!==i)}))
   const moveImg = (from,to) => {
@@ -3081,6 +3091,11 @@ ${message.trim()}` : 'Message / Notes:',
                     <span className="uz-sub">JPG, PNG, WebP · auto-compressed to JPG</span>
                   </div>
                 </div>
+                {getTemporaryImageCount() > 0 && (
+                  <button type="button" className="cancel-btn" style={{width:'100%',justifyContent:'center'}} onClick={removeTemporaryImages}>
+                    Remove failed preview images ({getTemporaryImageCount()})
+                  </button>
+                )}
                 {uploadErr && <div className="f-error">{uploadErr}</div>}
                 <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload}/>
               </div>
