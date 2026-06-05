@@ -528,7 +528,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .color-image-thumbs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;min-height:44px}
 .color-image-thumb{width:42px;height:42px;border-radius:7px;overflow:hidden;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative}
 .color-image-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.color-image-thumb.main-selected{border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.18)}
 .color-image-thumb button{position:absolute;right:2px;top:2px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(239,68,68,.88);color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.color-main-check{position:absolute;left:2px;bottom:2px;z-index:3;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.94);border:1px solid rgba(39,153,137,.18);border-radius:999px;padding:1px 5px;font-size:8px;font-weight:900;color:var(--tl);line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.color-main-check input{width:10px;height:10px;margin:0;accent-color:var(--tl)}
+.general-image-card{grid-column:1/-1;border-color:rgba(39,153,137,.24);background:rgba(255,255,255,.94)}
+.general-image-swatch{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--tl),var(--cy));box-shadow:0 1px 4px rgba(39,153,137,.18);flex-shrink:0}
 .color-image-empty{font-size:11px;font-weight:700;color:rgba(99,102,106,.58);background:rgba(255,255,255,.6);border:1px dashed rgba(185,220,210,.7);border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center;min-height:44px;text-align:center}
 .color-upload-btn{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(39,153,137,.1);border:1.5px dashed rgba(39,153,137,.35);border-radius:8px;color:var(--tl);font-family:var(--fn);font-size:11px;font-weight:900;padding:8px;cursor:pointer;transition:var(--tr);overflow:hidden}
 .color-upload-btn:hover{background:rgba(45,204,211,.16);border-color:var(--tl)}
@@ -2159,6 +2164,55 @@ ${message.trim()}` : 'Message / Notes:',
     }
   }
 
+  const uploadFilesGeneral = async (fileList) => {
+    const files = Array.from(fileList || [])
+    if (!files.length) return
+
+    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
+    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
+
+    if (!validFiles.length) {
+      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
+      return
+    }
+
+    let skipped = files.length - validFiles.length
+    let failed = 0
+    const uploaded = []
+
+    setUploadErr(`Compressing and uploading ${validFiles.length} general image${validFiles.length === 1 ? '' : 's'}...`)
+
+    for (const file of validFiles) {
+      try {
+        const url = await uploadImageToBlob(file)
+        uploaded.push({ src: url, colorSku: '', colorCode: '', colorName: '' })
+      } catch (err) {
+        failed += 1
+        console.error('General image upload failed:', err)
+      }
+    }
+
+    if (uploaded.length) {
+      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
+    }
+
+    if (failed || skipped) {
+      setUploadErr(`${uploaded.length} general image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
+    } else {
+      setUploadErr('')
+    }
+  }
+
+  const setMainImage = (index) => {
+    setEf(f => {
+      const imgs = [...normalizeProductImages(f.images)]
+      if (index <= 0 || index >= imgs.length) return { ...f, images: imgs }
+      const [item] = imgs.splice(index, 1)
+      imgs.unshift(item)
+      return { ...f, images: imgs }
+    })
+  }
+
   const getTemporaryImageCount = useCallback(() => {
     return normalizeProductImages(ef.images || []).filter(img => String(img?.src || '').startsWith('data:')).length
   }, [ef.images])
@@ -3012,7 +3066,60 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'images' && (
               <div className="em-panel">
-                <div className="f-hint">Upload product images. First image = main card photo. You can upload multiple images per color below, or use the dropdown on each image to reassign it to another color.</div>
+                <div className="f-hint">Upload product images. General images have their own section, and each color has its own upload area. Tick Main on any image to make it the product card/main image.</div>
+                <div className="color-image-panel">
+                  <div className="color-image-panel-head">
+                    <div>
+                      <div className="color-image-title">General product images</div>
+                      <div className="color-image-sub">Upload main lifestyle, infographics, packaging, or any product photos not tied to a specific color.</div>
+                    </div>
+                  </div>
+                  <div className="color-image-grid">
+                    {(() => {
+                      const generalAssigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => isGeneralImage(item.img))
+                      return (
+                        <div className="color-image-card general-image-card">
+                          <div className="color-image-card-top">
+                            <span className="general-image-swatch"/>
+                            <div style={{minWidth:0,flex:1}}>
+                              <div className="color-image-name">General Images</div>
+                              <div className="color-image-sku">Main gallery / no color assignment</div>
+                            </div>
+                          </div>
+                          {generalAssigned.length > 0 ? (
+                            <div className="color-image-thumbs">
+                              {generalAssigned.map(({img, index}) => (
+                                <span className={`color-image-thumb ${index===0 ? 'main-selected' : ''}`} key={`general-${index}`}>
+                                  {index===0 && <span className="main-tag">Main</span>}
+                                  <img src={getImageSrc(img)} alt=""/>
+                                  <button type="button" onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                  <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
+                                    <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
+                                  </label>
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="color-image-empty">No general photos yet</div>
+                          )}
+                          <label className="color-upload-btn">
+                            + Upload general product photos
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={e=>{
+                                uploadFilesGeneral(e.target.files)
+                                e.target.value = ''
+                              }}
+                            />
+                          </label>
+                        </div>
+                      )
+                    })()}
+                  </div>
+                </div>
+
                 <div className="color-image-panel">
                   <div className="color-image-panel-head">
                     <div>
@@ -3035,9 +3142,13 @@ ${message.trim()}` : 'Message / Notes:',
                           {assigned.length > 0 ? (
                             <div className="color-image-thumbs">
                               {assigned.map(({img, index}) => (
-                                <span className="color-image-thumb" key={`${color.sku || color.code}-${index}`}>
+                                <span className={`color-image-thumb ${index===0 ? 'main-selected' : ''}`} key={`${color.sku || color.code}-${index}`}>
+                                  {index===0 && <span className="main-tag">Main</span>}
                                   <img src={getImageSrc(img)} alt=""/>
                                   <button type="button" onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                  <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
+                                    <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
+                                  </label>
                                 </span>
                               ))}
                             </div>
@@ -3059,36 +3170,6 @@ ${message.trim()}` : 'Message / Notes:',
                         </div>
                       )
                     })}
-                  </div>
-                </div>
-                <div className="img-grid">
-                  {normalizeProductImages(ef.images).map((img,i)=>(
-                    <div key={i} className="img-thumb">
-                      {i===0 && <span className="main-tag">Main</span>}
-                      <img src={getImageSrc(img)} alt={`Product ${i+1}`}/>
-                      <select
-                        className="img-color-select"
-                        value={img.colorSku || ''}
-                        onClick={e=>e.stopPropagation()}
-                        onChange={e=>assignImageColor(i, e.target.value)}
-                        title="Assign this image to a product color"
-                      >
-                        <option value="">General / no color</option>
-                        {(ef.colors || []).map(color => (
-                          <option key={color.sku || color.code} value={color.sku || ''}>{color.name} {color.code ? `(${color.code})` : ''}</option>
-                        ))}
-                      </select>
-                      <div className="img-actions">
-                        {i>0 && <button onClick={()=>moveImg(i,i-1)}>←</button>}
-                        {i<ef.images.length-1 && <button onClick={()=>moveImg(i,i+1)}>→</button>}
-                        <button className="img-rm-btn" onClick={()=>removeImg(i)}>✕</button>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="upload-zone" onClick={()=>fileRef.current?.click()}>
-                    <span className="uz-ico">+</span>
-                    <span className="uz-lbl">Upload Image</span>
-                    <span className="uz-sub">JPG, PNG, WebP · auto-compressed to JPG</span>
                   </div>
                 </div>
                 {getTemporaryImageCount() > 0 && (
