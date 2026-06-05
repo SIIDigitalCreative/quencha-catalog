@@ -394,6 +394,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(185,220,210,.4);color:var(--tl)}
 .vm-desc{font-size:14px;color:var(--bk);line-height:1.65}
 .vm-price-row{display:flex;gap:24px;align-items:flex-end}
+.vm-price-row-under-desc{background:var(--sf4);border:1px solid rgba(185,220,210,.55);border-radius:10px;padding:12px 14px;margin:2px 0 6px;align-items:center;width:fit-content;max-width:100%}
 .vm-plbl{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gr);text-transform:uppercase;margin-bottom:2px}
 .vm-pval{font-size:26px;font-weight:900;color:var(--tl);line-height:1.1}
 .vm-pdiv{width:1px;height:36px;background:rgba(185,220,210,.5)}
@@ -454,30 +455,36 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .add-row{display:flex;gap:8px}
 .add-btn{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tr);flex-shrink:0}
 .add-btn:hover{background:var(--tl2)}
-.color-collection-panel{background:linear-gradient(180deg,rgba(185,220,210,.45),rgba(185,220,210,.22));border:1px solid rgba(39,153,137,.18);border-radius:12px;padding:14px;margin-bottom:12px;overflow:hidden}
-.collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.color-collection-panel{background:linear-gradient(180deg,rgba(185,220,210,.5),rgba(255,255,255,.78));border:1px solid rgba(39,153,137,.18);border-radius:14px;padding:14px;margin-bottom:14px;overflow:visible;box-shadow:0 2px 12px rgba(39,153,137,.05)}
+.collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(39,153,137,.12)}
 .collection-title{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--tl)}
-.collection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:10px}
-.collection-item{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:8px;background:rgba(255,255,255,.82);border:1px solid rgba(185,220,210,.72);border-radius:10px;padding:10px;box-shadow:0 2px 8px rgba(39,153,137,.04);min-width:0}
-.collection-item input[type=color]{width:30px;height:30px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0}
-.collection-actions{display:grid;grid-template-columns:1fr auto;gap:8px;width:100%;margin-top:6px;grid-column:1/-1}
-.collection-add-set,.collection-save-set{border:none;border-radius:8px;padding:7px 9px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:30px}
+.collection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.collection-item{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:8px;background:#fff;border:1px solid rgba(185,220,210,.75);border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(39,153,137,.05);min-width:0}
+.collection-item input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0}
+.collection-name{min-width:0;font-family:var(--fn);font-size:12px;font-weight:800;color:var(--bk);border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;outline:none;background:var(--bg);width:100%}
+.collection-name:focus{border-color:var(--tl);background:#fff}
+.collection-set-count{grid-column:1/2;font-size:9px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.12);border-radius:999px;padding:3px 7px;white-space:nowrap;text-align:center}
+.collection-actions{grid-column:2/3;display:grid;grid-template-columns:1fr auto;gap:8px;width:100%}
+.collection-add-set,.collection-save-set{border:none;border-radius:8px;padding:8px 10px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:32px}
 .collection-add-set{background:var(--tl);color:#fff;overflow:hidden;text-overflow:ellipsis}
 .collection-add-set:hover:not(:disabled){background:var(--tl2);transform:translateY(-1px)}
-.collection-save-set{background:rgba(255,255,255,.75);color:var(--tl);border:1px solid rgba(39,153,137,.18)}
+.collection-save-set{background:rgba(255,255,255,.85);color:var(--tl);border:1px solid rgba(39,153,137,.18)}
 .collection-save-set:hover{background:#fff;border-color:var(--tl)}
 .collection-add-set:disabled{opacity:.45;cursor:not-allowed;background:rgba(39,153,137,.35);transform:none}
-.collection-set-count{font-size:9px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.12);border-radius:999px;padding:3px 7px;white-space:nowrap}
-.collection-name{min-width:0;font-family:var(--fn);font-size:12px;font-weight:800;color:var(--bk);border:1px solid rgba(185,220,210,.65);border-radius:8px;padding:7px 9px;outline:none;background:var(--bg);width:100%}
-.collection-name:focus{border-color:var(--tl);background:#fff}
-.collection-add-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;margin-top:12px;background:rgba(255,255,255,.55);border:1px dashed rgba(39,153,137,.22);border-radius:10px;padding:10px}
-.collection-add-row input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
-.collection-add-row input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.65);border-radius:8px;padding:8px 10px;outline:none;background:#fff}
+.collection-add-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;margin-top:12px;background:rgba(255,255,255,.65);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:10px}
+.collection-add-row input[type=color]{width:38px;height:38px;border:none;background:none;padding:2px;cursor:pointer}
+.collection-add-row input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:9px 11px;outline:none;background:#fff}
 .collection-add-row input[type=text]:focus{border-color:var(--tl)}
-.collection-add-row button{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
+.collection-add-row button{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 13px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
 .collection-add-row button:hover{background:var(--tl2)}
-.color-table-head{display:grid;grid-template-columns:180px 128px 1fr 72px 1.25fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 8px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:8px}
-.color-row{display:grid;grid-template-columns:180px 128px 1fr 72px 1.25fr 28px;gap:8px;align-items:start;margin-bottom:8px;background:#fff;border:1px solid rgba(185,220,210,.45);border-radius:10px;padding:10px}
+.color-table-head{display:grid;grid-template-columns:54px 180px 128px 1fr 72px 1.25fr 28px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gr);text-transform:uppercase;padding:0 4px 8px;border-bottom:1px solid rgba(185,220,210,.4);margin-bottom:8px}
+.color-row{display:grid;grid-template-columns:54px 180px 128px 1fr 72px 1.25fr 28px;gap:8px;align-items:start;margin-bottom:8px;background:#fff;border:1px solid rgba(185,220,210,.45);border-radius:10px;padding:10px}
+.color-move-controls{display:flex;gap:4px;align-items:center;justify-content:center;min-height:34px}
+.move-btn{width:24px;height:28px;border-radius:6px;border:1px solid rgba(39,153,137,.18);background:rgba(185,220,210,.28);color:var(--tl);font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;transition:var(--tr);line-height:1}
+.move-btn:hover:not(:disabled){background:var(--tl);color:#fff;transform:translateY(-1px)}
+.move-btn:disabled{opacity:.35;cursor:not-allowed}
+.color-move-placeholder{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:rgba(39,153,137,.6);background:rgba(185,220,210,.28);border:1px dashed rgba(39,153,137,.18);border-radius:8px;display:flex;align-items:center;justify-content:center;min-height:34px}
+
 .cp{width:34px;height:34px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:none}
 .multi-swatch-edit{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-height:34px}
 .swatch-input-wrap{position:relative;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:6px;background:var(--bg);border:1px solid rgba(185,220,210,.55);border-radius:8px;padding:4px 8px 4px 4px;min-width:0}
@@ -490,7 +497,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hex-in:focus{color:var(--tl)}
 .collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
 .collection-select:focus{border-color:var(--tl);background:#fff}
-@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:30px minmax(0,1fr) auto}.collection-add-row{grid-template-columns:34px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-set-count{grid-column:1/2}.collection-actions{grid-column:2/3}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.vm-color-grid{grid-template-columns:1fr}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
@@ -1835,6 +1842,13 @@ ${message.trim()}` : 'Message / Notes:',
     setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
   }
   const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
+  const moveColor = (from, to) => setEf(f=>{
+    if (to < 0 || to >= f.colors.length || from === to) return f
+    const colors = [...f.colors]
+    const [moved] = colors.splice(from, 1)
+    colors.splice(to, 0, moved)
+    return {...f, colors}
+  })
   const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
   const updateColorHex = (i, hexIndex, value) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
     if (j !== i) return c
@@ -2516,6 +2530,11 @@ ${message.trim()}` : 'Message / Notes:',
               )}
               <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
               <p className="vm-desc">{vp.desc}</p>
+              <div className="vm-price-row vm-price-row-under-desc">
+                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
+                <div className="vm-pdiv"/>
+                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
+              </div>
               {(vp.dimensions || vp.barcode) && (
                 <div className="vm-meta-row">
                   {vp.dimensions && typeof vp.dimensions==='object' &&
@@ -2584,11 +2603,6 @@ ${message.trim()}` : 'Message / Notes:',
                   )}
                 </div>
               )}
-              <div className="vm-price-row">
-                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
-                <div className="vm-pdiv"/>
-                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
-              </div>
               <div className="vm-actions">
                 <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
@@ -2800,11 +2814,15 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 </div>
                 <div style={{background:'var(--bg)',borderRadius:10,padding:12}}>
-                  <div className="color-table-head"><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
+                  <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
                   {ef.colors.length === 0
                     ? <p style={{fontSize:12,color:'var(--gr)',padding:'4px 0'}}>No colors yet. Add one below.</p>
                     : ef.colors.map((c,i)=>(
                       <div key={i} className="color-row">
+                        <div className="color-move-controls" aria-label={`Reorder ${c.name || 'color'}`}>
+                          <button type="button" className="move-btn" disabled={i===0} onClick={()=>moveColor(i,i-1)} title="Move color up">↑</button>
+                          <button type="button" className="move-btn" disabled={i===ef.colors.length-1} onClick={()=>moveColor(i,i+1)} title="Move color down">↓</button>
+                        </div>
                         <div className="multi-swatch-edit">
                           {getColorHexes(c).map((hex, hi)=>(
                             <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
@@ -2836,8 +2854,9 @@ ${message.trim()}` : 'Message / Notes:',
                 </div>
                 <div className="add-color-form">
                   <div className="sub-hd">Add Color Variant</div>
-                  <div className="color-table-head"><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
-                  <div className="color-row">
+                  <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
+                  <div className="color-row new-color-row">
+                    <div className="color-move-placeholder">New</div>
                     <div className="multi-swatch-edit">
                       {getColorHexes(newColor).map((hex, hi)=>(
                         <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
