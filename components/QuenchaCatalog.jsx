@@ -1171,6 +1171,7 @@ function CodeLightbox({ src, label, onClose }) {
 
 // ─── CLIENT IMAGE COMPRESSION ────────────────────────────────────────────────
 // Compress product images before uploading so /api/upload receives a smaller file.
+// We output JPEG instead of WebP because some upload routes reject image/webp.
 // GIF and SVG are kept as-is because canvas conversion can remove animation/vector data.
 function loadImageFromFile(file) {
   return new Promise((resolve, reject) => {
@@ -1199,11 +1200,11 @@ function canvasToBlob(canvas, type, quality) {
 
 async function compressImageFile(file, options = {}) {
   const {
-    maxWidth = 1800,
-    maxHeight = 1800,
-    targetBytes = 1400 * 1024,
-    minQuality = 0.62,
-    outputType = 'image/webp',
+    maxWidth = 1600,
+    maxHeight = 1600,
+    targetBytes = 900 * 1024,
+    minQuality = 0.55,
+    outputType = 'image/jpeg',
   } = options
 
   if (!file || !file.type?.startsWith('image/')) return file
@@ -1222,28 +1223,31 @@ async function compressImageFile(file, options = {}) {
     const canvas = document.createElement('canvas')
     canvas.width = outWidth
     canvas.height = outHeight
-    const ctx = canvas.getContext('2d', { alpha: true })
+    const ctx = canvas.getContext('2d', { alpha: false })
+    if (!ctx) return file
+
+    // JPEG does not support transparency, so use a white background.
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(0, 0, outWidth, outHeight)
     ctx.imageSmoothingEnabled = true
     ctx.imageSmoothingQuality = 'high'
     ctx.drawImage(img, 0, 0, outWidth, outHeight)
 
-    let quality = 0.86
+    let quality = 0.82
     let blob = await canvasToBlob(canvas, outputType, quality)
 
     while (blob.size > targetBytes && quality > minQuality) {
-      quality = Math.max(minQuality, quality - 0.08)
+      quality = Math.max(minQuality, quality - 0.07)
       blob = await canvasToBlob(canvas, outputType, quality)
     }
 
     const baseName = String(file.name || 'image').replace(/\.[^.]+$/, '') || 'image'
-    const compressed = new File([blob], `${baseName}.webp`, {
+    const compressed = new File([blob], `${baseName}-compressed.jpg`, {
       type: outputType,
       lastModified: Date.now(),
     })
 
-    // Use the compressed image if it is smaller, or if the original is above the safe upload target.
-    if (compressed.size < file.size || file.size > targetBytes) return compressed
-    return file
+    return compressed.size < file.size ? compressed : file
   } catch (err) {
     console.warn('Image compression skipped:', err)
     return file
@@ -1746,12 +1750,13 @@ ${message.trim()}` : 'Message / Notes:',
 
     const res = await fetch('/api/upload', { method:'POST', body: fd })
     if (!res.ok) {
-      let message = 'Upload failed'
+      let message = `Upload failed (${res.status})`
       try {
         const payload = await res.json()
         message = payload?.error || payload?.message || message
       } catch {}
-      throw new Error(message)
+      const mb = (uploadFile.size / 1024 / 1024).toFixed(2)
+      throw new Error(`${message} — ${uploadFile.type || 'unknown type'}, ${mb}MB`)
     }
     const { url } = await res.json()
     if (!url) throw new Error('Upload completed but no URL was returned')
@@ -2124,7 +2129,7 @@ ${message.trim()}` : 'Message / Notes:',
     const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
 
     if (!validFiles.length) {
-      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. Images will be compressed before upload.')
+      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
       return
     }
 
@@ -3073,7 +3078,7 @@ ${message.trim()}` : 'Message / Notes:',
                   <div className="upload-zone" onClick={()=>fileRef.current?.click()}>
                     <span className="uz-ico">+</span>
                     <span className="uz-lbl">Upload Image</span>
-                    <span className="uz-sub">JPG, PNG, WebP · auto-compressed</span>
+                    <span className="uz-sub">JPG, PNG, WebP · auto-compressed to JPG</span>
                   </div>
                 </div>
                 {uploadErr && <div className="f-error">{uploadErr}</div>}
