@@ -674,6 +674,70 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
  .edit-bar{bottom:12px;left:12px;right:12px;transform:none;border-radius:12px}
  .eb-cnt{display:none}
 }
+ 
+/* MOBILE PRODUCT MODAL — FULLSCREEN PAGE STYLE */
+@media (max-width: 640px) {
+ .modal-bg {
+   padding: 0 !important;
+   align-items: stretch !important;
+   justify-content: stretch !important;
+   background: var(--wh) !important;
+   backdrop-filter: none !important;
+ }
+ 
+ .modal {
+   width: 100vw !important;
+   height: 100dvh !important;
+   max-width: none !important;
+   max-height: none !important;
+   border-radius: 0 !important;
+   box-shadow: none !important;
+   display: block !important;
+   overflow-y: auto !important;
+   -webkit-overflow-scrolling: touch !important;
+ }
+ 
+ .m-hdr {
+   position: relative !important;
+   padding: 28px 52px 24px 24px !important;
+   border-radius: 0 !important;
+ }
+ 
+ .m-close {
+   position: absolute !important;
+   top: 22px !important;
+   right: 18px !important;
+   width: 42px !important;
+   height: 42px !important;
+   font-size: 18px !important;
+   z-index: 3 !important;
+ }
+ 
+ .m-body {
+   overflow: visible !important;
+   padding: 20px 18px 96px !important;
+   max-height: none !important;
+ }
+ 
+ .m-footer {
+   position: sticky !important;
+   bottom: 0 !important;
+   z-index: 5 !important;
+   border-radius: 0 !important;
+   padding: 12px 14px calc(12px + env(safe-area-inset-bottom)) !important;
+   background: rgba(255,255,255,.96) !important;
+   backdrop-filter: blur(10px) !important;
+ }
+ 
+ .vm-main-wrap {
+   border-radius: 14px !important;
+ }
+ 
+ .vm-thumbs {
+   padding-bottom: 8px !important;
+ }
+}
+ 
 `
  
  
