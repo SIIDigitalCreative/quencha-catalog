@@ -1658,16 +1658,8 @@ ${message.trim()}` : 'Message / Notes:',
   const uploadImageToBlob = useCallback(async (file) => {
     const fd = new FormData(); fd.append('file', file)
     const res = await fetch('/api/upload', { method:'POST', body: fd })
-    if (!res.ok) {
-      let message = 'Upload failed'
-      try {
-        const payload = await res.json()
-        message = payload?.error || payload?.message || message
-      } catch {}
-      throw new Error(message)
-    }
+    if (!res.ok) throw new Error('Upload failed')
     const { url } = await res.json()
-    if (!url) throw new Error('Upload completed but no URL was returned')
     return url
   }, [])
 
@@ -1771,21 +1763,9 @@ ${message.trim()}` : 'Message / Notes:',
     if (!srp || srp <= 0) { alert('Valid price is required.'); return }
 
     const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
-    const normalizedImages = normalizeProductImages(ef.images || [])
-    const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
-
-    if (temporaryImages.length) {
-      const msg = `${temporaryImages.length} image(s) are temporary browser previews because the upload failed. Please remove and re-upload them before saving.`
-      setUploadErr(msg)
-      alert(msg)
-      setEditTab('images')
-      return
-    }
-
     const data = {
       ...ef,
       colors: normalizedColors,
-      images: normalizedImages,
       srp,
       packing: parseInt(ef.packing) || 0,
       dimensions: ef.dimensions,
@@ -2015,16 +1995,16 @@ ${message.trim()}` : 'Message / Notes:',
   // Images
   const handleImgUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return
-    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, WebP, or GIF.'); e.target.value = ''; return }
-    if (file.size > 8*1024*1024) { setUploadErr('File too large. Max 8MB.'); e.target.value = ''; return }
-    setUploadErr('Uploading image...')
+    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, or WebP.'); return }
+    if (file.size > 8*1024*1024) { setUploadErr('File too large. Max 8MB.'); return }
+    setUploadErr('')
     try {
       const url = await uploadImageToBlob(file)
-      setEf(f=>({...f,images:[...normalizeProductImages(f.images),{src:url,colorSku:'',colorCode:'',colorName:''}]}))
-      setUploadErr('')
-    } catch (err) {
-      console.error(err)
-      setUploadErr(err?.message || 'Upload failed. Please try again.')
+      setEf(f=>({...f,images:[...f.images,{src:url,colorSku:'',colorCode:'',colorName:''}]}))
+    } catch {
+      const reader = new FileReader()
+      reader.onload = ev => setEf(f=>({...f,images:[...f.images,{src:ev.target.result,colorSku:'',colorCode:'',colorName:''}]}))
+      reader.readAsDataURL(file)
     }
     e.target.value = ''
   }
@@ -2041,31 +2021,29 @@ ${message.trim()}` : 'Message / Notes:',
       return
     }
 
-    let skipped = files.length - validFiles.length
-    let failed = 0
-    const uploaded = []
-
-    setUploadErr(`Uploading ${validFiles.length} image${validFiles.length === 1 ? '' : 's'}...`)
-
-    // Upload sequentially. This is more reliable than firing many /api/upload requests at once.
-    for (const file of validFiles) {
-      try {
-        const url = await uploadImageToBlob(file)
-        uploaded.push({ src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
-      } catch (err) {
-        failed += 1
-        console.error('Color image upload failed:', err)
-      }
-    }
-
-    if (uploaded.length) {
-      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
-    }
-
-    if (failed || skipped) {
-      setUploadErr(`${uploaded.length} image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
+    if (validFiles.length !== files.length) {
+      setUploadErr('Some files were skipped. Use JPG, PNG, WebP, or GIF up to 8MB each.')
     } else {
       setUploadErr('')
+    }
+
+    const uploaded = await Promise.all(validFiles.map(async (file) => {
+      try {
+        const url = await uploadImageToBlob(file)
+        return { src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' }
+      } catch {
+        return await new Promise(resolve => {
+          const reader = new FileReader()
+          reader.onload = ev => resolve({ src: ev.target.result, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
+          reader.onerror = () => resolve(null)
+          reader.readAsDataURL(file)
+        })
+      }
+    }))
+
+    const clean = uploaded.filter(Boolean)
+    if (clean.length) {
+      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...clean] }))
     }
   }
 
