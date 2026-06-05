@@ -262,6 +262,19 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.48);border:1px solid rgba(39,153,137,.12);color:rgba(58,58,58,.62);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
 .pc:hover{border-color:var(--tl);color:var(--tl);background:#fff}
 .pc.on{background:rgba(45,204,211,.15);border-color:var(--tl);color:var(--tl)}
+.filter-pill-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px 12px 10px}
+.filter-pill{min-height:38px;border-radius:999px;border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.62);color:rgba(58,58,58,.68);font-family:var(--fn);font-size:11px;font-weight:800;line-height:1.1;padding:7px 9px;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:space-between;gap:7px;text-align:left;box-shadow:0 2px 8px rgba(39,153,137,.04)}
+.filter-pill:hover{background:#fff;border-color:rgba(39,153,137,.34);color:var(--tl);transform:translateY(-1px)}
+.filter-pill.on{background:rgba(45,204,211,.16);border-color:var(--tl);color:var(--tl);box-shadow:0 3px 12px rgba(39,153,137,.10)}
+.filter-pill-l{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden}
+.filter-pill-ico,.filter-pill-dot{flex-shrink:0}
+.filter-pill-dot{width:8px;height:8px;border-radius:999px;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.filter-pill-label{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filter-pill-count{font-size:10px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.10);border-radius:999px;padding:2px 7px;min-width:26px;text-align:center;flex-shrink:0}
+.filter-pill.on .filter-pill-count{background:rgba(255,255,255,.76);border-color:rgba(39,153,137,.16)}
+.filter-pill.full{grid-column:1/-1}
+.manage-pill{grid-column:1/-1;justify-content:center;color:rgba(39,153,137,.72);background:rgba(255,255,255,.45);border-style:dashed}
+@media(max-width:430px){.filter-pill-wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-left:10px;padding-right:10px}.filter-pill{font-size:10px;padding:7px 8px}.filter-pill-count{padding:2px 6px;min-width:24px}}
 .clear-filters{display:block;margin:8px 16px 0;width:calc(100% - 32px);background:rgba(255,255,255,.42);border:1px solid rgba(39,153,137,.15);border-radius:6px;color:rgba(39,153,137,.62);font-family:var(--fn);font-size:11px;font-weight:700;padding:7px;cursor:pointer;transition:var(--tr)}
 .clear-filters:hover{border-color:var(--tl);color:var(--tl);background:#fff}
  
@@ -2473,25 +2486,32 @@ ${message.trim()}` : 'Message / Notes:',
      </div>
      <hr className="sb-div"/>
      <div className="sb-sec">
-       <span className="sb-lbl">Category</span>
-       {Object.entries(cats.reduce((a,c)=>({...a,[c.value]:c.icon}),{})).map(([v,ico])=>(
-         <button key={v} className={`fb ${filterCat===v?'on':''}`} style={{borderLeftColor:filterCat===v?'var(--cy)':'transparent'}} onClick={()=>{setFilterCat(filterCat===v?null:v); closeMobileSidebar()}}>
-           <span className="fb-ico">{ico}</span><span className="fb-lbl">{cats.find(c=>c.value===v)?.label||v}</span><span className="fb-cnt">{counts.cat[v]||0}</span>
-         </button>
-       ))}
-       {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>{setCatMgrOpen(true); closeMobileSidebar()}}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Categories</span></button>}
+       <span className="sb-lbl">Category Filter</span>
+       <div className="filter-pill-wrap">
+         {cats.map(c=>(
+           <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
+             <span className="filter-pill-l"><span className="filter-pill-ico">{c.icon}</span><span className="filter-pill-label">{c.label}</span></span>
+             <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
+           </button>
+         ))}
+         {editMode && <button className="filter-pill manage-pill" onClick={()=>{setCatMgrOpen(true); closeMobileSidebar()}}><span>⚙️ Manage Categories</span></button>}
+       </div>
      </div>
      <hr className="sb-div"/>
      <div className="sb-sec">
-       <span className="sb-lbl">Color Collection</span>
-       <button className={`fb ${filterColorCollection==='all'?'on':''}`} style={{borderLeftColor:filterColorCollection==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
-         <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Collections</span><span className="fb-cnt">{counts.collection?.all||0}</span>
-       </button>
-       {colorCollections.map(col=>(
-         <button key={col.value} className={`fb ${filterColorCollection===col.value?'on':''}`} style={{borderLeftColor:filterColorCollection===col.value?(col.color||'var(--tl)'):'transparent'}} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
-           <span className="fb-dot" style={{background:col.color||'var(--tl)'}}/><span className="fb-lbl">{col.label}</span><span className="fb-cnt">{counts.collection?.[col.value]||0}</span>
+       <span className="sb-lbl">Color Collection Filter</span>
+       <div className="filter-pill-wrap">
+         <button className={`filter-pill full ${filterColorCollection==='all'?'on':''}`} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
+           <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:'var(--cy)'}}/><span className="filter-pill-label">All Collections</span></span>
+           <span className="filter-pill-count">{counts.collection?.all||0}</span>
          </button>
-       ))}
+         {colorCollections.map(col=>(
+           <button key={col.value} className={`filter-pill ${filterColorCollection===col.value?'on':''}`} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
+             <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:col.color||'var(--tl)'}}/><span className="filter-pill-label">{col.label}</span></span>
+             <span className="filter-pill-count">{counts.collection?.[col.value]||0}</span>
+           </button>
+         ))}
+       </div>
      </div>
      <hr className="sb-div"/>
      <div className="sb-sec">
