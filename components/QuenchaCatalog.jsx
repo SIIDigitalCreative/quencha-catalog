@@ -419,7 +419,6 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-color-item.sku-copied{background:rgba(45,204,211,.1);border-color:var(--cy)}
 .vm-color-item.sku-copied .vm-color-sku{color:var(--cy)}
 .vm-color-item.color-active{background:rgba(45,204,211,.12);border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.08)}
-.vm-color-no-img{font-size:9px;font-weight:800;color:rgba(99,102,106,.65);background:rgba(99,102,106,.08);border-radius:999px;padding:1px 6px;width:max-content;margin-top:2px}
 .c-sku.copyable:hover{background:var(--sf4);border-color:var(--cy);color:var(--tl)}
 .vm-actions{display:flex;gap:10px;flex-wrap:wrap}
 .vm-pencil-btn{width:44px;height:44px;border-radius:50%;border:none;background:rgba(39,153,137,.1);color:var(--tl);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0}
@@ -508,6 +507,25 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .main-tag{position:absolute;top:6px;left:6px;z-index:3;font-size:9px;font-weight:700;background:var(--tl);color:#fff;border-radius:999px;padding:2px 6px;text-transform:uppercase;letter-spacing:.06em}
 .img-color-select{position:absolute;left:6px;right:6px;bottom:6px;z-index:4;font-family:var(--fn);font-size:10px;font-weight:800;color:var(--bk);background:rgba(255,255,255,.92);border:1px solid rgba(185,220,210,.72);border-radius:7px;padding:5px 7px;outline:none;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .img-color-select:focus{border-color:var(--tl);background:#fff}
+.color-image-panel{background:rgba(185,220,210,.22);border:1px solid rgba(39,153,137,.14);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.color-image-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.color-image-title{font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--tl)}
+.color-image-sub{font-size:11px;color:var(--gr);line-height:1.45;margin-top:2px}
+.color-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.color-image-card{background:#fff;border:1px solid rgba(185,220,210,.62);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:9px;box-shadow:0 2px 8px rgba(39,153,137,.04)}
+.color-image-card-top{display:flex;align-items:center;gap:9px;min-width:0}
+.color-image-swatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 1px 4px rgba(0,0,0,.16);flex-shrink:0}
+.color-image-name{font-size:12px;font-weight:900;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.color-image-sku{font-family:monospace;font-size:10px;font-weight:800;color:var(--tl);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.color-image-thumbs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;min-height:44px}
+.color-image-thumb{width:42px;height:42px;border-radius:7px;overflow:hidden;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative}
+.color-image-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.color-image-thumb button{position:absolute;right:2px;top:2px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(239,68,68,.88);color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.color-image-empty{font-size:11px;font-weight:700;color:rgba(99,102,106,.58);background:rgba(255,255,255,.6);border:1px dashed rgba(185,220,210,.7);border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center;min-height:44px;text-align:center}
+.color-upload-btn{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(39,153,137,.1);border:1.5px dashed rgba(39,153,137,.35);border-radius:8px;color:var(--tl);font-family:var(--fn);font-size:11px;font-weight:900;padding:8px;cursor:pointer;transition:var(--tr);overflow:hidden}
+.color-upload-btn:hover{background:rgba(45,204,211,.16);border-color:var(--tl)}
+.color-upload-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+@media(max-width:700px){.color-image-grid{grid-template-columns:1fr}}
 .upload-zone{aspect-ratio:1;border-radius:8px;border:2px dashed rgba(185,220,210,.7);background:var(--bg);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:var(--tr);font-family:var(--fn)}
 .upload-zone:hover{border-color:var(--tl);background:var(--sf4)}
 .uz-ico{font-size:24px;color:var(--tl)}
@@ -813,6 +831,13 @@ function imageMatchesColor(image, color) {
 function findImageIndexForColor(product, color) {
   const images = normalizeProductImages(product?.images || [])
   return images.findIndex(img => imageMatchesColor(img, color))
+}
+
+function findImageIndexesForColor(product, color) {
+  const images = normalizeProductImages(product?.images || [])
+  return images
+    .map((img, index) => imageMatchesColor(img, color) ? index : -1)
+    .filter(index => index >= 0)
 }
 
 function hasImageForColor(product, color) {
@@ -1963,6 +1988,45 @@ ${message.trim()}` : 'Message / Notes:',
     }
     e.target.value = ''
   }
+
+  const uploadFilesForColor = async (fileList, color) => {
+    const files = Array.from(fileList || [])
+    if (!files.length || !color) return
+
+    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
+    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 8*1024*1024)
+
+    if (!validFiles.length) {
+      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 8MB each.')
+      return
+    }
+
+    if (validFiles.length !== files.length) {
+      setUploadErr('Some files were skipped. Use JPG, PNG, WebP, or GIF up to 8MB each.')
+    } else {
+      setUploadErr('')
+    }
+
+    const uploaded = await Promise.all(validFiles.map(async (file) => {
+      try {
+        const url = await uploadImageToBlob(file)
+        return { src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' }
+      } catch {
+        return await new Promise(resolve => {
+          const reader = new FileReader()
+          reader.onload = ev => resolve({ src: ev.target.result, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
+          reader.onerror = () => resolve(null)
+          reader.readAsDataURL(file)
+        })
+      }
+    }))
+
+    const clean = uploaded.filter(Boolean)
+    if (clean.length) {
+      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...clean] }))
+    }
+  }
+
   const removeImg = (i) => setEf(f=>({...f,images:f.images.filter((_,j)=>j!==i)}))
   const moveImg = (from,to) => {
     const imgs = [...ef.images]; const [item] = imgs.splice(from,1); imgs.splice(to,0,item)
@@ -2494,16 +2558,16 @@ ${message.trim()}` : 'Message / Notes:',
                               key={clr.sku}
                               className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
                               onClick={()=>{
+                                if (!hasLinkedImage) return
                                 setVmColorKey(colorKey)
-                                if (hasLinkedImage) setVmImg(linkedImageIndex)
+                                setVmImg(linkedImageIndex)
                               }}
-                              title={hasLinkedImage ? `Show image for ${clr.name}` : `No image assigned to ${clr.name} yet`}
+                              title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
                             >
                               <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
                               <div className="vm-color-info">
                                 <span className="vm-color-name">{clr.name}</span>
                                 <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
-                                {!hasLinkedImage && <span className="vm-color-no-img">No image set</span>}
                               </div>
                             </div>
                           )
@@ -2793,7 +2857,55 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'images' && (
               <div className="em-panel">
-                <div className="f-hint">Upload product images. First image = main card photo. Use the dropdown on each image to assign it to a color; clicking that color in the product modal will show the assigned image.</div>
+                <div className="f-hint">Upload product images. First image = main card photo. You can upload multiple images per color below, or use the dropdown on each image to reassign it to another color.</div>
+                <div className="color-image-panel">
+                  <div className="color-image-panel-head">
+                    <div>
+                      <div className="color-image-title">Images per color</div>
+                      <div className="color-image-sub">Upload multiple product photos for each color. When customers click a color, the first assigned image will show.</div>
+                    </div>
+                  </div>
+                  <div className="color-image-grid">
+                    {(ef.colors || []).map(color => {
+                      const assigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => imageMatchesColor(item.img, color))
+                      return (
+                        <div className="color-image-card" key={color.sku || color.code || color.name}>
+                          <div className="color-image-card-top">
+                            <span className="color-image-swatch" style={{background:swatchBackground(color)}}/>
+                            <div style={{minWidth:0,flex:1}}>
+                              <div className="color-image-name">{color.name}</div>
+                              <div className="color-image-sku">{color.sku}</div>
+                            </div>
+                          </div>
+                          {assigned.length > 0 ? (
+                            <div className="color-image-thumbs">
+                              {assigned.map(({img, index}) => (
+                                <span className="color-image-thumb" key={`${color.sku || color.code}-${index}`}>
+                                  <img src={getImageSrc(img)} alt=""/>
+                                  <button type="button" onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="color-image-empty">No uploaded photos yet</div>
+                          )}
+                          <label className="color-upload-btn">
+                            + Upload photos for {color.name}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={e=>{
+                                uploadFilesForColor(e.target.files, color)
+                                e.target.value = ''
+                              }}
+                            />
+                          </label>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
                 <div className="img-grid">
                   {normalizeProductImages(ef.images).map((img,i)=>(
                     <div key={i} className="img-thumb">
