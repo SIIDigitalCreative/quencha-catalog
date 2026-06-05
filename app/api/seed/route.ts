@@ -39,11 +39,17 @@ export async function GET() {
         ...seedProduct,
         id,
 
+        // Preserve manually edited Extension and Category
+        ext: existing?.ext ?? seedProduct.ext ?? 'core',
+        cat: existing?.cat ?? seedProduct.cat ?? 'sip',
+
+        // Preserve uploaded images
         images:
           seedProduct.images && seedProduct.images.length > 0
             ? seedProduct.images
             : existing?.images || [],
 
+        // Preserve extra media/codes
         barcode: seedProduct.barcode || existing?.barcode || '',
         barcodeImage: seedProduct.barcodeImage || existing?.barcodeImage || '',
         qrCode: seedProduct.qrCode || existing?.qrCode || '',
@@ -60,7 +66,7 @@ export async function GET() {
     await redis.hset(KEYS.products, entries)
 
     return NextResponse.json({
-      message: `Seed completed. Added/updated ${SEED_PRODUCTS.length} products while preserving existing images.`,
+      message: `Seed completed. Added/updated ${SEED_PRODUCTS.length} products while preserving existing images, categories, and extensions.`,
       added: SEED_PRODUCTS.length,
     })
   } catch (error) {
