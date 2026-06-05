@@ -525,13 +525,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .color-image-swatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 1px 4px rgba(0,0,0,.16);flex-shrink:0}
 .color-image-name{font-size:12px;font-weight:900;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .color-image-sku{font-family:monospace;font-size:10px;font-weight:800;color:var(--tl);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.color-image-thumbs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;min-height:44px}
-.color-image-thumb{width:42px;height:42px;border-radius:7px;overflow:hidden;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative}
-.color-image-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.color-image-thumb.main-selected{border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.18)}
-.color-image-thumb button{position:absolute;right:2px;top:2px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(239,68,68,.88);color:#fff;font-size:10px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.color-main-check{position:absolute;left:2px;bottom:2px;z-index:3;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.94);border:1px solid rgba(39,153,137,.18);border-radius:999px;padding:1px 5px;font-size:8px;font-weight:900;color:var(--tl);line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.color-main-check input{width:10px;height:10px;margin:0;accent-color:var(--tl)}
+.color-image-thumbs{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;min-height:96px;align-items:flex-start}
+.color-image-thumb{width:76px;min-height:92px;border-radius:10px;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative;padding:5px;display:flex;flex-direction:column;gap:5px;overflow:visible;cursor:grab;transition:transform .16s ease, opacity .16s ease, border-color .16s ease, box-shadow .16s ease}
+.color-image-thumb:active{cursor:grabbing}
+.color-image-thumb.dragging{opacity:.42;transform:scale(.96);border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.16)}
+.color-image-thumb img{width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;display:block;border-radius:7px;background:#fff}
+.color-image-thumb.main-selected{border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.18);background:rgba(185,220,210,.32)}
+.color-image-thumb button{position:absolute;right:-6px;top:-6px;width:18px;height:18px;border:none;border-radius:50%;background:rgba(239,68,68,.92);color:#fff;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:4;box-shadow:0 2px 5px rgba(0,0,0,.16)}
+.color-main-check{position:static;z-index:3;display:flex;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,.94);border:1px solid rgba(39,153,137,.2);border-radius:6px;padding:4px 5px;font-size:9px;font-weight:900;color:var(--tl);line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);width:100%;min-height:22px;text-align:center}
+.color-main-check input{width:12px;height:12px;margin:0;accent-color:var(--tl)}
 .general-image-card{grid-column:1/-1;border-color:rgba(39,153,137,.24);background:rgba(255,255,255,.94)}
 .general-image-swatch{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--tl),var(--cy));box-shadow:0 1px 4px rgba(39,153,137,.18);flex-shrink:0}
 .color-image-empty{font-size:11px;font-weight:700;color:rgba(99,102,106,.58);background:rgba(255,255,255,.6);border:1px dashed rgba(185,220,210,.7);border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center;min-height:44px;text-align:center}
@@ -1814,6 +1816,7 @@ ${message.trim()}` : 'Message / Notes:',
   const [badgeInput, setBadgeInput] = useState('')
   const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
   const [uploadErr, setUploadErr] = useState('')
+  const [dragImageIndex, setDragImageIndex] = useState(null)
   const [addingNewExt, setAddingNewExt] = useState(false)
   const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
   const [addingNewCat, setAddingNewCat] = useState(false)
@@ -2225,10 +2228,34 @@ ${message.trim()}` : 'Message / Notes:',
     setUploadErr(removed ? `Removed ${removed} failed preview image${removed === 1 ? '' : 's'}. You can now re-upload them.` : '')
   }, [ef.images])
 
-  const removeImg = (i) => setEf(f=>({...f,images:f.images.filter((_,j)=>j!==i)}))
+  const removeImg = (i) => setEf(f=>({...f,images:normalizeProductImages(f.images).filter((_,j)=>j!==i)}))
   const moveImg = (from,to) => {
-    const imgs = [...ef.images]; const [item] = imgs.splice(from,1); imgs.splice(to,0,item)
-    setEf(f=>({...f,images:imgs}))
+    setEf(f => {
+      const imgs = [...normalizeProductImages(f.images)]
+      if (from === to || from < 0 || to < 0 || from >= imgs.length || to >= imgs.length) return { ...f, images: imgs }
+      const [item] = imgs.splice(from,1)
+      imgs.splice(to,0,item)
+      return { ...f, images: imgs }
+    })
+  }
+
+  const handleImageDragStart = (e, index) => {
+    setDragImageIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', String(index))
+  }
+
+  const handleImageDragOver = (e) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleImageDrop = (e, toIndex) => {
+    e.preventDefault()
+    const fromRaw = dragImageIndex ?? Number(e.dataTransfer.getData('text/plain'))
+    const fromIndex = Number(fromRaw)
+    if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex)
+    setDragImageIndex(null)
   }
 
   const assignImageColor = (index, colorSku) => {
@@ -3066,7 +3093,7 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'images' && (
               <div className="em-panel">
-                <div className="f-hint">Upload product images. General images have their own section, and each color has its own upload area. Tick Main on any image to make it the product card/main image.</div>
+                <div className="f-hint">Upload product images. General images have their own section, and each color has its own upload area. Drag thumbnails to rearrange their order. Tick Main on any image to make it the product card/main image.</div>
                 <div className="color-image-panel">
                   <div className="color-image-panel-head">
                     <div>
@@ -3089,10 +3116,19 @@ ${message.trim()}` : 'Message / Notes:',
                           {generalAssigned.length > 0 ? (
                             <div className="color-image-thumbs">
                               {generalAssigned.map(({img, index}) => (
-                                <span className={`color-image-thumb ${index===0 ? 'main-selected' : ''}`} key={`general-${index}`}>
+                                <span
+                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''}`}
+                                  key={`general-${index}`}
+                                  draggable
+                                  onDragStart={(e)=>handleImageDragStart(e,index)}
+                                  onDragOver={handleImageDragOver}
+                                  onDrop={(e)=>handleImageDrop(e,index)}
+                                  onDragEnd={()=>setDragImageIndex(null)}
+                                  title="Drag to rearrange thumbnail order"
+                                >
                                   {index===0 && <span className="main-tag">Main</span>}
                                   <img src={getImageSrc(img)} alt=""/>
-                                  <button type="button" onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                  <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
                                   <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
                                     <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
                                   </label>
@@ -3142,10 +3178,19 @@ ${message.trim()}` : 'Message / Notes:',
                           {assigned.length > 0 ? (
                             <div className="color-image-thumbs">
                               {assigned.map(({img, index}) => (
-                                <span className={`color-image-thumb ${index===0 ? 'main-selected' : ''}`} key={`${color.sku || color.code}-${index}`}>
+                                <span
+                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''}`}
+                                  key={`${color.sku || color.code}-${index}`}
+                                  draggable
+                                  onDragStart={(e)=>handleImageDragStart(e,index)}
+                                  onDragOver={handleImageDragOver}
+                                  onDrop={(e)=>handleImageDrop(e,index)}
+                                  onDragEnd={()=>setDragImageIndex(null)}
+                                  title="Drag to rearrange thumbnail order"
+                                >
                                   {index===0 && <span className="main-tag">Main</span>}
                                   <img src={getImageSrc(img)} alt=""/>
-                                  <button type="button" onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                  <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
                                   <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
                                     <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
                                   </label>
