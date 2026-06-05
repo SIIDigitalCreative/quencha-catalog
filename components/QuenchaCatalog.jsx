@@ -2231,7 +2231,16 @@ ${message.trim()}` : 'Message / Notes:',
   // ── RENDER ──
   const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
   const vpImages = vp ? normalizeProductImages(vp.images || []) : []
-  const safeVmImg = vpImages.length ? Math.min(vmImg, vpImages.length - 1) : 0
+  const defaultVmColor = vp && !vmColorKey ? (vp.colors || []).find(color => hasImageForColor(vp, color)) : null
+  const activeVmColor = vp
+    ? (vmColorKey
+      ? (vp.colors || []).find(color => getColorKey(color) === vmColorKey)
+      : defaultVmColor)
+    : null
+  const activeVmColorKey = activeVmColor ? getColorKey(activeVmColor) : ''
+  const filteredVmImages = activeVmColor ? vpImages.filter(img => imageMatchesColor(img, activeVmColor)) : []
+  const visibleVmImages = activeVmColor && filteredVmImages.length ? filteredVmImages : vpImages
+  const safeVmImg = visibleVmImages.length ? Math.min(vmImg, visibleVmImages.length - 1) : 0
   return (
     <div>
       {/* TOPBAR */}
@@ -2447,12 +2456,12 @@ ${message.trim()}` : 'Message / Notes:',
             <div className="m-body">
               <div>
                 <div className="vm-main-wrap">
-                  {vpImages.length > 0 ? <img src={getImageSrc(vpImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
+                  {visibleVmImages.length > 0 ? <img src={getImageSrc(visibleVmImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
                 </div>
-                {vpImages.length > 1 && (
+                {visibleVmImages.length > 1 && (
                   <div className="vm-thumbs">
-                    {vpImages.map((img,i) => (
-                      <div key={i} className={`vm-thumb ${i===safeVmImg?'on':''}`} onClick={()=>{setVmImg(i); setVmColorKey('')}}>
+                    {visibleVmImages.map((img,i) => (
+                      <div key={`${getImageSrc(img)}-${i}`} className={`vm-thumb ${i===safeVmImg?'on':''}`} onClick={()=>setVmImg(i)}>
                         <img src={getImageSrc(img)} alt=""/>
                       </div>
                     ))}
@@ -2471,11 +2480,10 @@ ${message.trim()}` : 'Message / Notes:',
                       </div>
                       <div className="vm-color-grid">
                         {group.colors.map(clr=>{
-                          const linkedImageIndex = findImageIndexForColor(vp, clr)
-                          const hasLinkedImage = linkedImageIndex >= 0
+                          const linkedImageIndexes = findImageIndexesForColor(vp, clr)
+                          const hasLinkedImage = linkedImageIndexes.length > 0
                           const colorKey = getColorKey(clr)
-                          const currentImage = vpImages[safeVmImg]
-                          const isActive = vmColorKey ? vmColorKey === colorKey : imageMatchesColor(currentImage, clr)
+                          const isActive = activeVmColorKey === colorKey
                           return (
                             <div
                               key={clr.sku}
@@ -2483,7 +2491,7 @@ ${message.trim()}` : 'Message / Notes:',
                               onClick={()=>{
                                 if (!hasLinkedImage) return
                                 setVmColorKey(colorKey)
-                                setVmImg(linkedImageIndex)
+                                setVmImg(0)
                               }}
                               title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
                             >
