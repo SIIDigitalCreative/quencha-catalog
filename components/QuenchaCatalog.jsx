@@ -1,4 +1,4 @@
-'use client'
+ client'
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
  
 // ─── SEED DATA ───────────────────────────────────────────────────────────────
@@ -3141,7 +3141,7 @@ ${message.trim()}` : 'Message / Notes:',
                            const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
                            const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
                            const qty = Math.max(1, Number(quenchQty[product.id] || 1))
-                           const mainImg = getMainImage(product)
+                           const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
                            return (
                              <div key={product.id} className="quench-product">
                                <div className="quench-prod-top">
