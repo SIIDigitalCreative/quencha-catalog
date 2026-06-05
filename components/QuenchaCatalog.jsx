@@ -529,6 +529,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .color-image-thumb{width:100%;min-height:112px;border-radius:10px;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative;padding:6px;display:flex;flex-direction:column;gap:6px;overflow:hidden;cursor:grab;transition:transform .16s ease, opacity .16s ease, border-color .16s ease, box-shadow .16s ease}
 .color-image-thumb:active{cursor:grabbing}
 .color-image-thumb.dragging{opacity:.42;transform:scale(.96);border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.16)}
+.color-image-thumb.drop-before::before,.color-image-thumb.drop-after::after{content:'';position:absolute;top:6px;bottom:30px;width:4px;border-radius:999px;background:var(--cy);box-shadow:0 0 0 3px rgba(45,204,211,.18);z-index:5;pointer-events:none}
+.color-image-thumb.drop-before::before{left:-2px}
+.color-image-thumb.drop-after::after{right:-2px}
 .color-image-thumb img{width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;display:block;border-radius:8px;background:#fff}
 .color-image-thumb.main-selected{border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.18);background:rgba(185,220,210,.32)}
 .color-image-thumb button{position:absolute;right:5px;top:5px;width:20px;height:20px;border:none;border-radius:50%;background:rgba(239,68,68,.94);color:#fff;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:4;box-shadow:0 2px 6px rgba(0,0,0,.18)}
@@ -1817,6 +1820,8 @@ ${message.trim()}` : 'Message / Notes:',
   const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
   const [uploadErr, setUploadErr] = useState('')
   const [dragImageIndex, setDragImageIndex] = useState(null)
+  const [dragOverImageIndex, setDragOverImageIndex] = useState(null)
+  const [dragOverImagePosition, setDragOverImagePosition] = useState('before')
   const [addingNewExt, setAddingNewExt] = useState(false)
   const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
   const [addingNewCat, setAddingNewCat] = useState(false)
@@ -2229,33 +2234,51 @@ ${message.trim()}` : 'Message / Notes:',
   }, [ef.images])
 
   const removeImg = (i) => setEf(f=>({...f,images:normalizeProductImages(f.images).filter((_,j)=>j!==i)}))
-  const moveImg = (from,to) => {
+  const moveImg = (from, to, position = 'before') => {
     setEf(f => {
       const imgs = [...normalizeProductImages(f.images)]
-      if (from === to || from < 0 || to < 0 || from >= imgs.length || to >= imgs.length) return { ...f, images: imgs }
-      const [item] = imgs.splice(from,1)
-      imgs.splice(to,0,item)
+      if (from < 0 || to < 0 || from >= imgs.length || to >= imgs.length) return { ...f, images: imgs }
+      let insertIndex = position === 'after' ? to + 1 : to
+      if (from < insertIndex) insertIndex -= 1
+      if (from === insertIndex) return { ...f, images: imgs }
+      const [item] = imgs.splice(from, 1)
+      imgs.splice(insertIndex, 0, item)
       return { ...f, images: imgs }
     })
   }
 
+  const clearImageDropGuide = () => {
+    setDragOverImageIndex(null)
+    setDragOverImagePosition('before')
+  }
+
   const handleImageDragStart = (e, index) => {
     setDragImageIndex(index)
+    clearImageDropGuide()
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('text/plain', String(index))
   }
 
-  const handleImageDragOver = (e) => {
+  const handleImageDragOver = (e, index) => {
     e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
+    if (dragImageIndex === null || dragImageIndex === index) {
+      clearImageDropGuide()
+      return
+    }
+    const rect = e.currentTarget.getBoundingClientRect()
+    const position = e.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
+    setDragOverImageIndex(index)
+    setDragOverImagePosition(position)
   }
 
   const handleImageDrop = (e, toIndex) => {
     e.preventDefault()
     const fromRaw = dragImageIndex ?? Number(e.dataTransfer.getData('text/plain'))
     const fromIndex = Number(fromRaw)
-    if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex)
+    if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex, dragOverImagePosition)
     setDragImageIndex(null)
+    clearImageDropGuide()
   }
 
   const assignImageColor = (index, colorSku) => {
@@ -3117,13 +3140,13 @@ ${message.trim()}` : 'Message / Notes:',
                             <div className="color-image-thumbs">
                               {generalAssigned.map(({img, index}) => (
                                 <span
-                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''}`}
+                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
                                   key={`general-${index}`}
                                   draggable
                                   onDragStart={(e)=>handleImageDragStart(e,index)}
-                                  onDragOver={handleImageDragOver}
+                                  onDragOver={(e)=>handleImageDragOver(e,index)}
                                   onDrop={(e)=>handleImageDrop(e,index)}
-                                  onDragEnd={()=>setDragImageIndex(null)}
+                                  onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
                                   title="Drag to rearrange thumbnail order"
                                 >
                                   {index===0 && <span className="main-tag">Main</span>}
@@ -3179,13 +3202,13 @@ ${message.trim()}` : 'Message / Notes:',
                             <div className="color-image-thumbs">
                               {assigned.map(({img, index}) => (
                                 <span
-                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''}`}
+                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
                                   key={`${color.sku || color.code}-${index}`}
                                   draggable
                                   onDragStart={(e)=>handleImageDragStart(e,index)}
-                                  onDragOver={handleImageDragOver}
+                                  onDragOver={(e)=>handleImageDragOver(e,index)}
                                   onDrop={(e)=>handleImageDrop(e,index)}
-                                  onDragEnd={()=>setDragImageIndex(null)}
+                                  onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
                                   title="Drag to rearrange thumbnail order"
                                 >
                                   {index===0 && <span className="main-tag">Main</span>}
