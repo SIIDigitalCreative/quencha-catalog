@@ -394,7 +394,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(185,220,210,.4);color:var(--tl)}
 .vm-desc{font-size:14px;color:var(--bk);line-height:1.65}
 .vm-price-row{display:flex;gap:24px;align-items:flex-end}
-.vm-price-row-under-desc{background:var(--sf4);border:1px solid rgba(185,220,210,.55);border-radius:10px;padding:12px 14px;margin:2px 0 6px;align-items:center;width:fit-content;max-width:100%}
+.vm-price-row-under-desc{background:transparent;border:none;border-radius:0;padding:0;margin:2px 0 12px;align-items:flex-end;width:fit-content;max-width:100%}
 .vm-plbl{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gr);text-transform:uppercase;margin-bottom:2px}
 .vm-pval{font-size:26px;font-weight:900;color:var(--tl);line-height:1.1}
 .vm-pdiv{width:1px;height:36px;background:rgba(185,220,210,.5)}
