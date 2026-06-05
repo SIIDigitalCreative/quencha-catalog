@@ -1,3 +1,4 @@
+
 'use client'
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
  
@@ -817,6 +818,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .quench-start,.quench-next,.quench-send,.quench-add{border:none;border-radius:12px;background:var(--tl);color:#fff;font-family:var(--fn);font-size:13px;font-weight:900;padding:12px 18px;cursor:pointer;transition:var(--tr);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;box-shadow:0 8px 20px rgba(39,153,137,.16)}
 .quench-start:hover,.quench-next:hover,.quench-send:hover,.quench-add:hover{background:var(--tl2);transform:translateY(-1px)}
+.quench-add:disabled{background:rgba(39,153,137,.18)!important;color:var(--tl)!important;cursor:not-allowed;transform:none!important;box-shadow:none!important;border:1px solid rgba(39,153,137,.18)}
+.quench-selected-pill{display:inline-flex;align-items:center;gap:5px;width:max-content;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:var(--tl);background:rgba(45,204,211,.13);border:1px solid rgba(39,153,137,.18);border-radius:999px;padding:4px 8px;margin-top:2px}
 .quench-next:disabled{opacity:.45;cursor:not-allowed;transform:none;background:rgba(39,153,137,.45)}
 .quench-mini-collections{display:flex;gap:7px;flex-wrap:wrap}
 .quench-chip{border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.78);color:var(--tl);border-radius:999px;padding:8px 11px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;transition:var(--tr)}
@@ -830,13 +833,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-modal{max-width:1040px;width:min(1040px,calc(100vw - 28px));max-height:min(92vh,900px);overflow:hidden}
 .quench-head{background:linear-gradient(135deg,rgba(185,220,210,.45),rgba(255,255,255,.96));border-bottom:1px solid rgba(39,153,137,.12)}
 .quench-progress{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
-.quench-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:rgba(58,58,58,.50)}
+.quench-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:rgba(58,58,58,.50);border:none;background:transparent;padding:0;font-family:var(--fn);cursor:pointer;transition:var(--tr)}
 .quench-step::after{content:'';width:24px;height:1px;background:rgba(39,153,137,.18);margin-left:2px}
 .quench-step:last-child::after{display:none}
 .quench-step-dot{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(39,153,137,.10);color:var(--tl);font-size:11px;font-weight:900}
 .quench-step.on{color:var(--tl)}
 .quench-step.on .quench-step-dot{background:var(--tl);color:#fff}
+.quench-step:hover:not(:disabled){color:var(--tl)}
+.quench-step:hover:not(:disabled) .quench-step-dot{background:rgba(39,153,137,.18)}
+.quench-step:disabled{opacity:.42;cursor:not-allowed}
+.quench-back{margin-top:10px;border:1px solid rgba(39,153,137,.20);background:#fff;color:var(--tl);border-radius:999px;padding:7px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;transition:var(--tr)}
+.quench-back:hover{background:rgba(185,220,210,.35);border-color:var(--tl)}
 .quench-body{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;padding:22px;background:#fff;overflow:auto}
+.quench-body.no-side{grid-template-columns:1fr}
+.quench-body.no-side .quench-side{display:none}
 .quench-side{display:flex;flex-direction:column;gap:14px;min-width:0}
 .quench-side-title,.quench-set-title{font-size:12px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--tl)}
 .quench-collection-list{display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1px solid rgba(185,220,210,.55);border-radius:14px;padding:10px}
@@ -2617,6 +2627,10 @@ ${message.trim()}` : 'Message / Notes:',
    return { totalPacks, totalUnits, totalSrp }
  }, [quenchItems])
  
+ const selectedQuenchSkuSet = useMemo(() => {
+   return new Set(quenchItems.map(item => item.sku).filter(Boolean))
+ }, [quenchItems])
+ 
  const startQuenchables = useCallback((collection = quenchCollection) => {
    setQuenchCollection(collection)
    setQuenchStep('collection')
@@ -2632,21 +2646,25 @@ ${message.trim()}` : 'Message / Notes:',
    const packing = Number(product.packing || 1)
    const units = packs * packing
  
-   setQuenchItems(items => [
-     ...items,
-     {
-       id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
-       productId: product.id,
-       productName: product.name,
-       colorName: selectedColor.name,
-       colorCode: selectedColor.code,
-       sku: selectedColor.sku,
-       packs,
-       packing,
-       units,
-       srp: Number(product.srp || 0),
-     }
-   ])
+   setQuenchItems(items => {
+     const alreadySelected = items.some(item => item.sku === selectedColor.sku)
+     if (alreadySelected) return items
+     return [
+       ...items,
+       {
+         id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
+         productId: product.id,
+         productName: product.name,
+         colorName: selectedColor.name,
+         colorCode: selectedColor.code,
+         sku: selectedColor.sku,
+         packs,
+         packing,
+         units,
+         srp: Number(product.srp || 0),
+       }
+     ]
+   })
    setQuenchStep('review')
  }, [getQuenchColors, quenchColor, quenchQty])
  
@@ -3076,15 +3094,23 @@ ${message.trim()}` : 'Message / Notes:',
                <div className="quench-eyebrow">Quenchables</div>
                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Build Your Quencha Combo</div>
                <div className="quench-progress">
-                 {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>(
-                   <span key={key} className={`quench-step ${quenchStep===key?'on':''}`}><span className="quench-step-dot">{index+1}</span>{label}</span>
-                 ))}
+                 {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>{
+                   const disabled = key === 'inquiry' && !quenchItems.length
+                   return (
+                     <button type="button" key={key} disabled={disabled} onClick={()=>{ if(!disabled) setQuenchStep(key) }} className={`quench-step ${quenchStep===key?'on':''}`} aria-label={`Go to ${label} step`}>
+                       <span className="quench-step-dot">{index+1}</span>{label}
+                     </button>
+                   )
+                 })}
                </div>
+               {quenchStep !== 'collection' && (
+                 <button type="button" className="quench-back" onClick={()=>setQuenchStep(quenchStep==='inquiry'?'review':quenchStep==='review'?'products':'collection')}>← Back</button>
+               )}
              </div>
              <button className="m-close" onClick={()=>setQuenchOpen(false)}>✕</button>
            </div>
            <div className="m-body">
-             <div className="quench-body">
+             <div className={`quench-body ${['review','inquiry'].includes(quenchStep) ? 'no-side' : ''}`}>
                <aside className="quench-side">
                  <div className="quench-side-title">Choose Collection</div>
                  {colorCollections.map(col => {
@@ -3141,9 +3167,10 @@ ${message.trim()}` : 'Message / Notes:',
                            const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
                            const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
                            const qty = Math.max(1, Number(quenchQty[product.id] || 1))
-                           const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
+                           const mainImg = getMainImage(product)
+                           const alreadyInSet = selectedQuenchSkuSet.has(selectedSku)
                            return (
-                             <div key={product.id} className="quench-product">
+                             <div key={product.id} className={`quench-product ${alreadyInSet ? 'already-selected' : ''}`}>
                                <div className="quench-prod-top">
                                  {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
                                  <div>
@@ -3158,7 +3185,8 @@ ${message.trim()}` : 'Message / Notes:',
                                  <input className="quench-input" type="number" min="1" value={qty} onChange={e=>setQuenchQty(prev=>({...prev,[product.id]:e.target.value}))} />
                                </div>
                                <div className="quench-set-meta">Selected: {selectedColor?.name} · Estimated units: {qty * Number(product.packing || 1)} pcs</div>
-                               <button className="quench-add" onClick={()=>addQuenchItem(product)}>Add to Quenchables</button>
+                               {alreadyInSet && <div className="quench-selected-pill">✓ Already in set</div>}
+                               <button className="quench-add" disabled={alreadyInSet} onClick={()=>addQuenchItem(product)}>{alreadyInSet ? 'Already Selected' : 'Add to Quenchables'}</button>
                              </div>
                            )
                          })}
