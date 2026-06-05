@@ -424,6 +424,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-pencil-btn:hover{background:rgba(39,153,137,.2);transform:scale(1.08)}
 .vm-inq-btn{flex:1;background:var(--tl);border:none;border-radius:8px;padding:11px 16px;font-family:var(--fn);font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:var(--tr)}
 .vm-inq-btn:hover{background:var(--tl2)}
+.vm-link-btn{flex:1;background:rgba(185,220,210,.35);border:1px solid rgba(39,153,137,.22);border-radius:8px;padding:11px 16px;font-family:var(--fn);font-size:13px;font-weight:800;color:var(--tl);cursor:pointer;transition:var(--tr)}
+.vm-link-btn:hover{background:rgba(185,220,210,.6);border-color:var(--tl);transform:translateY(-1px)}
 
 /* EDIT MODAL */
 .edit-modal-inner{max-width:680px}
@@ -766,6 +768,40 @@ function swatchBackground(color) {
   const step = 100 / hexes.length
   const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
   return `linear-gradient(90deg, ${stops})`
+}
+
+function getProductSkuBase(product = null) {
+  const firstSku = product?.colors?.[0]?.sku || ''
+  const firstCode = product?.colors?.[0]?.code || ''
+  if (!firstSku) return ''
+  if (firstCode && firstSku.toUpperCase().endsWith(`-${String(firstCode).toUpperCase()}`)) {
+    return firstSku.slice(0, -(String(firstCode).length + 1)) || firstSku
+  }
+  const parts = firstSku.split('-')
+  return parts.length > 2 ? parts.slice(0, -1).join('-') : firstSku
+}
+
+function productMatchesSku(product, skuParam) {
+  const target = String(skuParam || '').trim().toUpperCase()
+  if (!target || !product) return false
+
+  const values = new Set()
+  if (product.id) values.add(String(product.id).trim().toUpperCase())
+
+  const base = getProductSkuBase(product)
+  if (base) values.add(String(base).trim().toUpperCase())
+
+  ;(product.colors || []).forEach(color => {
+    if (!color?.sku) return
+    const sku = String(color.sku).trim()
+    const code = String(color.code || '').trim()
+    values.add(sku.toUpperCase())
+    if (code && sku.toUpperCase().endsWith(`-${code.toUpperCase()}`)) {
+      values.add(sku.slice(0, -(code.length + 1)).toUpperCase())
+    }
+  })
+
+  return values.has(target)
 }
 
 // ─── YOUTUBE HELPER ──────────────────────────────────────────────────────────
@@ -1294,6 +1330,7 @@ export default function QuenchaCatalog() {
   const [showMobileFilter, setShowMobileFilter] = useState(false)
   const searchInputRef = useRef(null)
   const resultsRef = useRef(null)
+  const productCardRefs = useRef({})
 
   // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
   // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
@@ -1396,10 +1433,65 @@ export default function QuenchaCatalog() {
 
   const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
 
-  const getSkuBase = useCallback((product = null) => {
-    if (!product?.colors?.[0]?.sku) return ''
-    return product.colors[0].sku.split('-').slice(0, -1).join('-') || product.colors[0].sku
+  const getSkuBase = useCallback((product = null) => getProductSkuBase(product), [])
+
+  const openProductModal = useCallback((product, options = {}) => {
+    if (!product) return
+    const { updateUrl = true } = options
+    setViewProduct(product)
+    setVmImg(0)
+    setYtPlaying(false)
+
+    if (updateUrl && typeof window !== 'undefined') {
+      const skuBase = getProductSkuBase(product)
+      if (skuBase) {
+        const url = new URL(window.location.href)
+        url.searchParams.set('sku', skuBase)
+        window.history.pushState({ productSku: skuBase }, '', url.toString())
+      }
+    }
   }, [])
+
+  const closeProductModal = useCallback(() => {
+    setViewProduct(null)
+    setYtPlaying(false)
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      if (url.searchParams.has('sku')) {
+        url.searchParams.delete('sku')
+        window.history.pushState({}, '', url.toString())
+      }
+    }
+  }, [])
+
+  const copyProductLink = useCallback((product) => {
+    if (typeof window === 'undefined' || !product) return
+    const skuBase = getProductSkuBase(product)
+    if (!skuBase) return
+    const link = `${window.location.origin}${window.location.pathname}?sku=${encodeURIComponent(skuBase)}`
+    copy(link)
+  }, [copy])
+
+  useEffect(() => {
+    if (!products.length || typeof window === 'undefined') return
+
+    const openFromUrl = () => {
+      const skuParam = new URL(window.location.href).searchParams.get('sku')
+      if (!skuParam) return
+      const match = products.find(product => productMatchesSku(product, skuParam))
+      if (!match) return
+
+      openProductModal(match, { updateUrl: false })
+      window.requestAnimationFrame(() => {
+        productCardRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+    }
+
+    openFromUrl()
+    window.addEventListener('popstate', openFromUrl)
+    return () => window.removeEventListener('popstate', openFromUrl)
+  }, [products, openProductModal])
 
   const buildInquiryText = useCallback((product, lines, message) => {
     const packing = parseInt(product?.packing, 10) || 0
@@ -1941,6 +2033,7 @@ ${message.trim()}` : 'Message / Notes:',
     const showExtTag = !!p.ext && p.ext !== 'core'
     return (
       <div
+        ref={el => { if (el) productCardRefs.current[p.id] = el; else delete productCardRefs.current[p.id] }}
         className={`pcard ${editMode?'em':''} ${dragProductId===p.id?'dragging':''}`}
         draggable={editMode && sort === 'default'}
         onDragStart={editMode && sort === 'default' ? (e) => {
@@ -1959,7 +2052,7 @@ ${message.trim()}` : 'Message / Notes:',
           setDragProductId(null)
         } : undefined}
         onDragEnd={() => setDragProductId(null)}
-        onClick={editMode ? undefined : () => { setViewProduct(p); setVmImg(0); setYtPlaying(false) }}
+        onClick={editMode ? undefined : () => openProductModal(p)}
       >
         {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
 
@@ -1970,9 +2063,11 @@ ${message.trim()}` : 'Message / Notes:',
 
         <div className="c-body">
           <div className="c-name">{p.name}</div>
-          <span className="c-sku copyable" onClick={e=>{e.stopPropagation();copy(p.colors[0]?.sku.split('-').slice(0,2).join('-'))}} title="Click to copy SKU">
-            {copied===p.colors[0]?.sku.split('-').slice(0,2).join('-') ? '✓ Copied!' : p.colors[0]?.sku.split('-').slice(0,2).join('-')}
-          </span>
+          {getSkuBase(p) && (
+            <span className="c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
+              {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
+            </span>
+          )}
           <div className="c-desc">{p.desc}</div>
           <div className="c-badges">{p.badges.slice(0,3).map(b=><span key={b} className="c-badge">{b}</span>)}</div>
           <div className="c-colors">
@@ -2188,7 +2283,7 @@ ${message.trim()}` : 'Message / Notes:',
 
       {/* VIEW MODAL */}
       {vp && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget){setViewProduct(null);setYtPlaying(false)}}}>
+        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)closeProductModal()}}>
           <div className="modal">
             <div className="m-hdr" style={{background:'var(--sf4)'}}>
               <div>
@@ -2201,17 +2296,17 @@ ${message.trim()}` : 'Message / Notes:',
                   ) : null
                 })()}
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
-                {vp.colors[0]?.sku && (
+                {getSkuBase(vp) && (
                   <code
-                    onClick={()=>copy(vp.colors[0].sku.split('-').slice(0,2).join('-'))}
+                    onClick={()=>copy(getSkuBase(vp))}
                     style={{fontSize:11,fontWeight:700,fontFamily:'monospace',background:'rgba(39,153,137,.1)',color:'var(--tl)',borderRadius:4,padding:'2px 8px',marginTop:5,display:'inline-block',letterSpacing:'.04em',cursor:'pointer',transition:'background .15s'}}
-                    title="Click to copy"
+                    title="Click to copy SKU"
                   >
-                    {copied===vp.colors[0].sku.split('-').slice(0,2).join('-') ? '✓ Copied!' : vp.colors[0].sku.split('-').slice(0,2).join('-')}
+                    {copied===getSkuBase(vp) ? '✓ Copied!' : getSkuBase(vp)}
                   </code>
                 )}
               </div>
-              <button className="m-close" onClick={()=>{setViewProduct(null);setYtPlaying(false)}}>✕</button>
+              <button className="m-close" onClick={closeProductModal}>✕</button>
             </div>
             <div className="m-body">
               <div>
@@ -2332,10 +2427,13 @@ ${message.trim()}` : 'Message / Notes:',
                 </div>
               )}
               <div className="vm-actions">
-                <button className="vm-pencil-btn" onClick={()=>{ setViewProduct(null); requestAuth(viewProduct) }} title="Edit product">
+                <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
                 </button>
-                <button className="vm-inq-btn" onClick={()=>{ const product = vp; setViewProduct(null); openInquiry(product) }}>📩 Bulk Inquiry</button>
+                <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
+                  {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Copy Product Link'}
+                </button>
+                <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal(); openInquiry(product) }}>📩 Bulk Inquiry</button>
               </div>
             </div>
           </div>
