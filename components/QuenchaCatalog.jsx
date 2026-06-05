@@ -418,6 +418,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-color-item.copyable:hover{background:rgba(185,220,210,.5);border-color:var(--cy)}
 .vm-color-item.sku-copied{background:rgba(45,204,211,.1);border-color:var(--cy)}
 .vm-color-item.sku-copied .vm-color-sku{color:var(--cy)}
+.vm-color-item.color-active{background:rgba(45,204,211,.12);border-color:var(--tl);box-shadow:0 0 0 2px rgba(39,153,137,.08)}
+.vm-color-no-img{font-size:9px;font-weight:800;color:rgba(99,102,106,.65);background:rgba(99,102,106,.08);border-radius:999px;padding:1px 6px;width:max-content;margin-top:2px}
 .c-sku.copyable:hover{background:var(--sf4);border-color:var(--cy);color:var(--tl)}
 .vm-actions{display:flex;gap:10px;flex-wrap:wrap}
 .vm-pencil-btn{width:44px;height:44px;border-radius:50%;border:none;background:rgba(39,153,137,.1);color:var(--tl);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0}
@@ -504,6 +506,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .img-actions button{background:rgba(255,255,255,.88);border:none;border-radius:4px;padding:4px 7px;cursor:pointer;font-size:12px}
 .img-rm-btn{background:rgba(239,68,68,.85)!important;color:#fff}
 .main-tag{position:absolute;top:6px;left:6px;z-index:3;font-size:9px;font-weight:700;background:var(--tl);color:#fff;border-radius:999px;padding:2px 6px;text-transform:uppercase;letter-spacing:.06em}
+.img-color-select{position:absolute;left:6px;right:6px;bottom:6px;z-index:4;font-family:var(--fn);font-size:10px;font-weight:800;color:var(--bk);background:rgba(255,255,255,.92);border:1px solid rgba(185,220,210,.72);border-radius:7px;padding:5px 7px;outline:none;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.img-color-select:focus{border-color:var(--tl);background:#fff}
 .upload-zone{aspect-ratio:1;border-radius:8px;border:2px dashed rgba(185,220,210,.7);background:var(--bg);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:var(--tr);font-family:var(--fn)}
 .upload-zone:hover{border-color:var(--tl);background:var(--sf4)}
 .uz-ico{font-size:24px;color:var(--tl)}
@@ -768,6 +772,51 @@ function swatchBackground(color) {
   const step = 100 / hexes.length
   const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
   return `linear-gradient(90deg, ${stops})`
+}
+
+function getImageSrc(image) {
+  if (!image) return ''
+  if (typeof image === 'string') return image
+  return image.src || image.url || image.image || ''
+}
+
+function normalizeImageItem(image) {
+  if (!image) return { src: '', colorSku: '', colorCode: '', colorName: '' }
+  if (typeof image === 'string') return { src: image, colorSku: '', colorCode: '', colorName: '' }
+  return {
+    ...image,
+    src: getImageSrc(image),
+    colorSku: image.colorSku || image.sku || '',
+    colorCode: image.colorCode || image.code || '',
+    colorName: image.colorName || '',
+  }
+}
+
+function normalizeProductImages(images) {
+  if (!Array.isArray(images)) return []
+  return images.map(normalizeImageItem).filter(img => !!img.src)
+}
+
+function getColorKey(color) {
+  return String(color?.sku || color?.code || color?.name || '').trim().toUpperCase()
+}
+
+function imageMatchesColor(image, color) {
+  const img = normalizeImageItem(image)
+  if (!img.src || !color) return false
+  const imageKeys = [img.colorSku, img.colorCode, img.colorName].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
+  if (!imageKeys.length) return false
+  const colorKeys = [color.sku, color.code, color.name].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
+  return imageKeys.some(key => colorKeys.includes(key))
+}
+
+function findImageIndexForColor(product, color) {
+  const images = normalizeProductImages(product?.images || [])
+  return images.findIndex(img => imageMatchesColor(img, color))
+}
+
+function hasImageForColor(product, color) {
+  return findImageIndexForColor(product, color) >= 0
 }
 
 function getProductSkuBase(product = null) {
@@ -1350,6 +1399,7 @@ export default function QuenchaCatalog() {
   // Modals
   const [viewProduct, setViewProduct] = useState(null)
   const [vmImg, setVmImg] = useState(0)
+  const [vmColorKey, setVmColorKey] = useState('')
   const [ytPlaying, setYtPlaying] = useState(false)
   const [banners, setBanners] = useState([])
   const [bannerAspect, setBannerAspect] = useState('custom')
@@ -1440,6 +1490,7 @@ export default function QuenchaCatalog() {
     const { updateUrl = true } = options
     setViewProduct(product)
     setVmImg(0)
+    setVmColorKey('')
     setYtPlaying(false)
 
     if (updateUrl && typeof window !== 'undefined') {
@@ -1454,6 +1505,7 @@ export default function QuenchaCatalog() {
 
   const closeProductModal = useCallback(() => {
     setViewProduct(null)
+    setVmColorKey('')
     setYtPlaying(false)
 
     if (typeof window !== 'undefined') {
@@ -1656,7 +1708,7 @@ ${message.trim()}` : 'Message / Notes:',
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
     setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:[...(p.images||[])],dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
+    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
@@ -1695,6 +1747,7 @@ ${message.trim()}` : 'Message / Notes:',
         setEditOpen(false)
         setViewProduct(saved)
         setVmImg(0)
+        setVmColorKey('')
         setYtPlaying(false)
       } else {
         const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
@@ -1902,10 +1955,10 @@ ${message.trim()}` : 'Message / Notes:',
     setUploadErr('')
     try {
       const url = await uploadImageToBlob(file)
-      setEf(f=>({...f,images:[...f.images,url]}))
+      setEf(f=>({...f,images:[...f.images,{src:url,colorSku:'',colorCode:'',colorName:''}]}))
     } catch {
       const reader = new FileReader()
-      reader.onload = ev => setEf(f=>({...f,images:[...f.images,ev.target.result]}))
+      reader.onload = ev => setEf(f=>({...f,images:[...f.images,{src:ev.target.result,colorSku:'',colorCode:'',colorName:''}]}))
       reader.readAsDataURL(file)
     }
     e.target.value = ''
@@ -1914,6 +1967,22 @@ ${message.trim()}` : 'Message / Notes:',
   const moveImg = (from,to) => {
     const imgs = [...ef.images]; const [item] = imgs.splice(from,1); imgs.splice(to,0,item)
     setEf(f=>({...f,images:imgs}))
+  }
+
+  const assignImageColor = (index, colorSku) => {
+    setEf(f => {
+      const selectedColor = (f.colors || []).find(c => c.sku === colorSku)
+      const nextImages = normalizeProductImages(f.images).map((img, i) => {
+        if (i !== index) return img
+        return {
+          ...img,
+          colorSku: selectedColor?.sku || '',
+          colorCode: selectedColor?.code || '',
+          colorName: selectedColor?.name || '',
+        }
+      })
+      return { ...f, images: nextImages }
+    })
   }
 
   // ── FILTERED ──
@@ -2025,7 +2094,7 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── PRODUCT CARD ──
   const Card = ({ p }) => {
-    const mainImg = p.images?.[0]
+    const mainImg = getImageSrc(p.images?.[0])
     const colors = p.colors.slice(0, 6)
     const extra = p.colors.length > 6 ? p.colors.length - 6 : 0
     const extEntry = exts.find(x=>x.value===p.ext)
@@ -2096,6 +2165,8 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── RENDER ──
   const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
+  const vpImages = vp ? normalizeProductImages(vp.images || []) : []
+  const safeVmImg = vpImages.length ? Math.min(vmImg, vpImages.length - 1) : 0
   return (
     <div>
       {/* TOPBAR */}
@@ -2311,13 +2382,13 @@ ${message.trim()}` : 'Message / Notes:',
             <div className="m-body">
               <div>
                 <div className="vm-main-wrap">
-                  {vp.images?.length > 0 ? <img src={vp.images[vmImg]} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
+                  {vpImages.length > 0 ? <img src={getImageSrc(vpImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
                 </div>
-                {vp.images?.length > 1 && (
+                {vpImages.length > 1 && (
                   <div className="vm-thumbs">
-                    {vp.images.map((u,i) => (
-                      <div key={i} className={`vm-thumb ${i===vmImg?'on':''}`} onClick={()=>setVmImg(i)}>
-                        <img src={u} alt=""/>
+                    {vpImages.map((img,i) => (
+                      <div key={i} className={`vm-thumb ${i===safeVmImg?'on':''}`} onClick={()=>{setVmImg(i); setVmColorKey('')}}>
+                        <img src={getImageSrc(img)} alt=""/>
                       </div>
                     ))}
                   </div>
@@ -2412,15 +2483,31 @@ ${message.trim()}` : 'Message / Notes:',
                         <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
                       </div>
                       <div className="vm-color-grid">
-                        {group.colors.map(clr=>(
-                          <div key={clr.sku} className={`vm-color-item copyable ${copied===clr.sku?'sku-copied':''}`} onClick={()=>copy(clr.sku)} title={`Copy ${clr.sku}`}>
-                            <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
-                            <div className="vm-color-info">
-                              <span className="vm-color-name">{clr.name}</span>
-                              <span className="vm-color-sku">{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                        {group.colors.map(clr=>{
+                          const linkedImageIndex = findImageIndexForColor(vp, clr)
+                          const hasLinkedImage = linkedImageIndex >= 0
+                          const colorKey = getColorKey(clr)
+                          const currentImage = vpImages[safeVmImg]
+                          const isActive = vmColorKey ? vmColorKey === colorKey : imageMatchesColor(currentImage, clr)
+                          return (
+                            <div
+                              key={clr.sku}
+                              className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
+                              onClick={()=>{
+                                setVmColorKey(colorKey)
+                                if (hasLinkedImage) setVmImg(linkedImageIndex)
+                              }}
+                              title={hasLinkedImage ? `Show image for ${clr.name}` : `No image assigned to ${clr.name} yet`}
+                            >
+                              <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
+                              <div className="vm-color-info">
+                                <span className="vm-color-name">{clr.name}</span>
+                                <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                                {!hasLinkedImage && <span className="vm-color-no-img">No image set</span>}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     </div>
                   ))}
@@ -2706,12 +2793,24 @@ ${message.trim()}` : 'Message / Notes:',
             )}
             {editTab === 'images' && (
               <div className="em-panel">
-                <div className="f-hint">Upload product images. First image = main card photo. Click arrows to reorder.</div>
+                <div className="f-hint">Upload product images. First image = main card photo. Use the dropdown on each image to assign it to a color; clicking that color in the product modal will show the assigned image.</div>
                 <div className="img-grid">
-                  {ef.images.map((src,i)=>(
+                  {normalizeProductImages(ef.images).map((img,i)=>(
                     <div key={i} className="img-thumb">
                       {i===0 && <span className="main-tag">Main</span>}
-                      <img src={src} alt={`Product ${i+1}`}/>
+                      <img src={getImageSrc(img)} alt={`Product ${i+1}`}/>
+                      <select
+                        className="img-color-select"
+                        value={img.colorSku || ''}
+                        onClick={e=>e.stopPropagation()}
+                        onChange={e=>assignImageColor(i, e.target.value)}
+                        title="Assign this image to a product color"
+                      >
+                        <option value="">General / no color</option>
+                        {(ef.colors || []).map(color => (
+                          <option key={color.sku || color.code} value={color.sku || ''}>{color.name} {color.code ? `(${color.code})` : ''}</option>
+                        ))}
+                      </select>
                       <div className="img-actions">
                         {i>0 && <button onClick={()=>moveImg(i,i-1)}>←</button>}
                         {i<ef.images.length-1 && <button onClick={()=>moveImg(i,i+1)}>→</button>}
