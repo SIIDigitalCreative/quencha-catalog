@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-
+ 
 // ─── SEED DATA ───────────────────────────────────────────────────────────────
 const now = new Date().toISOString()
-
+ 
 const OG = [
  { n: 'Snow', c: 'WT', h: '#F5F5F0' },
  { n: 'Sand', c: 'TP', h: '#C8C5BE' },
  { n: 'Stone', c: 'GY', h: '#8A8780' },
  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
-
+ 
 const XP = [
  ...OG,
  { n: 'Autumn Sunset', c: 'AS', h: '#D4894A' },
@@ -18,33 +18,33 @@ const XP = [
  { n: 'Twilight Teal', c: 'TT', h: '#2B8090' },
  { n: 'Coral Oasis', c: 'CO', h: '#E8524A' },
 ]
-
+ 
 const BLOOM = [
  { n: 'Sky', c: 'SK', h: '#88C4E8' },
  { n: 'Meadow', c: 'ME', h: '#5CBF7A' },
  { n: 'Coral', c: 'CO', h: '#FF7A5C' },
  { n: 'Blossom', c: 'BL', h: '#F9A8C4' },
 ]
-
+ 
 const POPLY = [
  { n: 'Bubbly', c: 'BB', h: '#57C0E8' },
  { n: 'Minty', c: 'MT', h: '#48C8C0' },
  { n: 'Purpy', c: 'PP', h: '#B09AD8' },
  { n: 'Rosy', c: 'RO', h: '#F05A9D' },
 ]
-
+ 
 const COOLER = [
  { n: 'Sand', c: 'TP', h: '#C8C5BE' },
  { n: 'Stone', c: 'GY', h: '#8A8780' },
  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
-
+ 
 const PET_BOWL_940 = [
  { n: 'Snow', c: 'WT', h: '#F5F5F0' },
  { n: 'Stone', c: 'GY', h: '#8A8780' },
  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
-
+ 
 const ZODIAC = [
  { name: 'Aquarius', code: 'AQ', hex: '#111111', sku: 'QNH-NBMZOD-AQ' },
  { name: 'Pisces', code: 'PI', hex: '#111111', sku: 'QNH-NBMZOD-PI' },
@@ -59,15 +59,15 @@ const ZODIAC = [
  { name: 'Sagittarius', code: 'SA', hex: '#111111', sku: 'QNH-NBMZOD-SA' },
  { name: 'Capricorn', code: 'CP', hex: '#111111', sku: 'QNH-NBMZOD-CP' },
 ]
-
+ 
 const SINGLE_REFILL = [
  { name: 'Refill Set', code: 'RF', hex: '#F5F5F0', sku: 'QNH-PLRR' },
 ]
-
+ 
 function mk(base, pal) {
  return pal.map(c => ({ name: c.n, code: c.c, hex: c.h, sku: `${base}-${c.c}` }))
 }
-
+ 
 function product(id, name, ext, cat, desc, badges, srp, packing, colors) {
  return {
    id,
@@ -90,7 +90,7 @@ function product(id, name, ext, cat, desc, badges, srp, packing, colors) {
    updatedAt: now,
  }
 }
-
+ 
 const INSULATED_BADGES = ['Double Wall', 'BPA-Free', 'Temp. Retention', '18/8 Stainless Steel', 'Powder Coated']
 const PLASTIC_BOTTLE_BADGES = ['BPA-Free', 'Polypropylene', 'Leak-Proof']
 const TRAVEL_BOTTLE_BADGES = ['Dual Spout', 'BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Rubberized Grip', 'Hot Temp.']
@@ -102,7 +102,7 @@ const GLASS_BOTTLE_BADGES = ['Borosilicate', 'BPA-Free', 'Leak-Proof', 'Silicone
 const BAG_BADGES = ['Oxford Fabric', 'BPA-Free', 'Temp. Retention', 'Water Proof']
 const SILICONE_BADGES = ['BPA-Free', 'Thermal Silicone', 'Non-Slip']
 const COOLER_BADGES = ['36h Maintains Cold Temp.', 'Heavy-Duty PP Body', 'Spacious & Efficient', 'Secure Tight-Seal Lid', 'Temp. Retention', 'BPA-Free']
-
+ 
 const SEED = [
  // ── SIP / DRINKWARE ───────────────────────────────────────────────
  product('qnh-dfit550', 'Dual Flow Insulated Tumbler 550ml', 'core', 'sip', 'Insulated tumbler with a 2-way spout lid for hot or cold drinks, designed for everyday hydration and temperature retention.', INSULATED_BADGES, 799.75, 25, mk('QNH-DFIT550', OG)),
@@ -164,7 +164,7 @@ const SEED = [
  product('qnh-cool12', 'Cooler Box 12L', 'core', 'go', 'Insulated cooler box designed to keep food and beverages fresh, cold, and ready for outdoor trips and everyday use.', COOLER_BADGES, 1799.75, 1, mk('QNH-COOL12', COOLER)),
  product('qnh-cool24', 'Cooler Box 24L', 'core', 'go', 'Large insulated cooler box for picnics, beach days, road trips, and everyday cooling needs.', COOLER_BADGES, 2999.75, 1, mk('QNH-COOL24', COOLER)),
 ]
-
+ 
 const EDIT_PASSWORD = 'quencha2026'
 const EXT_LABELS = {core:'Quencha',kids:'Quencha Kids',pets:'Quencha Pets',tech:'Quencha Tech'}
 const CAT_LABELS = {sip:'SIP — Drinkware',savor:'SAVOR — Lunch & Food',go:'GO — Bags & Carry',accessories:'Accessories'}
@@ -184,7 +184,7 @@ const DEFAULT_EXTS = [
  {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
  {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
 ]
-
+ 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap');
@@ -201,7 +201,7 @@ const CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
+ 
 /* TOPBAR */
 .qnh-topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nh);background:var(--tl);display:flex;align-items:center;padding:0 20px;gap:12px;transition:background var(--tr)}
 .qnh-topbar.edit-on{background:#92400e}
@@ -223,21 +223,21 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .tb-clear{position:absolute;right:42px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:13px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
 .tb-clear:hover{background:rgba(255,255,255,.14);color:#fff}
 .tb-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
-
+ 
 /* Edit mode indicator — subtle, secondary */
 .tb-edit-btn{width:36px;height:36px;border-radius:50%;cursor:pointer;border:none;background:rgba(255,255,255,.18);color:#fff;transition:var(--tr);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
 .tb-edit-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.05)}
 .tb-edit-btn.on{background:#fff;color:var(--tl)}
 .tb-edit-tooltip{position:absolute;top:calc(100% + 8px);right:0;background:rgba(28,25,23,.92);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:var(--tr);font-family:var(--fn)}
 .tb-edit-btn:hover .tb-edit-tooltip{opacity:1}
-
+ 
 /* Bulk Inquiry — MAIN CTA */
 .tb-inq{background:var(--cy);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;transition:var(--tr);white-space:nowrap;letter-spacing:.02em}
 .tb-inq:hover{background:var(--cy2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(45,204,211,.4)}
-
+ 
 .edit-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;animation:pulse 1.4s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-
+ 
 /* LAYOUT */
 .qnh-layout{display:flex;margin-top:var(--nh);min-height:calc(100vh - var(--nh))}
 .qnh-sidebar{width:var(--sw);background:#E6F4F1;position:fixed;top:var(--nh);bottom:0;left:0;overflow-y:auto;z-index:100;border-right:1px solid rgba(185,220,210,.75);box-shadow:2px 0 14px rgba(39,153,137,.06)}
@@ -277,16 +277,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 @media(max-width:430px){.filter-pill-wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-left:10px;padding-right:10px}.filter-pill{font-size:10px;padding:7px 8px}.filter-pill-count{padding:2px 6px;min-width:24px}}
 .clear-filters{display:block;margin:8px 16px 0;width:calc(100% - 32px);background:rgba(255,255,255,.42);border:1px solid rgba(39,153,137,.15);border-radius:6px;color:rgba(39,153,137,.62);font-family:var(--fn);font-size:11px;font-weight:700;padding:7px;cursor:pointer;transition:var(--tr)}
 .clear-filters:hover{border-color:var(--tl);color:var(--tl);background:#fff}
-
+ 
 /* MOBILE */
 .mob-filter-btn{display:none;position:fixed;bottom:80px;left:16px;z-index:150;background:var(--tl);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(39,153,137,.4);align-items:center;gap:6px}
 .mob-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.4);backdrop-filter:blur(2px)}
 .mob-drawer{position:absolute;top:0;left:0;bottom:0;width:280px;background:#E6F4F1;overflow-y:auto;padding-top:44px}
 .drawer-close{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.65);border:none;border-radius:50%;width:32px;height:32px;color:var(--tl);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
+ 
 /* MAIN */
 .qnh-main{margin-left:var(--sw);flex:1;padding:32px 36px 100px;min-width:0}
-
+ 
 /* HERO */
 .hero{background:var(--sf4);border-radius:var(--rl);padding:40px 48px;margin-bottom:32px;display:flex;align-items:center;gap:32px;position:relative;overflow:hidden}
 .hero::after{content:'';position:absolute;right:-40px;bottom:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(45,204,211,.2) 0%,transparent 70%);pointer-events:none}
@@ -299,7 +299,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .h-stat{flex-shrink:0;text-align:right;position:relative;z-index:1}
 .h-num{font-size:52px;font-weight:900;color:var(--cy);line-height:1;letter-spacing:-.03em}
 .h-nlab{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--tl);text-transform:uppercase;opacity:.65}
-
+ 
 /* TOOLBAR */
 .toolbar{display:flex;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
 .res-label{flex:1;font-size:13px;color:var(--gr)}
@@ -308,14 +308,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vbtn{min-width:32px;height:28px;border-radius:5px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gr);font-size:13px;font-weight:700;font-family:var(--fn);transition:var(--tr);padding:0 8px;white-space:nowrap}
 .vbtn:hover{background:var(--sf4);color:var(--tl)}
 .vbtn.on{background:var(--tl);color:#fff}
-
+ 
 /* SECTION HEADER */
 .cat-hdr{display:flex;align-items:center;gap:10px;margin:40px 0 16px;padding-bottom:12px;border-bottom:2px solid rgba(185,220,210,.35)}
 .cat-line{flex:1;height:1px;background:rgba(185,220,210,.25)}
 .cat-nm{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--tl);text-transform:uppercase;white-space:nowrap}
 .ext-tag{font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;text-transform:uppercase;color:#fff;white-space:nowrap}
 .cat-cnt{font-size:10px;font-weight:700;background:var(--sf4);color:var(--tl);padding:2px 8px;border-radius:999px;white-space:nowrap}
-
+ 
 /* PRODUCT GRID — 4 layouts */
 .pgrid{display:grid;gap:18px;margin-bottom:8px}
 .pgrid.col-4{grid-template-columns:repeat(4,1fr)}
@@ -323,7 +323,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .pgrid.col-1{grid-template-columns:1fr!important}
 @media(max-width:900px){.pgrid.col-4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:480px){.pgrid.col-4{grid-template-columns:1fr}}
-
+ 
 /* PRODUCT CARD */
 .pcard{background:var(--wh);border:1px solid rgba(185,220,210,.4);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:var(--tr);cursor:pointer;display:flex;flex-direction:column;position:relative}
 .pcard:not(.em):hover{transform:translateY(-3px);box-shadow:var(--shh);border-color:rgba(45,204,211,.3)}
@@ -333,15 +333,15 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-drag-handle{position:absolute;top:10px;right:10px;z-index:4;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.92);color:var(--tl);border:1px solid rgba(39,153,137,.2);border-radius:999px;padding:3px 8px;cursor:grab;box-shadow:0 2px 8px rgba(39,153,137,.12)}
 .c-drag-handle:active{cursor:grabbing}
 .reorder-hint{font-size:11px;font-weight:700;color:var(--tl);background:var(--sf4);border:1px solid rgba(185,220,210,.6);border-radius:999px;padding:5px 10px}
-
+ 
 /* IMAGE WRAP — fixed: position:relative + proper img fill */
 .c-img-wrap{position:relative;overflow:hidden;aspect-ratio:1/1;background:var(--sf4);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .c-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .3s ease}
 .pcard:not(.em):hover .c-img-wrap img{transform:scale(1.04)}
 .c-img-ph{font-size:40px;opacity:.18;user-select:none;position:relative;z-index:0}
 .c-etag{position:absolute;top:10px;left:10px;z-index:2;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:#fff}
-
-
+ 
+ 
 .c-body{padding:14px 16px;display:flex;flex-direction:column;gap:7px;flex:1;min-width:0}
 .c-name{font-size:14px;font-weight:700;color:var(--bk);line-height:1.3;padding-right:4px}
 .c-desc{font-size:12px;color:var(--gr);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -350,7 +350,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-colors{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .c-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0}
 .c-more{font-size:10px;font-weight:700;color:var(--gr);background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:999px;padding:1px 6px}
-
+ 
 /* CARD FOOTER — SRP and Packing same size/weight */
 .c-foot{display:flex;align-items:flex-end;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(185,220,210,.3);margin-top:auto;gap:8px}
 .c-stats{display:flex;gap:16px;align-items:flex-end}
@@ -359,11 +359,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-stat-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);opacity:.8}
 .c-stat-divider{width:1px;height:28px;background:rgba(185,220,210,.5);align-self:flex-end;margin-bottom:2px}
 .c-sku{display:inline-block;font-size:10px;font-weight:700;font-family:monospace;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:4px;padding:2px 6px;color:var(--gr);align-self:flex-start;width:fit-content}
-
+ 
 /* EMPTY */
 .empty{text-align:center;padding:80px 20px;color:var(--gr)}
 .empty-ico{font-size:48px;margin-bottom:14px;opacity:.4}
-
+ 
 /* MODAL SHARED */
 .modal-bg{position:fixed;inset:0;z-index:500;background:rgba(39,153,137,.15);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
 .modal{background:var(--wh);border-radius:var(--rl);width:100%;max-width:720px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(39,153,137,.22)}
@@ -375,7 +375,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .m-body::-webkit-scrollbar-thumb{background:rgba(185,220,210,.6);border-radius:2px}
 .m-footer{padding:14px 24px;border-top:1px solid rgba(185,220,210,.4);display:flex;align-items:center;gap:10px;background:var(--wh);border-radius:0 0 var(--rl) var(--rl);flex-shrink:0}
 .m-footer-r{display:flex;gap:8px;margin-left:auto}
-
+ 
 /* PASSWORD MODAL */
 .pw-modal{background:var(--wh);border-radius:var(--rl);width:100%;max-width:380px;box-shadow:0 24px 80px rgba(39,153,137,.22);overflow:hidden}
 .pw-hdr{background:var(--sf4);padding:28px;text-align:center}
@@ -394,7 +394,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .pw-submit:hover{background:var(--tl2)}
 .pw-cancel{width:100%;background:none;color:var(--gr);border:none;padding:8px;font-family:var(--fn);font-size:13px;cursor:pointer;margin-top:4px;transition:var(--tr)}
 .pw-cancel:hover{color:var(--bk)}
-
+ 
 /* VIEW MODAL */
 .vm-main-wrap{width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--sf4);position:relative;display:flex;align-items:center;justify-content:center}
 .vm-main-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
@@ -441,7 +441,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-inq-btn:hover{background:var(--tl2)}
 .vm-link-btn{flex:1;background:rgba(185,220,210,.35);border:1px solid rgba(39,153,137,.22);border-radius:8px;padding:11px 16px;font-family:var(--fn);font-size:13px;font-weight:800;color:var(--tl);cursor:pointer;transition:var(--tr)}
 .vm-link-btn:hover{background:rgba(185,220,210,.6);border-color:var(--tl);transform:translateY(-1px)}
-
+ 
 /* EDIT MODAL */
 .edit-modal-inner{max-width:800px}
 .em-hdr{background:rgba(245,158,11,.06);border-bottom:1px solid rgba(245,158,11,.18)}
@@ -497,7 +497,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .move-btn:hover:not(:disabled){background:var(--tl);color:#fff;transform:translateY(-1px)}
 .move-btn:disabled{opacity:.35;cursor:not-allowed}
 .color-move-placeholder{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:rgba(39,153,137,.6);background:rgba(185,220,210,.28);border:1px dashed rgba(39,153,137,.18);border-radius:8px;display:flex;align-items:center;justify-content:center;min-height:34px}
-
+ 
 .cp{width:34px;height:34px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:none}
 .multi-swatch-edit{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-height:34px}
 .swatch-input-wrap{position:relative;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:6px;background:var(--bg);border:1px solid rgba(185,220,210,.55);border-radius:8px;padding:4px 8px 4px 4px;min-width:0}
@@ -570,7 +570,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .save-btn{background:var(--tl);border:none;border-radius:8px;padding:9px 20px;font-family:var(--fn);font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:var(--tr)}
 .save-btn:hover:not(:disabled){background:var(--tl2)}
 .save-btn:disabled{opacity:.5;cursor:not-allowed}
-
+ 
 /* EDIT BAR */
 .edit-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:300;background:#1c1917;border-radius:999px;padding:10px 16px 10px 20px;display:flex;align-items:center;gap:20px;box-shadow:0 8px 32px rgba(0,0,0,.3);border:1px solid rgba(245,158,11,.3);white-space:nowrap}
 .eb-lbl{font-size:13px;font-weight:700;color:#f59e0b}
@@ -579,11 +579,11 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .eb-add:hover{background:var(--tl2)}
 .eb-exit{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:7px 14px;font-family:var(--fn);font-size:12px;font-weight:700;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}
 .eb-exit:hover{background:rgba(255,255,255,.14);color:#fff}
-
+ 
 /* INQUIRY */
 .inq-link{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--sf4);border-radius:8px;text-decoration:none;color:var(--tl);font-weight:700;font-size:14px;transition:var(--tr)}
 .inq-link:hover{background:var(--sf7)}
-
+ 
 /* YOUTUBE PLAYER */
 .vm-yt-wrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000;margin-bottom:4px}
 /* META ROW (dimensions + barcode) */
@@ -641,7 +641,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hero-empty-card{width:100%;aspect-ratio:16/9;min-height:0;border:none;background:var(--sf4);color:var(--tl);font-family:var(--fn);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
 .hero-empty-card:hover{background:var(--sf7)}
 @media(max-width:1000px){.hero-media-grid{grid-template-columns:1fr}.hero-video-card{min-height:auto}}
-
+ 
 /* Banner edit modal */
 .banner-modal{max-width:600px}
 .aspect-btns{display:flex;gap:8px;flex-wrap:wrap}
@@ -657,7 +657,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .bt-rm{background:rgba(239,68,68,.85)!important;color:#fff}
 .banner-add-zone{aspect-ratio:16/9;border-radius:8px;border:2px dashed rgba(185,220,210,.7);background:var(--bg);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:var(--tr)}
 .banner-add-zone:hover{border-color:var(--tl);background:var(--sf4)}
-
+ 
 /* RESPONSIVE */
 @media(max-width:1024px){
  .qnh-sidebar{display:none}
@@ -687,8 +687,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
  .edit-bar{bottom:12px;left:12px;right:12px;transform:none;border-radius:12px}
  .eb-cnt{display:none}
 }
-
-
+ 
+ 
 /* MOBILE EDIT MODE BAR — COMPACT SAFE DOCK */
 @media (max-width: 640px) {
  .edit-bar {
@@ -707,20 +707,20 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    white-space: normal !important;
    overflow: visible !important;
  }
-
+ 
  .edit-bar > div:first-child {
    width: 100% !important;
    justify-content: flex-start !important;
    padding: 0 4px !important;
  }
-
+ 
  .edit-bar > div:nth-child(2) {
    display: grid !important;
    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
    gap: 8px !important;
    width: 100% !important;
  }
-
+ 
  .edit-bar .eb-add,
  .edit-bar .eb-exit {
    width: 100% !important;
@@ -737,12 +737,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    overflow: hidden !important;
    text-overflow: ellipsis !important;
  }
-
+ 
  .edit-bar .eb-cnt {
    display: none !important;
  }
 }
-
+ 
 /* MOBILE PRODUCT MODAL — FULLSCREEN PAGE STYLE */
 @media (max-width: 640px) {
  .modal-bg {
@@ -752,7 +752,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    background: var(--wh) !important;
    backdrop-filter: none !important;
  }
-
+ 
  .modal {
    width: 100vw !important;
    height: 100dvh !important;
@@ -764,13 +764,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    overflow-y: auto !important;
    -webkit-overflow-scrolling: touch !important;
  }
-
+ 
  .m-hdr {
    position: relative !important;
    padding: 28px 52px 24px 24px !important;
    border-radius: 0 !important;
  }
-
+ 
  .m-close {
    position: absolute !important;
    top: 22px !important;
@@ -780,13 +780,13 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    font-size: 18px !important;
    z-index: 3 !important;
  }
-
+ 
  .m-body {
    overflow: visible !important;
    padding: 20px 18px 96px !important;
    max-height: none !important;
  }
-
+ 
  .m-footer {
    position: sticky !important;
    bottom: 0 !important;
@@ -796,19 +796,19 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
    background: rgba(255,255,255,.96) !important;
    backdrop-filter: blur(10px) !important;
  }
-
+ 
  .vm-main-wrap {
    border-radius: 14px !important;
  }
-
+ 
  .vm-thumbs {
    padding-bottom: 8px !important;
  }
 }
-
+ 
 `
-
-
+ 
+ 
 // ─── COLOR COLLECTION MAP ─────────────────────────────────────────────────────
 const COLOR_COLLECTION_MAP = {
  'Snow': 'OG', 'Sand': 'OG', 'Taupe': 'OG', 'Stone': 'OG', 'Onyx': 'OG', 'Black': 'OG',
@@ -824,7 +824,7 @@ const DEFAULT_COLOR_COLLECTIONS = [
  { value:'Bloom',   label:'Bloom',   color:'#5CB8A0' },
  { value:'Poply',   label:'Poply',   color:'#E070A0' },
 ]
-
+ 
 const COLOR_COLLECTION_SETS_KEY = 'qnh-color-collection-sets'
 const DEFAULT_COLOR_COLLECTION_SETS = {
  OG: [
@@ -862,7 +862,7 @@ const DEFAULT_COLOR_COLLECTION_SETS = {
    { name:'Rosy', code:'RO', hex:'#F070A0', hexes:['#F070A0'], collection:'Poply' },
  ],
 }
-
+ 
 function normalizeCollectionSetMap(map) {
  const source = map && typeof map === 'object' ? map : {}
  const normalized = {}
@@ -874,7 +874,7 @@ function normalizeCollectionSetMap(map) {
  })
  return normalized
 }
-
+ 
 function getSavedColorCollectionSets() {
  if (typeof window === 'undefined') return DEFAULT_COLOR_COLLECTION_SETS
  try {
@@ -884,11 +884,11 @@ function getSavedColorCollectionSets() {
    return DEFAULT_COLOR_COLLECTION_SETS
  }
 }
-
+ 
 function defaultColorCollection(color) {
  return color?.collection || COLOR_COLLECTION_MAP[color?.name] || 'Other'
 }
-
+ 
 function groupColorsByCollection(colors, collections = DEFAULT_COLOR_COLLECTIONS) {
  const groups = {}
  ;(colors || []).forEach(clr => {
@@ -906,7 +906,7 @@ function groupColorsByCollection(colors, collections = DEFAULT_COLOR_COLLECTIONS
  })
  return ordered
 }
-
+ 
 function normalizeHexValue(value, fallback = '') {
  if (!value) return fallback
  let v = String(value).trim().replace(/[^0-9a-fA-F#]/g, '')
@@ -917,23 +917,23 @@ function normalizeHexValue(value, fallback = '') {
  }
  return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : fallback
 }
-
+ 
 function extractHexValues(value) {
  const matches = String(value || '').match(/#?[0-9a-fA-F]{6}|#?[0-9a-fA-F]{3}/g) || []
  return matches.map(v => normalizeHexValue(v)).filter(Boolean)
 }
-
+ 
 function getColorHexes(color) {
  const hexes = Array.isArray(color?.hexes) ? color.hexes.map(h => normalizeHexValue(h)).filter(Boolean) : []
  if (hexes.length) return hexes
  return [normalizeHexValue(color?.hex, '#B9DCD2')]
 }
-
+ 
 function normalizeColorVariant(color) {
  const hexes = getColorHexes(color)
  return { ...color, hex: hexes[0] || '#B9DCD2', hexes, collection: defaultColorCollection(color) }
 }
-
+ 
 function swatchBackground(color) {
  const hexes = getColorHexes(color)
  if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
@@ -941,13 +941,13 @@ function swatchBackground(color) {
  const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
  return `linear-gradient(90deg, ${stops})`
 }
-
+ 
 function getImageSrc(image) {
  if (!image) return ''
  if (typeof image === 'string') return image
  return image.src || image.url || image.image || ''
 }
-
+ 
 function normalizeImageItem(image) {
  if (!image) return { src: '', colorSku: '', colorCode: '', colorName: '' }
  if (typeof image === 'string') return { src: image, colorSku: '', colorCode: '', colorName: '' }
@@ -959,16 +959,16 @@ function normalizeImageItem(image) {
    colorName: image.colorName || '',
  }
 }
-
+ 
 function normalizeProductImages(images) {
  if (!Array.isArray(images)) return []
  return images.map(normalizeImageItem).filter(img => !!img.src)
 }
-
+ 
 function getColorKey(color) {
  return String(color?.sku || color?.code || color?.name || '').trim().toUpperCase()
 }
-
+ 
 function imageMatchesColor(image, color) {
  const img = normalizeImageItem(image)
  if (!img.src || !color) return false
@@ -977,28 +977,28 @@ function imageMatchesColor(image, color) {
  const colorKeys = [color.sku, color.code, color.name].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
  return imageKeys.some(key => colorKeys.includes(key))
 }
-
+ 
 function isGeneralImage(image) {
  const img = normalizeImageItem(image)
  return !!img.src && !String(img.colorSku || '').trim() && !String(img.colorCode || '').trim() && !String(img.colorName || '').trim()
 }
-
+ 
 function findImageIndexForColor(product, color) {
  const images = normalizeProductImages(product?.images || [])
  return images.findIndex(img => imageMatchesColor(img, color))
 }
-
+ 
 function findImageIndexesForColor(product, color) {
  const images = normalizeProductImages(product?.images || [])
  return images
    .map((img, index) => imageMatchesColor(img, color) ? index : -1)
    .filter(index => index >= 0)
 }
-
+ 
 function hasImageForColor(product, color) {
  return findImageIndexForColor(product, color) >= 0
 }
-
+ 
 function getProductSkuBase(product = null) {
  const firstSku = product?.colors?.[0]?.sku || ''
  const firstCode = product?.colors?.[0]?.code || ''
@@ -1009,17 +1009,17 @@ function getProductSkuBase(product = null) {
  const parts = firstSku.split('-')
  return parts.length > 2 ? parts.slice(0, -1).join('-') : firstSku
 }
-
+ 
 function productMatchesSku(product, skuParam) {
  const target = String(skuParam || '').trim().toUpperCase()
  if (!target || !product) return false
-
+ 
  const values = new Set()
  if (product.id) values.add(String(product.id).trim().toUpperCase())
-
+ 
  const base = getProductSkuBase(product)
  if (base) values.add(String(base).trim().toUpperCase())
-
+ 
  ;(product.colors || []).forEach(color => {
    if (!color?.sku) return
    const sku = String(color.sku).trim()
@@ -1029,10 +1029,10 @@ function productMatchesSku(product, skuParam) {
      values.add(sku.slice(0, -(code.length + 1)).toUpperCase())
    }
  })
-
+ 
  return values.has(target)
 }
-
+ 
 // ─── YOUTUBE HELPER ──────────────────────────────────────────────────────────
 function getYouTubeId(url) {
  if (!url) return null
@@ -1048,7 +1048,7 @@ function getYouTubeId(url) {
  }
  return null
 }
-
+ 
 // ─── COPY TO CLIPBOARD ───────────────────────────────────────────────────────
 function useCopy() {
  const [copied, setCopied] = useState(null) // holds the text that was just copied
@@ -1069,7 +1069,7 @@ function useCopy() {
  }, [])
  return { copy, copied }
 }
-
+ 
 // ─── PENCIL SVG ───────────────────────────────────────────────────────────────
 const PencilIcon = () => (
  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1077,7 +1077,7 @@ const PencilIcon = () => (
    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
  </svg>
 )
-
+ 
 // ─── HERO CAROUSEL + VIDEO COMPONENT ─────────────────────────────────────────
 function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
  banners = Array.isArray(banners) ? banners : []
@@ -1093,17 +1093,17 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
  const showBannerCard = banners.length > 0 || editMode
  const isTwoColumn = showBannerCard && showVideoCard
  const bannerFirst = mediaOrder !== 'video-banner'
-
+ 
  const startTimer = useCallback(() => {
    clearInterval(timerRef.current)
    if (banners.length > 1 && interval > 0) {
      timerRef.current = setInterval(() => setSlide(s => (s + 1) % banners.length), interval * 1000)
    }
  }, [banners.length, interval])
-
+ 
  useEffect(() => { startTimer(); return () => clearInterval(timerRef.current) }, [startTimer])
  const go = (dir) => { if (!banners.length) return; setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
-
+ 
  const onTouchStart = (e) => {
    touchStartX.current = e.touches[0].clientX
    touchStartY.current = e.touches[0].clientY
@@ -1117,9 +1117,9 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
    }
    touchStartX.current = null
  }
-
+ 
  const currentBanner = banners[slide]
-
+ 
  return (
    <>
      {/* ── HEADLINE + SUBHEADLINE ── */}
@@ -1152,7 +1152,7 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
          </div>
        )}
      </div>
-
+ 
      {/* ── TWO-COLUMN MEDIA AREA: banner + YouTube video ── */}
      {(showBannerCard || showVideoCard) && (
        <div className={`hero-media-grid ${isTwoColumn ? '' : 'is-single'}`}>
@@ -1183,7 +1183,7 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
                      )}
                    </div>
                  </div>
-
+ 
                  {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
                    <div className="hero-media-caption">
                      <div>
@@ -1201,7 +1201,7 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
              )}
            </div>
          )}
-
+ 
          {showVideoCard && (
            <div className="hero-media-card hero-video-card" style={{order: bannerFirst ? 2 : 1}}>
              {editMode && hasVideo && (
@@ -1232,8 +1232,8 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
    </>
  )
 }
-
-
+ 
+ 
 // ─── YOUTUBE BLOCK COMPONENT ─────────────────────────────────────────────────
 function YouTubeBlock({ ytUrl }) {
  if (!ytUrl) return null
@@ -1258,7 +1258,7 @@ function YouTubeBlock({ ytUrl }) {
    </a>
  )
 }
-
+ 
 // ─── CODE IMAGE LIGHTBOX ─────────────────────────────────────────────────────
 function CodeLightbox({ src, label, onClose }) {
  const download = () => {
@@ -1267,13 +1267,13 @@ function CodeLightbox({ src, label, onClose }) {
    a.download = `${label.replace(/\s+/g,'-').toLowerCase()}.png`
    a.click()
  }
-
+ 
  useEffect(() => {
    const onKey = (e) => { if (e.key === 'Escape') onClose() }
    window.addEventListener('keydown', onKey)
    return () => window.removeEventListener('keydown', onKey)
  }, [onClose])
-
+ 
  return (
    <div
      onClick={onClose}
@@ -1309,8 +1309,8 @@ function CodeLightbox({ src, label, onClose }) {
    </div>
  )
 }
-
-
+ 
+ 
 // ─── CLIENT IMAGE COMPRESSION ────────────────────────────────────────────────
 // Compress product images before uploading so /api/upload receives a smaller file.
 // We output JPEG instead of WebP because some upload routes reject image/webp.
@@ -1330,7 +1330,7 @@ function loadImageFromFile(file) {
    img.src = url
  })
 }
-
+ 
 function canvasToBlob(canvas, type, quality) {
  return new Promise((resolve, reject) => {
    canvas.toBlob(blob => {
@@ -1339,7 +1339,7 @@ function canvasToBlob(canvas, type, quality) {
    }, type, quality)
  })
 }
-
+ 
 async function compressImageFile(file, options = {}) {
  const {
    maxWidth = 1600,
@@ -1348,59 +1348,59 @@ async function compressImageFile(file, options = {}) {
    minQuality = 0.55,
    outputType = 'image/jpeg',
  } = options
-
+ 
  if (!file || !file.type?.startsWith('image/')) return file
  if (file.type === 'image/gif' || file.type === 'image/svg+xml') return file
-
+ 
  try {
    const img = await loadImageFromFile(file)
    const width = img.naturalWidth || img.width
    const height = img.naturalHeight || img.height
    if (!width || !height) return file
-
+ 
    const ratio = Math.min(1, maxWidth / width, maxHeight / height)
    const outWidth = Math.max(1, Math.round(width * ratio))
    const outHeight = Math.max(1, Math.round(height * ratio))
-
+ 
    const canvas = document.createElement('canvas')
    canvas.width = outWidth
    canvas.height = outHeight
    const ctx = canvas.getContext('2d', { alpha: false })
    if (!ctx) return file
-
+ 
    // JPEG does not support transparency, so use a white background.
    ctx.fillStyle = '#FFFFFF'
    ctx.fillRect(0, 0, outWidth, outHeight)
    ctx.imageSmoothingEnabled = true
    ctx.imageSmoothingQuality = 'high'
    ctx.drawImage(img, 0, 0, outWidth, outHeight)
-
+ 
    let quality = 0.82
    let blob = await canvasToBlob(canvas, outputType, quality)
-
+ 
    while (blob.size > targetBytes && quality > minQuality) {
      quality = Math.max(minQuality, quality - 0.07)
      blob = await canvasToBlob(canvas, outputType, quality)
    }
-
+ 
    const baseName = String(file.name || 'image').replace(/\.[^.]+$/, '') || 'image'
    const compressed = new File([blob], `${baseName}-compressed.jpg`, {
      type: outputType,
      lastModified: Date.now(),
    })
-
+ 
    return compressed.size < file.size ? compressed : file
  } catch (err) {
    console.warn('Image compression skipped:', err)
    return file
  }
 }
-
+ 
 // ─── CODE IMAGE UPLOAD (barcode / QR) ────────────────────────────────────────
 function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
  const ref = useRef(null)
  const [uploading, setUploading] = useState(false)
-
+ 
  const handleFile = async (e) => {
    const file = e.target.files[0]; if (!file) return
    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) return
@@ -1419,7 +1419,7 @@ function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
    }
    e.target.value = ''
  }
-
+ 
  if (value) {
    return (
      <div style={{position:'relative',display:'inline-flex',alignItems:'flex-start',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:8,padding:8}}>
@@ -1431,7 +1431,7 @@ function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
      </div>
    )
  }
-
+ 
  return (
    <>
      <button
@@ -1445,12 +1445,12 @@ function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
    </>
  )
 }
-
+ 
 // ─── DIMENSIONS TABLE EDITOR ─────────────────────────────────────────────────
 function DimensionsEditor({ value, onChange }) {
  const tbl = value && typeof value === 'object' ? value : { headers: [''], rows: [['']] }
  const cols = tbl.headers.length
-
+ 
  const setHeader = (ci, val) => {
    const h = [...tbl.headers]; h[ci] = val
    onChange({ ...tbl, headers: h })
@@ -1473,12 +1473,12 @@ function DimensionsEditor({ value, onChange }) {
    if (tbl.rows.length <= 1) return
    onChange({ ...tbl, rows: tbl.rows.filter((_,i)=>i!==ri) })
  }
-
+ 
  const cellStyle = { fontFamily:'var(--fn)',fontSize:13,border:'1px solid var(--sf7)',borderRadius:5,padding:'6px 8px',outline:'none',width:'100%',background:'#fff' }
  const headStyle = { ...cellStyle, fontWeight:700,color:'var(--tl)',background:'var(--sf4)' }
  const btnStyle = { background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,.5)',fontSize:14,padding:'0 4px',lineHeight:1 }
  const addBtnStyle = { background:'var(--sf4)',border:'1px dashed rgba(185,220,210,.8)',borderRadius:6,padding:'5px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',transition:'var(--tr)' }
-
+ 
  return (
    <div style={{display:'flex',flexDirection:'column',gap:8}}>
      <div style={{overflowX:'auto'}}>
@@ -1519,10 +1519,10 @@ function DimensionsEditor({ value, onChange }) {
    </div>
  )
 }
-
+ 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
-
-
+ 
+ 
 // ─── CATALOG PREFERENCES AUTOSAVE ─────────────────────────────────────────────
 const CATALOG_PREFS_KEY = 'qnh-catalog-preferences'
 function getSavedCatalogPrefs() {
@@ -1541,7 +1541,7 @@ function savedNumberOrNull(value) {
  const num = Number(value)
  return Number.isFinite(num) ? num : null
 }
-
+ 
 export default function QuenchaCatalog() {
  useEffect(() => {
    const id = 'qnh-styles'
@@ -1550,7 +1550,7 @@ export default function QuenchaCatalog() {
      document.head.appendChild(s)
    }
  }, [])
-
+ 
  // ── DATA ──
  const [products, setProducts] = useState([])
  const [loading, setLoading] = useState(true)
@@ -1558,11 +1558,11 @@ export default function QuenchaCatalog() {
  const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
  const [colorCollectionSets, setColorCollectionSets] = useState(getSavedColorCollectionSets)
  const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
-
+ 
  // Load saved catalog preferences once so filter/sort state can initialize safely.
  const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
  const [catalogPrefsHydrated, setCatalogPrefsHydrated] = useState(false)
-
+ 
  // Fetch all data on mount — Redis is now the source of truth.
  // Important: this no longer auto-seeds missing products from the local SEED list,
  // so products you delete manually in Upstash will stay deleted.
@@ -1573,7 +1573,7 @@ export default function QuenchaCatalog() {
    ]).then(([prods, settings]) => {
      const existingProducts = Array.isArray(prods) ? prods : []
      setProducts(existingProducts.map(p => ({ youtube: '', ...p })))
-
+ 
      if (Array.isArray(settings.banners))          setBanners(settings.banners)
      if (settings.bannerAspect)                 setBannerAspect(settings.bannerAspect)
      if (settings.bannerInterval !== undefined) setBannerIntervalVal(settings.bannerInterval)
@@ -1596,7 +1596,7 @@ export default function QuenchaCatalog() {
      if (settings.colorCollectionSets && typeof settings.colorCollectionSets === 'object') {
        setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(settings.colorCollectionSets) }))
      }
-
+ 
      // Shared catalog preferences from /api/settings keep desktop and mobile in sync.
      // Local storage is only a fallback while settings are loading.
      if (settings.catalogPrefs && typeof settings.catalogPrefs === 'object') {
@@ -1620,12 +1620,12 @@ export default function QuenchaCatalog() {
          }))
        }
      }
-
+ 
      setCatalogPrefsHydrated(true)
      setLoading(false)
    }).catch(() => { setProducts([]); setCatalogPrefsHydrated(true); setLoading(false) })
  }, [])
-
+ 
  // ── FILTERS ──
  const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
@@ -1646,14 +1646,14 @@ export default function QuenchaCatalog() {
  const searchInputRef = useRef(null)
  const resultsRef = useRef(null)
  const productCardRefs = useRef({})
-
+ 
  // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
  // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
-
+ 
  // ── AUTH — once unlocked, stays for session ──
  const [isAuthed, setIsAuthed] = useState(false)
  const [editMode, setEditMode] = useState(false)
-
+ 
  // Password modal
  const [pwOpen, setPwOpen] = useState(false)
  const [pwValue, setPwValue] = useState('')
@@ -1661,7 +1661,7 @@ export default function QuenchaCatalog() {
  const [pwShow, setPwShow] = useState(false)
  const [pwIntent, setPwIntent] = useState(null) // 'topbar' | product object
  const pwRef = useRef(null)
-
+ 
  // Modals
  const [viewProduct, setViewProduct] = useState(null)
  const [vmImg, setVmImg] = useState(0)
@@ -1678,12 +1678,12 @@ export default function QuenchaCatalog() {
  const [brandTagline, setBrandTagline] = useState('')
  const [brandEditOpen, setBrandEditOpen] = useState(false)
  const [brandUploadErr, setBrandUploadErr] = useState('')
-
-
+ 
+ 
  const syncSettings = useCallback((patch) => {
    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
  }, [])
-
+ 
  const focusSearchResults = useCallback(() => {
    window.requestAnimationFrame(() => {
      const target = resultsRef.current
@@ -1692,7 +1692,7 @@ export default function QuenchaCatalog() {
      }
    })
  }, [])
-
+ 
  const runSearch = useCallback(() => {
    if (!search.trim()) {
      searchInputRef.current?.focus()
@@ -1700,7 +1700,7 @@ export default function QuenchaCatalog() {
    }
    focusSearchResults()
  }, [search, focusSearchResults])
-
+ 
  const saveCatalogView = useCallback((nextView) => {
    setView(nextView)
    if (!catalogPrefsHydrated) return
@@ -1718,7 +1718,7 @@ export default function QuenchaCatalog() {
    }
    syncSettings({ catalogPrefs })
  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, syncSettings])
-
+ 
  const saveCatalogSort = useCallback((nextSort) => {
    setSort(nextSort)
    if (!catalogPrefsHydrated) return
@@ -1736,7 +1736,7 @@ export default function QuenchaCatalog() {
    }
    syncSettings({ catalogPrefs })
  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, view, syncSettings])
-
+ 
  // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
  useEffect(() => {
    if (!catalogPrefsHydrated) return
@@ -1754,7 +1754,7 @@ export default function QuenchaCatalog() {
    }
    syncSettings({ catalogPrefs })
  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, view, syncSettings])
-
+ 
  const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
  const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
  const [bannerInterval, setBannerIntervalVal] = useState(4.5)
@@ -1770,23 +1770,23 @@ export default function QuenchaCatalog() {
    if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
    syncSettings({ colorCollections: next })
  }, [syncSettings])
-
+ 
  const saveColorCollectionSets = useCallback((next) => {
    setColorCollectionSets(next)
    if (typeof window !== 'undefined') localStorage.setItem(COLOR_COLLECTION_SETS_KEY, JSON.stringify(next))
    syncSettings({ colorCollectionSets: next })
  }, [syncSettings])
-
+ 
  const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
  const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
  const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
  const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
  const { copy, copied } = useCopy()
-
+ 
  const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
-
+ 
  const getSkuBase = useCallback((product = null) => getProductSkuBase(product), [])
-
+ 
  const openProductModal = useCallback((product, options = {}) => {
    if (!product) return
    const { updateUrl = true } = options
@@ -1794,7 +1794,7 @@ export default function QuenchaCatalog() {
    setVmImg(0)
    setVmColorKey('')
    setYtPlaying(false)
-
+ 
    if (updateUrl && typeof window !== 'undefined') {
      const skuBase = getProductSkuBase(product)
      if (skuBase) {
@@ -1804,12 +1804,12 @@ export default function QuenchaCatalog() {
      }
    }
  }, [])
-
+ 
  const closeProductModal = useCallback(() => {
    setViewProduct(null)
    setVmColorKey('')
    setYtPlaying(false)
-
+ 
    if (typeof window !== 'undefined') {
      const url = new URL(window.location.href)
      if (url.searchParams.has('sku')) {
@@ -1818,7 +1818,7 @@ export default function QuenchaCatalog() {
      }
    }
  }, [])
-
+ 
  const copyProductLink = useCallback((product) => {
    if (typeof window === 'undefined' || !product) return
    const skuBase = getProductSkuBase(product)
@@ -1826,51 +1826,58 @@ export default function QuenchaCatalog() {
    const link = `${window.location.origin}${window.location.pathname}?sku=${encodeURIComponent(skuBase)}`
    copy(link)
  }, [copy])
-
+ 
  useEffect(() => {
    if (!products.length || typeof window === 'undefined') return
-
+ 
    const openFromUrl = () => {
      const skuParam = new URL(window.location.href).searchParams.get('sku')
      if (!skuParam) return
      const match = products.find(product => productMatchesSku(product, skuParam))
      if (!match) return
-
+ 
      openProductModal(match, { updateUrl: false })
      window.requestAnimationFrame(() => {
        productCardRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
      })
    }
-
+ 
    openFromUrl()
    window.addEventListener('popstate', openFromUrl)
    return () => window.removeEventListener('popstate', openFromUrl)
  }, [products, openProductModal])
-
+ 
  const buildInquiryText = useCallback((product, lines, message) => {
    const packing = parseInt(product?.packing, 10) || 0
    const safeLines = Array.isArray(lines) ? lines : []
    const requestedLines = safeLines
      .map((line) => {
-       const packs = parseInt(line?.packs, 10) || 0
+       const mode = line?.qtyMode === 'pack' ? 'pack' : 'unit'
        const color = product?.colors?.find(c => c.code === line?.colorCode) || product?.colors?.[0] || null
-       const units = packs && packing ? packs * packing : 0
-       return { color, packs, units }
+       const packs = mode === 'pack' ? (parseInt(line?.packs, 10) || 0) : 0
+       const requestedUnits = mode === 'unit' ? (parseInt(line?.units, 10) || 0) : 0
+       const units = mode === 'pack' ? (packs && packing ? packs * packing : 0) : requestedUnits
+       const estimatedPacks = mode === 'unit' && requestedUnits && packing ? Math.ceil(requestedUnits / packing) : packs
+       return { color, mode, packs, requestedUnits, units, estimatedPacks }
      })
-     .filter(line => line.packs > 0)
-
+     .filter(line => line.mode === 'unit' ? line.requestedUnits > 0 : line.packs > 0)
+ 
    const skuBase = getSkuBase(product)
-   const totalPacks = requestedLines.reduce((sum, line) => sum + line.packs, 0)
-   const totalUnits = requestedLines.reduce((sum, line) => sum + line.units, 0)
+   const totalPacks = requestedLines.reduce((sum, line) => sum + (line.estimatedPacks || 0), 0)
+   const totalUnits = requestedLines.reduce((sum, line) => sum + (line.units || 0), 0)
    const requestSummary = requestedLines.length
      ? requestedLines.map((line, index) => {
          const colorLabel = line.color ? `${line.color.name} (${line.color.code})` : 'Color'
          const skuLabel = line.color?.sku ? ` | SKU: ${line.color.sku}` : ''
+         if (line.mode === 'unit') {
+           const packEstimate = packing && line.estimatedPacks ? ` | Estimated Cartons: ${line.estimatedPacks}` : ''
+           return `${index + 1}. ${colorLabel}${skuLabel} | Quantity Mode: By Piece/Unit | Requested Quantity: ${line.requestedUnits} pcs${packEstimate}`
+         }
          const unitsLabel = line.units ? ` | Estimated Units: ${line.units} pcs` : ''
-         return `${index + 1}. ${colorLabel}${skuLabel} | Packs/Cartons: ${line.packs}${unitsLabel}`
+         return `${index + 1}. ${colorLabel}${skuLabel} | Quantity Mode: By Pack/Carton | Packs/Cartons: ${line.packs}${unitsLabel}`
        }).join('\n')
-     : '1. Color / SKU: | Packs/Cartons:'
-
+     : '1. Color / SKU: | Quantity Mode: | Quantity:'
+ 
    return [
      'Hi Quencha Team,',
      '',
@@ -1884,8 +1891,8 @@ export default function QuenchaCatalog() {
      'Requested Colors / Quantities:',
      requestSummary,
      '',
-     totalPacks ? `Total Packs/Cartons: ${totalPacks}` : '',
-     totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
+     totalPacks ? `Total Estimated Packs/Cartons: ${totalPacks}` : '',
+     totalUnits ? `Estimated / Requested Total Units: ${totalUnits} pcs` : '',
      '',
      'Company / Name:',
      'Contact Number:',
@@ -1897,35 +1904,35 @@ ${message.trim()}` : 'Message / Notes:',
      'Thank you.'
    ].filter(line => line !== '').join('\n')
  }, [getSkuBase])
-
+ 
  const buildInquiryHref = useCallback((product, lines, message) => {
    const email = 'design@sunbeamsimpexinc.com'
    const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
    const body = buildInquiryText(product, lines, message)
    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
  }, [buildInquiryText])
-
+ 
  // ── API HELPERS ──
  const apiCreateProduct = useCallback(async (product) => {
    const res = await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) })
    if (!res.ok) throw new Error('Create product failed')
    return res.json().catch(() => product)
  }, [])
-
+ 
  const apiSaveProduct = useCallback(async (id, data) => {
    const res = await fetch('/api/products/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) })
    if (!res.ok) throw new Error('Save product failed')
    return res.json().catch(() => data)
  }, [])
-
+ 
  // ── IMAGE UPLOAD via Vercel Blob ──
  const uploadImageToBlob = useCallback(async (file, options = {}) => {
    const shouldCompress = options.compress !== false
    const uploadFile = shouldCompress ? await compressImageFile(file) : file
-
+ 
    const fd = new FormData()
    fd.append('file', uploadFile)
-
+ 
    const res = await fetch('/api/upload', { method:'POST', body: fd })
    if (!res.ok) {
      let message = `Upload failed (${res.status})`
@@ -1940,7 +1947,7 @@ ${message.trim()}` : 'Message / Notes:',
    if (!url) throw new Error('Upload completed but no URL was returned')
    return url
  }, [])
-
+ 
  const handleBrandLogoUpload = useCallback((e) => {
    const file = e.target.files?.[0]
    if (!file) return
@@ -1972,15 +1979,15 @@ ${message.trim()}` : 'Message / Notes:',
  const [inqLines, setInqLines] = useState([])
  const [inqMessage, setInqMessage] = useState('')
  const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
-
+ 
  const openInquiry = useCallback((product = null) => {
    const firstColorCode = product?.colors?.[0]?.code || ''
    setInqProduct(product)
-   setInqLines([{ colorCode: firstColorCode, packs: '1' }])
+   setInqLines([{ colorCode: firstColorCode, qtyMode: 'unit', packs: '1', units: '1' }])
    setInqMessage('')
    setInqOpen(true)
  }, [])
-
+ 
  // Edit form
  const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
  const [editTab, setEditTab] = useState('details')
@@ -1995,7 +2002,7 @@ ${message.trim()}` : 'Message / Notes:',
  const [addingNewCat, setAddingNewCat] = useState(false)
  const [inlineNewCat, setInlineNewCat] = useState({label:'',icon:'🏷️'})
  const fileRef = useRef(null)
-
+ 
  // ── PASSWORD FLOW ──
  const requestAuth = useCallback((intent) => {
    // intent = 'topbar' | 'newProduct' | product-object
@@ -2003,14 +2010,14 @@ ${message.trim()}` : 'Message / Notes:',
    setPwIntent(intent); setPwValue(''); setPwError(''); setPwShow(false); setPwOpen(true)
    setTimeout(() => pwRef.current?.focus(), 100)
  }, [isAuthed]) // eslint-disable-line
-
+ 
  const handleAuthSuccess = useCallback((intent) => {
    setIsAuthed(true)
    if (intent === 'topbar') { setEditMode(true) }
    else if (intent === 'newProduct') { openNewProduct() }
    else if (intent && typeof intent === 'object') { openEdit(intent) }
  }, []) // eslint-disable-line
-
+ 
  const submitPassword = () => {
    if (pwValue === EDIT_PASSWORD) {
      setPwOpen(false)
@@ -2021,9 +2028,9 @@ ${message.trim()}` : 'Message / Notes:',
      setTimeout(() => pwRef.current?.focus(), 50)
    }
  }
-
+ 
  const exitEdit = () => { setEditMode(false) }
-
+ 
  // ── EDIT HELPERS ──
  const openEdit = (p) => {
    setEditTarget(p)
@@ -2037,22 +2044,22 @@ ${message.trim()}` : 'Message / Notes:',
    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
    setEditOpen(true)
  }
-
+ 
  const saveProduct = async () => {
    if (!ef.name.trim()) { alert('Product name is required.'); return }
    const srp = parseFloat(ef.srp)
    if (!srp || srp <= 0) { alert('Valid price is required.'); return }
-
+ 
    const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
    const normalizedImages = normalizeProductImages(ef.images || [])
    const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
    const cleanedImages = normalizedImages.filter(img => !String(img?.src || '').startsWith('data:'))
-
+ 
    if (temporaryImages.length) {
      setUploadErr(`${temporaryImages.length} failed preview image${temporaryImages.length === 1 ? '' : 's'} removed before saving. Please re-upload those images after saving.`)
      setEf(f => ({ ...f, images: cleanedImages }))
    }
-
+ 
    const data = {
      ...ef,
      colors: normalizedColors,
@@ -2066,7 +2073,7 @@ ${message.trim()}` : 'Message / Notes:',
      qrImage: ef.qrImage||'',
      youtube: ef.youtube||''
    }
-
+ 
    try {
      if (editTarget) {
        const saved = { ...editTarget, ...data, updatedAt: new Date().toISOString() }
@@ -2089,41 +2096,41 @@ ${message.trim()}` : 'Message / Notes:',
      alert('Could not save this product. Please check the API route or internet connection, then try again.')
    }
  }
-
+ 
  const deleteProduct = async (id) => {
    if (!confirm('Delete this product? This cannot be undone.')) return
    setProducts(products.filter(p => p.id !== id))
    setEditOpen(false); setViewProduct(null)
    await fetch('/api/products/' + id, { method: 'DELETE' }).catch(console.error)
  }
-
+ 
  const moveProductOrder = useCallback((fromId, toId) => {
    if (!editMode || sort !== 'default' || !fromId || !toId || fromId === toId) return
    setProducts(prev => {
      const fromIndex = prev.findIndex(p => p.id === fromId)
      const toIndex = prev.findIndex(p => p.id === toId)
      if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return prev
-
+ 
      const next = [...prev]
      const [moved] = next.splice(fromIndex, 1)
      next.splice(toIndex, 0, moved)
-
+ 
      const reordered = next.map((p, index) => ({
        ...p,
        sortOrder: index,
        updatedAt: new Date().toISOString()
      }))
-
+ 
      // Persist the manual order so it stays after refresh/redeploy.
      reordered.forEach(p => apiSaveProduct(p.id, p))
      return reordered
    })
  }, [editMode, sort, apiSaveProduct])
-
+ 
  // Badges
  const addBadge = () => { const b = badgeInput.trim(); if (b && !ef.badges.includes(b)) { setEf(f=>({...f,badges:[...f.badges,b]})); setBadgeInput('') } }
  const removeBadge = (b) => setEf(f=>({...f,badges:f.badges.filter(x=>x!==b)}))
-
+ 
  // Colors
  const addColor = () => {
    const { name, code, sku } = newColor
@@ -2189,7 +2196,7 @@ ${message.trim()}` : 'Message / Notes:',
    const hexes = getColorHexes(n).filter((_,idx)=>idx!==hexIndex)
    return normalizeColorVariant({...n,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
  })
-
+ 
  const updateCollection = (value, patch) => {
    const next = colorCollections.map(c=>c.value===value?{...c,...patch}:c)
    saveColorCollections(next)
@@ -2202,9 +2209,9 @@ ${message.trim()}` : 'Message / Notes:',
    saveColorCollections([...colorCollections,{value,label,color:newCollection.color||'#279989'}])
    setNewCollection({label:'',color:'#279989'})
  }
-
+ 
  const collectionSetCount = (value) => (colorCollectionSets[value] || []).length
-
+ 
  const colorWithCurrentSkuBase = (color, skuBase) => {
    const code = String(color.code || '').toUpperCase().replace(/\s+/g, '')
    const hexes = getColorHexes(color)
@@ -2217,7 +2224,7 @@ ${message.trim()}` : 'Message / Notes:',
      collection: color.collection || 'Other'
    })
  }
-
+ 
  const addCollectionSetToProduct = (collectionValue) => {
    const set = colorCollectionSets[collectionValue] || []
    if (!set.length) {
@@ -2238,7 +2245,7 @@ ${message.trim()}` : 'Message / Notes:',
      return { ...f, colors: [...f.colors, ...additions] }
    })
  }
-
+ 
  const saveCollectionSetFromCurrentProduct = (collectionValue) => {
    const variants = (ef.colors || [])
      .filter(c => (c.collection || defaultColorCollection(c)) === collectionValue)
@@ -2253,7 +2260,7 @@ ${message.trim()}` : 'Message / Notes:',
        })
      })
      .filter(c => c.name && c.code)
-
+ 
    if (!variants.length) {
      alert('No color variants are assigned to this collection yet.')
      return
@@ -2261,7 +2268,7 @@ ${message.trim()}` : 'Message / Notes:',
    saveColorCollectionSets({ ...colorCollectionSets, [collectionValue]: variants })
    alert('Color collection set saved. You can now quick-add it to other products.')
  }
-
+ 
  // SKU Base — bulk-edit all color variant SKUs from Details tab
  const getEditableSkuBase = () => {
    const first = ef.colors?.[0]
@@ -2271,7 +2278,7 @@ ${message.trim()}` : 'Message / Notes:',
    if (code && sku.endsWith(`-${code}`)) return sku.slice(0, -(code.length + 1))
    return sku.split('-').slice(0, -1).join('-') || sku
  }
-
+ 
  const updateAllColorSkusFromBase = (base) => {
    const cleaned = base.toUpperCase().replace(/\s+/g, '')
    setEf(f => ({
@@ -2282,7 +2289,7 @@ ${message.trim()}` : 'Message / Notes:',
      })
    }))
  }
-
+ 
  // Images
  const handleImgUpload = async (e) => {
    const file = e.target.files[0]; if (!file) return
@@ -2299,25 +2306,25 @@ ${message.trim()}` : 'Message / Notes:',
    }
    e.target.value = ''
  }
-
+ 
  const uploadFilesForColor = async (fileList, color) => {
    const files = Array.from(fileList || [])
    if (!files.length || !color) return
-
+ 
    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
-
+ 
    if (!validFiles.length) {
      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
      return
    }
-
+ 
    let skipped = files.length - validFiles.length
    let failed = 0
    const uploaded = []
-
+ 
    setUploadErr(`Compressing and uploading ${validFiles.length} image${validFiles.length === 1 ? '' : 's'}...`)
-
+ 
    // Upload sequentially. This is more reliable than firing many /api/upload requests at once.
    for (const file of validFiles) {
      try {
@@ -2328,36 +2335,36 @@ ${message.trim()}` : 'Message / Notes:',
        console.error('Color image upload failed:', err)
      }
    }
-
+ 
    if (uploaded.length) {
      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
    }
-
+ 
    if (failed || skipped) {
      setUploadErr(`${uploaded.length} image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
    } else {
      setUploadErr('')
    }
  }
-
+ 
  const uploadFilesGeneral = async (fileList) => {
    const files = Array.from(fileList || [])
    if (!files.length) return
-
+ 
    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
-
+ 
    if (!validFiles.length) {
      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
      return
    }
-
+ 
    let skipped = files.length - validFiles.length
    let failed = 0
    const uploaded = []
-
+ 
    setUploadErr(`Compressing and uploading ${validFiles.length} general image${validFiles.length === 1 ? '' : 's'}...`)
-
+ 
    for (const file of validFiles) {
      try {
        const url = await uploadImageToBlob(file)
@@ -2367,18 +2374,18 @@ ${message.trim()}` : 'Message / Notes:',
        console.error('General image upload failed:', err)
      }
    }
-
+ 
    if (uploaded.length) {
      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
    }
-
+ 
    if (failed || skipped) {
      setUploadErr(`${uploaded.length} general image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
    } else {
      setUploadErr('')
    }
  }
-
+ 
  const setMainImage = (index) => {
    setEf(f => {
      const imgs = [...normalizeProductImages(f.images)]
@@ -2388,11 +2395,11 @@ ${message.trim()}` : 'Message / Notes:',
      return { ...f, images: imgs }
    })
  }
-
+ 
  const getTemporaryImageCount = useCallback(() => {
    return normalizeProductImages(ef.images || []).filter(img => String(img?.src || '').startsWith('data:')).length
  }, [ef.images])
-
+ 
  const removeTemporaryImages = useCallback(() => {
    const current = normalizeProductImages(ef.images || [])
    const cleaned = current.filter(img => !String(img?.src || '').startsWith('data:'))
@@ -2400,7 +2407,7 @@ ${message.trim()}` : 'Message / Notes:',
    setEf(f => ({ ...f, images: cleaned }))
    setUploadErr(removed ? `Removed ${removed} failed preview image${removed === 1 ? '' : 's'}. You can now re-upload them.` : '')
  }, [ef.images])
-
+ 
  const removeImg = (i) => setEf(f=>({...f,images:normalizeProductImages(f.images).filter((_,j)=>j!==i)}))
  const moveImg = (from, to, position = 'before') => {
    setEf(f => {
@@ -2414,19 +2421,19 @@ ${message.trim()}` : 'Message / Notes:',
      return { ...f, images: imgs }
    })
  }
-
+ 
  const clearImageDropGuide = () => {
    setDragOverImageIndex(null)
    setDragOverImagePosition('before')
  }
-
+ 
  const handleImageDragStart = (e, index) => {
    setDragImageIndex(index)
    clearImageDropGuide()
    e.dataTransfer.effectAllowed = 'move'
    e.dataTransfer.setData('text/plain', String(index))
  }
-
+ 
  const handleImageDragOver = (e, index) => {
    e.preventDefault()
    e.dataTransfer.dropEffect = 'move'
@@ -2439,7 +2446,7 @@ ${message.trim()}` : 'Message / Notes:',
    setDragOverImageIndex(index)
    setDragOverImagePosition(position)
  }
-
+ 
  const handleImageDrop = (e, toIndex) => {
    e.preventDefault()
    const fromRaw = dragImageIndex ?? Number(e.dataTransfer.getData('text/plain'))
@@ -2448,7 +2455,7 @@ ${message.trim()}` : 'Message / Notes:',
    setDragImageIndex(null)
    clearImageDropGuide()
  }
-
+ 
  const assignImageColor = (index, colorSku) => {
    setEf(f => {
      const selectedColor = (f.colors || []).find(c => c.sku === colorSku)
@@ -2464,7 +2471,7 @@ ${message.trim()}` : 'Message / Notes:',
      return { ...f, images: nextImages }
    })
  }
-
+ 
  // ── FILTERED ──
  const filtered = useMemo(() => {
    let list = products.map((p, index) => ({
@@ -2490,13 +2497,13 @@ ${message.trim()}` : 'Message / Notes:',
    if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
    return list
  }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
-
+ 
  const counts = useMemo(() => {
    const ext = { all: products.length }, cat = {}, collection = { all: products.length }
    products.forEach(p => {
      ext[p.ext] = (ext[p.ext]||0)+1
      cat[p.cat] = (cat[p.cat]||0)+1
-
+ 
      const productCollections = new Set((p.colors || []).map(c => defaultColorCollection(c)).filter(Boolean))
      productCollections.forEach(col => {
        collection[col] = (collection[col] || 0) + 1
@@ -2504,13 +2511,13 @@ ${message.trim()}` : 'Message / Notes:',
    })
    return { ext, cat, collection }
  }, [products])
-
+ 
  const grouped = useMemo(() => {
    const g = {}
    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; if(!g[p.ext][p.cat])g[p.ext][p.cat]=[]; g[p.ext][p.cat].push(p) })
    return g
  }, [filtered])
-
+ 
  // ── SIDEBAR ──
  const SidebarContent = ({ closeOnSelect = false } = {}) => {
    const closeMobileSidebar = () => {
@@ -2584,7 +2591,7 @@ ${message.trim()}` : 'Message / Notes:',
    </>
    )
  }
-
+ 
  // ── PRODUCT CARD ──
  const Card = ({ p }) => {
    const mainImg = getImageSrc(p.images?.[0])
@@ -2617,12 +2624,12 @@ ${message.trim()}` : 'Message / Notes:',
        onClick={editMode ? undefined : () => openProductModal(p)}
      >
        {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
-
+ 
        <div className="c-img-wrap">
          {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
          {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
        </div>
-
+ 
        <div className="c-body">
          <div className="c-name">{p.name}</div>
          {getSkuBase(p) && (
@@ -2650,12 +2657,12 @@ ${message.trim()}` : 'Message / Notes:',
              </div>
            </div>
          </div>
-
+ 
        </div>
      </div>
    )
  }
-
+ 
  // ── RENDER ──
  const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
  const vpImages = vp ? normalizeProductImages(vp.images || []) : []
@@ -2705,12 +2712,12 @@ ${message.trim()}` : 'Message / Notes:',
          </button>
        </div>
      </header>
-
+ 
      {/* LAYOUT */}
      <div className="qnh-layout">
        <aside className="qnh-sidebar"><SidebarContent/></aside>
        <main className="qnh-main">
-
+ 
          {/* Hero Carousel */}
          <HeroCarousel
            banners={banners}
@@ -2738,7 +2745,7 @@ ${message.trim()}` : 'Message / Notes:',
              }
            }}
          />
-
+ 
          {/* Toolbar */}
          <div className="toolbar" ref={resultsRef}>
            <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
@@ -2757,7 +2764,7 @@ ${message.trim()}` : 'Message / Notes:',
              <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>saveCatalogView('col-1')} title="1 column">▬</button>
            </div>
          </div>
-
+ 
          {/* Products */}
          {(() => {
            // Build render order: no-ext bucket first, then known exts, then any unknown ext keys
@@ -2766,13 +2773,13 @@ ${message.trim()}` : 'Message / Notes:',
            const noExtProds = grouped[''] || {}
            const unknownExtKeys = allExtKeys.filter(k => k !== '' && !knownExtVals.includes(k))
            const orderedExtKeys = [...knownExtVals, ...unknownExtKeys]
-
+ 
            // All cat values to iterate (known cats + '' for no-cat + any unknown cat keys)
            const knownCatVals = cats.map(c=>c.value)
            const allCatKeysInGrouped = [...new Set(Object.values(grouped).flatMap(g=>Object.keys(g)))]
            const unknownCatKeys = allCatKeysInGrouped.filter(k => k !== '' && !knownCatVals.includes(k))
            const orderedCatKeys = ['', ...knownCatVals, ...unknownCatKeys]
-
+ 
            const renderSection = (ext, cat, prods) => {
              if (!prods?.length) return null
              const catLabel = cat === '' ? null : (cats.find(c=>c.value===cat)?.label || cat)
@@ -2794,7 +2801,7 @@ ${message.trim()}` : 'Message / Notes:',
                </div>
              )
            }
-
+ 
            return (
              <>
                {/* No-ext products first */}
@@ -2808,7 +2815,7 @@ ${message.trim()}` : 'Message / Notes:',
          })()}
        </main>
      </div>
-
+ 
      {/* MOBILE FILTER */}
      <button className="mob-filter-btn" onClick={()=>setShowMobileFilter(true)}>☰ Filters</button>
      {showMobileFilter && (
@@ -2819,7 +2826,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* PASSWORD MODAL */}
      {pwOpen && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setPwOpen(false)}}>
@@ -2851,7 +2858,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* VIEW MODAL */}
      {vp && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)closeProductModal()}}>
@@ -3025,7 +3032,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* EDIT MODAL */}
      {editOpen && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setEditOpen(false)}}>
@@ -3359,7 +3366,7 @@ ${message.trim()}` : 'Message / Notes:',
                    })()}
                  </div>
                </div>
-
+ 
                <div className="color-image-panel">
                  <div className="color-image-panel-head">
                    <div>
@@ -3440,7 +3447,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* BRAND LOGO + TOPBAR TEXT MODAL */}
      {brandEditOpen && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setBrandEditOpen(false)}}>
@@ -3472,7 +3479,7 @@ ${message.trim()}` : 'Message / Notes:',
                </div>
                {brandUploadErr && <div className="f-error">{brandUploadErr}</div>}
              </div>
-
+ 
              <div className="f-row">
                <div className="f-col">
                  <label className="f-lbl">Brand Name</label>
@@ -3483,7 +3490,7 @@ ${message.trim()}` : 'Message / Notes:',
                  <input className="f-in" value={brandTagline} onChange={e=>saveBrandTagline(e.target.value)} placeholder="Leave blank to hide tagline"/>
                </div>
              </div>
-
+ 
              <div className="f-col">
                <label className="f-lbl">Preview</label>
                <div style={{background:'var(--tl)',borderRadius:8,padding:'12px 16px',display:'flex',alignItems:'center',gap:8,minHeight:58}}>
@@ -3501,7 +3508,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* CODE LIGHTBOX */}
      {codeLightbox && (
        <CodeLightbox
@@ -3510,7 +3517,7 @@ ${message.trim()}` : 'Message / Notes:',
          onClose={()=>setCodeLightbox(null)}
        />
      )}
-
+ 
      {/* LOADING */}
      {loading && (
        <div style={{position:'fixed',inset:0,zIndex:999,background:'var(--sf4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
@@ -3519,7 +3526,7 @@ ${message.trim()}` : 'Message / Notes:',
          <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
        </div>
      )}
-
+ 
      {/* BANNER EDIT MODAL */}
      {bannerEditOpen && (
        <BannerEditModal
@@ -3541,20 +3548,23 @@ ${message.trim()}` : 'Message / Notes:',
          onClose={()=>setBannerEditOpen(false)}
        />
      )}
-
+ 
      {/* INQUIRY MODAL */}
      {inqOpen && (() => {
        const colors = inqProduct?.colors || []
        const packingNum = parseInt(inqProduct?.packing, 10) || 0
-       const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', packs: '1' }]
+       const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', qtyMode: 'unit', packs: '1', units: '1' }]
        const enrichedLines = activeLines.map((line) => {
          const selectedColor = colors.find(c => c.code === line.colorCode) || colors[0] || null
-         const packsNum = parseInt(line.packs, 10) || 0
-         const units = packsNum && packingNum ? packsNum * packingNum : 0
-         return { ...line, selectedColor, packsNum, units }
+         const qtyMode = line.qtyMode === 'pack' ? 'pack' : 'unit'
+         const packsNum = qtyMode === 'pack' ? (parseInt(line.packs, 10) || 0) : 0
+         const requestedUnits = qtyMode === 'unit' ? (parseInt(line.units, 10) || 0) : 0
+         const units = qtyMode === 'pack' ? (packsNum && packingNum ? packsNum * packingNum : 0) : requestedUnits
+         const estimatedPacks = qtyMode === 'unit' && requestedUnits && packingNum ? Math.ceil(requestedUnits / packingNum) : packsNum
+         return { ...line, qtyMode, selectedColor, packsNum, requestedUnits, units, estimatedPacks }
        })
-       const totalPacks = enrichedLines.reduce((sum, line) => sum + line.packsNum, 0)
-       const totalUnits = enrichedLines.reduce((sum, line) => sum + line.units, 0)
+       const totalPacks = enrichedLines.reduce((sum, line) => sum + (line.estimatedPacks || 0), 0)
+       const totalUnits = enrichedLines.reduce((sum, line) => sum + (line.units || 0), 0)
        const inquiryHref = buildInquiryHref(inqProduct, activeLines, inqMessage)
        const updateLine = (index, patch) => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
@@ -3562,13 +3572,13 @@ ${message.trim()}` : 'Message / Notes:',
        })
        const addLine = () => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
-         return [...base, { colorCode: colors[0]?.code || '', packs: '1' }]
+         return [...base, { colorCode: colors[0]?.code || '', qtyMode: 'unit', packs: '1', units: '1' }]
        })
        const removeLine = (index) => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
          return base.length > 1 ? base.filter((_, i) => i !== index) : base
        })
-
+ 
        return (
          <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
            <div className="modal" style={{maxWidth:640}}>
@@ -3581,7 +3591,7 @@ ${message.trim()}` : 'Message / Notes:',
              </div>
              <div className="m-body" style={{gap:14}}>
                <p style={{fontSize:14,color:'var(--gr)'}}>Select the preferred color/s and quantity first, then send the inquiry through email.</p>
-
+ 
                <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
                  <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
                  <div style={{fontSize:16,fontWeight:900,color:'var(--bk)',lineHeight:1.25}}>{inqProduct?.name || 'General Quencha bulk inquiry'}</div>
@@ -3601,13 +3611,13 @@ ${message.trim()}` : 'Message / Notes:',
                    </div>
                  </div>
                </div>
-
+ 
                <div className="f-col">
                  <label className="f-lbl">Color & Quantity</label>
                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
                    {enrichedLines.map((line, index) => (
                      <div key={index} style={{background:'var(--bg)',border:'1px solid rgba(185,220,210,.55)',borderRadius:10,padding:10,display:'flex',flexDirection:'column',gap:8}}>
-                       <div style={{display:'grid',gridTemplateColumns:'1fr 120px 34px',gap:8,alignItems:'center'}}>
+                       <div className="inq-qty-grid" style={{display:'grid',gridTemplateColumns:'1fr 140px 120px 34px',gap:8,alignItems:'center'}}>
                          <select
                            className="f-sel"
                            value={line.colorCode || ''}
@@ -3618,13 +3628,21 @@ ${message.trim()}` : 'Message / Notes:',
                              <option key={color.sku || color.code} value={color.code}>{color.name} — {color.code}</option>
                            )) : <option value="">Select color</option>}
                          </select>
+                         <select
+                           className="f-sel"
+                           value={line.qtyMode || 'unit'}
+                           onChange={e=>updateLine(index, { qtyMode: e.target.value })}
+                         >
+                           <option value="unit">By Piece</option>
+                           <option value="pack">By Pack</option>
+                         </select>
                          <input
                            className="f-in"
                            type="number"
                            min="1"
-                           value={line.packs}
-                           onChange={e=>updateLine(index, { packs: e.target.value })}
-                           placeholder="Packs"
+                           value={(line.qtyMode || 'unit') === 'pack' ? line.packs : line.units}
+                           onChange={e=>updateLine(index, (line.qtyMode || 'unit') === 'pack' ? { packs: e.target.value } : { units: e.target.value })}
+                           placeholder={(line.qtyMode || 'unit') === 'pack' ? 'Packs' : 'Pieces'}
                          />
                          <button
                            type="button"
@@ -3640,7 +3658,8 @@ ${message.trim()}` : 'Message / Notes:',
                        <div style={{display:'flex',flexWrap:'wrap',gap:8,fontSize:11,color:'var(--gr)'}}>
                          {line.selectedColor?.hex && <span style={{width:12,height:12,borderRadius:'50%',background:line.selectedColor.hex,border:'1px solid rgba(0,0,0,.1)',display:'inline-block',marginTop:2}}/>}
                          {line.selectedColor?.sku && <span>SKU: <strong style={{color:'var(--tl)'}}>{line.selectedColor.sku}</strong></span>}
-                         {packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
+                         {line.qtyMode === 'pack' && packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
+                         {line.qtyMode === 'unit' && line.requestedUnits > 0 && <span>Requested: <strong>{line.requestedUnits} pcs</strong>{packingNum > 0 && line.estimatedPacks > 0 ? ` • Est. ${line.estimatedPacks} carton${line.estimatedPacks > 1 ? 's' : ''}` : ''}</span>}
                        </div>
                      </div>
                    ))}
@@ -3653,9 +3672,9 @@ ${message.trim()}` : 'Message / Notes:',
                  >
                    + Add another color
                  </button>
-                 {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total per color.</div>}
+                 {packingNum > 0 && <div className="f-hint">Choose <strong>By Piece</strong> for exact quantities or <strong>By Pack</strong> for carton-based inquiries. Packing: {packingNum} pcs per carton.</div>}
                </div>
-
+ 
                <div className="f-col">
                  <label className="f-lbl">Note / Message</label>
                  <textarea
@@ -3666,7 +3685,7 @@ ${message.trim()}` : 'Message / Notes:',
                    placeholder="Add UV printing details, delivery area, deadline, or other notes…"
                  />
                </div>
-
+ 
                <a
                  className="inq-link"
                  href={inquiryHref}
@@ -3681,7 +3700,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        )
      })()}
-
+ 
      {/* CATEGORY MANAGER MODAL */}
      {catMgrOpen && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setCatMgrOpen(false)}}>
@@ -3729,7 +3748,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* EXTENSION MANAGER MODAL */}
      {extMgrOpen && (
        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setExtMgrOpen(false)}}>
@@ -3775,7 +3794,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
        </div>
      )}
-
+ 
      {/* EDIT BAR */}
      {editMode && (
        <div className="edit-bar">
@@ -3797,7 +3816,7 @@ ${message.trim()}` : 'Message / Notes:',
 }function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose }) {
  const fileRef = useRef(null)
  const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
-
+ 
  const handleFile = (e) => {
    const file = e.target.files[0]; if (!file) return
    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) return
@@ -3806,9 +3825,9 @@ ${message.trim()}` : 'Message / Notes:',
    reader.readAsDataURL(file)
    e.target.value = ''
  }
-
+ 
  const editingData = banners.find(b=>b.id===editingBanner)
-
+ 
  return (
    <div style={{position:'fixed',inset:0,zIndex:600,background:'rgba(39,153,137,.15)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}} onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
      <div style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:600,maxHeight:'90vh',display:'flex',flexDirection:'column',boxShadow:'0 24px 80px rgba(39,153,137,.22)'}}>
@@ -3819,7 +3838,7 @@ ${message.trim()}` : 'Message / Notes:',
          </div>
          <button onClick={onClose} style={{background:'rgba(0,0,0,.07)',border:'none',borderRadius:'50%',width:34,height:34,cursor:'pointer',fontSize:14,color:'var(--gr)',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
        </div>
-
+ 
        <div style={{overflow:'auto',padding:24,display:'flex',flexDirection:'column',gap:18,flex:1}}>
          {/* Media layout */}
          <div>
@@ -3830,7 +3849,7 @@ ${message.trim()}` : 'Message / Notes:',
            </div>
            <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>Controls the two-column arrangement below the headline.</div>
          </div>
-
+ 
          {/* YouTube video */}
          <div>
            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>YouTube Video</div>
@@ -3874,7 +3893,7 @@ ${message.trim()}` : 'Message / Notes:',
              <div style={{fontSize:10,color:'var(--gr)'}}>Paste or replace the YouTube link anytime. Thumbnail preview is locked to a 16:9 frame and will crop neatly if needed.</div>
            </div>
          </div>
-
+ 
          {/* Aspect ratio */}
          <div>
            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Aspect Ratio</div>
@@ -3889,7 +3908,7 @@ ${message.trim()}` : 'Message / Notes:',
              {aspect==='1:1' && 'Square format — good for product-focused imagery.'}
            </div>
          </div>
-
+ 
          {/* Auto-advance interval */}
          <div>
            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Slide Transition</div>
@@ -3907,7 +3926,7 @@ ${message.trim()}` : 'Message / Notes:',
              {interval===0 ? 'Banners only advance on manual swipe.' : `Banners auto-advance every ${interval}s. Swipe anytime to override.`}
            </div>
          </div>
-
+ 
          {/* Banner list */}
          <div>
            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Banners ({banners.length})</div>
