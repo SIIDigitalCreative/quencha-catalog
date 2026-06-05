@@ -1679,6 +1679,16 @@ export default function QuenchaCatalog() {
  const [brandEditOpen, setBrandEditOpen] = useState(false)
  const [brandUploadErr, setBrandUploadErr] = useState('')
  
+ // Quenchables builder
+ const [quenchOpen, setQuenchOpen] = useState(false)
+ const [quenchStep, setQuenchStep] = useState('collection')
+ const [quenchCollection, setQuenchCollection] = useState('Horizon')
+ const [quenchCat, setQuenchCat] = useState('sip')
+ const [quenchItems, setQuenchItems] = useState([])
+ const [quenchQty, setQuenchQty] = useState({})
+ const [quenchColor, setQuenchColor] = useState({})
+ const [quenchMessage, setQuenchMessage] = useState('')
+ 
  
  const syncSettings = useCallback((patch) => {
    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
@@ -1852,31 +1862,24 @@ export default function QuenchaCatalog() {
    const safeLines = Array.isArray(lines) ? lines : []
    const requestedLines = safeLines
      .map((line) => {
-       const mode = line?.qtyMode === 'pack' ? 'pack' : 'unit'
+       const packs = parseInt(line?.packs, 10) || 0
        const color = product?.colors?.find(c => c.code === line?.colorCode) || product?.colors?.[0] || null
-       const packs = mode === 'pack' ? (parseInt(line?.packs, 10) || 0) : 0
-       const requestedUnits = mode === 'unit' ? (parseInt(line?.units, 10) || 0) : 0
-       const units = mode === 'pack' ? (packs && packing ? packs * packing : 0) : requestedUnits
-       const estimatedPacks = mode === 'unit' && requestedUnits && packing ? Math.ceil(requestedUnits / packing) : packs
-       return { color, mode, packs, requestedUnits, units, estimatedPacks }
+       const units = packs && packing ? packs * packing : 0
+       return { color, packs, units }
      })
-     .filter(line => line.mode === 'unit' ? line.requestedUnits > 0 : line.packs > 0)
+     .filter(line => line.packs > 0)
  
    const skuBase = getSkuBase(product)
-   const totalPacks = requestedLines.reduce((sum, line) => sum + (line.estimatedPacks || 0), 0)
-   const totalUnits = requestedLines.reduce((sum, line) => sum + (line.units || 0), 0)
+   const totalPacks = requestedLines.reduce((sum, line) => sum + line.packs, 0)
+   const totalUnits = requestedLines.reduce((sum, line) => sum + line.units, 0)
    const requestSummary = requestedLines.length
      ? requestedLines.map((line, index) => {
          const colorLabel = line.color ? `${line.color.name} (${line.color.code})` : 'Color'
          const skuLabel = line.color?.sku ? ` | SKU: ${line.color.sku}` : ''
-         if (line.mode === 'unit') {
-           const packEstimate = packing && line.estimatedPacks ? ` | Estimated Cartons: ${line.estimatedPacks}` : ''
-           return `${index + 1}. ${colorLabel}${skuLabel} | Quantity Mode: By Piece/Unit | Requested Quantity: ${line.requestedUnits} pcs${packEstimate}`
-         }
          const unitsLabel = line.units ? ` | Estimated Units: ${line.units} pcs` : ''
-         return `${index + 1}. ${colorLabel}${skuLabel} | Quantity Mode: By Pack/Carton | Packs/Cartons: ${line.packs}${unitsLabel}`
+         return `${index + 1}. ${colorLabel}${skuLabel} | Packs/Cartons: ${line.packs}${unitsLabel}`
        }).join('\n')
-     : '1. Color / SKU: | Quantity Mode: | Quantity:'
+     : '1. Color / SKU: | Packs/Cartons:'
  
    return [
      'Hi Quencha Team,',
@@ -1891,8 +1894,8 @@ export default function QuenchaCatalog() {
      'Requested Colors / Quantities:',
      requestSummary,
      '',
-     totalPacks ? `Total Estimated Packs/Cartons: ${totalPacks}` : '',
-     totalUnits ? `Estimated / Requested Total Units: ${totalUnits} pcs` : '',
+     totalPacks ? `Total Packs/Cartons: ${totalPacks}` : '',
+     totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
      '',
      'Company / Name:',
      'Contact Number:',
@@ -1983,7 +1986,7 @@ ${message.trim()}` : 'Message / Notes:',
  const openInquiry = useCallback((product = null) => {
    const firstColorCode = product?.colors?.[0]?.code || ''
    setInqProduct(product)
-   setInqLines([{ colorCode: firstColorCode, qtyMode: 'unit', packs: '1', units: '1' }])
+   setInqLines([{ colorCode: firstColorCode, packs: '1' }])
    setInqMessage('')
    setInqOpen(true)
  }, [])
@@ -2472,6 +2475,105 @@ ${message.trim()}` : 'Message / Notes:',
    })
  }
  
+ 
+ 
+ // ── QUENCHABLES BUILDER ──
+ const quenchCollectionMeta = useMemo(() => {
+   return colorCollections.find(c => c.value === quenchCollection) || DEFAULT_COLOR_COLLECTIONS.find(c => c.value === quenchCollection) || { value: quenchCollection, label: quenchCollection, color: 'var(--tl)' }
+ }, [colorCollections, quenchCollection])
+ 
+ const getQuenchColors = useCallback((product, collection = quenchCollection) => {
+   return (product?.colors || []).filter(color => defaultColorCollection(color) === collection)
+ }, [quenchCollection])
+ 
+ const quenchAvailableColors = useMemo(() => {
+   return colorCollectionSets?.[quenchCollection] || []
+ }, [colorCollectionSets, quenchCollection])
+ 
+ const quenchProducts = useMemo(() => {
+   return products.filter(product => getQuenchColors(product).length > 0)
+ }, [products, getQuenchColors])
+ 
+ const quenchProductsByCat = useMemo(() => {
+   return quenchProducts.filter(product => product.cat === quenchCat)
+ }, [quenchProducts, quenchCat])
+ 
+ const quenchTotals = useMemo(() => {
+   const totalPacks = quenchItems.reduce((sum, item) => sum + Number(item.packs || 0), 0)
+   const totalUnits = quenchItems.reduce((sum, item) => sum + Number(item.units || 0), 0)
+   const totalSrp = quenchItems.reduce((sum, item) => sum + (Number(item.srp || 0) * Number(item.units || 0)), 0)
+   return { totalPacks, totalUnits, totalSrp }
+ }, [quenchItems])
+ 
+ const startQuenchables = useCallback((collection = quenchCollection) => {
+   setQuenchCollection(collection)
+   setQuenchStep('collection')
+   setQuenchOpen(true)
+ }, [quenchCollection])
+ 
+ const addQuenchItem = useCallback((product) => {
+   const colors = getQuenchColors(product)
+   if (!colors.length) return
+   const selectedSku = quenchColor[product.id] || colors[0].sku
+   const selectedColor = colors.find(c => c.sku === selectedSku) || colors[0]
+   const packs = Math.max(1, Number(quenchQty[product.id] || 1))
+   const packing = Number(product.packing || 1)
+   const units = packs * packing
+ 
+   setQuenchItems(items => [
+     ...items,
+     {
+       id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
+       productId: product.id,
+       productName: product.name,
+       colorName: selectedColor.name,
+       colorCode: selectedColor.code,
+       sku: selectedColor.sku,
+       packs,
+       packing,
+       units,
+       srp: Number(product.srp || 0),
+     }
+   ])
+   setQuenchStep('review')
+ }, [getQuenchColors, quenchColor, quenchQty])
+ 
+ const removeQuenchItem = useCallback((id) => {
+   setQuenchItems(items => items.filter(item => item.id !== id))
+ }, [])
+ 
+ const buildQuenchablesHref = useCallback(() => {
+   const collectionLabel = quenchCollectionMeta.label || quenchCollection
+   const subject = `Quenchables Inquiry - ${collectionLabel} Set`
+   const lines = [
+     'Hi Quencha Team,',
+     '',
+     'I would like to inquire about this Quenchables set:',
+     '',
+     `Collection: ${collectionLabel}`,
+     '',
+     'Items:',
+     ...quenchItems.flatMap((item, index) => [
+       `${index + 1}. ${item.productName}`,
+       `   Color: ${item.colorName}`,
+       `   SKU: ${item.sku}`,
+       `   Packs/Cartons: ${item.packs}`,
+       `   Packing: ${item.packing} pcs/carton`,
+       `   Estimated Units: ${item.units} pcs`,
+       `   SRP: ₱${Number(item.srp || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+       '',
+     ]),
+     `Total Packs/Cartons: ${quenchTotals.totalPacks}`,
+     `Estimated Total Units: ${quenchTotals.totalUnits} pcs`,
+     `Estimated SRP Total: ₱${quenchTotals.totalSrp.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+     '',
+     quenchMessage ? `Notes: ${quenchMessage}` : 'Notes:',
+     '',
+     'Thank you.'
+   ]
+   return `mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
+ }, [quenchCollection, quenchCollectionMeta, quenchItems, quenchMessage, quenchTotals])
+ 
  // ── FILTERED ──
  const filtered = useMemo(() => {
    let list = products.map((p, index) => ({
@@ -2746,6 +2848,30 @@ ${message.trim()}` : 'Message / Notes:',
            }}
          />
  
+ 
+ 
+         {/* Quenchables Builder Entry */}
+         <section className="quench-hero">
+           <div>
+             <div className="quench-eyebrow">Shop the Set</div>
+             <h2 className="quench-title">Build Your Quenchables</h2>
+             <p className="quench-sub">Mix, match, and create your Quencha combo by collection. Choose your tumbler, lunch essentials, bags, and accessories in one set.</p>
+             <div className="quench-actions">
+               <button className="quench-start" onClick={()=>startQuenchables('Horizon')}>Start Building →</button>
+               <div className="quench-mini-collections">
+                 {colorCollections.map(col => (
+                   <button key={col.value} className="quench-chip" onClick={()=>startQuenchables(col.value)}>{col.label}</button>
+                 ))}
+               </div>
+             </div>
+           </div>
+           <div className="quench-visual" aria-hidden="true">
+             {(colorCollectionSets?.Horizon || DEFAULT_COLOR_COLLECTION_SETS.Horizon).slice(0,4).map(c => (
+               <span key={c.code} className="quench-visual-dot" style={{background:swatchBackground(c)}} />
+             ))}
+           </div>
+         </section>
+ 
          {/* Toolbar */}
          <div className="toolbar" ref={resultsRef}>
            <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
@@ -2823,6 +2949,153 @@ ${message.trim()}` : 'Message / Notes:',
          <div className="mob-drawer" onClick={e=>e.stopPropagation()}>
            <button className="drawer-close" onClick={()=>setShowMobileFilter(false)}>✕</button>
            <SidebarContent closeOnSelect/>
+         </div>
+       </div>
+     )}
+ 
+ 
+ 
+     {/* QUENCHABLES BUILDER MODAL */}
+     {quenchOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setQuenchOpen(false)}}>
+         <div className="modal quench-modal">
+           <div className="m-hdr quench-head">
+             <div>
+               <div className="quench-eyebrow">Quenchables</div>
+               <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Build Your Quencha Combo</div>
+               <div className="quench-progress">
+                 {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>(
+                   <span key={key} className={`quench-step ${quenchStep===key?'on':''}`}><span className="quench-step-dot">{index+1}</span>{label}</span>
+                 ))}
+               </div>
+             </div>
+             <button className="m-close" onClick={()=>setQuenchOpen(false)}>✕</button>
+           </div>
+           <div className="m-body">
+             <div className="quench-body">
+               <aside className="quench-side">
+                 <div className="quench-side-title">Choose Collection</div>
+                 {colorCollections.map(col => {
+                   const setCount = (colorCollectionSets?.[col.value] || []).length
+                   return (
+                     <button key={col.value} className={`quench-collection-btn ${quenchCollection===col.value?'on':''}`} onClick={()=>{setQuenchCollection(col.value);setQuenchStep('collection')}}>
+                       <span className="quench-collection-dot" style={{background:col.color}} />
+                       <span>
+                         <span className="quench-collection-name">{col.label}</span>
+                         <span className="quench-collection-sub">{setCount} color{setCount===1?'':'s'} available</span>
+                       </span>
+                     </button>
+                   )
+                 })}
+                 <div className="quench-set">
+                   <div className="quench-set-title">Your Set</div>
+                   {quenchItems.length ? quenchItems.slice(0,3).map(item=>(
+                     <div key={item.id} className="quench-set-item">
+                       <div>
+                         <div className="quench-set-name">{item.productName}</div>
+                         <div className="quench-set-meta">{item.colorName} · {item.packs} pack{item.packs===1?'':'s'} · {item.units} pcs</div>
+                       </div>
+                     </div>
+                   )) : <div className="quench-empty">No items added yet.</div>}
+                   {quenchItems.length > 3 && <div className="quench-set-meta">+ {quenchItems.length - 3} more item{quenchItems.length - 3 === 1 ? '' : 's'}</div>}
+                 </div>
+               </aside>
+               <div className="quench-main">
+                 {quenchStep === 'collection' && (
+                   <>
+                     <div className="quench-feature-card">
+                       <div>
+                         <div className="quench-feature-title">{quenchCollectionMeta.label} Collection</div>
+                         <div className="quench-feature-sub">Start with a collection vibe, then build a matching set across drinkware, lunch, bags, and accessories.</div>
+                         <div className="quench-color-row">
+                           {quenchAvailableColors.map(color=><span key={color.code} className="quench-color-dot" title={color.name} style={{background:swatchBackground(color)}} />)}
+                         </div>
+                       </div>
+                       <button className="quench-next" onClick={()=>setQuenchStep('products')}>Next: Choose Products →</button>
+                     </div>
+                   </>
+                 )}
+                 {quenchStep === 'products' && (
+                   <>
+                     <div className="quench-tabs">
+                       {cats.map(cat=>(
+                         <button key={cat.value} className={`quench-tab ${quenchCat===cat.value?'on':''}`} onClick={()=>setQuenchCat(cat.value)}>{cat.icon} {cat.label}</button>
+                       ))}
+                     </div>
+                     {quenchProductsByCat.length ? (
+                       <div className="quench-product-grid">
+                         {quenchProductsByCat.map(product => {
+                           const colors = getQuenchColors(product)
+                           const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
+                           const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
+                           const qty = Math.max(1, Number(quenchQty[product.id] || 1))
+                           const mainImg = getMainImage(product)
+                           return (
+                             <div key={product.id} className="quench-product">
+                               <div className="quench-prod-top">
+                                 {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
+                                 <div>
+                                   <div className="quench-prod-name">{product.name}</div>
+                                   <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
+                                 </div>
+                               </div>
+                               <div className="quench-form-row">
+                                 <select className="quench-select" value={selectedSku} onChange={e=>setQuenchColor(prev=>({...prev,[product.id]:e.target.value}))}>
+                                   {colors.map(color=><option key={color.sku} value={color.sku}>{color.name} · {color.sku}</option>)}
+                                 </select>
+                                 <input className="quench-input" type="number" min="1" value={qty} onChange={e=>setQuenchQty(prev=>({...prev,[product.id]:e.target.value}))} />
+                               </div>
+                               <div className="quench-set-meta">Selected: {selectedColor?.name} · Estimated units: {qty * Number(product.packing || 1)} pcs</div>
+                               <button className="quench-add" onClick={()=>addQuenchItem(product)}>Add to Quenchables</button>
+                             </div>
+                           )
+                         })}
+                       </div>
+                     ) : <div className="quench-empty">No products in this category have {quenchCollectionMeta.label} colors yet.</div>}
+                     <button className="quench-next" onClick={()=>setQuenchStep('review')}>Review Set →</button>
+                   </>
+                 )}
+                 {quenchStep === 'review' && (
+                   <>
+                     <div className="quench-set">
+                       <div className="quench-set-title">Your Quenchables Set</div>
+                       {quenchItems.length ? quenchItems.map(item=>(
+                         <div key={item.id} className="quench-set-item">
+                           <div>
+                             <div className="quench-set-name">{item.productName}</div>
+                             <div className="quench-set-meta">Color: {item.colorName}<br/>SKU: {item.sku}<br/>Packs/Cartons: {item.packs} · Packing: {item.packing} pcs · Units: {item.units} pcs</div>
+                           </div>
+                           <button className="quench-remove" onClick={()=>removeQuenchItem(item.id)}>Remove</button>
+                         </div>
+                       )) : <div className="quench-empty">Add products first to build your Quenchables set.</div>}
+                     </div>
+                     <div className="quench-summary">
+                       <div className="quench-total"><div className="quench-total-val">{quenchItems.length}</div><div className="quench-total-lbl">Items</div></div>
+                       <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalPacks}</div><div className="quench-total-lbl">Packs</div></div>
+                       <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalUnits}</div><div className="quench-total-lbl">Units</div></div>
+                     </div>
+                     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                       <button className="quench-tab" onClick={()=>setQuenchStep('products')}>+ Add More Products</button>
+                       <button className="quench-next" disabled={!quenchItems.length} onClick={()=>setQuenchStep('inquiry')}>Continue to Inquiry →</button>
+                     </div>
+                   </>
+                 )}
+                 {quenchStep === 'inquiry' && (
+                   <>
+                     <div className="quench-feature-card">
+                       <div>
+                         <div className="quench-feature-title">Send Quenchables Inquiry</div>
+                         <div className="quench-feature-sub">Your email app will open with your selected Quenchables set, SKUs, quantities, packing, and notes.</div>
+                       </div>
+                     </div>
+                     <textarea className="quench-note" value={quenchMessage} onChange={e=>setQuenchMessage(e.target.value)} placeholder="Add notes, target colors, delivery questions, or customer details…" />
+                     <a className="quench-send" href={buildQuenchablesHref()} onClick={e=>{ if(!quenchItems.length) e.preventDefault() }}>📩 Send Quenchables Inquiry</a>
+                     <button className="quench-tab" onClick={()=>setQuenchStep('review')}>← Back to Review</button>
+                   </>
+                 )}
+               </div>
+             </div>
+           </div>
          </div>
        </div>
      )}
@@ -3553,18 +3826,15 @@ ${message.trim()}` : 'Message / Notes:',
      {inqOpen && (() => {
        const colors = inqProduct?.colors || []
        const packingNum = parseInt(inqProduct?.packing, 10) || 0
-       const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', qtyMode: 'unit', packs: '1', units: '1' }]
+       const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', packs: '1' }]
        const enrichedLines = activeLines.map((line) => {
          const selectedColor = colors.find(c => c.code === line.colorCode) || colors[0] || null
-         const qtyMode = line.qtyMode === 'pack' ? 'pack' : 'unit'
-         const packsNum = qtyMode === 'pack' ? (parseInt(line.packs, 10) || 0) : 0
-         const requestedUnits = qtyMode === 'unit' ? (parseInt(line.units, 10) || 0) : 0
-         const units = qtyMode === 'pack' ? (packsNum && packingNum ? packsNum * packingNum : 0) : requestedUnits
-         const estimatedPacks = qtyMode === 'unit' && requestedUnits && packingNum ? Math.ceil(requestedUnits / packingNum) : packsNum
-         return { ...line, qtyMode, selectedColor, packsNum, requestedUnits, units, estimatedPacks }
+         const packsNum = parseInt(line.packs, 10) || 0
+         const units = packsNum && packingNum ? packsNum * packingNum : 0
+         return { ...line, selectedColor, packsNum, units }
        })
-       const totalPacks = enrichedLines.reduce((sum, line) => sum + (line.estimatedPacks || 0), 0)
-       const totalUnits = enrichedLines.reduce((sum, line) => sum + (line.units || 0), 0)
+       const totalPacks = enrichedLines.reduce((sum, line) => sum + line.packsNum, 0)
+       const totalUnits = enrichedLines.reduce((sum, line) => sum + line.units, 0)
        const inquiryHref = buildInquiryHref(inqProduct, activeLines, inqMessage)
        const updateLine = (index, patch) => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
@@ -3572,7 +3842,7 @@ ${message.trim()}` : 'Message / Notes:',
        })
        const addLine = () => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
-         return [...base, { colorCode: colors[0]?.code || '', qtyMode: 'unit', packs: '1', units: '1' }]
+         return [...base, { colorCode: colors[0]?.code || '', packs: '1' }]
        })
        const removeLine = (index) => setInqLines(lines => {
          const base = lines?.length ? lines : activeLines
@@ -3617,7 +3887,7 @@ ${message.trim()}` : 'Message / Notes:',
                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
                    {enrichedLines.map((line, index) => (
                      <div key={index} style={{background:'var(--bg)',border:'1px solid rgba(185,220,210,.55)',borderRadius:10,padding:10,display:'flex',flexDirection:'column',gap:8}}>
-                       <div className="inq-qty-grid" style={{display:'grid',gridTemplateColumns:'1fr 140px 120px 34px',gap:8,alignItems:'center'}}>
+                       <div style={{display:'grid',gridTemplateColumns:'1fr 120px 34px',gap:8,alignItems:'center'}}>
                          <select
                            className="f-sel"
                            value={line.colorCode || ''}
@@ -3628,21 +3898,13 @@ ${message.trim()}` : 'Message / Notes:',
                              <option key={color.sku || color.code} value={color.code}>{color.name} — {color.code}</option>
                            )) : <option value="">Select color</option>}
                          </select>
-                         <select
-                           className="f-sel"
-                           value={line.qtyMode || 'unit'}
-                           onChange={e=>updateLine(index, { qtyMode: e.target.value })}
-                         >
-                           <option value="unit">By Piece</option>
-                           <option value="pack">By Pack</option>
-                         </select>
                          <input
                            className="f-in"
                            type="number"
                            min="1"
-                           value={(line.qtyMode || 'unit') === 'pack' ? line.packs : line.units}
-                           onChange={e=>updateLine(index, (line.qtyMode || 'unit') === 'pack' ? { packs: e.target.value } : { units: e.target.value })}
-                           placeholder={(line.qtyMode || 'unit') === 'pack' ? 'Packs' : 'Pieces'}
+                           value={line.packs}
+                           onChange={e=>updateLine(index, { packs: e.target.value })}
+                           placeholder="Packs"
                          />
                          <button
                            type="button"
@@ -3658,8 +3920,7 @@ ${message.trim()}` : 'Message / Notes:',
                        <div style={{display:'flex',flexWrap:'wrap',gap:8,fontSize:11,color:'var(--gr)'}}>
                          {line.selectedColor?.hex && <span style={{width:12,height:12,borderRadius:'50%',background:line.selectedColor.hex,border:'1px solid rgba(0,0,0,.1)',display:'inline-block',marginTop:2}}/>}
                          {line.selectedColor?.sku && <span>SKU: <strong style={{color:'var(--tl)'}}>{line.selectedColor.sku}</strong></span>}
-                         {line.qtyMode === 'pack' && packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
-                         {line.qtyMode === 'unit' && line.requestedUnits > 0 && <span>Requested: <strong>{line.requestedUnits} pcs</strong>{packingNum > 0 && line.estimatedPacks > 0 ? ` • Est. ${line.estimatedPacks} carton${line.estimatedPacks > 1 ? 's' : ''}` : ''}</span>}
+                         {packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
                        </div>
                      </div>
                    ))}
@@ -3672,7 +3933,7 @@ ${message.trim()}` : 'Message / Notes:',
                  >
                    + Add another color
                  </button>
-                 {packingNum > 0 && <div className="f-hint">Choose <strong>By Piece</strong> for exact quantities or <strong>By Pack</strong> for carton-based inquiries. Packing: {packingNum} pcs per carton.</div>}
+                 {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total per color.</div>}
                </div>
  
                <div className="f-col">
