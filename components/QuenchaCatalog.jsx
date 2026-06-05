@@ -408,8 +408,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-code{font-family:monospace;font-size:11px;color:var(--tl)}
 /* COLOR LIST */
 .vm-color-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--tl);text-transform:uppercase;margin-bottom:10px;display:block}
-.vm-color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-.vm-color-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:8px;padding:8px 12px}
+.vm-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.vm-color-item{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:8px;padding:8px 10px;min-width:0}
 .vm-color-swatch{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .vm-color-info{display:flex;flex-direction:column;gap:2px;min-width:0}
 .vm-color-name{font-size:12px;font-weight:700;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -490,7 +490,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hex-in:focus{color:var(--tl)}
 .collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
 .collection-select:focus{border-color:var(--tl);background:#fff}
-@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:30px minmax(0,1fr) auto}.collection-add-row{grid-template-columns:34px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}}
+@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:30px minmax(0,1fr) auto}.collection-add-row{grid-template-columns:34px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.vm-color-grid{grid-template-columns:1fr}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
 .rm-btn{background:none;border:none;cursor:pointer;color:rgba(239,68,68,.5);font-size:16px;transition:var(--tr)}
@@ -2458,6 +2459,47 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 )}
               </div>
+              {/* Color swatches + SKUs */}
+              {vp.colors.length > 0 && (
+                <div>
+                  <span className="vm-color-sec-lbl">Colors</span>
+                  {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
+                    <div key={group.name} style={{marginBottom:10}}>
+                      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
+                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
+                        <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
+                      </div>
+                      <div className="vm-color-grid">
+                        {group.colors.map(clr=>{
+                          const linkedImageIndex = findImageIndexForColor(vp, clr)
+                          const hasLinkedImage = linkedImageIndex >= 0
+                          const colorKey = getColorKey(clr)
+                          const currentImage = vpImages[safeVmImg]
+                          const isActive = vmColorKey ? vmColorKey === colorKey : imageMatchesColor(currentImage, clr)
+                          return (
+                            <div
+                              key={clr.sku}
+                              className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
+                              onClick={()=>{
+                                if (!hasLinkedImage) return
+                                setVmColorKey(colorKey)
+                                setVmImg(linkedImageIndex)
+                              }}
+                              title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
+                            >
+                              <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
+                              <div className="vm-color-info">
+                                <span className="vm-color-name">{clr.name}</span>
+                                <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
               {vp.youtube && getYouTubeId(vp.youtube) && (
                 <YouTubeBlock ytUrl={vp.youtube}/>
               )}
@@ -2536,47 +2578,6 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="vm-pdiv"/>
                 <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
               </div>
-              {/* Color swatches + SKUs */}
-              {vp.colors.length > 0 && (
-                <div>
-                  <span className="vm-color-sec-lbl">Colors</span>
-                  {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
-                    <div key={group.name} style={{marginBottom:10}}>
-                      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
-                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
-                        <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
-                      </div>
-                      <div className="vm-color-grid">
-                        {group.colors.map(clr=>{
-                          const linkedImageIndex = findImageIndexForColor(vp, clr)
-                          const hasLinkedImage = linkedImageIndex >= 0
-                          const colorKey = getColorKey(clr)
-                          const currentImage = vpImages[safeVmImg]
-                          const isActive = vmColorKey ? vmColorKey === colorKey : imageMatchesColor(currentImage, clr)
-                          return (
-                            <div
-                              key={clr.sku}
-                              className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
-                              onClick={()=>{
-                                if (!hasLinkedImage) return
-                                setVmColorKey(colorKey)
-                                setVmImg(linkedImageIndex)
-                              }}
-                              title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
-                            >
-                              <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
-                              <div className="vm-color-info">
-                                <span className="vm-color-name">{clr.name}</span>
-                                <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
               <div className="vm-actions">
                 <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
