@@ -3166,7 +3166,7 @@ ${message.trim()}` : 'Message / Notes:',
                            const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
                            const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
                            const qty = Math.max(1, Number(quenchQty[product.id] || 1))
-                           const mainImg = getMainImage(product)
+                           const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
                            const alreadyInSet = selectedQuenchSkuSet.has(selectedSku)
                            return (
                              <div key={product.id} className={`quench-product ${alreadyInSet ? 'already-selected' : ''}`}>
