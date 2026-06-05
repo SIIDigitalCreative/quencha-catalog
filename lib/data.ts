@@ -82,13 +82,6 @@ const POPLY: PaletteColor[] = [
 ]
 
 
-const BABY_FEEDING_BOTTLE_120: PaletteColor[] = [
-  { n: 'Giggle Gleam', c: 'GG', h: '#9FD7F5' },
-  { n: 'Happy Wink', c: 'HW', h: '#73D6C8' },
-  { n: 'Rosy Blush', c: 'RB', h: '#F4A8B8' },
-  { n: 'Mellow Glow', c: 'MG', h: '#B7B0A7' },
-]
-
 const COOLER: PaletteColor[] = [
   { n: 'Sand', c: 'TP', h: '#C8C5BE' },
   { n: 'Stone', c: 'GY', h: '#8A8780' },
@@ -234,7 +227,6 @@ export const SEED_PRODUCTS: Product[] = [
   product('qnh-nbmzod325', 'New Bone Zodiac Mug 325ml', 'core', 'savor', 'Black New Bone porcelain zodiac mug with gold zodiac artwork designs.', NEW_BONE_BADGES, 179.75, 36, ZODIAC),
   product('qnh-kdlp', 'Kids Lunch Pack', 'kids', 'go', 'Kids lunch pack designed for carrying lunch essentials with playful colors and school-ready style.', ['BPA-Free', 'Kid-Friendly', 'Portable', 'Easy Carry'], 829.75, 16, mk('QNH-KDLP', BLOOM)),
   product('qnh-kdwb520', 'Kids Water Bottle 520ml — Bloom', 'kids', 'sip', 'Kids water bottle from the Bloom collection with playful colors and easy everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 429.75, 24, mk('QNH-KDWB520', BLOOM)),
-  product('qnh-bsfb120', 'Standard Feeding Bottle 120ml', 'kids', 'sip', "Standard feeding bottle with a narrow opening, designed for infants. It mimics the natural shape of a mother's nipple, making it easier for babies to transition between breastfeeding and bottle feeding.", ['Anti-Colic System', 'BPA-Free', 'Soft Silicone', 'Natural Shape Nipple'], 199.75, 72, mk('QNH-BSFB120', BABY_FEEDING_BOTTLE_120)),
   product('qnh-kdtwb500-bloom', 'Kids Travel Water Bottle 500ml — Bloom', 'kids', 'sip', 'Spill-proof kids travel water bottle with built-in straw, rubber grip, and Bloom colorways.', ['Dual Speed Lid', 'BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Rubber Grip'], 249.75, 24, mk('QNH-KDTWB500', BLOOM)),
   product('qnh-kfscs230', 'Kids Food Storage Container Set 230ml — Bloom', 'kids', 'savor', 'Kids food storage container set for snacks, sides, and school baon organization.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS230', BLOOM)),
   product('qnh-kfscs390', 'Kids Food Storage Container Set 390ml — Bloom', 'kids', 'savor', 'Medium kids food storage container set with secure seal and stackable design.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS390', BLOOM)),
