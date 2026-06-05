@@ -459,16 +459,16 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(39,153,137,.12)}
 .collection-title{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--tl)}
 .collection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.collection-item{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:8px;background:#fff;border:1px solid rgba(185,220,210,.75);border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(39,153,137,.05);min-width:0}
-.collection-item input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0}
-.collection-name{min-width:0;font-family:var(--fn);font-size:12px;font-weight:800;color:var(--bk);border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;outline:none;background:var(--bg);width:100%}
+.collection-item{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:start;gap:8px;background:#fff;border:1px solid rgba(185,220,210,.75);border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(39,153,137,.05);min-width:0}
+.collection-item input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0;grid-row:1/3}
+.collection-name{min-width:0;font-family:var(--fn);font-size:12px;font-weight:800;color:var(--bk);border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;outline:none;background:var(--bg);width:100%;grid-column:2/3}
 .collection-name:focus{border-color:var(--tl);background:#fff}
-.collection-set-count{grid-column:1/2;font-size:9px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.12);border-radius:999px;padding:3px 7px;white-space:nowrap;text-align:center}
-.collection-actions{grid-column:2/3;display:grid;grid-template-columns:1fr auto;gap:8px;width:100%}
-.collection-add-set,.collection-save-set{border:none;border-radius:8px;padding:8px 10px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:32px}
+.collection-actions{grid-column:2/3;display:grid;grid-template-columns:74px minmax(0,1fr) 72px;gap:8px;width:100%;align-items:center}
+.collection-set-count{width:74px;height:32px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.12);border-radius:999px;white-space:nowrap;text-align:center;line-height:1}
+.collection-add-set,.collection-save-set{border:none;border-radius:8px;padding:8px 10px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:32px;min-width:0}
 .collection-add-set{background:var(--tl);color:#fff;overflow:hidden;text-overflow:ellipsis}
 .collection-add-set:hover:not(:disabled){background:var(--tl2);transform:translateY(-1px)}
-.collection-save-set{background:rgba(255,255,255,.85);color:var(--tl);border:1px solid rgba(39,153,137,.18)}
+.collection-save-set{background:rgba(255,255,255,.85);color:var(--tl);border:1px solid rgba(39,153,137,.18);width:72px;padding-left:6px;padding-right:6px}
 .collection-save-set:hover{background:#fff;border-color:var(--tl)}
 .collection-add-set:disabled{opacity:.45;cursor:not-allowed;background:rgba(39,153,137,.35);transform:none}
 .collection-add-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;margin-top:12px;background:rgba(255,255,255,.65);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:10px}
@@ -497,7 +497,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hex-in:focus{color:var(--tl)}
 .collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
 .collection-select:focus{border-color:var(--tl);background:#fff}
-@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-set-count{grid-column:1/2}.collection-actions{grid-column:2/3}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-actions{grid-template-columns:68px minmax(0,1fr) 68px}.collection-set-count{width:68px}.collection-save-set{width:68px}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.vm-color-grid{grid-template-columns:1fr}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
@@ -2798,8 +2798,8 @@ ${message.trim()}` : 'Message / Notes:',
                         <div key={col.value} className="collection-item">
                           <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
                           <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
-                          <span className="collection-set-count">{savedCount} colors</span>
                           <div className="collection-actions">
+                            <span className="collection-set-count">{savedCount} colors</span>
                             <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
                             <button type="button" className="collection-save-set" onClick={()=>saveCollectionSetFromCurrentProduct(col.value)}>Save Set</button>
                           </div>
