@@ -1,4 +1,4 @@
- client'
+'use client'
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
  
 // ─── SEED DATA ───────────────────────────────────────────────────────────────
