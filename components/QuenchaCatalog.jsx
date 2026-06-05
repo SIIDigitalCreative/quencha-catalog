@@ -1252,6 +1252,7 @@ export default function QuenchaCatalog() {
         const prefs = settings.catalogPrefs
         if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
         if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
+        if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
         if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
         if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
         if (prefs.sort !== undefined) setSort(prefs.sort || 'default')
@@ -1260,6 +1261,7 @@ export default function QuenchaCatalog() {
           localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
             filterExt: prefs.filterExt || 'all',
             filterCat: prefs.filterCat || null,
+            filterColorCollection: prefs.filterColorCollection || 'all',
             filterPMin: prefs.filterPMin ?? null,
             filterPMax: prefs.filterPMax ?? null,
             sort: prefs.sort || 'default',
@@ -1276,6 +1278,7 @@ export default function QuenchaCatalog() {
   // ── FILTERS ──
   const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
   const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
+  const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
   const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
@@ -1351,6 +1354,7 @@ export default function QuenchaCatalog() {
     const catalogPrefs = {
       filterExt,
       filterCat,
+      filterColorCollection,
       filterPMin,
       filterPMax,
       sort,
@@ -1360,7 +1364,7 @@ export default function QuenchaCatalog() {
       localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
     }
     syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterPMin, filterPMax, sort, view, syncSettings])
+  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, view, syncSettings])
 
   const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
   const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
@@ -1828,6 +1832,9 @@ ${message.trim()}` : 'Message / Notes:',
     }))
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
     if (filterCat) list = list.filter(p => p.cat === filterCat)
+    if (filterColorCollection !== 'all') {
+      list = list.filter(p => (p.colors || []).some(c => defaultColorCollection(c) === filterColorCollection))
+    }
     if (filterPMin !== null) list = list.filter(p => p.srp >= filterPMin)
     if (filterPMax !== null) list = list.filter(p => p.srp <= filterPMax)
     if (search) {
@@ -1841,12 +1848,20 @@ ${message.trim()}` : 'Message / Notes:',
     if (sort === 'sku-asc') list.sort((a,b) => getFirstSku(a).localeCompare(getFirstSku(b)))
     if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
     return list
-  }, [products, filterExt, filterCat, filterPMin, filterPMax, search, sort, getFirstSku])
+  }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
 
   const counts = useMemo(() => {
-    const ext = { all: products.length }, cat = {}
-    products.forEach(p => { ext[p.ext] = (ext[p.ext]||0)+1; cat[p.cat] = (cat[p.cat]||0)+1 })
-    return { ext, cat }
+    const ext = { all: products.length }, cat = {}, collection = { all: products.length }
+    products.forEach(p => {
+      ext[p.ext] = (ext[p.ext]||0)+1
+      cat[p.cat] = (cat[p.cat]||0)+1
+
+      const productCollections = new Set((p.colors || []).map(c => defaultColorCollection(c)).filter(Boolean))
+      productCollections.forEach(col => {
+        collection[col] = (collection[col] || 0) + 1
+      })
+    })
+    return { ext, cat, collection }
   }, [products])
 
   const grouped = useMemo(() => {
@@ -1889,6 +1904,18 @@ ${message.trim()}` : 'Message / Notes:',
       </div>
       <hr className="sb-div"/>
       <div className="sb-sec">
+        <span className="sb-lbl">Color Collection</span>
+        <button className={`fb ${filterColorCollection==='all'?'on':''}`} style={{borderLeftColor:filterColorCollection==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
+          <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Collections</span><span className="fb-cnt">{counts.collection?.all||0}</span>
+        </button>
+        {colorCollections.map(col=>(
+          <button key={col.value} className={`fb ${filterColorCollection===col.value?'on':''}`} style={{borderLeftColor:filterColorCollection===col.value?(col.color||'var(--tl)'):'transparent'}} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
+            <span className="fb-dot" style={{background:col.color||'var(--tl)'}}/><span className="fb-lbl">{col.label}</span><span className="fb-cnt">{counts.collection?.[col.value]||0}</span>
+          </button>
+        ))}
+      </div>
+      <hr className="sb-div"/>
+      <div className="sb-sec">
         <span className="sb-lbl">Price Range</span>
         <div className="pc-wrap">
           {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
@@ -1897,8 +1924,8 @@ ${message.trim()}` : 'Message / Notes:',
           })}
         </div>
       </div>
-      {(filterExt!=='all'||filterCat||filterPMin!==null) && (
-        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
+      {(filterExt!=='all'||filterCat||filterColorCollection!=='all'||filterPMin!==null) && (
+        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
       )}
     </>
     )
