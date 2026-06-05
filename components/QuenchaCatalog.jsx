@@ -1168,6 +1168,88 @@ function CodeLightbox({ src, label, onClose }) {
   )
 }
 
+
+// ─── CLIENT IMAGE COMPRESSION ────────────────────────────────────────────────
+// Compress product images before uploading so /api/upload receives a smaller file.
+// GIF and SVG are kept as-is because canvas conversion can remove animation/vector data.
+function loadImageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Could not read image for compression'))
+    }
+    img.src = url
+  })
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (!blob) reject(new Error('Image compression failed'))
+      else resolve(blob)
+    }, type, quality)
+  })
+}
+
+async function compressImageFile(file, options = {}) {
+  const {
+    maxWidth = 1800,
+    maxHeight = 1800,
+    targetBytes = 1400 * 1024,
+    minQuality = 0.62,
+    outputType = 'image/webp',
+  } = options
+
+  if (!file || !file.type?.startsWith('image/')) return file
+  if (file.type === 'image/gif' || file.type === 'image/svg+xml') return file
+
+  try {
+    const img = await loadImageFromFile(file)
+    const width = img.naturalWidth || img.width
+    const height = img.naturalHeight || img.height
+    if (!width || !height) return file
+
+    const ratio = Math.min(1, maxWidth / width, maxHeight / height)
+    const outWidth = Math.max(1, Math.round(width * ratio))
+    const outHeight = Math.max(1, Math.round(height * ratio))
+
+    const canvas = document.createElement('canvas')
+    canvas.width = outWidth
+    canvas.height = outHeight
+    const ctx = canvas.getContext('2d', { alpha: true })
+    ctx.imageSmoothingEnabled = true
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(img, 0, 0, outWidth, outHeight)
+
+    let quality = 0.86
+    let blob = await canvasToBlob(canvas, outputType, quality)
+
+    while (blob.size > targetBytes && quality > minQuality) {
+      quality = Math.max(minQuality, quality - 0.08)
+      blob = await canvasToBlob(canvas, outputType, quality)
+    }
+
+    const baseName = String(file.name || 'image').replace(/\.[^.]+$/, '') || 'image'
+    const compressed = new File([blob], `${baseName}.webp`, {
+      type: outputType,
+      lastModified: Date.now(),
+    })
+
+    // Use the compressed image if it is smaller, or if the original is above the safe upload target.
+    if (compressed.size < file.size || file.size > targetBytes) return compressed
+    return file
+  } catch (err) {
+    console.warn('Image compression skipped:', err)
+    return file
+  }
+}
+
 // ─── CODE IMAGE UPLOAD (barcode / QR) ────────────────────────────────────────
 function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
   const ref = useRef(null)
@@ -1655,11 +1737,24 @@ ${message.trim()}` : 'Message / Notes:',
   }, [])
 
   // ── IMAGE UPLOAD via Vercel Blob ──
-  const uploadImageToBlob = useCallback(async (file) => {
-    const fd = new FormData(); fd.append('file', file)
+  const uploadImageToBlob = useCallback(async (file, options = {}) => {
+    const shouldCompress = options.compress !== false
+    const uploadFile = shouldCompress ? await compressImageFile(file) : file
+
+    const fd = new FormData()
+    fd.append('file', uploadFile)
+
     const res = await fetch('/api/upload', { method:'POST', body: fd })
-    if (!res.ok) throw new Error('Upload failed')
+    if (!res.ok) {
+      let message = 'Upload failed'
+      try {
+        const payload = await res.json()
+        message = payload?.error || payload?.message || message
+      } catch {}
+      throw new Error(message)
+    }
     const { url } = await res.json()
+    if (!url) throw new Error('Upload completed but no URL was returned')
     return url
   }, [])
 
@@ -1763,9 +1858,21 @@ ${message.trim()}` : 'Message / Notes:',
     if (!srp || srp <= 0) { alert('Valid price is required.'); return }
 
     const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
+    const normalizedImages = normalizeProductImages(ef.images || [])
+    const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
+
+    if (temporaryImages.length) {
+      const msg = `${temporaryImages.length} image(s) are temporary browser previews because the upload failed. Please remove and re-upload them before saving.`
+      setUploadErr(msg)
+      alert(msg)
+      setEditTab('images')
+      return
+    }
+
     const data = {
       ...ef,
       colors: normalizedColors,
+      images: normalizedImages,
       srp,
       packing: parseInt(ef.packing) || 0,
       dimensions: ef.dimensions,
@@ -1995,16 +2102,16 @@ ${message.trim()}` : 'Message / Notes:',
   // Images
   const handleImgUpload = async (e) => {
     const file = e.target.files[0]; if (!file) return
-    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, or WebP.'); return }
-    if (file.size > 8*1024*1024) { setUploadErr('File too large. Max 8MB.'); return }
-    setUploadErr('')
+    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, WebP, or GIF.'); e.target.value = ''; return }
+    if (file.size > 25*1024*1024) { setUploadErr('File too large. Max 25MB before compression.'); e.target.value = ''; return }
+    setUploadErr('Compressing and uploading image...')
     try {
       const url = await uploadImageToBlob(file)
-      setEf(f=>({...f,images:[...f.images,{src:url,colorSku:'',colorCode:'',colorName:''}]}))
-    } catch {
-      const reader = new FileReader()
-      reader.onload = ev => setEf(f=>({...f,images:[...f.images,{src:ev.target.result,colorSku:'',colorCode:'',colorName:''}]}))
-      reader.readAsDataURL(file)
+      setEf(f=>({...f,images:[...normalizeProductImages(f.images),{src:url,colorSku:'',colorCode:'',colorName:''}]}))
+      setUploadErr('')
+    } catch (err) {
+      console.error(err)
+      setUploadErr(err?.message || 'Upload failed. Please try again.')
     }
     e.target.value = ''
   }
@@ -2014,36 +2121,38 @@ ${message.trim()}` : 'Message / Notes:',
     if (!files.length || !color) return
 
     const allowed = ['image/jpeg','image/png','image/webp','image/gif']
-    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 8*1024*1024)
+    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
 
     if (!validFiles.length) {
-      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 8MB each.')
+      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. Images will be compressed before upload.')
       return
     }
 
-    if (validFiles.length !== files.length) {
-      setUploadErr('Some files were skipped. Use JPG, PNG, WebP, or GIF up to 8MB each.')
-    } else {
-      setUploadErr('')
-    }
+    let skipped = files.length - validFiles.length
+    let failed = 0
+    const uploaded = []
 
-    const uploaded = await Promise.all(validFiles.map(async (file) => {
+    setUploadErr(`Compressing and uploading ${validFiles.length} image${validFiles.length === 1 ? '' : 's'}...`)
+
+    // Upload sequentially. This is more reliable than firing many /api/upload requests at once.
+    for (const file of validFiles) {
       try {
         const url = await uploadImageToBlob(file)
-        return { src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' }
-      } catch {
-        return await new Promise(resolve => {
-          const reader = new FileReader()
-          reader.onload = ev => resolve({ src: ev.target.result, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
-          reader.onerror = () => resolve(null)
-          reader.readAsDataURL(file)
-        })
+        uploaded.push({ src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
+      } catch (err) {
+        failed += 1
+        console.error('Color image upload failed:', err)
       }
-    }))
+    }
 
-    const clean = uploaded.filter(Boolean)
-    if (clean.length) {
-      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...clean] }))
+    if (uploaded.length) {
+      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
+    }
+
+    if (failed || skipped) {
+      setUploadErr(`${uploaded.length} image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
+    } else {
+      setUploadErr('')
     }
   }
 
@@ -2748,7 +2857,7 @@ ${message.trim()}` : 'Message / Notes:',
                       label="Barcode Image"
                       value={ef.barcodeImage}
                       onChange={img=>setEf(f=>({...f,barcodeImage:img}))}
-                      onUpload={uploadImageToBlob}
+                      onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
                       onClear={()=>setEf(f=>({...f,barcodeImage:''}))}
                     />
                   </div>
@@ -2760,7 +2869,7 @@ ${message.trim()}` : 'Message / Notes:',
                       label="QR Code Image"
                       value={ef.qrImage}
                       onChange={img=>setEf(f=>({...f,qrImage:img}))}
-                      onUpload={uploadImageToBlob}
+                      onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
                       onClear={()=>setEf(f=>({...f,qrImage:''}))}
                     />
                   </div>
@@ -2964,7 +3073,7 @@ ${message.trim()}` : 'Message / Notes:',
                   <div className="upload-zone" onClick={()=>fileRef.current?.click()}>
                     <span className="uz-ico">+</span>
                     <span className="uz-lbl">Upload Image</span>
-                    <span className="uz-sub">JPG, PNG, WebP · 8MB max</span>
+                    <span className="uz-sub">JPG, PNG, WebP · auto-compressed</span>
                   </div>
                 </div>
                 {uploadErr && <div className="f-error">{uploadErr}</div>}
