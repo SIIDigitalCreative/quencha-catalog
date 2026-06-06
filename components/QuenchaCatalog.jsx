@@ -1590,6 +1590,51 @@ button{touch-action:manipulation}
  }
 }
  
+/* FORCE MOBILE PRODUCT MODAL COLOR SWATCHES TO 4 COLUMNS */
+@media (max-width: 700px) {
+ .modal .vm-color-grid,
+ .modal-bg .vm-color-grid,
+ .vm-color-grid {
+   display: grid !important;
+   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+   gap: 8px !important;
+ }
+ .modal .vm-color-item,
+ .modal-bg .vm-color-item,
+ .vm-color-item {
+   min-height: 68px !important;
+   padding: 7px 4px !important;
+   border-radius: 14px !important;
+   display: flex !important;
+   flex-direction: column !important;
+   align-items: center !important;
+   justify-content: center !important;
+   text-align: center !important;
+   gap: 4px !important;
+ }
+ .modal .vm-color-swatch,
+ .modal-bg .vm-color-swatch,
+ .vm-color-swatch {
+   width: 28px !important;
+   height: 28px !important;
+   flex: 0 0 28px !important;
+ }
+ .modal .vm-color-name,
+ .modal-bg .vm-color-name,
+ .vm-color-name {
+   font-size: 10px !important;
+   line-height: 1.1 !important;
+   max-width: 100% !important;
+   white-space: nowrap !important;
+   overflow: hidden !important;
+   text-overflow: ellipsis !important;
+ }
+ .modal .vm-color-sku,
+ .modal-bg .vm-color-sku,
+ .vm-color-sku {
+   display: none !important;
+ }
+}
 `
  
  
@@ -5217,49 +5262,3 @@ ${message.trim()}` : 'Message / Notes:',
    </div>
  )
 }
-/* FORCE MOBILE PRODUCT MODAL COLOR SWATCHES TO 4 COLUMNS */
-@media (max-width: 700px) {
- .modal .vm-color-grid,
- .modal-bg .vm-color-grid,
- .vm-color-grid {
-   display: grid !important;
-   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-   gap: 8px !important;
- }
- .modal .vm-color-item,
- .modal-bg .vm-color-item,
- .vm-color-item {
-   min-height: 68px !important;
-   padding: 7px 4px !important;
-   border-radius: 14px !important;
-   display: flex !important;
-   flex-direction: column !important;
-   align-items: center !important;
-   justify-content: center !important;
-   text-align: center !important;
-   gap: 4px !important;
- }
- .modal .vm-color-swatch,
- .modal-bg .vm-color-swatch,
- .vm-color-swatch {
-   width: 28px !important;
-   height: 28px !important;
-   flex: 0 0 28px !important;
- }
- .modal .vm-color-name,
- .modal-bg .vm-color-name,
- .vm-color-name {
-   font-size: 10px !important;
-   line-height: 1.1 !important;
-   max-width: 100% !important;
-   white-space: nowrap !important;
-   overflow: hidden !important;
-   text-overflow: ellipsis !important;
- }
- .modal .vm-color-sku,
- .modal-bg .vm-color-sku,
- .vm-color-sku {
-   display: none !important;
- }
-}
- 
