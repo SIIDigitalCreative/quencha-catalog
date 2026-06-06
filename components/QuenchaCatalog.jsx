@@ -2052,7 +2052,6 @@ button{touch-action:manipulation}
 
 
 /* FINAL FIX: SKU CODE FONT CONSISTENCY */
-.c-sku,
 .vm-code,
 .vm-color-sku,
 .vm-variant-sku,
@@ -2064,8 +2063,15 @@ button{touch-action:manipulation}
   font-weight:500!important;
   letter-spacing:.02em!important;
 }
+
+/* Product card SKU now matches the full product page SKU style */
 .c-sku{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  letter-spacing:.06em!important;
   line-height:1.2!important;
+  color:var(--tl)!important;
 }
 `
  
