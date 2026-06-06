@@ -5,90 +5,90 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 const now = new Date().toISOString()
  
 const OG = [
-  { n: 'Snow', c: 'WT', h: '#F5F5F0' },
-  { n: 'Sand', c: 'TP', h: '#C8C5BE' },
-  { n: 'Stone', c: 'GY', h: '#8A8780' },
-  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
+ { n: 'Snow', c: 'WT', h: '#F5F5F0' },
+ { n: 'Sand', c: 'TP', h: '#C8C5BE' },
+ { n: 'Stone', c: 'GY', h: '#8A8780' },
+ { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
  
 const XP = [
-  ...OG,
-  { n: 'Autumn Sunset', c: 'AS', h: '#D4894A' },
-  { n: 'Forest Green', c: 'FG', h: '#3D6B4F' },
-  { n: 'Twilight Teal', c: 'TT', h: '#2B8090' },
-  { n: 'Coral Oasis', c: 'CO', h: '#E8524A' },
+ ...OG,
+ { n: 'Autumn Sunset', c: 'AS', h: '#D4894A' },
+ { n: 'Forest Green', c: 'FG', h: '#3D6B4F' },
+ { n: 'Twilight Teal', c: 'TT', h: '#2B8090' },
+ { n: 'Coral Oasis', c: 'CO', h: '#E8524A' },
 ]
  
 const BLOOM = [
-  { n: 'Sky', c: 'SK', h: '#88C4E8' },
-  { n: 'Meadow', c: 'ME', h: '#5CBF7A' },
-  { n: 'Coral', c: 'CO', h: '#FF7A5C' },
-  { n: 'Blossom', c: 'BL', h: '#F9A8C4' },
+ { n: 'Sky', c: 'SK', h: '#88C4E8' },
+ { n: 'Meadow', c: 'ME', h: '#5CBF7A' },
+ { n: 'Coral', c: 'CO', h: '#FF7A5C' },
+ { n: 'Blossom', c: 'BL', h: '#F9A8C4' },
 ]
  
 const POPLY = [
-  { n: 'Bubbly', c: 'BB', h: '#57C0E8' },
-  { n: 'Minty', c: 'MT', h: '#48C8C0' },
-  { n: 'Purpy', c: 'PP', h: '#B09AD8' },
-  { n: 'Rosy', c: 'RO', h: '#F05A9D' },
+ { n: 'Bubbly', c: 'BB', h: '#57C0E8' },
+ { n: 'Minty', c: 'MT', h: '#48C8C0' },
+ { n: 'Purpy', c: 'PP', h: '#B09AD8' },
+ { n: 'Rosy', c: 'RO', h: '#F05A9D' },
 ]
  
 const COOLER = [
-  { n: 'Sand', c: 'TP', h: '#C8C5BE' },
-  { n: 'Stone', c: 'GY', h: '#8A8780' },
-  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
+ { n: 'Sand', c: 'TP', h: '#C8C5BE' },
+ { n: 'Stone', c: 'GY', h: '#8A8780' },
+ { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
  
 const PET_BOWL_940 = [
-  { n: 'Snow', c: 'WT', h: '#F5F5F0' },
-  { n: 'Stone', c: 'GY', h: '#8A8780' },
-  { n: 'Onyx', c: 'BK', h: '#2A2A28' },
+ { n: 'Snow', c: 'WT', h: '#F5F5F0' },
+ { n: 'Stone', c: 'GY', h: '#8A8780' },
+ { n: 'Onyx', c: 'BK', h: '#2A2A28' },
 ]
  
 const ZODIAC = [
-  { name: 'Aquarius', code: 'AQ', hex: '#111111', sku: 'QNH-NBMZOD-AQ' },
-  { name: 'Pisces', code: 'PI', hex: '#111111', sku: 'QNH-NBMZOD-PI' },
-  { name: 'Aries', code: 'AR', hex: '#111111', sku: 'QNH-NBMZOD-AR' },
-  { name: 'Taurus', code: 'TA', hex: '#111111', sku: 'QNH-NBMZOD-TA' },
-  { name: 'Gemini', code: 'GE', hex: '#111111', sku: 'QNH-NBMZOD-GE' },
-  { name: 'Cancer', code: 'CA', hex: '#111111', sku: 'QNH-NBMZOD-CA' },
-  { name: 'Leo', code: 'LE', hex: '#111111', sku: 'QNH-NBMZOD-LE' },
-  { name: 'Virgo', code: 'VI', hex: '#111111', sku: 'QNH-NBMZOD-VI' },
-  { name: 'Libra', code: 'LI', hex: '#111111', sku: 'QNH-NBMZOD-LI' },
-  { name: 'Scorpio', code: 'SC', hex: '#111111', sku: 'QNH-NBMZOD-SC' },
-  { name: 'Sagittarius', code: 'SA', hex: '#111111', sku: 'QNH-NBMZOD-SA' },
-  { name: 'Capricorn', code: 'CP', hex: '#111111', sku: 'QNH-NBMZOD-CP' },
+ { name: 'Aquarius', code: 'AQ', hex: '#111111', sku: 'QNH-NBMZOD-AQ' },
+ { name: 'Pisces', code: 'PI', hex: '#111111', sku: 'QNH-NBMZOD-PI' },
+ { name: 'Aries', code: 'AR', hex: '#111111', sku: 'QNH-NBMZOD-AR' },
+ { name: 'Taurus', code: 'TA', hex: '#111111', sku: 'QNH-NBMZOD-TA' },
+ { name: 'Gemini', code: 'GE', hex: '#111111', sku: 'QNH-NBMZOD-GE' },
+ { name: 'Cancer', code: 'CA', hex: '#111111', sku: 'QNH-NBMZOD-CA' },
+ { name: 'Leo', code: 'LE', hex: '#111111', sku: 'QNH-NBMZOD-LE' },
+ { name: 'Virgo', code: 'VI', hex: '#111111', sku: 'QNH-NBMZOD-VI' },
+ { name: 'Libra', code: 'LI', hex: '#111111', sku: 'QNH-NBMZOD-LI' },
+ { name: 'Scorpio', code: 'SC', hex: '#111111', sku: 'QNH-NBMZOD-SC' },
+ { name: 'Sagittarius', code: 'SA', hex: '#111111', sku: 'QNH-NBMZOD-SA' },
+ { name: 'Capricorn', code: 'CP', hex: '#111111', sku: 'QNH-NBMZOD-CP' },
 ]
  
 const SINGLE_REFILL = [
-  { name: 'Refill Set', code: 'RF', hex: '#F5F5F0', sku: 'QNH-PLRR' },
+ { name: 'Refill Set', code: 'RF', hex: '#F5F5F0', sku: 'QNH-PLRR' },
 ]
  
 function mk(base, pal) {
-  return pal.map(c => ({ name: c.n, code: c.c, hex: c.h, sku: `${base}-${c.c}` }))
+ return pal.map(c => ({ name: c.n, code: c.c, hex: c.h, sku: `${base}-${c.c}` }))
 }
  
 function product(id, name, ext, cat, desc, badges, srp, packing, colors) {
-  return {
-    id,
-    name,
-    ext,
-    cat,
-    desc,
-    badges,
-    srp,
-    packing,
-    colors,
-    images: [],
-    dimensions: { headers: [''], rows: [['']] },
-    barcode: '',
-    barcodeImage: '',
-    qrCode: '',
-    qrImage: '',
-    youtube: '',
-    createdAt: now,
-    updatedAt: now,
-  }
+ return {
+   id,
+   name,
+   ext,
+   cat,
+   desc,
+   badges,
+   srp,
+   packing,
+   colors,
+   images: [],
+   dimensions: { headers: [''], rows: [['']] },
+   barcode: '',
+   barcodeImage: '',
+   qrCode: '',
+   qrImage: '',
+   youtube: '',
+   createdAt: now,
+   updatedAt: now,
+ }
 }
  
 const INSULATED_BADGES = ['Double Wall', 'BPA-Free', 'Temp. Retention', '18/8 Stainless Steel', 'Powder Coated']
@@ -104,65 +104,65 @@ const SILICONE_BADGES = ['BPA-Free', 'Thermal Silicone', 'Non-Slip']
 const COOLER_BADGES = ['36h Maintains Cold Temp.', 'Heavy-Duty PP Body', 'Spacious & Efficient', 'Secure Tight-Seal Lid', 'Temp. Retention', 'BPA-Free']
  
 const SEED = [
-  // ── SIP / DRINKWARE ───────────────────────────────────────────────
-  product('qnh-dfit550', 'Dual Flow Insulated Tumbler 550ml', 'core', 'sip', 'Insulated tumbler with a 2-way spout lid for hot or cold drinks, designed for everyday hydration and temperature retention.', INSULATED_BADGES, 799.75, 25, mk('QNH-DFIT550', OG)),
-  product('qnh-dfit900', 'Dual Flow Insulated Tumbler 900ml', 'core', 'sip', 'Larger 2-way spout insulated tumbler for all-day hydration with double-wall vacuum insulation.', INSULATED_BADGES, 999.75, 16, mk('QNH-DFIT900', OG)),
-  product('qnh-it550', 'Insulated Tumbler 550ml with Silicone Boot', 'core', 'sip', 'Insulated tumbler with protective silicone boot for a non-slip grip and added everyday durability.', INSULATED_BADGES, 799.75, 16, mk('QNH-IT550', XP)),
-  product('qnh-it1100', 'Insulated Tumbler 1100ml with Silicone Boot', 'core', 'sip', 'Extra-large insulated tumbler with silicone boot, ideal for gym, school, office, and long workdays.', INSULATED_BADGES, 999.75, 8, mk('QNH-IT1100', XP)),
-  product('qnh-imt1100', 'Insulated Mug Tumbler 1100ml', 'core', 'sip', 'Large insulated mug tumbler with handle and straw lid for coffee, tea, and cold beverages.', INSULATED_BADGES, 799.75, 12, mk('QNH-IMT1100', XP)),
-  product('qnh-icm400', 'Insulated Coffee Mug 400ml', 'core', 'sip', 'Insulated desk coffee mug with lid, designed for home and office use.', INSULATED_BADGES, 799.75, 16, mk('QNH-ICM400', OG)),
-  product('qnh-ict600', 'Insulated Coffee Tumbler 600ml', 'core', 'sip', 'Portable insulated coffee tumbler for keeping drinks hot or cold while on the go.', INSULATED_BADGES, 799.75, 16, mk('QNH-ICT600', OG)),
-  product('qnh-sit2200', 'Insulated Sports Water Tumbler 2200ml', 'core', 'sip', 'Large insulated sports water tumbler built for athletes, outdoor use, and long hydration needs.', INSULATED_BADGES, 1999.75, 8, mk('QNH-SIT2200', OG)),
-  product('qnh-iwj2100', 'Insulated Water Jug 2100ml', 'core', 'sip', 'Heavy-duty insulated water jug with carry handle for outdoor activities, camping, and sports events.', INSULATED_BADGES, 1999.75, 6, mk('QNH-IWJ2100', OG)),
-  product('qnh-iwj3800', 'Insulated Water Jug 3800ml', 'core', 'sip', 'Large-capacity insulated water jug made for extended outdoor, sports, and travel hydration.', INSULATED_BADGES, 2299.75, 6, mk('QNH-IWJ3800', OG)),
-  product('qnh-wb500', 'Water Bottle 500ml', 'core', 'sip', 'Lightweight BPA-free plastic water bottle with secure lid for everyday hydration.', PLASTIC_BOTTLE_BADGES, 149.75, 24, mk('QNH-WB500', XP)),
-  product('qnh-wb1100', 'Water Bottle 1100ml', 'core', 'sip', 'Large reusable BPA-free plastic water bottle for school, office, workouts, and daily use.', PLASTIC_BOTTLE_BADGES, 199.75, 24, mk('QNH-WB1100', XP)),
-  product('qnh-twb680', 'Travel Water Bottle 680ml', 'core', 'sip', 'Travel plastic water bottle with dual spout, built-in straw, rubberized grip, and leak-proof design.', TRAVEL_BOTTLE_BADGES, 299.75, 24, mk('QNH-TWB680', XP)),
-  product('qnh-ilb1300', 'Insulated Lunch Box 1300ml', 'core', 'savor', 'Two-layer insulated lunch box that separates food and helps maintain meal temperature while on the go.', LUNCH_STEEL_BADGES, 749.75, 36, mk('QNH-ILB1300', OG)),
-  product('qnh-lb800', 'Lunch Box 800ml', 'core', 'savor', 'Lunch box with stainless steel detachable tray, designed for carrying meals safely and conveniently.', LUNCH_STEEL_BADGES, 549.75, 36, mk('QNH-LB800', XP)),
-  product('qnh-lb1200', 'Lunch Box 1200ml', 'core', 'savor', 'Lightweight PP lunch box for meals on the go, made with durable plastic materials and convenient compartments.', LUNCH_PP_BADGES, 349.75, 48, mk('QNH-LB1200', XP)),
-  product('qnh-lb1100', 'Lunch Box 1100ml', 'core', 'savor', 'Compact lunch box with secure lid and portion-friendly inner container for daily meals.', ['BPA-Free', 'Leak-Proof', 'Silicone Seal Ring', 'Hot Temp.'], 349.75, 48, mk('QNH-LB1100', OG)),
-  product('qnh-pcs', 'Portable Cutlery Set', 'core', 'accessories', 'Compact portable cutlery set with spoon, fork, and case for meals at work, school, travel, and picnics.', ['304 Stainless Steel', 'BPA-Free'], 349.75, 72, mk('QNH-PCS', XP)),
-  product('qnh-fscs230', 'Food Storage Container Set 230ml', 'core', 'savor', 'Stackable food storage container set for meal prep, snacks, and kitchen organization.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-FSCS230', XP)),
-  product('qnh-fscs390', 'Food Storage Container Set 390ml', 'core', 'savor', 'Medium stackable food storage container set with silicone seal ring and secure snap-lock lid.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-FSCS390', XP)),
-  product('qnh-adlb', 'Insulated Lunch Bag', 'core', 'go', 'Insulated lunch bag for keeping meals fresh and easy to carry for work, school, and weekend trips.', BAG_BADGES, 799.75, 12, mk('QNH-ADLB', OG)),
-  product('qnh-gwb500', 'Glass Water Bottle 500ml', 'core', 'sip', 'Glass water bottle with borosilicate body, silicone sleeve, and leak-proof design for clean daily hydration.', GLASS_BOTTLE_BADGES, 399.75, 24, mk('QNH-GWB500', OG)),
-  product('qnh-gwb350', 'Glass Water Bottle 350ml', 'core', 'sip', 'Compact borosilicate glass water bottle with silicone sleeve and leak-proof lid.', GLASS_BOTTLE_BADGES, 299.75, 36, mk('QNH-GWB350', OG)),
-  product('qnh-gcc330', 'Glass Coffee Cup 330ml', 'core', 'sip', 'Glass coffee cup with sleeve and secure lid for coffee, tea, and everyday drinks.', ['Borosilicate', 'BPA-Free', 'Leak-Proof', 'Hot Temp.', 'Cold Temp.'], 229.75, 24, mk('QNH-GCC330', OG)),
-  product('qnh-gct380', 'Glass Coffee Tumbler 380ml', 'core', 'sip', 'Reusable glass coffee tumbler with sleeve and lid for stylish on-the-go drinks.', ['Borosilicate', 'BPA-Free', 'Leak-Proof', 'Hot Temp.', 'Cold Temp.'], 229.75, 24, mk('QNH-GCT380', XP)),
-  product('qnh-fcp350', 'French Coffee Press 350ml', 'core', 'sip', 'Compact French coffee press for brewing rich coffee at home, office, or travel.', ['Borosilicate', 'BPA-Free', '18/8 Stainless Steel', 'Silicone Sleeve'], 399.75, 30, mk('QNH-FCP350', OG)),
-  product('qnh-cg150', 'Coffee Grinder 150g', 'core', 'accessories', 'Manual coffee grinder for freshly ground coffee with compact everyday-friendly design.', ['Manual Grinder', 'BPA-Free', 'Durable', 'Coffee Essential'], 599.75, 25, mk('QNH-CG150', OG)),
-  product('qnh-nbmlin325', 'New Bone Porcelain Mug 325ml — Linear', 'core', 'savor', 'New Bone porcelain mug with linear design, made for elegant everyday coffee and tea moments.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMLIN', XP)),
-  product('qnh-nbmdia325', 'New Bone Porcelain Mug 325ml — Diamond', 'core', 'savor', 'New Bone porcelain mug with diamond design, combining durability, elegance, and daily practicality.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMDIA', XP)),
-  product('qnh-nbmzod325', 'New Bone Zodiac Mug 325ml', 'core', 'savor', 'Black New Bone porcelain zodiac mug with gold zodiac artwork designs.', NEW_BONE_BADGES, 179.75, 36, ZODIAC),
-  product('qnh-kdlp', 'Kids Lunch Pack', 'kids', 'go', 'Kids lunch pack designed for carrying lunch essentials with playful colors and school-ready style.', ['BPA-Free', 'Kid-Friendly', 'Portable', 'Easy Carry'], 829.75, 16, mk('QNH-KDLP', BLOOM)),
-  product('qnh-kdwb520', 'Kids Water Bottle 520ml — Bloom', 'kids', 'sip', 'Kids water bottle from the Bloom collection with playful colors and easy everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 429.75, 24, mk('QNH-KDWB520', BLOOM)),
-  product('qnh-kdtwb500-bloom', 'Kids Travel Water Bottle 500ml — Bloom', 'kids', 'sip', 'Spill-proof kids travel water bottle with built-in straw, rubber grip, and Bloom colorways.', ['Dual Speed Lid', 'BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Rubber Grip'], 249.75, 24, mk('QNH-KDTWB500', BLOOM)),
-  product('qnh-kfscs230', 'Kids Food Storage Container Set 230ml — Bloom', 'kids', 'savor', 'Kids food storage container set for snacks, sides, and school baon organization.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS230', BLOOM)),
-  product('qnh-kfscs390', 'Kids Food Storage Container Set 390ml — Bloom', 'kids', 'savor', 'Medium kids food storage container set with secure seal and stackable design.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS390', BLOOM)),
-  product('qnh-kdfit400-poply', 'Dual Flow Insulated Tumbler 400ml — Poply', 'kids', 'sip', 'Bright Poply insulated tumbler for kids with dual-flow drinking and temperature retention.', INSULATED_BADGES, 699.75, 25, mk('QNH-KDFIT400', POPLY)),
-  product('qnh-kdwb650-poply', 'Kids Water Bottle 650ml — Poply', 'kids', 'sip', 'Playful Poply kids water bottle designed for school, outdoor activities, and everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 249.75, 24, mk('QNH-KDWB650', POPLY)),
-  product('qnh-kdlb1800-poply', 'Kids Lunch Box 1800ml — Poply', 'kids', 'savor', 'Spacious Poply kids lunch box for baon, snacks, and school meals.', ['BPA-Free', 'Air-Vent', 'Silicone Seal Ring', 'Kid-Friendly'], 799.75, 24, mk('QNH-KDLB1800', POPLY)),
-  product('qnh-boots-poply', 'Silicone Boot — Poply', 'kids', 'accessories', 'Protective silicone boot in Poply colors for added grip and bottle protection.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', POPLY)),
-  product('qnh-boots-core', 'Silicone Boot 20oz', 'core', 'accessories', 'Protective silicone boot for tumblers, designed to reduce scratches and add a non-slip base.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', XP)),
-  product('qnh-bootl', 'Silicone Boot 37oz', 'core', 'accessories', 'Large protective silicone boot designed for compatible tumblers, helping prevent dents, scratches, and slips.', SILICONE_BADGES, 149.75, 100, mk('QNH-BOOTL', XP)),
-  product('qnh-lid', 'Lid Cap', 'core', 'accessories', 'Replacement lid cap for compatible Quencha drinkware.', ['BPA-Free', 'Secure Fit', 'Leak-Proof', 'Replacement Part'], 199.75, 100, mk('QNH-LID', XP)),
-  product('qnh-cord', 'Paracord Handle', 'core', 'accessories', 'Durable paracord handle accessory for compatible tumblers and bottles.', ['Paracord', 'Durable', 'Portable', 'Easy Carry'], 129.75, 100, mk('QNH-CORD', XP)),
-  product('qnh-coaster', 'Silicone Coaster and Lid Set', 'core', 'accessories', 'Silicone coaster and lid set for added protection, grip, and daily drinkware convenience.', ['BPA-Free', 'Silicone', 'Non-Slip', 'Heat Resistant'], 199.75, 100, mk('QNH-COASTER', XP)),
-  product('qnh-parkey', 'Paracord Keychain', 'core', 'accessories', 'Paracord keychain accessory in Quencha colors for bags, bottles, and daily carry.', ['Paracord', 'Durable', 'Portable'], 199.75, 100, mk('QNH-PARKEY', XP)),
-  product('qnh-ittb', 'Insulated Tote Bag', 'core', 'go', 'Insulated tote bag with thermal lining for keeping meals fresh while on the go.', ['Non-Woven Fabric', 'Water Proof', '14L Capacity', 'Temp. Retention'], 299.75, 60, mk('QNH-ITTB', XP)),
-  product('qnh-hssb', 'Hard-Shell Sling Bag', 'core', 'go', 'Hard-shell sling bag for organized carry and everyday protection of essentials.', ['Hard Shell', 'Water Proof', 'Durable', 'Easy Carry'], 499.75, 50, mk('QNH-HSSB', XP)),
-  product('qnh-rutb', 'Rubber Tote Bag', 'core', 'go', 'Durable rubber tote bag for daily errands, travel, school, and casual carry.', ['Rubber', 'Water Proof', 'Durable', 'Easy Carry'], 999.75, 15, mk('QNH-RUTB', XP)),
-  product('qnh-pb940', 'Pet Bowl 940ml', 'pets', 'accessories', 'Stainless steel pet bowl for clean, durable, and hygienic feeding.', ['Stainless Steel', 'Pet-Safe', 'Durable', 'Easy Clean'], 999.75, 28, mk('QNH-PB940', PET_BOWL_940)),
-  product('qnh-pb1800', 'Pet Bowl 1800ml', 'pets', 'accessories', 'Large stainless steel pet bowl for feeding and water with durable pet-friendly construction.', ['Stainless Steel', 'Pet-Safe', 'Durable', 'Easy Clean'], 1199.75, 28, mk('QNH-PB1800', OG)),
-  product('qnh-pt550', 'Insulated Pet Tumbler 550ml', 'pets', 'accessories', "Double-wall insulated pet tumbler designed to keep your pet's water fresh during walks and trips.", ['Double Wall', 'BPA-Free', '18/8 Stainless Steel', '18h Cold', '8h Hot'], 799.75, 25, mk('QNH-PT550', OG)),
-  product('qnh-plr60', 'Pet Lint Roller 60 Sheets', 'pets', 'accessories', 'Pet lint roller for removing fur and lint from clothing, furniture, bags, and car seats.', ['Pet Care', 'Lint Removal', 'Portable', 'Easy Grip'], 199.75, 48, mk('QNH-PLR60', OG)),
-  product('qnh-plrr', '2pc Lint Roller Refill Set', 'pets', 'accessories', 'Two-piece lint roller refill set for compatible Quencha pet lint roller.', ['Pet Care', 'Lint Removal', 'Refill Set'], 199.75, 48, SINGLE_REFILL),
-  product('qnh-tpfwf', 'Portable Fan', 'tech', 'accessories', 'Portable fan with compact design for school, office, travel, and everyday cooling.', ['Portable', 'Rechargeable', 'USB Port', 'Compact'], 699.75, 50, mk('QNH-TPFWF', OG)),
-  product('qnh-tcoolpf', 'Portable Fan with Stand', 'tech', 'accessories', 'Portable standing fan with rechargeable power and compact everyday cooling design.', ['Portable', 'Rechargeable', 'USB Port', 'Compact'], 999.75, 96, mk('QNH-TCOOLPF', OG)),
-  product('qnh-tpdf', 'Portable Desk Fan', 'tech', 'accessories', 'Compact portable desk fan with rechargeable battery for offices, bedrooms, travel, and study spaces.', ['2000mAh Battery', '8hr Operation', '3hr Charging', 'USB Port', 'Compact'], 999.75, 60, mk('QNH-TPDF', OG)),
-  product('qnh-cool12', 'Cooler Box 12L', 'core', 'go', 'Insulated cooler box designed to keep food and beverages fresh, cold, and ready for outdoor trips and everyday use.', COOLER_BADGES, 1799.75, 1, mk('QNH-COOL12', COOLER)),
-  product('qnh-cool24', 'Cooler Box 24L', 'core', 'go', 'Large insulated cooler box for picnics, beach days, road trips, and everyday cooling needs.', COOLER_BADGES, 2999.75, 1, mk('QNH-COOL24', COOLER)),
+ // ── SIP / DRINKWARE ───────────────────────────────────────────────
+ product('qnh-dfit550', 'Dual Flow Insulated Tumbler 550ml', 'core', 'sip', 'Insulated tumbler with a 2-way spout lid for hot or cold drinks, designed for everyday hydration and temperature retention.', INSULATED_BADGES, 799.75, 25, mk('QNH-DFIT550', OG)),
+ product('qnh-dfit900', 'Dual Flow Insulated Tumbler 900ml', 'core', 'sip', 'Larger 2-way spout insulated tumbler for all-day hydration with double-wall vacuum insulation.', INSULATED_BADGES, 999.75, 16, mk('QNH-DFIT900', OG)),
+ product('qnh-it550', 'Insulated Tumbler 550ml with Silicone Boot', 'core', 'sip', 'Insulated tumbler with protective silicone boot for a non-slip grip and added everyday durability.', INSULATED_BADGES, 799.75, 16, mk('QNH-IT550', XP)),
+ product('qnh-it1100', 'Insulated Tumbler 1100ml with Silicone Boot', 'core', 'sip', 'Extra-large insulated tumbler with silicone boot, ideal for gym, school, office, and long workdays.', INSULATED_BADGES, 999.75, 8, mk('QNH-IT1100', XP)),
+ product('qnh-imt1100', 'Insulated Mug Tumbler 1100ml', 'core', 'sip', 'Large insulated mug tumbler with handle and straw lid for coffee, tea, and cold beverages.', INSULATED_BADGES, 799.75, 12, mk('QNH-IMT1100', XP)),
+ product('qnh-icm400', 'Insulated Coffee Mug 400ml', 'core', 'sip', 'Insulated desk coffee mug with lid, designed for home and office use.', INSULATED_BADGES, 799.75, 16, mk('QNH-ICM400', OG)),
+ product('qnh-ict600', 'Insulated Coffee Tumbler 600ml', 'core', 'sip', 'Portable insulated coffee tumbler for keeping drinks hot or cold while on the go.', INSULATED_BADGES, 799.75, 16, mk('QNH-ICT600', OG)),
+ product('qnh-sit2200', 'Insulated Sports Water Tumbler 2200ml', 'core', 'sip', 'Large insulated sports water tumbler built for athletes, outdoor use, and long hydration needs.', INSULATED_BADGES, 1999.75, 8, mk('QNH-SIT2200', OG)),
+ product('qnh-iwj2100', 'Insulated Water Jug 2100ml', 'core', 'sip', 'Heavy-duty insulated water jug with carry handle for outdoor activities, camping, and sports events.', INSULATED_BADGES, 1999.75, 6, mk('QNH-IWJ2100', OG)),
+ product('qnh-iwj3800', 'Insulated Water Jug 3800ml', 'core', 'sip', 'Large-capacity insulated water jug made for extended outdoor, sports, and travel hydration.', INSULATED_BADGES, 2299.75, 6, mk('QNH-IWJ3800', OG)),
+ product('qnh-wb500', 'Water Bottle 500ml', 'core', 'sip', 'Lightweight BPA-free plastic water bottle with secure lid for everyday hydration.', PLASTIC_BOTTLE_BADGES, 149.75, 24, mk('QNH-WB500', XP)),
+ product('qnh-wb1100', 'Water Bottle 1100ml', 'core', 'sip', 'Large reusable BPA-free plastic water bottle for school, office, workouts, and daily use.', PLASTIC_BOTTLE_BADGES, 199.75, 24, mk('QNH-WB1100', XP)),
+ product('qnh-twb680', 'Travel Water Bottle 680ml', 'core', 'sip', 'Travel plastic water bottle with dual spout, built-in straw, rubberized grip, and leak-proof design.', TRAVEL_BOTTLE_BADGES, 299.75, 24, mk('QNH-TWB680', XP)),
+ product('qnh-ilb1300', 'Insulated Lunch Box 1300ml', 'core', 'savor', 'Two-layer insulated lunch box that separates food and helps maintain meal temperature while on the go.', LUNCH_STEEL_BADGES, 749.75, 36, mk('QNH-ILB1300', OG)),
+ product('qnh-lb800', 'Lunch Box 800ml', 'core', 'savor', 'Lunch box with stainless steel detachable tray, designed for carrying meals safely and conveniently.', LUNCH_STEEL_BADGES, 549.75, 36, mk('QNH-LB800', XP)),
+ product('qnh-lb1200', 'Lunch Box 1200ml', 'core', 'savor', 'Lightweight PP lunch box for meals on the go, made with durable plastic materials and convenient compartments.', LUNCH_PP_BADGES, 349.75, 48, mk('QNH-LB1200', XP)),
+ product('qnh-lb1100', 'Lunch Box 1100ml', 'core', 'savor', 'Compact lunch box with secure lid and portion-friendly inner container for daily meals.', ['BPA-Free', 'Leak-Proof', 'Silicone Seal Ring', 'Hot Temp.'], 349.75, 48, mk('QNH-LB1100', OG)),
+ product('qnh-pcs', 'Portable Cutlery Set', 'core', 'accessories', 'Compact portable cutlery set with spoon, fork, and case for meals at work, school, travel, and picnics.', ['304 Stainless Steel', 'BPA-Free'], 349.75, 72, mk('QNH-PCS', XP)),
+ product('qnh-fscs230', 'Food Storage Container Set 230ml', 'core', 'savor', 'Stackable food storage container set for meal prep, snacks, and kitchen organization.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-FSCS230', XP)),
+ product('qnh-fscs390', 'Food Storage Container Set 390ml', 'core', 'savor', 'Medium stackable food storage container set with silicone seal ring and secure snap-lock lid.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-FSCS390', XP)),
+ product('qnh-adlb', 'Insulated Lunch Bag', 'core', 'go', 'Insulated lunch bag for keeping meals fresh and easy to carry for work, school, and weekend trips.', BAG_BADGES, 799.75, 12, mk('QNH-ADLB', OG)),
+ product('qnh-gwb500', 'Glass Water Bottle 500ml', 'core', 'sip', 'Glass water bottle with borosilicate body, silicone sleeve, and leak-proof design for clean daily hydration.', GLASS_BOTTLE_BADGES, 399.75, 24, mk('QNH-GWB500', OG)),
+ product('qnh-gwb350', 'Glass Water Bottle 350ml', 'core', 'sip', 'Compact borosilicate glass water bottle with silicone sleeve and leak-proof lid.', GLASS_BOTTLE_BADGES, 299.75, 36, mk('QNH-GWB350', OG)),
+ product('qnh-gcc330', 'Glass Coffee Cup 330ml', 'core', 'sip', 'Glass coffee cup with sleeve and secure lid for coffee, tea, and everyday drinks.', ['Borosilicate', 'BPA-Free', 'Leak-Proof', 'Hot Temp.', 'Cold Temp.'], 229.75, 24, mk('QNH-GCC330', OG)),
+ product('qnh-gct380', 'Glass Coffee Tumbler 380ml', 'core', 'sip', 'Reusable glass coffee tumbler with sleeve and lid for stylish on-the-go drinks.', ['Borosilicate', 'BPA-Free', 'Leak-Proof', 'Hot Temp.', 'Cold Temp.'], 229.75, 24, mk('QNH-GCT380', XP)),
+ product('qnh-fcp350', 'French Coffee Press 350ml', 'core', 'sip', 'Compact French coffee press for brewing rich coffee at home, office, or travel.', ['Borosilicate', 'BPA-Free', '18/8 Stainless Steel', 'Silicone Sleeve'], 399.75, 30, mk('QNH-FCP350', OG)),
+ product('qnh-cg150', 'Coffee Grinder 150g', 'core', 'accessories', 'Manual coffee grinder for freshly ground coffee with compact everyday-friendly design.', ['Manual Grinder', 'BPA-Free', 'Durable', 'Coffee Essential'], 599.75, 25, mk('QNH-CG150', OG)),
+ product('qnh-nbmlin325', 'New Bone Porcelain Mug 325ml — Linear', 'core', 'savor', 'New Bone porcelain mug with linear design, made for elegant everyday coffee and tea moments.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMLIN', XP)),
+ product('qnh-nbmdia325', 'New Bone Porcelain Mug 325ml — Diamond', 'core', 'savor', 'New Bone porcelain mug with diamond design, combining durability, elegance, and daily practicality.', NEW_BONE_BADGES, 129.75, 36, mk('QNH-NBMDIA', XP)),
+ product('qnh-nbmzod325', 'New Bone Zodiac Mug 325ml', 'core', 'savor', 'Black New Bone porcelain zodiac mug with gold zodiac artwork designs.', NEW_BONE_BADGES, 179.75, 36, ZODIAC),
+ product('qnh-kdlp', 'Kids Lunch Pack', 'kids', 'go', 'Kids lunch pack designed for carrying lunch essentials with playful colors and school-ready style.', ['BPA-Free', 'Kid-Friendly', 'Portable', 'Easy Carry'], 829.75, 16, mk('QNH-KDLP', BLOOM)),
+ product('qnh-kdwb520', 'Kids Water Bottle 520ml — Bloom', 'kids', 'sip', 'Kids water bottle from the Bloom collection with playful colors and easy everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 429.75, 24, mk('QNH-KDWB520', BLOOM)),
+ product('qnh-kdtwb500-bloom', 'Kids Travel Water Bottle 500ml — Bloom', 'kids', 'sip', 'Spill-proof kids travel water bottle with built-in straw, rubber grip, and Bloom colorways.', ['Dual Speed Lid', 'BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Rubber Grip'], 249.75, 24, mk('QNH-KDTWB500', BLOOM)),
+ product('qnh-kfscs230', 'Kids Food Storage Container Set 230ml — Bloom', 'kids', 'savor', 'Kids food storage container set for snacks, sides, and school baon organization.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS230', BLOOM)),
+ product('qnh-kfscs390', 'Kids Food Storage Container Set 390ml — Bloom', 'kids', 'savor', 'Medium kids food storage container set with secure seal and stackable design.', FOOD_STORAGE_BADGES, 399.75, 36, mk('QNH-KFSCS390', BLOOM)),
+ product('qnh-kdfit400-poply', 'Dual Flow Insulated Tumbler 400ml — Poply', 'kids', 'sip', 'Bright Poply insulated tumbler for kids with dual-flow drinking and temperature retention.', INSULATED_BADGES, 699.75, 25, mk('QNH-KDFIT400', POPLY)),
+ product('qnh-kdwb650-poply', 'Kids Water Bottle 650ml — Poply', 'kids', 'sip', 'Playful Poply kids water bottle designed for school, outdoor activities, and everyday hydration.', ['BPA-Free', 'Built-in Straw', 'Leak-Proof', 'Kid-Friendly'], 249.75, 24, mk('QNH-KDWB650', POPLY)),
+ product('qnh-kdlb1800-poply', 'Kids Lunch Box 1800ml — Poply', 'kids', 'savor', 'Spacious Poply kids lunch box for baon, snacks, and school meals.', ['BPA-Free', 'Air-Vent', 'Silicone Seal Ring', 'Kid-Friendly'], 799.75, 24, mk('QNH-KDLB1800', POPLY)),
+ product('qnh-boots-poply', 'Silicone Boot — Poply', 'kids', 'accessories', 'Protective silicone boot in Poply colors for added grip and bottle protection.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', POPLY)),
+ product('qnh-boots-core', 'Silicone Boot 20oz', 'core', 'accessories', 'Protective silicone boot for tumblers, designed to reduce scratches and add a non-slip base.', SILICONE_BADGES, 129.75, 100, mk('QNH-BOOTS', XP)),
+ product('qnh-bootl', 'Silicone Boot 37oz', 'core', 'accessories', 'Large protective silicone boot designed for compatible tumblers, helping prevent dents, scratches, and slips.', SILICONE_BADGES, 149.75, 100, mk('QNH-BOOTL', XP)),
+ product('qnh-lid', 'Lid Cap', 'core', 'accessories', 'Replacement lid cap for compatible Quencha drinkware.', ['BPA-Free', 'Secure Fit', 'Leak-Proof', 'Replacement Part'], 199.75, 100, mk('QNH-LID', XP)),
+ product('qnh-cord', 'Paracord Handle', 'core', 'accessories', 'Durable paracord handle accessory for compatible tumblers and bottles.', ['Paracord', 'Durable', 'Portable', 'Easy Carry'], 129.75, 100, mk('QNH-CORD', XP)),
+ product('qnh-coaster', 'Silicone Coaster and Lid Set', 'core', 'accessories', 'Silicone coaster and lid set for added protection, grip, and daily drinkware convenience.', ['BPA-Free', 'Silicone', 'Non-Slip', 'Heat Resistant'], 199.75, 100, mk('QNH-COASTER', XP)),
+ product('qnh-parkey', 'Paracord Keychain', 'core', 'accessories', 'Paracord keychain accessory in Quencha colors for bags, bottles, and daily carry.', ['Paracord', 'Durable', 'Portable'], 199.75, 100, mk('QNH-PARKEY', XP)),
+ product('qnh-ittb', 'Insulated Tote Bag', 'core', 'go', 'Insulated tote bag with thermal lining for keeping meals fresh while on the go.', ['Non-Woven Fabric', 'Water Proof', '14L Capacity', 'Temp. Retention'], 299.75, 60, mk('QNH-ITTB', XP)),
+ product('qnh-hssb', 'Hard-Shell Sling Bag', 'core', 'go', 'Hard-shell sling bag for organized carry and everyday protection of essentials.', ['Hard Shell', 'Water Proof', 'Durable', 'Easy Carry'], 499.75, 50, mk('QNH-HSSB', XP)),
+ product('qnh-rutb', 'Rubber Tote Bag', 'core', 'go', 'Durable rubber tote bag for daily errands, travel, school, and casual carry.', ['Rubber', 'Water Proof', 'Durable', 'Easy Carry'], 999.75, 15, mk('QNH-RUTB', XP)),
+ product('qnh-pb940', 'Pet Bowl 940ml', 'pets', 'accessories', 'Stainless steel pet bowl for clean, durable, and hygienic feeding.', ['Stainless Steel', 'Pet-Safe', 'Durable', 'Easy Clean'], 999.75, 28, mk('QNH-PB940', PET_BOWL_940)),
+ product('qnh-pb1800', 'Pet Bowl 1800ml', 'pets', 'accessories', 'Large stainless steel pet bowl for feeding and water with durable pet-friendly construction.', ['Stainless Steel', 'Pet-Safe', 'Durable', 'Easy Clean'], 1199.75, 28, mk('QNH-PB1800', OG)),
+ product('qnh-pt550', 'Insulated Pet Tumbler 550ml', 'pets', 'accessories', "Double-wall insulated pet tumbler designed to keep your pet's water fresh during walks and trips.", ['Double Wall', 'BPA-Free', '18/8 Stainless Steel', '18h Cold', '8h Hot'], 799.75, 25, mk('QNH-PT550', OG)),
+ product('qnh-plr60', 'Pet Lint Roller 60 Sheets', 'pets', 'accessories', 'Pet lint roller for removing fur and lint from clothing, furniture, bags, and car seats.', ['Pet Care', 'Lint Removal', 'Portable', 'Easy Grip'], 199.75, 48, mk('QNH-PLR60', OG)),
+ product('qnh-plrr', '2pc Lint Roller Refill Set', 'pets', 'accessories', 'Two-piece lint roller refill set for compatible Quencha pet lint roller.', ['Pet Care', 'Lint Removal', 'Refill Set'], 199.75, 48, SINGLE_REFILL),
+ product('qnh-tpfwf', 'Portable Fan', 'tech', 'accessories', 'Portable fan with compact design for school, office, travel, and everyday cooling.', ['Portable', 'Rechargeable', 'USB Port', 'Compact'], 699.75, 50, mk('QNH-TPFWF', OG)),
+ product('qnh-tcoolpf', 'Portable Fan with Stand', 'tech', 'accessories', 'Portable standing fan with rechargeable power and compact everyday cooling design.', ['Portable', 'Rechargeable', 'USB Port', 'Compact'], 999.75, 96, mk('QNH-TCOOLPF', OG)),
+ product('qnh-tpdf', 'Portable Desk Fan', 'tech', 'accessories', 'Compact portable desk fan with rechargeable battery for offices, bedrooms, travel, and study spaces.', ['2000mAh Battery', '8hr Operation', '3hr Charging', 'USB Port', 'Compact'], 999.75, 60, mk('QNH-TPDF', OG)),
+ product('qnh-cool12', 'Cooler Box 12L', 'core', 'go', 'Insulated cooler box designed to keep food and beverages fresh, cold, and ready for outdoor trips and everyday use.', COOLER_BADGES, 1799.75, 1, mk('QNH-COOL12', COOLER)),
+ product('qnh-cool24', 'Cooler Box 24L', 'core', 'go', 'Large insulated cooler box for picnics, beach days, road trips, and everyday cooling needs.', COOLER_BADGES, 2999.75, 1, mk('QNH-COOL24', COOLER)),
 ]
  
 const EDIT_PASSWORD = 'quencha2026'
@@ -173,30 +173,30 @@ const CAT_ORDER = ['sip','savor','go','accessories']
 const EXT_COLORS = {core:'#279989',kids:'#5891c4',pets:'#b06820',tech:'#2B4C5E'}
 const CAT_ICONS = {sip:'💧',savor:'🍱',go:'👜',accessories:'⚙️'}
 const DEFAULT_CATS = [
-  {value:'sip',         label:'SIP — Drinkware',      icon:'💧'},
-  {value:'savor',       label:'SAVOR — Lunch & Food',  icon:'🍱'},
-  {value:'go',          label:'GO — Bags & Carry',     icon:'👜'},
-  {value:'accessories', label:'Accessories',           icon:'⚙️'},
+ {value:'sip',         label:'SIP — Drinkware',      icon:'💧'},
+ {value:'savor',       label:'SAVOR — Lunch & Food',  icon:'🍱'},
+ {value:'go',          label:'GO — Bags & Carry',     icon:'👜'},
+ {value:'accessories', label:'Accessories',           icon:'⚙️'},
 ]
 const DEFAULT_EXTS = [
-  {value:'core',  label:'Quencha',  color:'#279989'},
-  {value:'kids',  label:'Quencha Kids',  color:'#5891c4'},
-  {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
-  {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
+ {value:'core',  label:'Quencha',  color:'#279989'},
+ {value:'kids',  label:'Quencha Kids',  color:'#5891c4'},
+ {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
+ {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
 ]
  
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap');
 :root{
-  --sf:#B9DCD2;--sf4:rgba(185,220,210,0.4);--sf7:rgba(185,220,210,0.7);
-  --cy:#2DCCD3;--cy2:#25b5bb;--tl:#279989;--tl2:#1e8070;
-  --gr:#63666A;--wh:#FFFFFF;--bk:#3A3A3A;--bg:#F7FAF9;
-  --fn:'Satoshi','Inter',-apple-system,sans-serif;
-  --r:10px;--rl:16px;--tr:.2s ease;
-  --nh:60px;--sw:260px;
-  --sh:0 2px 12px rgba(39,153,137,.08);
-  --shh:0 8px 32px rgba(39,153,137,.18);
+ --sf:#B9DCD2;--sf4:rgba(185,220,210,0.4);--sf7:rgba(185,220,210,0.7);
+ --cy:#2DCCD3;--cy2:#25b5bb;--tl:#279989;--tl2:#1e8070;
+ --gr:#63666A;--wh:#FFFFFF;--bk:#3A3A3A;--bg:#F7FAF9;
+ --fn:'Satoshi','Inter',-apple-system,sans-serif;
+ --r:10px;--rl:16px;--tr:.2s ease;
+ --nh:60px;--sw:260px;
+ --sh:0 2px 12px rgba(39,153,137,.08);
+ --shh:0 8px 32px rgba(39,153,137,.18);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -697,150 +697,150 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
  
 /* RESPONSIVE */
 @media(max-width:1024px){
-  .qnh-sidebar{display:none}
-  .qnh-main{margin-left:0}
-  .mob-filter-btn{display:none}
-  .tb-menu-btn{display:flex}
+ .qnh-sidebar{display:none}
+ .qnh-main{margin-left:0}
+ .mob-filter-btn{display:none}
+ .tb-menu-btn{display:flex}
 }
 @media(max-width:768px){
-  .tb-tg{display:none}
-  .hero{padding:28px 24px;flex-direction:column;gap:16px}
-  .h-ti{font-size:36px}
-  .h-stat{text-align:left}
-  .f-row{grid-template-columns:1fr}
+ .tb-tg{display:none}
+ .hero{padding:28px 24px;flex-direction:column;gap:16px}
+ .h-ti{font-size:36px}
+ .h-stat{text-align:left}
+ .f-row{grid-template-columns:1fr}
 }
 @media(max-width:480px){
-  .qnh-topbar{padding:0 12px;gap:8px}
-  .tb-wm{font-size:16px}
-  .tb-tg{display:none}
-  .tb-logo{height:24px;max-width:92px}
-  .tb-brand-edit{display:none}
-  .tb-edit-btn span:last-child{display:none}
-  .qnh-main{padding:16px 14px 100px}
-  .hero{padding:20px 16px}
-  .h-ti{font-size:28px}
-  .modal-bg{padding:0;align-items:flex-end}
-  .modal{max-height:96vh;border-radius:var(--rl) var(--rl) 0 0}
-  .edit-bar{bottom:12px;left:12px;right:12px;transform:none;border-radius:12px}
-  .eb-cnt{display:none}
+ .qnh-topbar{padding:0 12px;gap:8px}
+ .tb-wm{font-size:16px}
+ .tb-tg{display:none}
+ .tb-logo{height:24px;max-width:92px}
+ .tb-brand-edit{display:none}
+ .tb-edit-btn span:last-child{display:none}
+ .qnh-main{padding:16px 14px 100px}
+ .hero{padding:20px 16px}
+ .h-ti{font-size:28px}
+ .modal-bg{padding:0;align-items:flex-end}
+ .modal{max-height:96vh;border-radius:var(--rl) var(--rl) 0 0}
+ .edit-bar{bottom:12px;left:12px;right:12px;transform:none;border-radius:12px}
+ .eb-cnt{display:none}
 }
  
  
 /* MOBILE EDIT MODE BAR — COMPACT SAFE DOCK */
 @media (max-width: 640px) {
-  .edit-bar {
-    left: 12px !important;
-    right: 12px !important;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
-    transform: none !important;
-    width: auto !important;
-    max-width: calc(100vw - 24px) !important;
-    border-radius: 18px !important;
-    padding: 10px !important;
-    gap: 10px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    white-space: normal !important;
-    overflow: visible !important;
-  }
+ .edit-bar {
+   left: 12px !important;
+   right: 12px !important;
+   bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+   transform: none !important;
+   width: auto !important;
+   max-width: calc(100vw - 24px) !important;
+   border-radius: 18px !important;
+   padding: 10px !important;
+   gap: 10px !important;
+   display: flex !important;
+   flex-direction: column !important;
+   align-items: stretch !important;
+   white-space: normal !important;
+   overflow: visible !important;
+ }
  
-  .edit-bar > div:first-child {
-    width: 100% !important;
-    justify-content: flex-start !important;
-    padding: 0 4px !important;
-  }
+ .edit-bar > div:first-child {
+   width: 100% !important;
+   justify-content: flex-start !important;
+   padding: 0 4px !important;
+ }
  
-  .edit-bar > div:nth-child(2) {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-  }
+ .edit-bar > div:nth-child(2) {
+   display: grid !important;
+   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+   gap: 8px !important;
+   width: 100% !important;
+ }
  
-  .edit-bar .eb-add,
-  .edit-bar .eb-exit {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 40px !important;
-    padding: 0 10px !important;
-    border-radius: 12px !important;
-    font-size: 12px !important;
-    line-height: 1.1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
+ .edit-bar .eb-add,
+ .edit-bar .eb-exit {
+   width: 100% !important;
+   min-width: 0 !important;
+   height: 40px !important;
+   padding: 0 10px !important;
+   border-radius: 12px !important;
+   font-size: 12px !important;
+   line-height: 1.1 !important;
+   display: flex !important;
+   align-items: center !important;
+   justify-content: center !important;
+   text-align: center !important;
+   overflow: hidden !important;
+   text-overflow: ellipsis !important;
+ }
  
-  .edit-bar .eb-cnt {
-    display: none !important;
-  }
+ .edit-bar .eb-cnt {
+   display: none !important;
+ }
 }
  
 /* MOBILE PRODUCT MODAL — FULLSCREEN PAGE STYLE */
 @media (max-width: 640px) {
-  .modal-bg {
-    padding: 0 !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
-    background: var(--wh) !important;
-    backdrop-filter: none !important;
-  }
+ .modal-bg {
+   padding: 0 !important;
+   align-items: stretch !important;
+   justify-content: stretch !important;
+   background: var(--wh) !important;
+   backdrop-filter: none !important;
+ }
  
-  .modal {
-    width: 100vw !important;
-    height: 100dvh !important;
-    max-width: none !important;
-    max-height: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    display: block !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
+ .modal {
+   width: 100vw !important;
+   height: 100dvh !important;
+   max-width: none !important;
+   max-height: none !important;
+   border-radius: 0 !important;
+   box-shadow: none !important;
+   display: block !important;
+   overflow-y: auto !important;
+   -webkit-overflow-scrolling: touch !important;
+ }
  
-  .m-hdr {
-    position: relative !important;
-    padding: 28px 52px 24px 24px !important;
-    border-radius: 0 !important;
-  }
+ .m-hdr {
+   position: relative !important;
+   padding: 28px 52px 24px 24px !important;
+   border-radius: 0 !important;
+ }
  
-  .m-close {
-    position: absolute !important;
-    top: 22px !important;
-    right: 18px !important;
-    width: 42px !important;
-    height: 42px !important;
-    font-size: 18px !important;
-    z-index: 3 !important;
-  }
+ .m-close {
+   position: absolute !important;
+   top: 22px !important;
+   right: 18px !important;
+   width: 42px !important;
+   height: 42px !important;
+   font-size: 18px !important;
+   z-index: 3 !important;
+ }
  
-  .m-body {
-    overflow: visible !important;
-    padding: 20px 18px 96px !important;
-    max-height: none !important;
-  }
+ .m-body {
+   overflow: visible !important;
+   padding: 20px 18px 96px !important;
+   max-height: none !important;
+ }
  
-  .m-footer {
-    position: sticky !important;
-    bottom: 0 !important;
-    z-index: 5 !important;
-    border-radius: 0 !important;
-    padding: 12px 14px calc(12px + env(safe-area-inset-bottom)) !important;
-    background: rgba(255,255,255,.96) !important;
-    backdrop-filter: blur(10px) !important;
-  }
+ .m-footer {
+   position: sticky !important;
+   bottom: 0 !important;
+   z-index: 5 !important;
+   border-radius: 0 !important;
+   padding: 12px 14px calc(12px + env(safe-area-inset-bottom)) !important;
+   background: rgba(255,255,255,.96) !important;
+   backdrop-filter: blur(10px) !important;
+ }
  
-  .vm-main-wrap {
-    border-radius: 14px !important;
-  }
+ .vm-main-wrap {
+   border-radius: 14px !important;
+ }
  
-  .vm-thumbs {
-    padding-bottom: 8px !important;
-  }
+ .vm-thumbs {
+   padding-bottom: 8px !important;
+ }
 }
  
  
@@ -925,65 +925,65 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-send{width:100%;margin-top:4px}
  
 @media(max-width:900px){
-  .quench-hero{grid-template-columns:1fr;padding:22px;margin:24px 0;gap:16px}
-  .quench-visual{min-height:150px}
-  .quench-title{font-size:34px}
-  .quench-modal{width:100vw!important;max-width:none!important;height:100dvh!important;max-height:none!important;border-radius:0!important}
-  .quench-body{grid-template-columns:1fr;gap:14px;padding:16px}
-  .quench-side{order:2}
-  .quench-main{order:1}
-  .quench-product-grid{grid-template-columns:1fr;max-height:none;overflow:visible;padding-right:0}
-  .quench-progress{gap:6px}
-  .quench-step{font-size:11px}
-  .quench-step::after{width:14px}
+ .quench-hero{grid-template-columns:1fr;padding:22px;margin:24px 0;gap:16px}
+ .quench-visual{min-height:150px}
+ .quench-title{font-size:34px}
+ .quench-modal{width:100vw!important;max-width:none!important;height:100dvh!important;max-height:none!important;border-radius:0!important}
+ .quench-body{grid-template-columns:1fr;gap:14px;padding:16px}
+ .quench-side{order:2}
+ .quench-main{order:1}
+ .quench-product-grid{grid-template-columns:1fr;max-height:none;overflow:visible;padding-right:0}
+ .quench-progress{gap:6px}
+ .quench-step{font-size:11px}
+ .quench-step::after{width:14px}
 }
 @media(max-width:640px){
-  .quench-hero{border-radius:18px;padding:20px;margin:20px 0;background:linear-gradient(145deg,rgba(185,220,210,.50),rgba(255,255,255,.96))}
-  .quench-title{font-size:30px}
-  .quench-sub{font-size:14px}
-  .quench-actions{display:block}
-  .quench-start{width:100%;margin-bottom:12px}
-  .quench-mini-collections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .quench-chip{font-size:11px;padding:8px 6px;text-align:center}
-  .quench-visual{display:none}
-  .quench-head{padding:22px 18px!important}
-  .quench-head .quench-title{font-size:28px;margin-right:48px}
-  .quench-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:14px}
-  .quench-step{font-size:0;justify-content:center;gap:0}
-  .quench-step::after{display:none}
-  .quench-step-dot{width:28px;height:28px;font-size:12px}
-  .quench-body{padding:14px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .quench-feature-card{min-height:auto;padding:18px;border-radius:14px}
-  .quench-feature-title{font-size:20px}
-  .quench-feature-sub{font-size:13px}
-  .quench-color-dot{width:38px;height:38px}
-  .quench-form-row{grid-template-columns:1fr 74px}
-  .quench-summary{grid-template-columns:repeat(3,1fr);gap:7px}
-  .quench-total{padding:11px 6px}
-  .quench-total-val{font-size:20px}
-  .quench-collection-list{display:grid;grid-template-columns:1fr;gap:7px}
-  .quench-set{padding:12px}
+ .quench-hero{border-radius:18px;padding:20px;margin:20px 0;background:linear-gradient(145deg,rgba(185,220,210,.50),rgba(255,255,255,.96))}
+ .quench-title{font-size:30px}
+ .quench-sub{font-size:14px}
+ .quench-actions{display:block}
+ .quench-start{width:100%;margin-bottom:12px}
+ .quench-mini-collections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .quench-chip{font-size:11px;padding:8px 6px;text-align:center}
+ .quench-visual{display:none}
+ .quench-head{padding:22px 18px!important}
+ .quench-head .quench-title{font-size:28px;margin-right:48px}
+ .quench-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:14px}
+ .quench-step{font-size:0;justify-content:center;gap:0}
+ .quench-step::after{display:none}
+ .quench-step-dot{width:28px;height:28px;font-size:12px}
+ .quench-body{padding:14px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+ .quench-feature-card{min-height:auto;padding:18px;border-radius:14px}
+ .quench-feature-title{font-size:20px}
+ .quench-feature-sub{font-size:13px}
+ .quench-color-dot{width:38px;height:38px}
+ .quench-form-row{grid-template-columns:1fr 74px}
+ .quench-summary{grid-template-columns:repeat(3,1fr);gap:7px}
+ .quench-total{padding:11px 6px}
+ .quench-total-val{font-size:20px}
+ .quench-collection-list{display:grid;grid-template-columns:1fr;gap:7px}
+ .quench-set{padding:12px}
 }
  
  
 /* ─── UI CONSISTENCY PASS — QUENCHA DESIGN SYSTEM ─────────────────────────────
-   Unified typography, spacing, buttons, cards, modals, edit mode, and mobile UI
-   across catalog, product modal, Quenchables, sidebar, and admin/edit forms.
+  Unified typography, spacing, buttons, cards, modals, edit mode, and mobile UI
+  across catalog, product modal, Quenchables, sidebar, and admin/edit forms.
 */
 :root{
-  --q-space-1:4px;--q-space-2:8px;--q-space-3:12px;--q-space-4:16px;--q-space-5:20px;--q-space-6:24px;--q-space-8:32px;
-  --q-radius-sm:8px;--q-radius-md:12px;--q-radius-lg:18px;--q-radius-xl:24px;
-  --q-border:1px solid rgba(39,153,137,.16);
-  --q-border-strong:1.5px solid rgba(39,153,137,.28);
-  --q-surface:#ffffff;
-  --q-surface-mint:rgba(185,220,210,.28);
-  --q-surface-mint-strong:rgba(185,220,210,.48);
-  --q-text:#3A3A3A;
-  --q-muted:rgba(58,58,58,.62);
-  --q-muted-2:rgba(58,58,58,.45);
-  --q-shadow-soft:0 8px 28px rgba(39,153,137,.10);
-  --q-shadow-card:0 2px 14px rgba(39,153,137,.08);
-  --q-shadow-float:0 18px 60px rgba(39,153,137,.20);
+ --q-space-1:4px;--q-space-2:8px;--q-space-3:12px;--q-space-4:16px;--q-space-5:20px;--q-space-6:24px;--q-space-8:32px;
+ --q-radius-sm:8px;--q-radius-md:12px;--q-radius-lg:18px;--q-radius-xl:24px;
+ --q-border:1px solid rgba(39,153,137,.16);
+ --q-border-strong:1.5px solid rgba(39,153,137,.28);
+ --q-surface:#ffffff;
+ --q-surface-mint:rgba(185,220,210,.28);
+ --q-surface-mint-strong:rgba(185,220,210,.48);
+ --q-text:#3A3A3A;
+ --q-muted:rgba(58,58,58,.62);
+ --q-muted-2:rgba(58,58,58,.45);
+ --q-shadow-soft:0 8px 28px rgba(39,153,137,.10);
+ --q-shadow-card:0 2px 14px rgba(39,153,137,.08);
+ --q-shadow-float:0 18px 60px rgba(39,153,137,.20);
 }
 body{font-size:14px;color:var(--q-text);background:var(--bg)}
 button,input,select,textarea{font-family:var(--fn)}
@@ -998,30 +998,30 @@ button,input,select,textarea{font-family:var(--fn)}
 /* Shared buttons */
 button{touch-action:manipulation}
 .add-btn,.save-btn,.pw-submit,.vm-inq-btn,.tb-inq,.q-primary,.q-next,.q-add-btn,.q-send-btn,.collection-add-set,.collection-add-row button{
-  background:var(--tl)!important;color:#fff!important;border:1px solid var(--tl)!important;border-radius:var(--q-radius-md)!important;
-  min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.01em!important;
-  box-shadow:0 8px 22px rgba(39,153,137,.16)!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important
+ background:var(--tl)!important;color:#fff!important;border:1px solid var(--tl)!important;border-radius:var(--q-radius-md)!important;
+ min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.01em!important;
+ box-shadow:0 8px 22px rgba(39,153,137,.16)!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important
 }
 .add-btn:hover,.save-btn:hover,.pw-submit:hover,.vm-inq-btn:hover,.tb-inq:hover,.q-primary:hover,.q-next:hover,.q-add-btn:hover,.q-send-btn:hover,.collection-add-set:hover,.collection-add-row button:hover{background:var(--tl2)!important;transform:translateY(-1px)!important;box-shadow:0 12px 28px rgba(39,153,137,.22)!important}
 .cancel-btn,.q-secondary,.collection-save-set,.qb-back,.qb-ghost{
-  background:#fff!important;color:var(--tl)!important;border:1.5px solid rgba(39,153,137,.22)!important;border-radius:var(--q-radius-md)!important;
-  min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important;box-shadow:none!important
+ background:#fff!important;color:var(--tl)!important;border:1.5px solid rgba(39,153,137,.22)!important;border-radius:var(--q-radius-md)!important;
+ min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important;box-shadow:none!important
 }
 .del-btn,.q-danger{
-  background:rgba(239,68,68,.08)!important;color:#b91c1c!important;border:1.5px solid rgba(239,68,68,.24)!important;border-radius:var(--q-radius-md)!important;
-  min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important
+ background:rgba(239,68,68,.08)!important;color:#b91c1c!important;border:1.5px solid rgba(239,68,68,.24)!important;border-radius:var(--q-radius-md)!important;
+ min-height:42px!important;padding:10px 16px!important;font-size:13px!important;font-weight:900!important
 }
  
 /* Cards and surfaces */
 .hero,.q-hero,.q-builder-card,.q-review-card,.q-inquiry-card,.pcard,.modal,.pw-modal,.vm-color-item,.color-collection-panel,.collection-item,.collection-set-editor,.color-row,.img-color-card,.img-general-card,.f-in,.f-sel,.f-ta,.in-sm,.sort-sel{
-  border-radius:var(--q-radius-lg)!important;border:var(--q-border)!important
+ border-radius:var(--q-radius-lg)!important;border:var(--q-border)!important
 }
 .pcard,.q-builder-card,.q-review-card,.q-inquiry-card,.collection-item,.color-row,.img-color-card,.img-general-card{box-shadow:var(--q-shadow-card)!important;background:var(--q-surface)!important}
 .hero,.q-hero{background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.92))!important;border:var(--q-border)!important;box-shadow:var(--q-shadow-soft)!important}
  
 /* Forms */
 .f-in,.f-sel,.f-ta,.in-sm,.collection-name,.collection-add-row input[type=text],.hex-in,.collection-select,.sort-sel{
-  background:#fff!important;border:1.5px solid rgba(39,153,137,.18)!important;border-radius:var(--q-radius-md)!important;color:var(--q-text)!important;font-size:13px!important;min-height:40px!important
+ background:#fff!important;border:1.5px solid rgba(39,153,137,.18)!important;border-radius:var(--q-radius-md)!important;color:var(--q-text)!important;font-size:13px!important;min-height:40px!important
 }
 .f-in:focus,.f-sel:focus,.f-ta:focus,.in-sm:focus,.collection-name:focus,.collection-add-row input[type=text]:focus,.collection-select:focus,.sort-sel:focus{border-color:var(--tl)!important;box-shadow:0 0 0 3px rgba(39,153,137,.08)!important;background:#fff!important}
  
@@ -1105,278 +1105,278 @@ button{touch-action:manipulation}
  
 /* Mobile consistency */
 @media(max-width:640px){
-  :root{--nh:58px}
-  body{font-size:13px!important}
-  .qnh-topbar{height:58px!important;padding:0 12px!important;gap:8px!important}
-  .tb-menu-btn{display:flex!important;width:42px!important;height:42px!important;border-radius:14px!important}
-  .tb-logo{max-width:142px!important;height:30px!important}
-  .tb-wm{font-size:16px!important;max-width:126px!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .tb-tg{display:none!important}
-  .tb-search-wrap{max-width:none!important;min-width:0!important;flex:1!important;margin:0!important}
-  .tb-search{height:42px!important;font-size:13px!important;padding:9px 44px 9px 14px!important}
-  .tb-clear{display:none!important}
-  .tb-search-btn{width:34px!important;height:34px!important;right:4px!important}
-  .tb-edit-btn{width:42px!important;height:42px!important;border-radius:50%!important}
-  .qnh-main{margin-left:0!important;padding:24px 16px 110px!important}
-  .hero,.q-section,.quenchables-section{padding:22px!important;margin:18px 0!important;border-radius:22px!important}
-  .h-ti,.q-title{font-size:34px!important;line-height:1.02!important}
-  .h-su,.q-sub{font-size:14px!important;line-height:1.58!important}
-  .toolbar{gap:10px!important;margin:18px 0 22px!important}
-  .res-label{width:100%!important;flex:0 0 100%!important;font-size:13px!important}
-  .sort-sel{flex:1!important;height:48px!important;font-size:14px!important}
-  .vbtns{height:48px!important;border-radius:14px!important}
-  .vbtn{min-width:48px!important;height:40px!important;border-radius:10px!important}
-  .modal-bg{padding:0!important;align-items:stretch!important;justify-content:stretch!important}
-  .modal{width:100%!important;max-width:none!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important;border:none!important;box-shadow:none!important}
-  .m-hdr{padding:28px 20px 22px!important;border-radius:0!important}
-  .m-body{padding:20px!important;gap:16px!important}
-  .m-footer{border-radius:0!important;padding:14px 16px calc(14px + env(safe-area-inset-bottom))!important;position:sticky!important;bottom:0!important;z-index:3!important}
-  .m-close{width:54px!important;height:54px!important;font-size:22px!important}
-  .vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
-  .vm-color-item{display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;padding:10px 8px!important;gap:8px!important}
-  .vm-color-name{font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .vm-color-sku{font-size:9px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .f-row{grid-template-columns:1fr!important}
-  .edit-modal-inner{max-width:none!important}
-  .collection-grid{grid-template-columns:1fr!important}
-  .collection-item{grid-template-columns:46px minmax(0,1fr)!important;padding:14px!important}
-  .collection-actions{grid-template-columns:1fr 1fr!important}
-  .collection-set-count{grid-column:1/-1!important;width:max-content!important;min-width:86px!important}
-  .collection-add-set,.collection-save-set{width:100%!important;min-width:0!important}
-  .collection-color-edit-row{grid-template-columns:42px 70px minmax(0,1fr) 62px 34px!important;gap:7px!important;padding:9px!important}
-  .collection-color-edit-row input{font-size:12px!important;min-width:0!important}
-  .color-row{grid-template-columns:1fr!important;gap:10px!important}
-  .qb-modal,.q-modal{width:100%!important;max-width:none!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important}
-  .qb-header,.q-modal-header{padding:28px 20px 22px!important}
-  .qb-body,.q-modal-body{padding:20px!important}
-  .qb-footer,.q-modal-footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom))!important;position:sticky!important;bottom:0!important;z-index:3!important;flex-direction:column!important;align-items:stretch!important}
-  .qb-steps,.q-steps{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
-  .qb-step,.q-step{justify-content:center!important;padding:8px!important;font-size:0!important}
-  .qb-step-num,.q-step-num{width:34px!important;height:34px!important;font-size:13px!important}
-  .qb-product-grid,.q-product-grid{grid-template-columns:1fr!important}
-  .q-collections,.q-collection-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ :root{--nh:58px}
+ body{font-size:13px!important}
+ .qnh-topbar{height:58px!important;padding:0 12px!important;gap:8px!important}
+ .tb-menu-btn{display:flex!important;width:42px!important;height:42px!important;border-radius:14px!important}
+ .tb-logo{max-width:142px!important;height:30px!important}
+ .tb-wm{font-size:16px!important;max-width:126px!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .tb-tg{display:none!important}
+ .tb-search-wrap{max-width:none!important;min-width:0!important;flex:1!important;margin:0!important}
+ .tb-search{height:42px!important;font-size:13px!important;padding:9px 44px 9px 14px!important}
+ .tb-clear{display:none!important}
+ .tb-search-btn{width:34px!important;height:34px!important;right:4px!important}
+ .tb-edit-btn{width:42px!important;height:42px!important;border-radius:50%!important}
+ .qnh-main{margin-left:0!important;padding:24px 16px 110px!important}
+ .hero,.q-section,.quenchables-section{padding:22px!important;margin:18px 0!important;border-radius:22px!important}
+ .h-ti,.q-title{font-size:34px!important;line-height:1.02!important}
+ .h-su,.q-sub{font-size:14px!important;line-height:1.58!important}
+ .toolbar{gap:10px!important;margin:18px 0 22px!important}
+ .res-label{width:100%!important;flex:0 0 100%!important;font-size:13px!important}
+ .sort-sel{flex:1!important;height:48px!important;font-size:14px!important}
+ .vbtns{height:48px!important;border-radius:14px!important}
+ .vbtn{min-width:48px!important;height:40px!important;border-radius:10px!important}
+ .modal-bg{padding:0!important;align-items:stretch!important;justify-content:stretch!important}
+ .modal{width:100%!important;max-width:none!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important;border:none!important;box-shadow:none!important}
+ .m-hdr{padding:28px 20px 22px!important;border-radius:0!important}
+ .m-body{padding:20px!important;gap:16px!important}
+ .m-footer{border-radius:0!important;padding:14px 16px calc(14px + env(safe-area-inset-bottom))!important;position:sticky!important;bottom:0!important;z-index:3!important}
+ .m-close{width:54px!important;height:54px!important;font-size:22px!important}
+ .vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+ .vm-color-item{display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;padding:10px 8px!important;gap:8px!important}
+ .vm-color-name{font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .vm-color-sku{font-size:9px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .f-row{grid-template-columns:1fr!important}
+ .edit-modal-inner{max-width:none!important}
+ .collection-grid{grid-template-columns:1fr!important}
+ .collection-item{grid-template-columns:46px minmax(0,1fr)!important;padding:14px!important}
+ .collection-actions{grid-template-columns:1fr 1fr!important}
+ .collection-set-count{grid-column:1/-1!important;width:max-content!important;min-width:86px!important}
+ .collection-add-set,.collection-save-set{width:100%!important;min-width:0!important}
+ .collection-color-edit-row{grid-template-columns:42px 70px minmax(0,1fr) 62px 34px!important;gap:7px!important;padding:9px!important}
+ .collection-color-edit-row input{font-size:12px!important;min-width:0!important}
+ .color-row{grid-template-columns:1fr!important;gap:10px!important}
+ .qb-modal,.q-modal{width:100%!important;max-width:none!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important}
+ .qb-header,.q-modal-header{padding:28px 20px 22px!important}
+ .qb-body,.q-modal-body{padding:20px!important}
+ .qb-footer,.q-modal-footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom))!important;position:sticky!important;bottom:0!important;z-index:3!important;flex-direction:column!important;align-items:stretch!important}
+ .qb-steps,.q-steps{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
+ .qb-step,.q-step{justify-content:center!important;padding:8px!important;font-size:0!important}
+ .qb-step-num,.q-step-num{width:34px!important;height:34px!important;font-size:13px!important}
+ .qb-product-grid,.q-product-grid{grid-template-columns:1fr!important}
+ .q-collections,.q-collection-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
  
 /* ──────────────────────────────────────────────────────────────
-   UI CONSISTENCY FIX: MOBILE MODAL SCROLL + HERO/QUENCHABLES TYPE
-   This override keeps all top feature sections on one visual system
-   and fixes mobile product modal scrolling.
+  UI CONSISTENCY FIX: MOBILE MODAL SCROLL + HERO/QUENCHABLES TYPE
+  This override keeps all top feature sections on one visual system
+  and fixes mobile product modal scrolling.
 ────────────────────────────────────────────────────────────── */
 .hero,
 .quench-hero{
-  background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.92))!important;
-  border:1px solid rgba(39,153,137,.13)!important;
-  border-radius:var(--q-radius-xl)!important;
-  box-shadow:var(--q-shadow-soft)!important;
+ background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.92))!important;
+ border:1px solid rgba(39,153,137,.13)!important;
+ border-radius:var(--q-radius-xl)!important;
+ box-shadow:var(--q-shadow-soft)!important;
 }
  
 .h-ey,
 .quench-eyebrow{
-  font-family:var(--fn)!important;
-  font-size:clamp(10px,1.1vw,12px)!important;
-  line-height:1.15!important;
-  font-weight:900!important;
-  letter-spacing:.14em!important;
-  text-transform:uppercase!important;
-  color:var(--tl)!important;
-  opacity:.78!important;
-  margin-bottom:8px!important;
+ font-family:var(--fn)!important;
+ font-size:clamp(10px,1.1vw,12px)!important;
+ line-height:1.15!important;
+ font-weight:900!important;
+ letter-spacing:.14em!important;
+ text-transform:uppercase!important;
+ color:var(--tl)!important;
+ opacity:.78!important;
+ margin-bottom:8px!important;
 }
  
 .h-ti,
 .quench-title{
-  font-family:var(--fn)!important;
-  font-size:clamp(32px,4vw,48px)!important;
-  line-height:1.05!important;
-  font-weight:900!important;
-  letter-spacing:-.035em!important;
-  color:var(--tl)!important;
-  margin:0 0 10px!important;
+ font-family:var(--fn)!important;
+ font-size:clamp(32px,4vw,48px)!important;
+ line-height:1.05!important;
+ font-weight:900!important;
+ letter-spacing:-.035em!important;
+ color:var(--tl)!important;
+ margin:0 0 10px!important;
 }
  
 .h-su,
 .quench-sub{
-  font-family:var(--fn)!important;
-  font-size:clamp(14px,1.25vw,15px)!important;
-  line-height:1.62!important;
-  font-weight:400!important;
-  color:rgba(39,153,137,.72)!important;
-  margin:0 0 20px!important;
-  max-width:620px!important;
+ font-family:var(--fn)!important;
+ font-size:clamp(14px,1.25vw,15px)!important;
+ line-height:1.62!important;
+ font-weight:400!important;
+ color:rgba(39,153,137,.72)!important;
+ margin:0 0 20px!important;
+ max-width:620px!important;
 }
  
 .quench-start,
 .q-primary,
 .save-btn,
 .vm-inq-btn{
-  font-size:14px!important;
-  font-weight:900!important;
-  border-radius:14px!important;
+ font-size:14px!important;
+ font-weight:900!important;
+ border-radius:14px!important;
 }
  
 @media (max-width:640px){
-  /* Top feature sections: same spacing and typography on mobile */
-  .hero,
-  .quench-hero{
-    padding:28px 24px!important;
-    margin:18px 0 22px!important;
-    border-radius:24px!important;
-  }
+ /* Top feature sections: same spacing and typography on mobile */
+ .hero,
+ .quench-hero{
+   padding:28px 24px!important;
+   margin:18px 0 22px!important;
+   border-radius:24px!important;
+ }
  
-  .h-ey,
-  .quench-eyebrow{
-    font-size:11px!important;
-    letter-spacing:.15em!important;
-    margin-bottom:10px!important;
-  }
+ .h-ey,
+ .quench-eyebrow{
+   font-size:11px!important;
+   letter-spacing:.15em!important;
+   margin-bottom:10px!important;
+ }
  
-  .h-ti,
-  .quench-title{
-    font-size:34px!important;
-    line-height:1.04!important;
-    color:var(--tl)!important;
-  }
+ .h-ti,
+ .quench-title{
+   font-size:34px!important;
+   line-height:1.04!important;
+   color:var(--tl)!important;
+ }
  
-  .h-su,
-  .quench-sub{
-    font-size:15px!important;
-    line-height:1.62!important;
-    color:rgba(39,153,137,.70)!important;
-  }
+ .h-su,
+ .quench-sub{
+   font-size:15px!important;
+   line-height:1.62!important;
+   color:rgba(39,153,137,.70)!important;
+ }
  
-  .quench-start{
-    width:100%!important;
-    min-height:52px!important;
-    font-size:15px!important;
-  }
+ .quench-start{
+   width:100%!important;
+   min-height:52px!important;
+   font-size:15px!important;
+ }
  
-  /* Mobile product/detail modal: fix stuck/non-scrolling behavior */
-  .modal-bg{
-    padding:0!important;
-    align-items:stretch!important;
-    justify-content:stretch!important;
-    background:#fff!important;
-    backdrop-filter:none!important;
-    overflow:hidden!important;
-  }
+ /* Mobile product/detail modal: fix stuck/non-scrolling behavior */
+ .modal-bg{
+   padding:0!important;
+   align-items:stretch!important;
+   justify-content:stretch!important;
+   background:#fff!important;
+   backdrop-filter:none!important;
+   overflow:hidden!important;
+ }
  
-  .modal{
-    width:100vw!important;
-    height:100dvh!important;
-    max-width:none!important;
-    max-height:none!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    display:flex!important;
-    flex-direction:column!important;
-    overflow:hidden!important;
-  }
+ .modal{
+   width:100vw!important;
+   height:100dvh!important;
+   max-width:none!important;
+   max-height:none!important;
+   border-radius:0!important;
+   box-shadow:none!important;
+   display:flex!important;
+   flex-direction:column!important;
+   overflow:hidden!important;
+ }
  
-  .m-hdr{
-    flex:0 0 auto!important;
-    position:relative!important;
-    padding:28px 64px 24px 24px!important;
-    border-radius:0!important;
-  }
+ .m-hdr{
+   flex:0 0 auto!important;
+   position:relative!important;
+   padding:28px 64px 24px 24px!important;
+   border-radius:0!important;
+ }
  
-  .m-body{
-    flex:1 1 auto!important;
-    min-height:0!important;
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-    overscroll-behavior:contain!important;
-    padding:20px 18px 104px!important;
-    max-height:none!important;
-  }
+ .m-body{
+   flex:1 1 auto!important;
+   min-height:0!important;
+   overflow-y:auto!important;
+   -webkit-overflow-scrolling:touch!important;
+   overscroll-behavior:contain!important;
+   padding:20px 18px 104px!important;
+   max-height:none!important;
+ }
  
-  .m-footer{
-    flex:0 0 auto!important;
-    position:relative!important;
-    bottom:auto!important;
-    z-index:5!important;
-    border-radius:0!important;
-    padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
-    background:rgba(255,255,255,.98)!important;
-    backdrop-filter:blur(10px)!important;
-  }
+ .m-footer{
+   flex:0 0 auto!important;
+   position:relative!important;
+   bottom:auto!important;
+   z-index:5!important;
+   border-radius:0!important;
+   padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
+   background:rgba(255,255,255,.98)!important;
+   backdrop-filter:blur(10px)!important;
+ }
  
-  .m-close{
-    position:absolute!important;
-    top:18px!important;
-    right:16px!important;
-    width:48px!important;
-    height:48px!important;
-    font-size:20px!important;
-    z-index:10!important;
-  }
+ .m-close{
+   position:absolute!important;
+   top:18px!important;
+   right:16px!important;
+   width:48px!important;
+   height:48px!important;
+   font-size:20px!important;
+   z-index:10!important;
+ }
 }
  
  
  
 /* ──────────────────────────────────────────────────────────────
-   FINAL FULL UI AUDIT LOCK — consistent type, sections, modals
-   Applies to all public catalog, product modal, Quenchables, sidebar,
-   edit/admin, inquiry, and mobile screens.
+  FINAL FULL UI AUDIT LOCK — consistent type, sections, modals
+  Applies to all public catalog, product modal, Quenchables, sidebar,
+  edit/admin, inquiry, and mobile screens.
 ────────────────────────────────────────────────────────────── */
 :root{
-  --ui-label:11px;
-  --ui-body:14px;
-  --ui-helper:12px;
-  --ui-btn:14px;
-  --ui-radius-card:18px;
-  --ui-radius-section:24px;
-  --ui-line:1.55;
+ --ui-label:11px;
+ --ui-body:14px;
+ --ui-helper:12px;
+ --ui-btn:14px;
+ --ui-radius-card:18px;
+ --ui-radius-section:24px;
+ --ui-line:1.55;
 }
  
 /* Typography hierarchy */
 .h-ey,.quench-eyebrow,.sb-lbl,.cat-nm,.vm-tlbl,.f-lbl,.sub-hd,.collection-title,.qey,.q-step-label,.q-section-eyebrow,.em-badge,.pw-lbl{
-  font-family:var(--fn)!important;
-  font-size:var(--ui-label)!important;
-  line-height:1.15!important;
-  font-weight:900!important;
-  letter-spacing:.14em!important;
-  text-transform:uppercase!important;
-  color:var(--tl)!important;
-  opacity:.82!important;
+ font-family:var(--fn)!important;
+ font-size:var(--ui-label)!important;
+ line-height:1.15!important;
+ font-weight:900!important;
+ letter-spacing:.14em!important;
+ text-transform:uppercase!important;
+ color:var(--tl)!important;
+ opacity:.82!important;
 }
 .h-ti,.quench-title{
-  font-family:var(--fn)!important;
-  font-size:clamp(34px,4vw,46px)!important;
-  line-height:1.06!important;
-  font-weight:900!important;
-  letter-spacing:-.035em!important;
-  color:var(--tl)!important;
-  margin:0 0 10px!important;
+ font-family:var(--fn)!important;
+ font-size:clamp(34px,4vw,46px)!important;
+ line-height:1.06!important;
+ font-weight:900!important;
+ letter-spacing:-.035em!important;
+ color:var(--tl)!important;
+ margin:0 0 10px!important;
 }
 .h-su,.quench-sub,.vm-desc,.c-desc,.quench-feature-sub,.quench-set-meta,.f-hint,.uz-sub,.pw-sub{
-  font-family:var(--fn)!important;
-  font-size:var(--ui-body)!important;
-  line-height:var(--ui-line)!important;
-  font-weight:400!important;
-  color:rgba(58,58,58,.64)!important;
+ font-family:var(--fn)!important;
+ font-size:var(--ui-body)!important;
+ line-height:var(--ui-line)!important;
+ font-weight:400!important;
+ color:rgba(58,58,58,.64)!important;
 }
 .c-name,.vm-color-name,.quench-feature-title,.quench-set-name,.quench-prod-name,.em-title,.pw-title{
-  font-family:var(--fn)!important;
-  color:var(--q-text)!important;
-  font-weight:900!important;
-  letter-spacing:-.015em!important;
+ font-family:var(--fn)!important;
+ color:var(--q-text)!important;
+ font-weight:900!important;
+ letter-spacing:-.015em!important;
 }
 .c-sku,.vm-code,.vm-color-sku,.quench-code,.quench-prod-sku{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
-  font-size:11px!important;
-  font-weight:900!important;
-  letter-spacing:.035em!important;
-  color:var(--tl)!important;
+ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+ font-size:11px!important;
+ font-weight:900!important;
+ letter-spacing:.035em!important;
+ color:var(--tl)!important;
 }
  
 /* Section consistency: main intro and Quenchables use the same system */
 .hero,.quench-hero{
-  background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.96))!important;
-  border:1px solid rgba(39,153,137,.14)!important;
-  border-radius:var(--ui-radius-section)!important;
-  box-shadow:0 8px 28px rgba(39,153,137,.08)!important;
-  padding:clamp(24px,4vw,44px)!important;
-  margin:0 0 28px!important;
+ background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.96))!important;
+ border:1px solid rgba(39,153,137,.14)!important;
+ border-radius:var(--ui-radius-section)!important;
+ box-shadow:0 8px 28px rgba(39,153,137,.08)!important;
+ padding:clamp(24px,4vw,44px)!important;
+ margin:0 0 28px!important;
 }
 .quench-hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:24px!important;align-items:center!important}
 .h-text,.quench-hero>div:first-child{max-width:720px!important}
@@ -1384,53 +1384,53 @@ button{touch-action:manipulation}
 .quench-actions{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;margin-top:18px!important}
 .quench-mini-collections{display:flex!important;gap:8px!important;flex-wrap:wrap!important}
 .quench-chip,.pc,.fb{
-  min-height:36px!important;
-  border-radius:999px!important;
-  border:1px solid rgba(39,153,137,.18)!important;
-  background:#fff!important;
-  color:var(--tl)!important;
-  font-family:var(--fn)!important;
-  font-size:12px!important;
-  font-weight:900!important;
-  padding:8px 14px!important;
+ min-height:36px!important;
+ border-radius:999px!important;
+ border:1px solid rgba(39,153,137,.18)!important;
+ background:#fff!important;
+ color:var(--tl)!important;
+ font-family:var(--fn)!important;
+ font-size:12px!important;
+ font-weight:900!important;
+ padding:8px 14px!important;
 }
  
 /* Button consistency */
 .quench-start,.quench-next,.quench-send,.quench-add,.add-btn,.save-btn,.vm-inq-btn,.pw-submit,.tb-inq,.collection-add-set,.collection-add-row button{
-  min-height:44px!important;
-  border-radius:14px!important;
-  background:var(--tl)!important;
-  color:#fff!important;
-  border:1px solid var(--tl)!important;
-  font-size:var(--ui-btn)!important;
-  font-weight:900!important;
-  padding:11px 18px!important;
-  box-shadow:0 10px 24px rgba(39,153,137,.16)!important;
-  text-decoration:none!important;
+ min-height:44px!important;
+ border-radius:14px!important;
+ background:var(--tl)!important;
+ color:#fff!important;
+ border:1px solid var(--tl)!important;
+ font-size:var(--ui-btn)!important;
+ font-weight:900!important;
+ padding:11px 18px!important;
+ box-shadow:0 10px 24px rgba(39,153,137,.16)!important;
+ text-decoration:none!important;
 }
 .cancel-btn,.collection-save-set,.qb-back,.quench-tab{
-  min-height:42px!important;
-  border-radius:14px!important;
-  background:#fff!important;
-  color:var(--tl)!important;
-  border:1.5px solid rgba(39,153,137,.22)!important;
-  font-size:13px!important;
-  font-weight:900!important;
-  padding:10px 16px!important;
+ min-height:42px!important;
+ border-radius:14px!important;
+ background:#fff!important;
+ color:var(--tl)!important;
+ border:1.5px solid rgba(39,153,137,.22)!important;
+ font-size:13px!important;
+ font-weight:900!important;
+ padding:10px 16px!important;
 }
 .del-btn,.quench-remove,.rm-btn{
-  border-radius:14px!important;
-  background:rgba(239,68,68,.08)!important;
-  color:#b91c1c!important;
-  border:1.5px solid rgba(239,68,68,.22)!important;
-  font-weight:900!important;
+ border-radius:14px!important;
+ background:rgba(239,68,68,.08)!important;
+ color:#b91c1c!important;
+ border:1.5px solid rgba(239,68,68,.22)!important;
+ font-weight:900!important;
 }
  
 /* Card consistency */
 .pcard,.vm-color-item,.quench-product,.quench-set,.quench-feature-card,.quench-total,.collection-item,.collection-set-editor,.color-row,.img-color-card,.img-general-card,.upload-zone,.f-in,.f-sel,.f-ta,.in-sm,.sort-sel{
-  border-radius:var(--ui-radius-card)!important;
-  border:1px solid rgba(39,153,137,.16)!important;
-  box-shadow:0 2px 14px rgba(39,153,137,.06)!important;
+ border-radius:var(--ui-radius-card)!important;
+ border:1px solid rgba(39,153,137,.16)!important;
+ box-shadow:0 2px 14px rgba(39,153,137,.06)!important;
 }
 .pcard,.quench-product,.quench-set,.quench-feature-card,.collection-item,.collection-set-editor,.color-row,.img-color-card,.img-general-card{background:#fff!important}
  
@@ -1470,185 +1470,185 @@ button{touch-action:manipulation}
 .quench-input,.quench-select,.quench-note{border-radius:14px!important;border:1.5px solid rgba(39,153,137,.20)!important;background:#fff!important;font-family:var(--fn)!important;font-size:13px!important;color:var(--q-text)!important}
  
 @media(max-width:700px){
-  :root{--ui-body:14px;--ui-btn:14px}
-  .qnh-main{padding:22px 16px 100px!important}
-  .hero,.quench-hero{padding:28px 24px!important;margin:18px 0 24px!important;border-radius:24px!important}
-  .quench-hero{display:block!important}
-  .h-ti,.quench-title{font-size:34px!important;line-height:1.06!important;letter-spacing:-.035em!important}
-  .h-su,.quench-sub{font-size:15px!important;line-height:1.62!important;color:rgba(39,153,137,.70)!important;margin-bottom:18px!important}
-  .h-ey,.quench-eyebrow{font-size:11px!important;margin-bottom:10px!important}
-  .quench-start{width:100%!important;min-height:52px!important;font-size:15px!important}
-  .quench-mini-collections{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
-  .quench-chip{font-size:12px!important;min-height:44px!important;text-align:center!important;justify-content:center!important}
+ :root{--ui-body:14px;--ui-btn:14px}
+ .qnh-main{padding:22px 16px 100px!important}
+ .hero,.quench-hero{padding:28px 24px!important;margin:18px 0 24px!important;border-radius:24px!important}
+ .quench-hero{display:block!important}
+ .h-ti,.quench-title{font-size:34px!important;line-height:1.06!important;letter-spacing:-.035em!important}
+ .h-su,.quench-sub{font-size:15px!important;line-height:1.62!important;color:rgba(39,153,137,.70)!important;margin-bottom:18px!important}
+ .h-ey,.quench-eyebrow{font-size:11px!important;margin-bottom:10px!important}
+ .quench-start{width:100%!important;min-height:52px!important;font-size:15px!important}
+ .quench-mini-collections{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
+ .quench-chip{font-size:12px!important;min-height:44px!important;text-align:center!important;justify-content:center!important}
  
-  /* Reliable mobile modal scrolling: overlay scrolls as full page */
-  .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
-  .modal{width:100vw!important;max-width:none!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;border:none!important;overflow:visible!important;display:block!important}
-  .m-hdr{position:relative!important;border-radius:0!important;padding:28px 70px 24px 24px!important}
-  .m-body{overflow:visible!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
-  .m-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:30!important;border-radius:0!important;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(12px)!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;box-shadow:0 -8px 24px rgba(39,153,137,.10)!important}
-  .m-close{position:absolute!important;top:18px!important;right:16px!important;width:48px!important;height:48px!important;border-radius:50%!important;font-size:20px!important;z-index:10!important}
-  .m-footer-r{width:100%!important;display:grid!important;grid-template-columns:1fr 1.5fr!important;gap:10px!important;margin-left:0!important}
+ /* Reliable mobile modal scrolling: overlay scrolls as full page */
+ .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
+ .modal{width:100vw!important;max-width:none!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;border:none!important;overflow:visible!important;display:block!important}
+ .m-hdr{position:relative!important;border-radius:0!important;padding:28px 70px 24px 24px!important}
+ .m-body{overflow:visible!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
+ .m-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:30!important;border-radius:0!important;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(12px)!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;box-shadow:0 -8px 24px rgba(39,153,137,.10)!important}
+ .m-close{position:absolute!important;top:18px!important;right:16px!important;width:48px!important;height:48px!important;border-radius:50%!important;font-size:20px!important;z-index:10!important}
+ .m-footer-r{width:100%!important;display:grid!important;grid-template-columns:1fr 1.5fr!important;gap:10px!important;margin-left:0!important}
  
-  .vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
-  .vm-color-item{padding:10px 8px!important;gap:8px!important;min-height:74px!important}
-  .vm-color-swatch{width:32px!important;height:32px!important;flex-basis:32px!important}
-  .vm-color-name{font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .vm-color-sku{font-size:9.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+ .vm-color-item{padding:10px 8px!important;gap:8px!important;min-height:74px!important}
+ .vm-color-swatch{width:32px!important;height:32px!important;flex-basis:32px!important}
+ .vm-color-name{font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .vm-color-sku{font-size:9.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
  
-  .collection-grid{grid-template-columns:1fr!important}
-  .collection-item{grid-template-columns:40px minmax(0,1fr)!important;padding:14px!important}
-  .collection-actions{grid-template-columns:1fr!important;gap:8px!important}
-  .collection-set-count,.collection-add-set,.collection-save-set{width:100%!important;min-width:0!important}
-  .collection-color-edit-row{grid-template-columns:34px 66px minmax(0,1fr) 58px 34px!important;gap:7px!important;padding:9px!important}
+ .collection-grid{grid-template-columns:1fr!important}
+ .collection-item{grid-template-columns:40px minmax(0,1fr)!important;padding:14px!important}
+ .collection-actions{grid-template-columns:1fr!important;gap:8px!important}
+ .collection-set-count,.collection-add-set,.collection-save-set{width:100%!important;min-width:0!important}
+ .collection-color-edit-row{grid-template-columns:34px 66px minmax(0,1fr) 58px 34px!important;gap:7px!important;padding:9px!important}
  
-  .quench-modal{width:100vw!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;overflow:visible!important}
-  .quench-body{overflow:visible!important;max-height:none!important;padding:18px!important}
-  .quench-layout{grid-template-columns:1fr!important}
-  .quench-side{order:2!important}
-  .quench-main{order:1!important}
-  .quench-progress{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
-  .quench-step{font-size:0!important;justify-content:center!important;padding:6px!important}
-  .quench-step-dot{width:34px!important;height:34px!important;font-size:13px!important}
-  .quench-product-grid{grid-template-columns:1fr!important}
-  .quench-form-row{grid-template-columns:1fr 78px!important}
-  .quench-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .quench-modal{width:100vw!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;overflow:visible!important}
+ .quench-body{overflow:visible!important;max-height:none!important;padding:18px!important}
+ .quench-layout{grid-template-columns:1fr!important}
+ .quench-side{order:2!important}
+ .quench-main{order:1!important}
+ .quench-progress{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+ .quench-step{font-size:0!important;justify-content:center!important;padding:6px!important}
+ .quench-step-dot{width:34px!important;height:34px!important;font-size:13px!important}
+ .quench-product-grid{grid-template-columns:1fr!important}
+ .quench-form-row{grid-template-columns:1fr 78px!important}
+ .quench-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
 }
  
  
  
 /* ─── MOBILE COLOR GRID RESTORE: 4 COLUMNS + SMOOTH EDIT SCROLL ───────────── */
 @media (max-width:700px){
-  .vm-color-sec-lbl{
-    font-size:11px!important;
-    margin-bottom:8px!important;
-    letter-spacing:.12em!important;
-  }
-  .vm-color-grid{
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-  .vm-color-item{
-    min-height:74px!important;
-    padding:8px 5px!important;
-    border-radius:14px!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    text-align:center!important;
-    gap:5px!important;
-    background:#fff!important;
-  }
-  .vm-color-swatch{
-    width:30px!important;
-    height:30px!important;
-    flex:0 0 30px!important;
-    box-shadow:0 2px 8px rgba(0,0,0,.12)!important;
-  }
-  .vm-color-info{
-    width:100%!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:0!important;
-    min-width:0!important;
-  }
-  .vm-color-name{
-    font-size:10.5px!important;
-    line-height:1.12!important;
-    max-width:100%!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-  .vm-color-sku{
-    display:none!important;
-  }
-  .vm-color-item.color-active{
-    box-shadow:0 0 0 2px rgba(39,153,137,.22)!important;
-    background:rgba(45,204,211,.08)!important;
-  }
-  .modal.edit-modal-inner{
-    height:100dvh!important;
-    max-height:100dvh!important;
-    overflow:hidden!important;
-    border-radius:0!important;
-  }
-  .edit-modal-inner .em-panel{
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-    overscroll-behavior:contain!important;
-    touch-action:pan-y!important;
-    padding-bottom:120px!important;
-  }
-  .edit-modal-inner .m-body{
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-    overscroll-behavior:contain!important;
-  }
-  .edit-modal-inner .m-footer{
-    position:sticky!important;
-    bottom:0!important;
-    z-index:8!important;
-    background:rgba(255,255,255,.96)!important;
-    backdrop-filter:blur(10px)!important;
-  }
-  .color-image-thumb{
-    touch-action:none!important;
-    user-select:none!important;
-    -webkit-user-select:none!important;
-  }
-  .color-image-thumb.dragging{
-    opacity:.55!important;
-    transform:scale(.96)!important;
-  }
+ .vm-color-sec-lbl{
+   font-size:11px!important;
+   margin-bottom:8px!important;
+   letter-spacing:.12em!important;
+ }
+ .vm-color-grid{
+   grid-template-columns:repeat(4,minmax(0,1fr))!important;
+   gap:8px!important;
+ }
+ .vm-color-item{
+   min-height:74px!important;
+   padding:8px 5px!important;
+   border-radius:14px!important;
+   display:flex!important;
+   flex-direction:column!important;
+   align-items:center!important;
+   justify-content:center!important;
+   text-align:center!important;
+   gap:5px!important;
+   background:#fff!important;
+ }
+ .vm-color-swatch{
+   width:30px!important;
+   height:30px!important;
+   flex:0 0 30px!important;
+   box-shadow:0 2px 8px rgba(0,0,0,.12)!important;
+ }
+ .vm-color-info{
+   width:100%!important;
+   display:flex!important;
+   align-items:center!important;
+   justify-content:center!important;
+   gap:0!important;
+   min-width:0!important;
+ }
+ .vm-color-name{
+   font-size:10.5px!important;
+   line-height:1.12!important;
+   max-width:100%!important;
+   white-space:nowrap!important;
+   overflow:hidden!important;
+   text-overflow:ellipsis!important;
+ }
+ .vm-color-sku{
+   display:none!important;
+ }
+ .vm-color-item.color-active{
+   box-shadow:0 0 0 2px rgba(39,153,137,.22)!important;
+   background:rgba(45,204,211,.08)!important;
+ }
+ .modal.edit-modal-inner{
+   height:100dvh!important;
+   max-height:100dvh!important;
+   overflow:hidden!important;
+   border-radius:0!important;
+ }
+ .edit-modal-inner .em-panel{
+   overflow-y:auto!important;
+   -webkit-overflow-scrolling:touch!important;
+   overscroll-behavior:contain!important;
+   touch-action:pan-y!important;
+   padding-bottom:120px!important;
+ }
+ .edit-modal-inner .m-body{
+   overflow-y:auto!important;
+   -webkit-overflow-scrolling:touch!important;
+   overscroll-behavior:contain!important;
+ }
+ .edit-modal-inner .m-footer{
+   position:sticky!important;
+   bottom:0!important;
+   z-index:8!important;
+   background:rgba(255,255,255,.96)!important;
+   backdrop-filter:blur(10px)!important;
+ }
+ .color-image-thumb{
+   touch-action:none!important;
+   user-select:none!important;
+   -webkit-user-select:none!important;
+ }
+ .color-image-thumb.dragging{
+   opacity:.55!important;
+   transform:scale(.96)!important;
+ }
 }
  
 /* FORCE MOBILE PRODUCT MODAL COLOR SWATCHES TO 4 COLUMNS */
 @media (max-width: 700px) {
-  .modal .vm-color-grid,
-  .modal-bg .vm-color-grid,
-  .vm-color-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .modal .vm-color-item,
-  .modal-bg .vm-color-item,
-  .vm-color-item {
-    min-height: 68px !important;
-    padding: 7px 4px !important;
-    border-radius: 14px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    gap: 4px !important;
-  }
-  .modal .vm-color-swatch,
-  .modal-bg .vm-color-swatch,
-  .vm-color-swatch {
-    width: 28px !important;
-    height: 28px !important;
-    flex: 0 0 28px !important;
-  }
-  .modal .vm-color-name,
-  .modal-bg .vm-color-name,
-  .vm-color-name {
-    font-size: 10px !important;
-    line-height: 1.1 !important;
-    max-width: 100% !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  .modal .vm-color-sku,
-  .modal-bg .vm-color-sku,
-  .vm-color-sku {
-    display: none !important;
-  }
+ .modal .vm-color-grid,
+ .modal-bg .vm-color-grid,
+ .vm-color-grid {
+   display: grid !important;
+   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+   gap: 8px !important;
+ }
+ .modal .vm-color-item,
+ .modal-bg .vm-color-item,
+ .vm-color-item {
+   min-height: 68px !important;
+   padding: 7px 4px !important;
+   border-radius: 14px !important;
+   display: flex !important;
+   flex-direction: column !important;
+   align-items: center !important;
+   justify-content: center !important;
+   text-align: center !important;
+   gap: 4px !important;
+ }
+ .modal .vm-color-swatch,
+ .modal-bg .vm-color-swatch,
+ .vm-color-swatch {
+   width: 28px !important;
+   height: 28px !important;
+   flex: 0 0 28px !important;
+ }
+ .modal .vm-color-name,
+ .modal-bg .vm-color-name,
+ .vm-color-name {
+   font-size: 10px !important;
+   line-height: 1.1 !important;
+   max-width: 100% !important;
+   white-space: nowrap !important;
+   overflow: hidden !important;
+   text-overflow: ellipsis !important;
+ }
+ .modal .vm-color-sku,
+ .modal-bg .vm-color-sku,
+ .vm-color-sku {
+   display: none !important;
+ }
 }
  
  
@@ -1663,57 +1663,198 @@ button{touch-action:manipulation}
  
 .edit-modal-inner,
 .modal.edit-modal-inner{
-  display:flex!important;
-  flex-direction:column!important;
-  min-height:0!important;
+ display:flex!important;
+ flex-direction:column!important;
+ min-height:0!important;
 }
 .edit-modal-inner .em-panel{
-  flex:1 1 auto!important;
-  min-height:0!important;
-  overflow-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
-  overscroll-behavior:contain!important;
-  scroll-behavior:smooth!important;
-  touch-action:pan-y!important;
+ flex:1 1 auto!important;
+ min-height:0!important;
+ overflow-y:auto!important;
+ -webkit-overflow-scrolling:touch!important;
+ overscroll-behavior:contain!important;
+ scroll-behavior:smooth!important;
+ touch-action:pan-y!important;
 }
 .edit-modal-inner .m-footer{
-  flex-shrink:0!important;
+ flex-shrink:0!important;
 }
  
 @media(max-width:700px){
-  .vm-thumbs{gap:7px!important;padding:3px 2px 8px!important}
-  .vm-thumb{width:48px!important;height:48px!important;border-radius:8px!important}
-  .vm-variant-table-card{padding:10px!important}
-  .vm-variant-table{min-width:360px!important}
-  .vm-variant-table th{font-size:9px!important;padding:7px 8px!important}
-  .vm-variant-table td{font-size:11px!important;padding:7px 8px!important}
-  .vm-variant-color{gap:6px!important}
-  .vm-variant-swatch{width:12px!important;height:12px!important}
-  .vm-variant-sku{font-size:10px!important}
-  .vm-variant-barcode img{max-width:96px!important;max-height:36px!important}
+ .vm-thumbs{gap:7px!important;padding:3px 2px 8px!important}
+ .vm-thumb{width:48px!important;height:48px!important;border-radius:8px!important}
+ .vm-variant-table-card{padding:10px!important}
+ .vm-variant-table{min-width:360px!important}
+ .vm-variant-table th{font-size:9px!important;padding:7px 8px!important}
+ .vm-variant-table td{font-size:11px!important;padding:7px 8px!important}
+ .vm-variant-color{gap:6px!important}
+ .vm-variant-swatch{width:12px!important;height:12px!important}
+ .vm-variant-sku{font-size:10px!important}
+ .vm-variant-barcode img{max-width:96px!important;max-height:36px!important}
  
-  .edit-modal-inner,
-  .modal.edit-modal-inner{
-    width:100vw!important;
-    height:100dvh!important;
-    max-height:100dvh!important;
-    max-width:none!important;
-    border-radius:0!important;
-    overflow:hidden!important;
-  }
-  .edit-modal-inner .em-tabs{flex-shrink:0!important}
-  .edit-modal-inner .em-panel{
-    max-height:none!important;
-    padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;
-  }
-  .edit-modal-inner .m-footer{
-    position:sticky!important;
-    bottom:0!important;
-    z-index:8!important;
-    background:rgba(255,255,255,.96)!important;
-    backdrop-filter:blur(10px)!important;
-    padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
-  }
+ .edit-modal-inner,
+ .modal.edit-modal-inner{
+   width:100vw!important;
+   height:100dvh!important;
+   max-height:100dvh!important;
+   max-width:none!important;
+   border-radius:0!important;
+   overflow:hidden!important;
+ }
+ .edit-modal-inner .em-tabs{flex-shrink:0!important}
+ .edit-modal-inner .em-panel{
+   max-height:none!important;
+   padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;
+ }
+ .edit-modal-inner .m-footer{
+   position:sticky!important;
+   bottom:0!important;
+   z-index:8!important;
+   background:rgba(255,255,255,.96)!important;
+   backdrop-filter:blur(10px)!important;
+   padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
+ }
+}
+ 
+ 
+/* ─── FINAL MOBILE SIDEBAR FILTER UI FIX — CATEGORY + COLOR COLLECTIONS ─── */
+@media (max-width: 700px) {
+ .mob-drawer{
+   width:min(78vw,320px)!important;
+   background:linear-gradient(180deg,#EAF8F5 0%,#F4FBF9 100%)!important;
+   padding-top:48px!important;
+ }
+ .mob-drawer .sb-sec{padding:16px 16px 10px!important}
+ .mob-drawer .sb-lbl{
+   display:block!important;
+   padding:0 0 12px!important;
+   font-size:13px!important;
+   line-height:1.15!important;
+   letter-spacing:.14em!important;
+   color:rgba(39,153,137,.78)!important;
+ }
+ .mob-drawer .filter-pill-wrap{
+   display:grid!important;
+   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+   gap:10px!important;
+   padding:0!important;
+   width:100%!important;
+ }
+ .mob-drawer .filter-pill{
+   width:100%!important;
+   min-height:78px!important;
+   height:auto!important;
+   border-radius:22px!important;
+   padding:12px 10px!important;
+   display:flex!important;
+   flex-direction:column!important;
+   align-items:center!important;
+   justify-content:center!important;
+   gap:8px!important;
+   text-align:center!important;
+   background:rgba(255,255,255,.88)!important;
+   border:1.5px solid rgba(39,153,137,.14)!important;
+   box-shadow:0 4px 14px rgba(39,153,137,.07)!important;
+   color:var(--tl)!important;
+   overflow:hidden!important;
+ }
+ .mob-drawer .filter-pill:hover,
+ .mob-drawer .filter-pill.on{
+   background:rgba(45,204,211,.14)!important;
+   border-color:var(--tl)!important;
+   box-shadow:0 8px 20px rgba(39,153,137,.12)!important;
+   transform:none!important;
+ }
+ .mob-drawer .filter-pill.full{
+   grid-column:1/-1!important;
+   min-height:60px!important;
+   flex-direction:row!important;
+   justify-content:space-between!important;
+   padding:12px 16px!important;
+   text-align:left!important;
+ }
+ .mob-drawer .filter-pill-l{
+   width:100%!important;
+   min-width:0!important;
+   display:flex!important;
+   flex-direction:column!important;
+   align-items:center!important;
+   justify-content:center!important;
+   gap:6px!important;
+   overflow:visible!important;
+ }
+ .mob-drawer .filter-pill.full .filter-pill-l{
+   width:auto!important;
+   flex-direction:row!important;
+   justify-content:flex-start!important;
+   gap:9px!important;
+ }
+ .mob-drawer .filter-pill-ico{
+   width:34px!important;
+   height:34px!important;
+   border-radius:50%!important;
+   display:flex!important;
+   align-items:center!important;
+   justify-content:center!important;
+   background:rgba(185,220,210,.38)!important;
+   border:1px solid rgba(39,153,137,.12)!important;
+   font-size:19px!important;
+   line-height:1!important;
+   flex:0 0 34px!important;
+ }
+ .mob-drawer .filter-pill-dot{
+   width:22px!important;
+   height:22px!important;
+   border-radius:50%!important;
+   flex:0 0 22px!important;
+   border:3px solid #fff!important;
+   box-shadow:0 2px 8px rgba(0,0,0,.14)!important;
+ }
+ .mob-drawer .filter-pill-label{
+   display:block!important;
+   width:100%!important;
+   max-width:100%!important;
+   color:var(--tl)!important;
+   font-size:12px!important;
+   line-height:1.12!important;
+   font-weight:900!important;
+   letter-spacing:-.01em!important;
+   white-space:normal!important;
+   overflow:visible!important;
+   text-overflow:clip!important;
+ }
+ .mob-drawer .filter-pill.full .filter-pill-label{
+   width:auto!important;
+   white-space:nowrap!important;
+   font-size:14px!important;
+ }
+ .mob-drawer .filter-pill-count{
+   min-width:40px!important;
+   height:28px!important;
+   padding:0 10px!important;
+   border-radius:999px!important;
+   display:flex!important;
+   align-items:center!important;
+   justify-content:center!important;
+   background:rgba(39,153,137,.09)!important;
+   border:1px solid rgba(39,153,137,.10)!important;
+   color:var(--tl)!important;
+   font-size:14px!important;
+   font-weight:900!important;
+   line-height:1!important;
+   flex-shrink:0!important;
+ }
+ .mob-drawer .filter-pill.on .filter-pill-count{
+   background:#fff!important;
+   border-color:rgba(39,153,137,.18)!important;
+ }
+ .mob-drawer .manage-pill{
+   grid-column:1/-1!important;
+   min-height:46px!important;
+   flex-direction:row!important;
+   border-style:dashed!important;
+ }
+ .mob-drawer .sb-div{margin:18px 16px!important;border-top-color:rgba(39,153,137,.13)!important}
 }
  
 `
@@ -1721,502 +1862,502 @@ button{touch-action:manipulation}
  
 // ─── COLOR COLLECTION MAP ─────────────────────────────────────────────────────
 const COLOR_COLLECTION_MAP = {
-  'Snow': 'OG', 'Sand': 'OG', 'Taupe': 'OG', 'Stone': 'OG', 'Onyx': 'OG', 'Black': 'OG',
-  'Autumn Sunset': 'XPRESS', 'Forest Green': 'XPRESS', 'Twilight Teal': 'XPRESS', 'Coral Oasis': 'XPRESS',
-  'Rose Clay': 'Horizon', 'Forge Slate': 'Horizon', 'Sage Ash': 'Horizon', 'Warm Dune': 'Horizon',
-  'Sky': 'Bloom', 'Meadow': 'Bloom', 'Coral': 'Bloom', 'Blossom': 'Bloom',
-  'Bubbly': 'Poply', 'Minty': 'Poply', 'Purpy': 'Poply', 'Rosy': 'Poply',
+ 'Snow': 'OG', 'Sand': 'OG', 'Taupe': 'OG', 'Stone': 'OG', 'Onyx': 'OG', 'Black': 'OG',
+ 'Autumn Sunset': 'XPRESS', 'Forest Green': 'XPRESS', 'Twilight Teal': 'XPRESS', 'Coral Oasis': 'XPRESS',
+ 'Rose Clay': 'Horizon', 'Forge Slate': 'Horizon', 'Sage Ash': 'Horizon', 'Warm Dune': 'Horizon',
+ 'Sky': 'Bloom', 'Meadow': 'Bloom', 'Coral': 'Bloom', 'Blossom': 'Bloom',
+ 'Bubbly': 'Poply', 'Minty': 'Poply', 'Purpy': 'Poply', 'Rosy': 'Poply',
 }
 const DEFAULT_COLOR_COLLECTIONS = [
-  { value:'OG',      label:'OG',      color:'#63666A' },
-  { value:'XPRESS',  label:'XPRESS',  color:'#279989' },
-  { value:'Horizon', label:'Horizon', color:'#9B7EA8' },
-  { value:'Bloom',   label:'Bloom',   color:'#5CB8A0' },
-  { value:'Poply',   label:'Poply',   color:'#E070A0' },
+ { value:'OG',      label:'OG',      color:'#63666A' },
+ { value:'XPRESS',  label:'XPRESS',  color:'#279989' },
+ { value:'Horizon', label:'Horizon', color:'#9B7EA8' },
+ { value:'Bloom',   label:'Bloom',   color:'#5CB8A0' },
+ { value:'Poply',   label:'Poply',   color:'#E070A0' },
 ]
  
 const COLOR_COLLECTION_SETS_KEY = 'qnh-color-collection-sets'
 const DEFAULT_COLOR_COLLECTION_SETS = {
-  OG: [
-    { name:'Snow', code:'WT', hex:'#F5F5F0', hexes:['#F5F5F0'], collection:'OG' },
-    { name:'Sand', code:'TP', hex:'#C8C5BE', hexes:['#C8C5BE'], collection:'OG' },
-    { name:'Stone', code:'GY', hex:'#8A8780', hexes:['#8A8780'], collection:'OG' },
-    { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'OG' },
-  ],
-  XPRESS: [
-    { name:'Autumn Sunset', code:'AS', hex:'#D4894A', hexes:['#D4894A'], collection:'XPRESS' },
-    { name:'Forest Green', code:'FG', hex:'#3D6B4F', hexes:['#3D6B4F'], collection:'XPRESS' },
-    { name:'Twilight Teal', code:'TT', hex:'#2B8090', hexes:['#2B8090'], collection:'XPRESS' },
-    { name:'Coral Oasis', code:'CO', hex:'#E8524A', hexes:['#E8524A'], collection:'XPRESS' },
-  ],
-  Horizon: [
-    { name:'Rose Clay', code:'RC', hex:'#DCB8BC', hexes:['#DCB8BC','#946D72'], collection:'Horizon' },
-    { name:'Forge Slate', code:'FS', hex:'#A2AAAD', hexes:['#A2AAAD','#5A6770'], collection:'Horizon' },
-    { name:'Sage Ash', code:'SA', hex:'#A9ACA1', hexes:['#A9ACA1','#65665E'], collection:'Horizon' },
-    { name:'Warm Dune', code:'WD', hex:'#C6BFB7', hexes:['#C6BFB7','#8C837A'], collection:'Horizon' },
-  ],
-  Bloom: [
-    { name:'Sky', code:'SK', hex:'#88C4E8', hexes:['#88C4E8'], collection:'Bloom' },
-    { name:'Meadow', code:'ME', hex:'#5CBF7A', hexes:['#5CBF7A'], collection:'Bloom' },
-    { name:'Coral', code:'CO', hex:'#FF7A5C', hexes:['#FF7A5C'], collection:'Bloom' },
-    { name:'Blossom', code:'BL', hex:'#F9A8C4', hexes:['#F9A8C4'], collection:'Bloom' },
-  ],
-  Poply: [
-    { name:'Bubbly', code:'BB', hex:'#57C0E8', hexes:['#57C0E8'], collection:'Poply' },
-    { name:'Minty', code:'MT', hex:'#48C8C0', hexes:['#48C8C0'], collection:'Poply' },
-    { name:'Purpy', code:'PP', hex:'#B09AD8', hexes:['#B09AD8'], collection:'Poply' },
-    { name:'Rosy', code:'RO', hex:'#F070A0', hexes:['#F070A0'], collection:'Poply' },
-  ],
+ OG: [
+   { name:'Snow', code:'WT', hex:'#F5F5F0', hexes:['#F5F5F0'], collection:'OG' },
+   { name:'Sand', code:'TP', hex:'#C8C5BE', hexes:['#C8C5BE'], collection:'OG' },
+   { name:'Stone', code:'GY', hex:'#8A8780', hexes:['#8A8780'], collection:'OG' },
+   { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'OG' },
+ ],
+ XPRESS: [
+   { name:'Autumn Sunset', code:'AS', hex:'#D4894A', hexes:['#D4894A'], collection:'XPRESS' },
+   { name:'Forest Green', code:'FG', hex:'#3D6B4F', hexes:['#3D6B4F'], collection:'XPRESS' },
+   { name:'Twilight Teal', code:'TT', hex:'#2B8090', hexes:['#2B8090'], collection:'XPRESS' },
+   { name:'Coral Oasis', code:'CO', hex:'#E8524A', hexes:['#E8524A'], collection:'XPRESS' },
+ ],
+ Horizon: [
+   { name:'Rose Clay', code:'RC', hex:'#DCB8BC', hexes:['#DCB8BC','#946D72'], collection:'Horizon' },
+   { name:'Forge Slate', code:'FS', hex:'#A2AAAD', hexes:['#A2AAAD','#5A6770'], collection:'Horizon' },
+   { name:'Sage Ash', code:'SA', hex:'#A9ACA1', hexes:['#A9ACA1','#65665E'], collection:'Horizon' },
+   { name:'Warm Dune', code:'WD', hex:'#C6BFB7', hexes:['#C6BFB7','#8C837A'], collection:'Horizon' },
+ ],
+ Bloom: [
+   { name:'Sky', code:'SK', hex:'#88C4E8', hexes:['#88C4E8'], collection:'Bloom' },
+   { name:'Meadow', code:'ME', hex:'#5CBF7A', hexes:['#5CBF7A'], collection:'Bloom' },
+   { name:'Coral', code:'CO', hex:'#FF7A5C', hexes:['#FF7A5C'], collection:'Bloom' },
+   { name:'Blossom', code:'BL', hex:'#F9A8C4', hexes:['#F9A8C4'], collection:'Bloom' },
+ ],
+ Poply: [
+   { name:'Bubbly', code:'BB', hex:'#57C0E8', hexes:['#57C0E8'], collection:'Poply' },
+   { name:'Minty', code:'MT', hex:'#48C8C0', hexes:['#48C8C0'], collection:'Poply' },
+   { name:'Purpy', code:'PP', hex:'#B09AD8', hexes:['#B09AD8'], collection:'Poply' },
+   { name:'Rosy', code:'RO', hex:'#F070A0', hexes:['#F070A0'], collection:'Poply' },
+ ],
 }
  
 function normalizeCollectionSetMap(map) {
-  const source = map && typeof map === 'object' ? map : {}
-  const normalized = {}
-  Object.entries(source).forEach(([key, list]) => {
-    if (!Array.isArray(list)) return
-    const cleanedList = key === 'XPRESS'
-      ? list.filter(item => ['AS','FG','TT','CO'].includes(String(item.code || '').toUpperCase()))
-      : list
-    normalized[key] = cleanedList
-      .map(item => normalizeColorVariant({ ...item, collection: item.collection || key }))
-      .filter(item => item.name && item.code)
-  })
-  return normalized
+ const source = map && typeof map === 'object' ? map : {}
+ const normalized = {}
+ Object.entries(source).forEach(([key, list]) => {
+   if (!Array.isArray(list)) return
+   const cleanedList = key === 'XPRESS'
+     ? list.filter(item => ['AS','FG','TT','CO'].includes(String(item.code || '').toUpperCase()))
+     : list
+   normalized[key] = cleanedList
+     .map(item => normalizeColorVariant({ ...item, collection: item.collection || key }))
+     .filter(item => item.name && item.code)
+ })
+ return normalized
 }
  
 function getSavedColorCollectionSets() {
-  if (typeof window === 'undefined') return DEFAULT_COLOR_COLLECTION_SETS
-  try {
-    const stored = JSON.parse(localStorage.getItem(COLOR_COLLECTION_SETS_KEY) || 'null')
-    return { ...DEFAULT_COLOR_COLLECTION_SETS, ...normalizeCollectionSetMap(stored) }
-  } catch {
-    return DEFAULT_COLOR_COLLECTION_SETS
-  }
+ if (typeof window === 'undefined') return DEFAULT_COLOR_COLLECTION_SETS
+ try {
+   const stored = JSON.parse(localStorage.getItem(COLOR_COLLECTION_SETS_KEY) || 'null')
+   return { ...DEFAULT_COLOR_COLLECTION_SETS, ...normalizeCollectionSetMap(stored) }
+ } catch {
+   return DEFAULT_COLOR_COLLECTION_SETS
+ }
 }
  
 function defaultColorCollection(color) {
-  return color?.collection || COLOR_COLLECTION_MAP[color?.name] || 'Other'
+ return color?.collection || COLOR_COLLECTION_MAP[color?.name] || 'Other'
 }
  
 function groupColorsByCollection(colors, collections = DEFAULT_COLOR_COLLECTIONS) {
-  const groups = {}
-  ;(colors || []).forEach(clr => {
-    const col = defaultColorCollection(clr)
-    if (!groups[col]) groups[col] = []
-    groups[col].push(clr)
-  })
-  const ordered = []
-  const knownValues = collections.map(c=>c.value)
-  collections.forEach(col => {
-    if (groups[col.value]) ordered.push({ name: col.label, value: col.value, color: col.color, colors: groups[col.value] })
-  })
-  Object.keys(groups).forEach(key => {
-    if (!knownValues.includes(key)) ordered.push({ name: key, value: key, color: '#B9DCD2', colors: groups[key] })
-  })
-  return ordered
+ const groups = {}
+ ;(colors || []).forEach(clr => {
+   const col = defaultColorCollection(clr)
+   if (!groups[col]) groups[col] = []
+   groups[col].push(clr)
+ })
+ const ordered = []
+ const knownValues = collections.map(c=>c.value)
+ collections.forEach(col => {
+   if (groups[col.value]) ordered.push({ name: col.label, value: col.value, color: col.color, colors: groups[col.value] })
+ })
+ Object.keys(groups).forEach(key => {
+   if (!knownValues.includes(key)) ordered.push({ name: key, value: key, color: '#B9DCD2', colors: groups[key] })
+ })
+ return ordered
 }
  
 function normalizeHexValue(value, fallback = '') {
-  if (!value) return fallback
-  let v = String(value).trim().replace(/[^0-9a-fA-F#]/g, '')
-  if (!v) return fallback
-  if (!v.startsWith('#')) v = `#${v}`
-  if (/^#[0-9a-fA-F]{3}$/.test(v)) {
-    v = `#${v[1]}${v[1]}${v[2]}${v[2]}${v[3]}${v[3]}`
-  }
-  return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : fallback
+ if (!value) return fallback
+ let v = String(value).trim().replace(/[^0-9a-fA-F#]/g, '')
+ if (!v) return fallback
+ if (!v.startsWith('#')) v = `#${v}`
+ if (/^#[0-9a-fA-F]{3}$/.test(v)) {
+   v = `#${v[1]}${v[1]}${v[2]}${v[2]}${v[3]}${v[3]}`
+ }
+ return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : fallback
 }
  
 function extractHexValues(value) {
-  const matches = String(value || '').match(/#?[0-9a-fA-F]{6}|#?[0-9a-fA-F]{3}/g) || []
-  return matches.map(v => normalizeHexValue(v)).filter(Boolean)
+ const matches = String(value || '').match(/#?[0-9a-fA-F]{6}|#?[0-9a-fA-F]{3}/g) || []
+ return matches.map(v => normalizeHexValue(v)).filter(Boolean)
 }
  
 function getColorHexes(color) {
-  const hexes = Array.isArray(color?.hexes) ? color.hexes.map(h => normalizeHexValue(h)).filter(Boolean) : []
-  if (hexes.length) return hexes
-  return [normalizeHexValue(color?.hex, '#B9DCD2')]
+ const hexes = Array.isArray(color?.hexes) ? color.hexes.map(h => normalizeHexValue(h)).filter(Boolean) : []
+ if (hexes.length) return hexes
+ return [normalizeHexValue(color?.hex, '#B9DCD2')]
 }
  
 function normalizeColorVariant(color) {
-  const hexes = getColorHexes(color)
-  return { ...color, hex: hexes[0] || '#B9DCD2', hexes, collection: defaultColorCollection(color) }
+ const hexes = getColorHexes(color)
+ return { ...color, hex: hexes[0] || '#B9DCD2', hexes, collection: defaultColorCollection(color) }
 }
  
 function swatchBackground(color) {
-  const hexes = getColorHexes(color)
-  if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
-  const step = 100 / hexes.length
-  const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
-  return `linear-gradient(90deg, ${stops})`
+ const hexes = getColorHexes(color)
+ if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
+ const step = 100 / hexes.length
+ const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
+ return `linear-gradient(90deg, ${stops})`
 }
  
 function getImageSrc(image) {
-  if (!image) return ''
-  if (typeof image === 'string') return image
-  return image.src || image.url || image.image || ''
+ if (!image) return ''
+ if (typeof image === 'string') return image
+ return image.src || image.url || image.image || ''
 }
  
 function normalizeImageItem(image) {
-  if (!image) return { src: '', colorSku: '', colorCode: '', colorName: '' }
-  if (typeof image === 'string') return { src: image, colorSku: '', colorCode: '', colorName: '' }
-  return {
-    ...image,
-    src: getImageSrc(image),
-    colorSku: image.colorSku || image.sku || '',
-    colorCode: image.colorCode || image.code || '',
-    colorName: image.colorName || '',
-  }
+ if (!image) return { src: '', colorSku: '', colorCode: '', colorName: '' }
+ if (typeof image === 'string') return { src: image, colorSku: '', colorCode: '', colorName: '' }
+ return {
+   ...image,
+   src: getImageSrc(image),
+   colorSku: image.colorSku || image.sku || '',
+   colorCode: image.colorCode || image.code || '',
+   colorName: image.colorName || '',
+ }
 }
  
 function normalizeProductImages(images) {
-  if (!Array.isArray(images)) return []
-  return images.map(normalizeImageItem).filter(img => !!img.src)
+ if (!Array.isArray(images)) return []
+ return images.map(normalizeImageItem).filter(img => !!img.src)
 }
  
 function getColorKey(color) {
-  return String(color?.sku || color?.code || color?.name || '').trim().toUpperCase()
+ return String(color?.sku || color?.code || color?.name || '').trim().toUpperCase()
 }
  
 function imageMatchesColor(image, color) {
-  const img = normalizeImageItem(image)
-  if (!img.src || !color) return false
-  const imageKeys = [img.colorSku, img.colorCode, img.colorName].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
-  if (!imageKeys.length) return false
-  const colorKeys = [color.sku, color.code, color.name].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
-  return imageKeys.some(key => colorKeys.includes(key))
+ const img = normalizeImageItem(image)
+ if (!img.src || !color) return false
+ const imageKeys = [img.colorSku, img.colorCode, img.colorName].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
+ if (!imageKeys.length) return false
+ const colorKeys = [color.sku, color.code, color.name].map(v => String(v || '').trim().toUpperCase()).filter(Boolean)
+ return imageKeys.some(key => colorKeys.includes(key))
 }
  
 function isGeneralImage(image) {
-  const img = normalizeImageItem(image)
-  return !!img.src && !String(img.colorSku || '').trim() && !String(img.colorCode || '').trim() && !String(img.colorName || '').trim()
+ const img = normalizeImageItem(image)
+ return !!img.src && !String(img.colorSku || '').trim() && !String(img.colorCode || '').trim() && !String(img.colorName || '').trim()
 }
  
 function findImageIndexForColor(product, color) {
-  const images = normalizeProductImages(product?.images || [])
-  return images.findIndex(img => imageMatchesColor(img, color))
+ const images = normalizeProductImages(product?.images || [])
+ return images.findIndex(img => imageMatchesColor(img, color))
 }
  
 function findImageIndexesForColor(product, color) {
-  const images = normalizeProductImages(product?.images || [])
-  return images
-    .map((img, index) => imageMatchesColor(img, color) ? index : -1)
-    .filter(index => index >= 0)
+ const images = normalizeProductImages(product?.images || [])
+ return images
+   .map((img, index) => imageMatchesColor(img, color) ? index : -1)
+   .filter(index => index >= 0)
 }
  
 function hasImageForColor(product, color) {
-  return findImageIndexForColor(product, color) >= 0
+ return findImageIndexForColor(product, color) >= 0
 }
  
 function getProductSkuBase(product = null) {
-  const firstSku = product?.colors?.[0]?.sku || ''
-  const firstCode = product?.colors?.[0]?.code || ''
-  if (!firstSku) return ''
-  if (firstCode && firstSku.toUpperCase().endsWith(`-${String(firstCode).toUpperCase()}`)) {
-    return firstSku.slice(0, -(String(firstCode).length + 1)) || firstSku
-  }
-  const parts = firstSku.split('-')
-  return parts.length > 2 ? parts.slice(0, -1).join('-') : firstSku
+ const firstSku = product?.colors?.[0]?.sku || ''
+ const firstCode = product?.colors?.[0]?.code || ''
+ if (!firstSku) return ''
+ if (firstCode && firstSku.toUpperCase().endsWith(`-${String(firstCode).toUpperCase()}`)) {
+   return firstSku.slice(0, -(String(firstCode).length + 1)) || firstSku
+ }
+ const parts = firstSku.split('-')
+ return parts.length > 2 ? parts.slice(0, -1).join('-') : firstSku
 }
  
 function productMatchesSku(product, skuParam) {
-  const target = String(skuParam || '').trim().toUpperCase()
-  if (!target || !product) return false
+ const target = String(skuParam || '').trim().toUpperCase()
+ if (!target || !product) return false
  
-  const values = new Set()
-  if (product.id) values.add(String(product.id).trim().toUpperCase())
+ const values = new Set()
+ if (product.id) values.add(String(product.id).trim().toUpperCase())
  
-  const base = getProductSkuBase(product)
-  if (base) values.add(String(base).trim().toUpperCase())
+ const base = getProductSkuBase(product)
+ if (base) values.add(String(base).trim().toUpperCase())
  
-  ;(product.colors || []).forEach(color => {
-    if (!color?.sku) return
-    const sku = String(color.sku).trim()
-    const code = String(color.code || '').trim()
-    values.add(sku.toUpperCase())
-    if (code && sku.toUpperCase().endsWith(`-${code.toUpperCase()}`)) {
-      values.add(sku.slice(0, -(code.length + 1)).toUpperCase())
-    }
-  })
+ ;(product.colors || []).forEach(color => {
+   if (!color?.sku) return
+   const sku = String(color.sku).trim()
+   const code = String(color.code || '').trim()
+   values.add(sku.toUpperCase())
+   if (code && sku.toUpperCase().endsWith(`-${code.toUpperCase()}`)) {
+     values.add(sku.slice(0, -(code.length + 1)).toUpperCase())
+   }
+ })
  
-  return values.has(target)
+ return values.has(target)
 }
  
 // ─── YOUTUBE HELPER ──────────────────────────────────────────────────────────
 function getYouTubeId(url) {
-  if (!url) return null
-  const patterns = [
-    /youtube\.com\/watch\?v=([^&\s]+)/,
-    /youtu\.be\/([^?\s]+)/,
-    /youtube\.com\/embed\/([^?\s]+)/,
-    /youtube\.com\/shorts\/([^?\s]+)/,
-  ]
-  for (const p of patterns) {
-    const m = url.match(p)
-    if (m) return m[1]
-  }
-  return null
+ if (!url) return null
+ const patterns = [
+   /youtube\.com\/watch\?v=([^&\s]+)/,
+   /youtu\.be\/([^?\s]+)/,
+   /youtube\.com\/embed\/([^?\s]+)/,
+   /youtube\.com\/shorts\/([^?\s]+)/,
+ ]
+ for (const p of patterns) {
+   const m = url.match(p)
+   if (m) return m[1]
+ }
+ return null
 }
  
 // ─── COPY TO CLIPBOARD ───────────────────────────────────────────────────────
 function useCopy() {
-  const [copied, setCopied] = useState(null) // holds the text that was just copied
-  const copy = useCallback((text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(text)
-      setTimeout(() => setCopied(null), 1800)
-    }).catch(() => {
-      // fallback
-      const el = document.createElement('textarea')
-      el.value = text; el.style.position = 'fixed'; el.style.opacity = '0'
-      document.body.appendChild(el); el.select()
-      document.execCommand('copy')
-      document.body.removeChild(el)
-      setCopied(text)
-      setTimeout(() => setCopied(null), 1800)
-    })
-  }, [])
-  return { copy, copied }
+ const [copied, setCopied] = useState(null) // holds the text that was just copied
+ const copy = useCallback((text) => {
+   navigator.clipboard.writeText(text).then(() => {
+     setCopied(text)
+     setTimeout(() => setCopied(null), 1800)
+   }).catch(() => {
+     // fallback
+     const el = document.createElement('textarea')
+     el.value = text; el.style.position = 'fixed'; el.style.opacity = '0'
+     document.body.appendChild(el); el.select()
+     document.execCommand('copy')
+     document.body.removeChild(el)
+     setCopied(text)
+     setTimeout(() => setCopied(null), 1800)
+   })
+ }, [])
+ return { copy, copied }
 }
  
 // ─── PENCIL SVG ───────────────────────────────────────────────────────────────
 const PencilIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-  </svg>
+ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+ </svg>
 )
  
 // ─── HERO CAROUSEL + VIDEO COMPONENT ─────────────────────────────────────────
 function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, heroTitle, heroSub, onTitleChange, onSubChange, onBannerClick, heroVideoUrl, heroVideoThumbnail, mediaOrder='banner-video' }) {
-  banners = Array.isArray(banners) ? banners : []
-  const [slide, setSlide] = useState(0)
-  const timerRef = useRef(null)
-  const touchStartX = useRef(null)
-  const touchStartY = useRef(null)
-  const arClass = aspect === '16:9' ? 'ar-16-9' : aspect === '1:1' ? 'ar-1-1' : 'ar-custom'
-  const ytId = getYouTubeId(heroVideoUrl)
-  const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '')
-  const hasVideo = !!ytId
-  const showVideoCard = hasVideo || editMode
-  const showBannerCard = banners.length > 0 || editMode
-  const isTwoColumn = showBannerCard && showVideoCard
-  const bannerFirst = mediaOrder !== 'video-banner'
+ banners = Array.isArray(banners) ? banners : []
+ const [slide, setSlide] = useState(0)
+ const timerRef = useRef(null)
+ const touchStartX = useRef(null)
+ const touchStartY = useRef(null)
+ const arClass = aspect === '16:9' ? 'ar-16-9' : aspect === '1:1' ? 'ar-1-1' : 'ar-custom'
+ const ytId = getYouTubeId(heroVideoUrl)
+ const videoThumb = heroVideoThumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '')
+ const hasVideo = !!ytId
+ const showVideoCard = hasVideo || editMode
+ const showBannerCard = banners.length > 0 || editMode
+ const isTwoColumn = showBannerCard && showVideoCard
+ const bannerFirst = mediaOrder !== 'video-banner'
  
-  const startTimer = useCallback(() => {
-    clearInterval(timerRef.current)
-    if (banners.length > 1 && interval > 0) {
-      timerRef.current = setInterval(() => setSlide(s => (s + 1) % banners.length), interval * 1000)
-    }
-  }, [banners.length, interval])
+ const startTimer = useCallback(() => {
+   clearInterval(timerRef.current)
+   if (banners.length > 1 && interval > 0) {
+     timerRef.current = setInterval(() => setSlide(s => (s + 1) % banners.length), interval * 1000)
+   }
+ }, [banners.length, interval])
  
-  useEffect(() => { startTimer(); return () => clearInterval(timerRef.current) }, [startTimer])
-  const go = (dir) => { if (!banners.length) return; setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
+ useEffect(() => { startTimer(); return () => clearInterval(timerRef.current) }, [startTimer])
+ const go = (dir) => { if (!banners.length) return; setSlide(s => (s + dir + banners.length) % banners.length); startTimer() }
  
-  const onTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-  }
-  const onTouchEnd = (e) => {
-    if (touchStartX.current === null) return
-    const dx = e.changedTouches[0].clientX - touchStartX.current
-    const dy = e.changedTouches[0].clientY - touchStartY.current
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-      go(dx < 0 ? 1 : -1)
-    }
-    touchStartX.current = null
-  }
+ const onTouchStart = (e) => {
+   touchStartX.current = e.touches[0].clientX
+   touchStartY.current = e.touches[0].clientY
+ }
+ const onTouchEnd = (e) => {
+   if (touchStartX.current === null) return
+   const dx = e.changedTouches[0].clientX - touchStartX.current
+   const dy = e.changedTouches[0].clientY - touchStartY.current
+   if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+     go(dx < 0 ? 1 : -1)
+   }
+   touchStartX.current = null
+ }
  
-  const currentBanner = banners[slide]
+ const currentBanner = banners[slide]
  
-  return (
-    <>
-      {/* ── HEADLINE + SUBHEADLINE ── */}
-      <div style={{background:'var(--sf4)',borderRadius:'var(--rl)',padding:'20px 28px',marginBottom:12,position:'relative'}}>
-        {editMode && (
-          <button className="hero-edit-btn" onClick={onEditClick} style={{position:'absolute',top:14,right:14}}>
-            <PencilIcon/> Edit Hero
-          </button>
-        )}
-        {editMode ? (
-          <div style={{display:'flex',flexDirection:'column',gap:10,maxWidth:680}}>
-            <input
-              value={heroTitle}
-              onChange={e=>onTitleChange(e.target.value)}
-              style={{fontFamily:'var(--fn)',fontSize:26,fontWeight:900,letterSpacing:'-.01em',color:'var(--tl)',background:'transparent',border:'none',borderBottom:'2px dashed rgba(39,153,137,.35)',outline:'none',width:'100%',padding:'3px 0',lineHeight:1.15}}
-              placeholder="Headline…"
-            />
-            <textarea
-              value={heroSub}
-              onChange={e=>onSubChange(e.target.value)}
-              rows={2}
-              style={{fontFamily:'var(--fn)',fontSize:13,color:'var(--tl)',opacity:.7,background:'transparent',border:'none',borderBottom:'2px dashed rgba(39,153,137,.25)',outline:'none',resize:'none',width:'100%',padding:'3px 0',lineHeight:1.55}}
-              placeholder="Subheadline…"
-            />
-          </div>
-        ) : (
-          <div style={{maxWidth:680}}>
-            {heroTitle && <div style={{fontFamily:'var(--fn)',fontSize:26,fontWeight:900,letterSpacing:'-.01em',color:'var(--tl)',lineHeight:1.15,marginBottom:6}}>{heroTitle}</div>}
-            {heroSub && <div style={{fontFamily:'var(--fn)',fontSize:13,color:'var(--tl)',opacity:.65,lineHeight:1.55}}>{heroSub}</div>}
-          </div>
-        )}
-      </div>
+ return (
+   <>
+     {/* ── HEADLINE + SUBHEADLINE ── */}
+     <div style={{background:'var(--sf4)',borderRadius:'var(--rl)',padding:'20px 28px',marginBottom:12,position:'relative'}}>
+       {editMode && (
+         <button className="hero-edit-btn" onClick={onEditClick} style={{position:'absolute',top:14,right:14}}>
+           <PencilIcon/> Edit Hero
+         </button>
+       )}
+       {editMode ? (
+         <div style={{display:'flex',flexDirection:'column',gap:10,maxWidth:680}}>
+           <input
+             value={heroTitle}
+             onChange={e=>onTitleChange(e.target.value)}
+             style={{fontFamily:'var(--fn)',fontSize:26,fontWeight:900,letterSpacing:'-.01em',color:'var(--tl)',background:'transparent',border:'none',borderBottom:'2px dashed rgba(39,153,137,.35)',outline:'none',width:'100%',padding:'3px 0',lineHeight:1.15}}
+             placeholder="Headline…"
+           />
+           <textarea
+             value={heroSub}
+             onChange={e=>onSubChange(e.target.value)}
+             rows={2}
+             style={{fontFamily:'var(--fn)',fontSize:13,color:'var(--tl)',opacity:.7,background:'transparent',border:'none',borderBottom:'2px dashed rgba(39,153,137,.25)',outline:'none',resize:'none',width:'100%',padding:'3px 0',lineHeight:1.55}}
+             placeholder="Subheadline…"
+           />
+         </div>
+       ) : (
+         <div style={{maxWidth:680}}>
+           {heroTitle && <div style={{fontFamily:'var(--fn)',fontSize:26,fontWeight:900,letterSpacing:'-.01em',color:'var(--tl)',lineHeight:1.15,marginBottom:6}}>{heroTitle}</div>}
+           {heroSub && <div style={{fontFamily:'var(--fn)',fontSize:13,color:'var(--tl)',opacity:.65,lineHeight:1.55}}>{heroSub}</div>}
+         </div>
+       )}
+     </div>
  
-      {/* ── TWO-COLUMN MEDIA AREA: banner + YouTube video ── */}
-      {(showBannerCard || showVideoCard) && (
-        <div className={`hero-media-grid ${isTwoColumn ? '' : 'is-single'}`}>
-          {showBannerCard && (
-            <div className="hero-media-card hero-banner-card" style={{order: bannerFirst ? 1 : 2}}>
-              {banners.length > 0 ? (
-                <>
-                  <div style={{position:'relative'}}>
-                    <div className={`hero-carousel ${arClass}`} style={{borderRadius:0,marginBottom:0}}>
-                      <div className="hero-slides" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{userSelect:'none'}}>
-                        {banners.map((b,i) => (
-                          <div
-                            key={b.id}
-                            className={`hero-slide ${i===slide?'active':''}`}
-                            onClick={()=>b.link&&onBannerClick(b.link)}
-                            style={{cursor:b.link?'pointer':'default'}}
-                          >
-                            <img src={b.image} alt={b.alt||`Banner ${i+1}`}/>
-                          </div>
-                        ))}
-                      </div>
-                      {banners.length > 1 && (
-                        <div className="hero-dots">
-                          {banners.map((_,i)=>(
-                            <button key={i} className={`hero-dot ${i===slide?'on':''}`} onClick={e=>{e.stopPropagation();setSlide(i);startTimer()}}/>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+     {/* ── TWO-COLUMN MEDIA AREA: banner + YouTube video ── */}
+     {(showBannerCard || showVideoCard) && (
+       <div className={`hero-media-grid ${isTwoColumn ? '' : 'is-single'}`}>
+         {showBannerCard && (
+           <div className="hero-media-card hero-banner-card" style={{order: bannerFirst ? 1 : 2}}>
+             {banners.length > 0 ? (
+               <>
+                 <div style={{position:'relative'}}>
+                   <div className={`hero-carousel ${arClass}`} style={{borderRadius:0,marginBottom:0}}>
+                     <div className="hero-slides" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{userSelect:'none'}}>
+                       {banners.map((b,i) => (
+                         <div
+                           key={b.id}
+                           className={`hero-slide ${i===slide?'active':''}`}
+                           onClick={()=>b.link&&onBannerClick(b.link)}
+                           style={{cursor:b.link?'pointer':'default'}}
+                         >
+                           <img src={b.image} alt={b.alt||`Banner ${i+1}`}/>
+                         </div>
+                       ))}
+                     </div>
+                     {banners.length > 1 && (
+                       <div className="hero-dots">
+                         {banners.map((_,i)=>(
+                           <button key={i} className={`hero-dot ${i===slide?'on':''}`} onClick={e=>{e.stopPropagation();setSlide(i);startTimer()}}/>
+                         ))}
+                       </div>
+                     )}
+                   </div>
+                 </div>
  
-                  {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
-                    <div className="hero-media-caption">
-                      <div>
-                        {currentBanner.title && <div className="hero-media-title">{currentBanner.title}</div>}
-                        {currentBanner.subtitle && <div className="hero-media-subtitle">{currentBanner.subtitle}</div>}
-                      </div>
-                      {currentBanner.link && (
-                        <button onClick={()=>onBannerClick(currentBanner.link)} className="hero-media-action">View →</button>
-                      )}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <button className="hero-empty-card" onClick={onEditClick}>+ Add sliding banner</button>
-              )}
-            </div>
-          )}
+                 {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
+                   <div className="hero-media-caption">
+                     <div>
+                       {currentBanner.title && <div className="hero-media-title">{currentBanner.title}</div>}
+                       {currentBanner.subtitle && <div className="hero-media-subtitle">{currentBanner.subtitle}</div>}
+                     </div>
+                     {currentBanner.link && (
+                       <button onClick={()=>onBannerClick(currentBanner.link)} className="hero-media-action">View →</button>
+                     )}
+                   </div>
+                 )}
+               </>
+             ) : (
+               <button className="hero-empty-card" onClick={onEditClick}>+ Add sliding banner</button>
+             )}
+           </div>
+         )}
  
-          {showVideoCard && (
-            <div className="hero-media-card hero-video-card" style={{order: bannerFirst ? 2 : 1}}>
-              {editMode && hasVideo && (
-                <button
-                  className="hero-video-edit-btn"
-                  onClick={(e)=>{ e.stopPropagation(); onEditClick() }}
-                  title="Edit or replace video"
-                >
-                  ✏️ Edit Video
-                </button>
-              )}
-              {hasVideo ? (
-                <div className="hero-video-frame">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${ytId}?controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`}
-                    title="Quencha video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              ) : editMode ? (
-                <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
-              ) : null}
-            </div>
-          )}
-        </div>
-      )}
-    </>
-  )
+         {showVideoCard && (
+           <div className="hero-media-card hero-video-card" style={{order: bannerFirst ? 2 : 1}}>
+             {editMode && hasVideo && (
+               <button
+                 className="hero-video-edit-btn"
+                 onClick={(e)=>{ e.stopPropagation(); onEditClick() }}
+                 title="Edit or replace video"
+               >
+                 ✏️ Edit Video
+               </button>
+             )}
+             {hasVideo ? (
+               <div className="hero-video-frame">
+                 <iframe
+                   src={`https://www.youtube.com/embed/${ytId}?controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`}
+                   title="Quencha video"
+                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                   allowFullScreen
+                 />
+               </div>
+             ) : editMode ? (
+               <button className="hero-empty-card" onClick={onEditClick}>+ Add YouTube video</button>
+             ) : null}
+           </div>
+         )}
+       </div>
+     )}
+   </>
+ )
 }
  
  
 // ─── YOUTUBE BLOCK COMPONENT ─────────────────────────────────────────────────
 function YouTubeBlock({ ytUrl }) {
-  if (!ytUrl) return null
-  const ytId = getYouTubeId(ytUrl)
-  if (!ytId) return null
-  const watchUrl = `https://www.youtube.com/watch?v=${ytId}`
-  return (
-    <a
-      href={watchUrl}
-      target="_blank"
-      rel="noreferrer"
-      style={{display:'flex',alignItems:'center',gap:16,padding:'16px 20px',background:'#111',borderRadius:10,border:'1px solid rgba(185,220,210,.2)',textDecoration:'none',cursor:'pointer'}}
-    >
-      <div style={{width:52,height:52,borderRadius:'50%',background:'#FF0000',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 2px 12px rgba(255,0,0,.4)'}}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
-      </div>
-      <div>
-        <div style={{color:'#fff',fontSize:13,fontWeight:700,letterSpacing:'.02em',marginBottom:3}}>Watch Product Video</div>
-        <div style={{color:'rgba(255,255,255,.45)',fontSize:11,fontFamily:'monospace'}}>youtube.com/watch?v={ytId}</div>
-      </div>
-      <div style={{marginLeft:'auto',color:'rgba(255,255,255,.3)',fontSize:18}}>↗</div>
-    </a>
-  )
+ if (!ytUrl) return null
+ const ytId = getYouTubeId(ytUrl)
+ if (!ytId) return null
+ const watchUrl = `https://www.youtube.com/watch?v=${ytId}`
+ return (
+   <a
+     href={watchUrl}
+     target="_blank"
+     rel="noreferrer"
+     style={{display:'flex',alignItems:'center',gap:16,padding:'16px 20px',background:'#111',borderRadius:10,border:'1px solid rgba(185,220,210,.2)',textDecoration:'none',cursor:'pointer'}}
+   >
+     <div style={{width:52,height:52,borderRadius:'50%',background:'#FF0000',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 2px 12px rgba(255,0,0,.4)'}}>
+       <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+     </div>
+     <div>
+       <div style={{color:'#fff',fontSize:13,fontWeight:700,letterSpacing:'.02em',marginBottom:3}}>Watch Product Video</div>
+       <div style={{color:'rgba(255,255,255,.45)',fontSize:11,fontFamily:'monospace'}}>youtube.com/watch?v={ytId}</div>
+     </div>
+     <div style={{marginLeft:'auto',color:'rgba(255,255,255,.3)',fontSize:18}}>↗</div>
+   </a>
+ )
 }
  
 // ─── CODE IMAGE LIGHTBOX ─────────────────────────────────────────────────────
 function CodeLightbox({ src, label, onClose }) {
-  const download = () => {
-    const a = document.createElement('a')
-    a.href = src
-    a.download = `${label.replace(/\s+/g,'-').toLowerCase()}.png`
-    a.click()
-  }
+ const download = () => {
+   const a = document.createElement('a')
+   a.href = src
+   a.download = `${label.replace(/\s+/g,'-').toLowerCase()}.png`
+   a.click()
+ }
  
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+ useEffect(() => {
+   const onKey = (e) => { if (e.key === 'Escape') onClose() }
+   window.addEventListener('keydown', onKey)
+   return () => window.removeEventListener('keydown', onKey)
+ }, [onClose])
  
-  return (
-    <div
-      onClick={onClose}
-      style={{position:'fixed',inset:0,zIndex:900,background:'rgba(0,0,0,.92)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}
-    >
-      {/* Image */}
-      <div onClick={e=>e.stopPropagation()} style={{position:'relative',maxWidth:'90vw',maxHeight:'75vh',display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <img
-          src={src}
-          alt={label}
-          style={{maxWidth:'90vw',maxHeight:'72vh',objectFit:'contain',borderRadius:12,background:'#fff',padding:16,boxShadow:'0 8px 40px rgba(0,0,0,.5)'}}
-        />
-      </div>
-      {/* Label */}
-      <div style={{color:'rgba(255,255,255,.6)',fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',marginTop:20,fontFamily:'var(--fn)'}}>{label}</div>
-      {/* Buttons */}
-      <div style={{display:'flex',gap:12,marginTop:16}}>
-        <button
-          onClick={e=>{e.stopPropagation();download()}}
-          style={{background:'var(--tl)',color:'#fff',border:'none',borderRadius:10,padding:'11px 28px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',gap:8,transition:'var(--tr)'}}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download
-        </button>
-        <button
-          onClick={e=>{e.stopPropagation();onClose()}}
-          style={{background:'rgba(255,255,255,.1)',color:'#fff',border:'2px solid rgba(255,255,255,.2)',borderRadius:10,padding:'11px 24px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',transition:'var(--tr)'}}
-        >
-          ✕ Close
-        </button>
-      </div>
-      <div style={{color:'rgba(255,255,255,.3)',fontSize:11,marginTop:12,fontFamily:'var(--fn)'}}>Press Esc to close</div>
-    </div>
-  )
+ return (
+   <div
+     onClick={onClose}
+     style={{position:'fixed',inset:0,zIndex:900,background:'rgba(0,0,0,.92)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}
+   >
+     {/* Image */}
+     <div onClick={e=>e.stopPropagation()} style={{position:'relative',maxWidth:'90vw',maxHeight:'75vh',display:'flex',alignItems:'center',justifyContent:'center'}}>
+       <img
+         src={src}
+         alt={label}
+         style={{maxWidth:'90vw',maxHeight:'72vh',objectFit:'contain',borderRadius:12,background:'#fff',padding:16,boxShadow:'0 8px 40px rgba(0,0,0,.5)'}}
+       />
+     </div>
+     {/* Label */}
+     <div style={{color:'rgba(255,255,255,.6)',fontSize:12,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',marginTop:20,fontFamily:'var(--fn)'}}>{label}</div>
+     {/* Buttons */}
+     <div style={{display:'flex',gap:12,marginTop:16}}>
+       <button
+         onClick={e=>{e.stopPropagation();download()}}
+         style={{background:'var(--tl)',color:'#fff',border:'none',borderRadius:10,padding:'11px 28px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',gap:8,transition:'var(--tr)'}}
+       >
+         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+         Download
+       </button>
+       <button
+         onClick={e=>{e.stopPropagation();onClose()}}
+         style={{background:'rgba(255,255,255,.1)',color:'#fff',border:'2px solid rgba(255,255,255,.2)',borderRadius:10,padding:'11px 24px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',transition:'var(--tr)'}}
+       >
+         ✕ Close
+       </button>
+     </div>
+     <div style={{color:'rgba(255,255,255,.3)',fontSize:11,marginTop:12,fontFamily:'var(--fn)'}}>Press Esc to close</div>
+   </div>
+ )
 }
  
  
@@ -2225,207 +2366,207 @@ function CodeLightbox({ src, label, onClose }) {
 // We output JPEG instead of WebP because some upload routes reject image/webp.
 // GIF and SVG are kept as-is because canvas conversion can remove animation/vector data.
 function loadImageFromFile(file) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file)
-    const img = new Image()
-    img.onload = () => {
-      URL.revokeObjectURL(url)
-      resolve(img)
-    }
-    img.onerror = () => {
-      URL.revokeObjectURL(url)
-      reject(new Error('Could not read image for compression'))
-    }
-    img.src = url
-  })
+ return new Promise((resolve, reject) => {
+   const url = URL.createObjectURL(file)
+   const img = new Image()
+   img.onload = () => {
+     URL.revokeObjectURL(url)
+     resolve(img)
+   }
+   img.onerror = () => {
+     URL.revokeObjectURL(url)
+     reject(new Error('Could not read image for compression'))
+   }
+   img.src = url
+ })
 }
  
 function canvasToBlob(canvas, type, quality) {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(blob => {
-      if (!blob) reject(new Error('Image compression failed'))
-      else resolve(blob)
-    }, type, quality)
-  })
+ return new Promise((resolve, reject) => {
+   canvas.toBlob(blob => {
+     if (!blob) reject(new Error('Image compression failed'))
+     else resolve(blob)
+   }, type, quality)
+ })
 }
  
 async function compressImageFile(file, options = {}) {
-  const {
-    maxWidth = 1600,
-    maxHeight = 1600,
-    targetBytes = 900 * 1024,
-    minQuality = 0.55,
-    outputType = 'image/jpeg',
-  } = options
+ const {
+   maxWidth = 1600,
+   maxHeight = 1600,
+   targetBytes = 900 * 1024,
+   minQuality = 0.55,
+   outputType = 'image/jpeg',
+ } = options
  
-  if (!file || !file.type?.startsWith('image/')) return file
-  if (file.type === 'image/gif' || file.type === 'image/svg+xml') return file
+ if (!file || !file.type?.startsWith('image/')) return file
+ if (file.type === 'image/gif' || file.type === 'image/svg+xml') return file
  
-  try {
-    const img = await loadImageFromFile(file)
-    const width = img.naturalWidth || img.width
-    const height = img.naturalHeight || img.height
-    if (!width || !height) return file
+ try {
+   const img = await loadImageFromFile(file)
+   const width = img.naturalWidth || img.width
+   const height = img.naturalHeight || img.height
+   if (!width || !height) return file
  
-    const ratio = Math.min(1, maxWidth / width, maxHeight / height)
-    const outWidth = Math.max(1, Math.round(width * ratio))
-    const outHeight = Math.max(1, Math.round(height * ratio))
+   const ratio = Math.min(1, maxWidth / width, maxHeight / height)
+   const outWidth = Math.max(1, Math.round(width * ratio))
+   const outHeight = Math.max(1, Math.round(height * ratio))
  
-    const canvas = document.createElement('canvas')
-    canvas.width = outWidth
-    canvas.height = outHeight
-    const ctx = canvas.getContext('2d', { alpha: false })
-    if (!ctx) return file
+   const canvas = document.createElement('canvas')
+   canvas.width = outWidth
+   canvas.height = outHeight
+   const ctx = canvas.getContext('2d', { alpha: false })
+   if (!ctx) return file
  
-    // JPEG does not support transparency, so use a white background.
-    ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(0, 0, outWidth, outHeight)
-    ctx.imageSmoothingEnabled = true
-    ctx.imageSmoothingQuality = 'high'
-    ctx.drawImage(img, 0, 0, outWidth, outHeight)
+   // JPEG does not support transparency, so use a white background.
+   ctx.fillStyle = '#FFFFFF'
+   ctx.fillRect(0, 0, outWidth, outHeight)
+   ctx.imageSmoothingEnabled = true
+   ctx.imageSmoothingQuality = 'high'
+   ctx.drawImage(img, 0, 0, outWidth, outHeight)
  
-    let quality = 0.82
-    let blob = await canvasToBlob(canvas, outputType, quality)
+   let quality = 0.82
+   let blob = await canvasToBlob(canvas, outputType, quality)
  
-    while (blob.size > targetBytes && quality > minQuality) {
-      quality = Math.max(minQuality, quality - 0.07)
-      blob = await canvasToBlob(canvas, outputType, quality)
-    }
+   while (blob.size > targetBytes && quality > minQuality) {
+     quality = Math.max(minQuality, quality - 0.07)
+     blob = await canvasToBlob(canvas, outputType, quality)
+   }
  
-    const baseName = String(file.name || 'image').replace(/\.[^.]+$/, '') || 'image'
-    const compressed = new File([blob], `${baseName}-compressed.jpg`, {
-      type: outputType,
-      lastModified: Date.now(),
-    })
+   const baseName = String(file.name || 'image').replace(/\.[^.]+$/, '') || 'image'
+   const compressed = new File([blob], `${baseName}-compressed.jpg`, {
+     type: outputType,
+     lastModified: Date.now(),
+   })
  
-    return compressed.size < file.size ? compressed : file
-  } catch (err) {
-    console.warn('Image compression skipped:', err)
-    return file
-  }
+   return compressed.size < file.size ? compressed : file
+ } catch (err) {
+   console.warn('Image compression skipped:', err)
+   return file
+ }
 }
  
 // ─── CODE IMAGE UPLOAD (barcode / QR) ────────────────────────────────────────
 function CodeImageUpload({ label, value, onChange, onClear, onUpload }) {
-  const ref = useRef(null)
-  const [uploading, setUploading] = useState(false)
+ const ref = useRef(null)
+ const [uploading, setUploading] = useState(false)
  
-  const handleFile = async (e) => {
-    const file = e.target.files[0]; if (!file) return
-    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) return
-    if (onUpload) {
-      setUploading(true)
-      try {
-        const url = await onUpload(file)
-        onChange(url)
-      } catch (err) {
-        console.error('Code image upload failed:', err)
-        alert('Upload failed. Please try again. Barcode and QR images must be uploaded as files, not saved as Base64.')
-      } finally { setUploading(false) }
-    } else {
-      alert('Image upload is not configured. Please check /api/upload before adding barcode or QR images.')
-    }
-    e.target.value = ''
-  }
+ const handleFile = async (e) => {
+   const file = e.target.files[0]; if (!file) return
+   if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) return
+   if (onUpload) {
+     setUploading(true)
+     try {
+       const url = await onUpload(file)
+       onChange(url)
+     } catch (err) {
+       console.error('Code image upload failed:', err)
+       alert('Upload failed. Please try again. Barcode and QR images must be uploaded as files, not saved as Base64.')
+     } finally { setUploading(false) }
+   } else {
+     alert('Image upload is not configured. Please check /api/upload before adding barcode or QR images.')
+   }
+   e.target.value = ''
+ }
  
-  if (value) {
-    return (
-      <div style={{position:'relative',display:'inline-flex',alignItems:'flex-start',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:8,padding:8}}>
-        <img src={value} alt={label} style={{height:52,maxWidth:120,objectFit:'contain',borderRadius:4,display:'block'}}/>
-        <button
-          onClick={onClear}
-          style={{position:'absolute',top:4,right:4,background:'rgba(239,68,68,.85)',border:'none',borderRadius:'50%',width:18,height:18,color:'#fff',fontSize:10,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1}}
-        >✕</button>
-      </div>
-    )
-  }
+ if (value) {
+   return (
+     <div style={{position:'relative',display:'inline-flex',alignItems:'flex-start',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:8,padding:8}}>
+       <img src={value} alt={label} style={{height:52,maxWidth:120,objectFit:'contain',borderRadius:4,display:'block'}}/>
+       <button
+         onClick={onClear}
+         style={{position:'absolute',top:4,right:4,background:'rgba(239,68,68,.85)',border:'none',borderRadius:'50%',width:18,height:18,color:'#fff',fontSize:10,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',lineHeight:1}}
+       >✕</button>
+     </div>
+   )
+ }
  
-  return (
-    <>
-      <button
-        onClick={()=>!uploading&&ref.current?.click()}
-        disabled={uploading}
-        style={{display:'flex',alignItems:'center',gap:6,background:'var(--bg)',border:'1.5px dashed rgba(185,220,210,.8)',borderRadius:8,padding:'8px 12px',fontFamily:'var(--fn)',fontSize:12,fontWeight:600,color:'var(--tl)',cursor:uploading?'not-allowed':'pointer',transition:'var(--tr)',width:'100%',opacity:uploading?.6:1}}
-      >
-        <span style={{fontSize:15}}>{uploading?'⏳':'📎'}</span> {uploading?'Uploading…':`Upload ${label}`}
-      </button>
-      <input ref={ref} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
-    </>
-  )
+ return (
+   <>
+     <button
+       onClick={()=>!uploading&&ref.current?.click()}
+       disabled={uploading}
+       style={{display:'flex',alignItems:'center',gap:6,background:'var(--bg)',border:'1.5px dashed rgba(185,220,210,.8)',borderRadius:8,padding:'8px 12px',fontFamily:'var(--fn)',fontSize:12,fontWeight:600,color:'var(--tl)',cursor:uploading?'not-allowed':'pointer',transition:'var(--tr)',width:'100%',opacity:uploading?.6:1}}
+     >
+       <span style={{fontSize:15}}>{uploading?'⏳':'📎'}</span> {uploading?'Uploading…':`Upload ${label}`}
+     </button>
+     <input ref={ref} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
+   </>
+ )
 }
  
 // ─── DIMENSIONS TABLE EDITOR ─────────────────────────────────────────────────
 function DimensionsEditor({ value, onChange }) {
-  const tbl = value && typeof value === 'object' ? value : { headers: [''], rows: [['']] }
-  const cols = tbl.headers.length
+ const tbl = value && typeof value === 'object' ? value : { headers: [''], rows: [['']] }
+ const cols = tbl.headers.length
  
-  const setHeader = (ci, val) => {
-    const h = [...tbl.headers]; h[ci] = val
-    onChange({ ...tbl, headers: h })
-  }
-  const setCell = (ri, ci, val) => {
-    const rows = tbl.rows.map((r, i) => i === ri ? r.map((c, j) => j === ci ? val : c) : [...r])
-    onChange({ ...tbl, rows })
-  }
-  const addCol = () => {
-    onChange({ headers: [...tbl.headers, ''], rows: tbl.rows.map(r => [...r, '']) })
-  }
-  const removeCol = (ci) => {
-    if (cols <= 1) return
-    onChange({ headers: tbl.headers.filter((_,i)=>i!==ci), rows: tbl.rows.map(r=>r.filter((_,i)=>i!==ci)) })
-  }
-  const addRow = () => {
-    onChange({ ...tbl, rows: [...tbl.rows, Array(cols).fill('')] })
-  }
-  const removeRow = (ri) => {
-    if (tbl.rows.length <= 1) return
-    onChange({ ...tbl, rows: tbl.rows.filter((_,i)=>i!==ri) })
-  }
+ const setHeader = (ci, val) => {
+   const h = [...tbl.headers]; h[ci] = val
+   onChange({ ...tbl, headers: h })
+ }
+ const setCell = (ri, ci, val) => {
+   const rows = tbl.rows.map((r, i) => i === ri ? r.map((c, j) => j === ci ? val : c) : [...r])
+   onChange({ ...tbl, rows })
+ }
+ const addCol = () => {
+   onChange({ headers: [...tbl.headers, ''], rows: tbl.rows.map(r => [...r, '']) })
+ }
+ const removeCol = (ci) => {
+   if (cols <= 1) return
+   onChange({ headers: tbl.headers.filter((_,i)=>i!==ci), rows: tbl.rows.map(r=>r.filter((_,i)=>i!==ci)) })
+ }
+ const addRow = () => {
+   onChange({ ...tbl, rows: [...tbl.rows, Array(cols).fill('')] })
+ }
+ const removeRow = (ri) => {
+   if (tbl.rows.length <= 1) return
+   onChange({ ...tbl, rows: tbl.rows.filter((_,i)=>i!==ri) })
+ }
  
-  const cellStyle = { fontFamily:'var(--fn)',fontSize:13,border:'1px solid var(--sf7)',borderRadius:5,padding:'6px 8px',outline:'none',width:'100%',background:'#fff' }
-  const headStyle = { ...cellStyle, fontWeight:700,color:'var(--tl)',background:'var(--sf4)' }
-  const btnStyle = { background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,.5)',fontSize:14,padding:'0 4px',lineHeight:1 }
-  const addBtnStyle = { background:'var(--sf4)',border:'1px dashed rgba(185,220,210,.8)',borderRadius:6,padding:'5px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',transition:'var(--tr)' }
+ const cellStyle = { fontFamily:'var(--fn)',fontSize:13,border:'1px solid var(--sf7)',borderRadius:5,padding:'6px 8px',outline:'none',width:'100%',background:'#fff' }
+ const headStyle = { ...cellStyle, fontWeight:700,color:'var(--tl)',background:'var(--sf4)' }
+ const btnStyle = { background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,.5)',fontSize:14,padding:'0 4px',lineHeight:1 }
+ const addBtnStyle = { background:'var(--sf4)',border:'1px dashed rgba(185,220,210,.8)',borderRadius:6,padding:'5px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',transition:'var(--tr)' }
  
-  return (
-    <div style={{display:'flex',flexDirection:'column',gap:8}}>
-      <div style={{overflowX:'auto'}}>
-        <table style={{width:'100%',borderCollapse:'collapse',fontSize:13,minWidth:200}}>
-          <thead>
-            <tr>
-              {tbl.headers.map((h,ci)=>(
-                <th key={ci} style={{padding:'4px 4px 4px 0',verticalAlign:'bottom',width:`${90/cols}%`}}>
-                  <div style={{display:'flex',alignItems:'center',gap:3}}>
-                    <input value={h} onChange={e=>setHeader(ci,e.target.value)} style={headStyle} placeholder={ci===0?'Label':'Value'}/>
-                    {cols>1 && <button style={btnStyle} onClick={()=>removeCol(ci)}>✕</button>}
-                  </div>
-                </th>
-              ))}
-              <th style={{width:32}}/>
-            </tr>
-          </thead>
-          <tbody>
-            {tbl.rows.map((row,ri)=>(
-              <tr key={ri}>
-                {row.map((cell,ci)=>(
-                  <td key={ci} style={{padding:'3px 4px 3px 0'}}>
-                    <input value={cell} onChange={e=>setCell(ri,ci,e.target.value)} style={cellStyle} placeholder="—"/>
-                  </td>
-                ))}
-                <td style={{padding:'3px 0',verticalAlign:'middle'}}>
-                  {tbl.rows.length>1 && <button style={btnStyle} onClick={()=>removeRow(ri)}>✕</button>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div style={{display:'flex',gap:8}}>
-        <button style={addBtnStyle} onClick={addRow}>+ Row</button>
-        <button style={addBtnStyle} onClick={addCol}>+ Column</button>
-      </div>
-    </div>
-  )
+ return (
+   <div style={{display:'flex',flexDirection:'column',gap:8}}>
+     <div style={{overflowX:'auto'}}>
+       <table style={{width:'100%',borderCollapse:'collapse',fontSize:13,minWidth:200}}>
+         <thead>
+           <tr>
+             {tbl.headers.map((h,ci)=>(
+               <th key={ci} style={{padding:'4px 4px 4px 0',verticalAlign:'bottom',width:`${90/cols}%`}}>
+                 <div style={{display:'flex',alignItems:'center',gap:3}}>
+                   <input value={h} onChange={e=>setHeader(ci,e.target.value)} style={headStyle} placeholder={ci===0?'Label':'Value'}/>
+                   {cols>1 && <button style={btnStyle} onClick={()=>removeCol(ci)}>✕</button>}
+                 </div>
+               </th>
+             ))}
+             <th style={{width:32}}/>
+           </tr>
+         </thead>
+         <tbody>
+           {tbl.rows.map((row,ri)=>(
+             <tr key={ri}>
+               {row.map((cell,ci)=>(
+                 <td key={ci} style={{padding:'3px 4px 3px 0'}}>
+                   <input value={cell} onChange={e=>setCell(ri,ci,e.target.value)} style={cellStyle} placeholder="—"/>
+                 </td>
+               ))}
+               <td style={{padding:'3px 0',verticalAlign:'middle'}}>
+                 {tbl.rows.length>1 && <button style={btnStyle} onClick={()=>removeRow(ri)}>✕</button>}
+               </td>
+             </tr>
+           ))}
+         </tbody>
+       </table>
+     </div>
+     <div style={{display:'flex',gap:8}}>
+       <button style={addBtnStyle} onClick={addRow}>+ Row</button>
+       <button style={addBtnStyle} onClick={addCol}>+ Column</button>
+     </div>
+   </div>
+ )
 }
  
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
@@ -2434,3051 +2575,3051 @@ function DimensionsEditor({ value, onChange }) {
 // ─── CATALOG PREFERENCES AUTOSAVE ─────────────────────────────────────────────
 const CATALOG_PREFS_KEY = 'qnh-catalog-preferences'
 function getSavedCatalogPrefs() {
-  if (typeof window === 'undefined') return {}
-  try {
-    const raw = localStorage.getItem(CATALOG_PREFS_KEY)
-    if (!raw) return {}
-    const parsed = JSON.parse(raw)
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch {
-    return {}
-  }
+ if (typeof window === 'undefined') return {}
+ try {
+   const raw = localStorage.getItem(CATALOG_PREFS_KEY)
+   if (!raw) return {}
+   const parsed = JSON.parse(raw)
+   return parsed && typeof parsed === 'object' ? parsed : {}
+ } catch {
+   return {}
+ }
 }
 function savedNumberOrNull(value) {
-  if (value === null || value === undefined || value === '') return null
-  const num = Number(value)
-  return Number.isFinite(num) ? num : null
+ if (value === null || value === undefined || value === '') return null
+ const num = Number(value)
+ return Number.isFinite(num) ? num : null
 }
-
-
+ 
+ 
 // ─── EMBEDDED IMAGE CLEANUP ──────────────────────────────────────────────────
 // Base64/data URL images make /api/products and /api/settings very heavy because
 // they are stored inside JSON and cannot be cached like normal image files.
 // Keep only CDN/Blob/static URLs in saved catalog data.
 const isEmbeddedDataImage = (value) => typeof value === 'string' && /^data:image\//i.test(value.trim())
-
+ 
 function stripEmbeddedDataImagesFromProduct(product = {}) {
-  const cleanImages = Array.isArray(product.images)
-    ? product.images.filter(img => {
-        const src = typeof img === 'string' ? img : img?.src
-        return !isEmbeddedDataImage(src)
-      })
-    : []
-
-  const cleanColors = Array.isArray(product.colors)
-    ? product.colors.map(color => {
-        const next = { ...color }
-        if (isEmbeddedDataImage(next.barcodeImage)) next.barcodeImage = ''
-        if (isEmbeddedDataImage(next.qrImage)) next.qrImage = ''
-        if (isEmbeddedDataImage(next.barcodeUrl)) next.barcodeUrl = ''
-        if (isEmbeddedDataImage(next.qrUrl)) next.qrUrl = ''
-        return next
-      })
-    : []
-
-  return {
-    ...product,
-    images: cleanImages,
-    colors: cleanColors,
-    barcodeImage: isEmbeddedDataImage(product.barcodeImage) ? '' : (product.barcodeImage || ''),
-    qrImage: isEmbeddedDataImage(product.qrImage) ? '' : (product.qrImage || ''),
-  }
+ const cleanImages = Array.isArray(product.images)
+   ? product.images.filter(img => {
+       const src = typeof img === 'string' ? img : img?.src
+       return !isEmbeddedDataImage(src)
+     })
+   : []
+ 
+ const cleanColors = Array.isArray(product.colors)
+   ? product.colors.map(color => {
+       const next = { ...color }
+       if (isEmbeddedDataImage(next.barcodeImage)) next.barcodeImage = ''
+       if (isEmbeddedDataImage(next.qrImage)) next.qrImage = ''
+       if (isEmbeddedDataImage(next.barcodeUrl)) next.barcodeUrl = ''
+       if (isEmbeddedDataImage(next.qrUrl)) next.qrUrl = ''
+       return next
+     })
+   : []
+ 
+ return {
+   ...product,
+   images: cleanImages,
+   colors: cleanColors,
+   barcodeImage: isEmbeddedDataImage(product.barcodeImage) ? '' : (product.barcodeImage || ''),
+   qrImage: isEmbeddedDataImage(product.qrImage) ? '' : (product.qrImage || ''),
+ }
 }
-
+ 
 function stripEmbeddedDataImagesFromSettings(settings = {}) {
-  const cleanBanners = Array.isArray(settings.banners)
-    ? settings.banners.filter(banner => !isEmbeddedDataImage(banner?.image))
-    : settings.banners
-
-  return {
-    ...settings,
-    banners: cleanBanners,
-    brandLogo: isEmbeddedDataImage(settings.brandLogo) ? '' : (settings.brandLogo || ''),
-    heroVideoThumbnail: isEmbeddedDataImage(settings.heroVideoThumbnail) ? '' : (settings.heroVideoThumbnail || ''),
-  }
+ const cleanBanners = Array.isArray(settings.banners)
+   ? settings.banners.filter(banner => !isEmbeddedDataImage(banner?.image))
+   : settings.banners
+ 
+ return {
+   ...settings,
+   banners: cleanBanners,
+   brandLogo: isEmbeddedDataImage(settings.brandLogo) ? '' : (settings.brandLogo || ''),
+   heroVideoThumbnail: isEmbeddedDataImage(settings.heroVideoThumbnail) ? '' : (settings.heroVideoThumbnail || ''),
+ }
 }
-
+ 
 function hasEmbeddedDataImages(value) {
-  try { return JSON.stringify(value).includes('data:image/') }
-  catch { return false }
+ try { return JSON.stringify(value).includes('data:image/') }
+ catch { return false }
 }
  
 export default function QuenchaCatalog() {
-  useEffect(() => {
-    const id = 'qnh-styles'
-    if (!document.getElementById(id)) {
-      const s = document.createElement('style'); s.id = id; s.textContent = CSS
-      document.head.appendChild(s)
-    }
-  }, [])
+ useEffect(() => {
+   const id = 'qnh-styles'
+   if (!document.getElementById(id)) {
+     const s = document.createElement('style'); s.id = id; s.textContent = CSS
+     document.head.appendChild(s)
+   }
+ }, [])
  
-  // ── DATA ──
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
-  const [colorCollectionSets, setColorCollectionSets] = useState(getSavedColorCollectionSets)
-  const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
-  const [editingCollectionSet, setEditingCollectionSet] = useState('')
-  const [collectionSetDraft, setCollectionSetDraft] = useState([])
-  const [newCollectionSetColor, setNewCollectionSetColor] = useState({ name:'', code:'', hex:'#B9DCD2' })
+ // ── DATA ──
+ const [products, setProducts] = useState([])
+ const [loading, setLoading] = useState(true)
+ const [saving, setSaving] = useState(false)
+ const [colorCollections, setColorCollections] = useState(DEFAULT_COLOR_COLLECTIONS)
+ const [colorCollectionSets, setColorCollectionSets] = useState(getSavedColorCollectionSets)
+ const [newCollection, setNewCollection] = useState({ label:'', color:'#279989' })
+ const [editingCollectionSet, setEditingCollectionSet] = useState('')
+ const [collectionSetDraft, setCollectionSetDraft] = useState([])
+ const [newCollectionSetColor, setNewCollectionSetColor] = useState({ name:'', code:'', hex:'#B9DCD2' })
  
-  // Load saved catalog preferences once so filter/sort state can initialize safely.
-  const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
-  const [catalogPrefsHydrated, setCatalogPrefsHydrated] = useState(false)
+ // Load saved catalog preferences once so filter/sort state can initialize safely.
+ const savedCatalogPrefsRef = useRef(getSavedCatalogPrefs())
+ const [catalogPrefsHydrated, setCatalogPrefsHydrated] = useState(false)
  
-  // Fetch all data on mount — Redis is now the source of truth.
-  // Important: this no longer auto-seeds missing products from the local SEED list,
-  // so products you delete manually in Upstash will stay deleted.
-  useEffect(() => {
-    Promise.all([
-      fetch('/api/products').then(r=>r.json()),
-      fetch('/api/settings').then(r=>r.json()),
-    ]).then(([prods, settings]) => {
-      const existingProducts = Array.isArray(prods) ? prods : []
-      const cleanedProducts = existingProducts.map(p => stripEmbeddedDataImagesFromProduct({ youtube: '', ...p }))
-      const cleanedSettings = stripEmbeddedDataImagesFromSettings(settings || {})
-
-      setProducts(cleanedProducts)
-
-      // One-time cleanup: if old Base64 images are already saved in Redis, remove
-      // them after the first load so future visits no longer download them in JSON.
-      existingProducts.forEach((product, index) => {
-        if (hasEmbeddedDataImages(product) && product?.id) {
-          fetch('/api/products/' + product.id, {
-            method:'PUT',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({ ...product, ...cleanedProducts[index], updatedAt:new Date().toISOString() })
-          }).catch(console.error)
-        }
-      })
-      if (hasEmbeddedDataImages(settings || {})) {
-        fetch('/api/settings', {
-          method:'PUT',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(cleanedSettings)
-        }).catch(console.error)
-      }
+ // Fetch all data on mount — Redis is now the source of truth.
+ // Important: this no longer auto-seeds missing products from the local SEED list,
+ // so products you delete manually in Upstash will stay deleted.
+ useEffect(() => {
+   Promise.all([
+     fetch('/api/products').then(r=>r.json()),
+     fetch('/api/settings').then(r=>r.json()),
+   ]).then(([prods, settings]) => {
+     const existingProducts = Array.isArray(prods) ? prods : []
+     const cleanedProducts = existingProducts.map(p => stripEmbeddedDataImagesFromProduct({ youtube: '', ...p }))
+     const cleanedSettings = stripEmbeddedDataImagesFromSettings(settings || {})
  
-      if (Array.isArray(cleanedSettings.banners))          setBanners(cleanedSettings.banners)
-      if (cleanedSettings.bannerAspect)                 setBannerAspect(cleanedSettings.bannerAspect)
-      if (cleanedSettings.bannerInterval !== undefined) setBannerIntervalVal(cleanedSettings.bannerInterval)
-      if (cleanedSettings.heroVideoUrl !== undefined)       setHeroVideoUrl(cleanedSettings.heroVideoUrl || '')
-      if (cleanedSettings.heroVideoThumbnail !== undefined) setHeroVideoThumbnail(cleanedSettings.heroVideoThumbnail || '')
-      if (cleanedSettings.heroMediaOrder)                  setHeroMediaOrder(cleanedSettings.heroMediaOrder)
-      if (cleanedSettings.heroTitle !== undefined)           setHeroTitle(cleanedSettings.heroTitle || '')
-      if (cleanedSettings.heroSub !== undefined)             setHeroSub(cleanedSettings.heroSub || '')
-      if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
-      if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
-      if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
-      if (Array.isArray(cleanedSettings.colorCollections)) {
-        setColorCollections(cleanedSettings.colorCollections)
-      } else if (typeof window !== 'undefined') {
-        try {
-          const storedCollections = JSON.parse(localStorage.getItem('qnh-color-collections') || 'null')
-          if (Array.isArray(storedCollections)) setColorCollections(storedCollections)
-        } catch {}
-      }
-      if (cleanedSettings.colorCollectionSets && typeof cleanedSettings.colorCollectionSets === 'object') {
-        setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(cleanedSettings.colorCollectionSets) }))
-      }
+     setProducts(cleanedProducts)
  
-      // Shared catalog preferences from /api/settings keep desktop and mobile in sync.
-      // Local storage is only a fallback while settings are loading.
-      if (cleanedSettings.catalogPrefs && typeof cleanedSettings.catalogPrefs === 'object') {
-        const prefs = cleanedSettings.catalogPrefs
-        if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
-        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
-        if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
-        if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
-        if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
-        if (prefs.sort !== undefined) setSort(prefs.sort || 'default')
-        if (prefs.view !== undefined) setView(prefs.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
-            filterExt: prefs.filterExt || 'all',
-            filterCat: prefs.filterCat || null,
-            filterColorCollection: prefs.filterColorCollection || 'all',
-            filterPMin: prefs.filterPMin ?? null,
-            filterPMax: prefs.filterPMax ?? null,
-            sort: prefs.sort || 'default',
-            view: prefs.view || (window.innerWidth <= 768 ? 'col-2' : 'col-4'),
-          }))
-        }
-      }
+     // One-time cleanup: if old Base64 images are already saved in Redis, remove
+     // them after the first load so future visits no longer download them in JSON.
+     existingProducts.forEach((product, index) => {
+       if (hasEmbeddedDataImages(product) && product?.id) {
+         fetch('/api/products/' + product.id, {
+           method:'PUT',
+           headers:{'Content-Type':'application/json'},
+           body:JSON.stringify({ ...product, ...cleanedProducts[index], updatedAt:new Date().toISOString() })
+         }).catch(console.error)
+       }
+     })
+     if (hasEmbeddedDataImages(settings || {})) {
+       fetch('/api/settings', {
+         method:'PUT',
+         headers:{'Content-Type':'application/json'},
+         body:JSON.stringify(cleanedSettings)
+       }).catch(console.error)
+     }
  
-      setCatalogPrefsHydrated(true)
-      setLoading(false)
-    }).catch(() => { setProducts([]); setCatalogPrefsHydrated(true); setLoading(false) })
-  }, [])
+     if (Array.isArray(cleanedSettings.banners))          setBanners(cleanedSettings.banners)
+     if (cleanedSettings.bannerAspect)                 setBannerAspect(cleanedSettings.bannerAspect)
+     if (cleanedSettings.bannerInterval !== undefined) setBannerIntervalVal(cleanedSettings.bannerInterval)
+     if (cleanedSettings.heroVideoUrl !== undefined)       setHeroVideoUrl(cleanedSettings.heroVideoUrl || '')
+     if (cleanedSettings.heroVideoThumbnail !== undefined) setHeroVideoThumbnail(cleanedSettings.heroVideoThumbnail || '')
+     if (cleanedSettings.heroMediaOrder)                  setHeroMediaOrder(cleanedSettings.heroMediaOrder)
+     if (cleanedSettings.heroTitle !== undefined)           setHeroTitle(cleanedSettings.heroTitle || '')
+     if (cleanedSettings.heroSub !== undefined)             setHeroSub(cleanedSettings.heroSub || '')
+     if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
+     if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
+     if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
+     if (Array.isArray(cleanedSettings.colorCollections)) {
+       setColorCollections(cleanedSettings.colorCollections)
+     } else if (typeof window !== 'undefined') {
+       try {
+         const storedCollections = JSON.parse(localStorage.getItem('qnh-color-collections') || 'null')
+         if (Array.isArray(storedCollections)) setColorCollections(storedCollections)
+       } catch {}
+     }
+     if (cleanedSettings.colorCollectionSets && typeof cleanedSettings.colorCollectionSets === 'object') {
+       setColorCollectionSets(prev => ({ ...prev, ...normalizeCollectionSetMap(cleanedSettings.colorCollectionSets) }))
+     }
  
-  // ── FILTERS ──
-  const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
-  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
-  const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
-  const [cats, setCats] = useState(DEFAULT_CATS)
-  const [catMgrOpen, setCatMgrOpen] = useState(false)
-  const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
-  const [exts, setExts] = useState(DEFAULT_EXTS)
-  const [extMgrOpen, setExtMgrOpen] = useState(false)
-  const [newExt, setNewExt] = useState({value:'',label:'',color:'#279989'})
-  const [filterPMin, setFilterPMin] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMin))
-  const [filterPMax, setFilterPMax] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMax))
-  const [search, setSearch] = useState('')
-  const [sort, setSort] = useState(() => savedCatalogPrefsRef.current.sort || 'default')
-  const [dragProductId, setDragProductId] = useState(null)
-  const [view, setView] = useState(() => savedCatalogPrefsRef.current.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
-  const [showMobileFilter, setShowMobileFilter] = useState(false)
-  const searchInputRef = useRef(null)
-  const resultsRef = useRef(null)
-  const productCardRefs = useRef({})
-  const vmImageRef = useRef(null)
-  const touchImageDragIndexRef = useRef(null)
+     // Shared catalog preferences from /api/settings keep desktop and mobile in sync.
+     // Local storage is only a fallback while settings are loading.
+     if (cleanedSettings.catalogPrefs && typeof cleanedSettings.catalogPrefs === 'object') {
+       const prefs = cleanedSettings.catalogPrefs
+       if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
+       if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
+       if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
+       if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
+       if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
+       if (prefs.sort !== undefined) setSort(prefs.sort || 'default')
+       if (prefs.view !== undefined) setView(prefs.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
+       if (typeof window !== 'undefined') {
+         localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify({
+           filterExt: prefs.filterExt || 'all',
+           filterCat: prefs.filterCat || null,
+           filterColorCollection: prefs.filterColorCollection || 'all',
+           filterPMin: prefs.filterPMin ?? null,
+           filterPMax: prefs.filterPMax ?? null,
+           sort: prefs.sort || 'default',
+           view: prefs.view || (window.innerWidth <= 768 ? 'col-2' : 'col-4'),
+         }))
+       }
+     }
  
-  // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
-  // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
+     setCatalogPrefsHydrated(true)
+     setLoading(false)
+   }).catch(() => { setProducts([]); setCatalogPrefsHydrated(true); setLoading(false) })
+ }, [])
  
-  // ── AUTH — once unlocked, stays for session ──
-  const [isAuthed, setIsAuthed] = useState(false)
-  const [editMode, setEditMode] = useState(false)
+ // ── FILTERS ──
+ const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
+ const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
+ const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
+ const [cats, setCats] = useState(DEFAULT_CATS)
+ const [catMgrOpen, setCatMgrOpen] = useState(false)
+ const [newCat, setNewCat] = useState({value:'',label:'',icon:'🏷️'})
+ const [exts, setExts] = useState(DEFAULT_EXTS)
+ const [extMgrOpen, setExtMgrOpen] = useState(false)
+ const [newExt, setNewExt] = useState({value:'',label:'',color:'#279989'})
+ const [filterPMin, setFilterPMin] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMin))
+ const [filterPMax, setFilterPMax] = useState(() => savedNumberOrNull(savedCatalogPrefsRef.current.filterPMax))
+ const [search, setSearch] = useState('')
+ const [sort, setSort] = useState(() => savedCatalogPrefsRef.current.sort || 'default')
+ const [dragProductId, setDragProductId] = useState(null)
+ const [view, setView] = useState(() => savedCatalogPrefsRef.current.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
+ const [showMobileFilter, setShowMobileFilter] = useState(false)
+ const searchInputRef = useRef(null)
+ const resultsRef = useRef(null)
+ const productCardRefs = useRef({})
+ const vmImageRef = useRef(null)
+ const touchImageDragIndexRef = useRef(null)
  
-  // Password modal
-  const [pwOpen, setPwOpen] = useState(false)
-  const [pwValue, setPwValue] = useState('')
-  const [pwError, setPwError] = useState('')
-  const [pwShow, setPwShow] = useState(false)
-  const [pwIntent, setPwIntent] = useState(null) // 'topbar' | product object
-  const pwRef = useRef(null)
+ // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
+ // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
  
-  // Modals
-  const [viewProduct, setViewProduct] = useState(null)
-  const [vmImg, setVmImg] = useState(0)
-  const [vmColorKey, setVmColorKey] = useState('')
-  const [ytPlaying, setYtPlaying] = useState(false)
-  const [banners, setBanners] = useState([])
-  const [bannerAspect, setBannerAspect] = useState('custom')
-  const [bannerEditOpen, setBannerEditOpen] = useState(false)
-  const [heroVideoUrl, setHeroVideoUrl] = useState('')
-  const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
-  const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
-  const [brandLogo, setBrandLogo] = useState('')
-  const [brandName, setBrandName] = useState('')
-  const [brandTagline, setBrandTagline] = useState('')
-  const [brandEditOpen, setBrandEditOpen] = useState(false)
-  const [brandUploadErr, setBrandUploadErr] = useState('')
+ // ── AUTH — once unlocked, stays for session ──
+ const [isAuthed, setIsAuthed] = useState(false)
+ const [editMode, setEditMode] = useState(false)
  
-  // Quenchables builder
-  const [quenchOpen, setQuenchOpen] = useState(false)
-  const [quenchStep, setQuenchStep] = useState('collection')
-  const [quenchCollection, setQuenchCollection] = useState('Horizon')
-  const [quenchCat, setQuenchCat] = useState('sip')
-  const [quenchItems, setQuenchItems] = useState([])
-  const [quenchQty, setQuenchQty] = useState({})
-  const [quenchColor, setQuenchColor] = useState({})
-  const [quenchMessage, setQuenchMessage] = useState('')
+ // Password modal
+ const [pwOpen, setPwOpen] = useState(false)
+ const [pwValue, setPwValue] = useState('')
+ const [pwError, setPwError] = useState('')
+ const [pwShow, setPwShow] = useState(false)
+ const [pwIntent, setPwIntent] = useState(null) // 'topbar' | product object
+ const pwRef = useRef(null)
+ 
+ // Modals
+ const [viewProduct, setViewProduct] = useState(null)
+ const [vmImg, setVmImg] = useState(0)
+ const [vmColorKey, setVmColorKey] = useState('')
+ const [ytPlaying, setYtPlaying] = useState(false)
+ const [banners, setBanners] = useState([])
+ const [bannerAspect, setBannerAspect] = useState('custom')
+ const [bannerEditOpen, setBannerEditOpen] = useState(false)
+ const [heroVideoUrl, setHeroVideoUrl] = useState('')
+ const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
+ const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
+ const [brandLogo, setBrandLogo] = useState('')
+ const [brandName, setBrandName] = useState('')
+ const [brandTagline, setBrandTagline] = useState('')
+ const [brandEditOpen, setBrandEditOpen] = useState(false)
+ const [brandUploadErr, setBrandUploadErr] = useState('')
+ 
+ // Quenchables builder
+ const [quenchOpen, setQuenchOpen] = useState(false)
+ const [quenchStep, setQuenchStep] = useState('collection')
+ const [quenchCollection, setQuenchCollection] = useState('Horizon')
+ const [quenchCat, setQuenchCat] = useState('sip')
+ const [quenchItems, setQuenchItems] = useState([])
+ const [quenchQty, setQuenchQty] = useState({})
+ const [quenchColor, setQuenchColor] = useState({})
+ const [quenchMessage, setQuenchMessage] = useState('')
  
  
-  const syncSettings = useCallback((patch) => {
-    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
-  }, [])
+ const syncSettings = useCallback((patch) => {
+   fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
+ }, [])
  
-  const focusSearchResults = useCallback(() => {
-    window.requestAnimationFrame(() => {
-      const target = resultsRef.current
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
-  }, [])
+ const focusSearchResults = useCallback(() => {
+   window.requestAnimationFrame(() => {
+     const target = resultsRef.current
+     if (target) {
+       target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+     }
+   })
+ }, [])
  
-  const runSearch = useCallback(() => {
-    if (!search.trim()) {
-      searchInputRef.current?.focus()
-      return
-    }
-    focusSearchResults()
-  }, [search, focusSearchResults])
+ const runSearch = useCallback(() => {
+   if (!search.trim()) {
+     searchInputRef.current?.focus()
+     return
+   }
+   focusSearchResults()
+ }, [search, focusSearchResults])
  
-  const saveCatalogView = useCallback((nextView) => {
-    setView(nextView)
-    if (!catalogPrefsHydrated) return
-    const catalogPrefs = {
-      filterExt,
-      filterCat,
-      filterColorCollection,
-      filterPMin,
-      filterPMax,
-      sort,
-      view: nextView,
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
-    }
-    syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, syncSettings])
+ const saveCatalogView = useCallback((nextView) => {
+   setView(nextView)
+   if (!catalogPrefsHydrated) return
+   const catalogPrefs = {
+     filterExt,
+     filterCat,
+     filterColorCollection,
+     filterPMin,
+     filterPMax,
+     sort,
+     view: nextView,
+   }
+   if (typeof window !== 'undefined') {
+     localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+   }
+   syncSettings({ catalogPrefs })
+ }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, syncSettings])
  
-  const saveCatalogSort = useCallback((nextSort) => {
-    setSort(nextSort)
-    if (!catalogPrefsHydrated) return
-    const catalogPrefs = {
-      filterExt,
-      filterCat,
-      filterColorCollection,
-      filterPMin,
-      filterPMax,
-      sort: nextSort,
-      view,
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
-    }
-    syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, view, syncSettings])
+ const saveCatalogSort = useCallback((nextSort) => {
+   setSort(nextSort)
+   if (!catalogPrefsHydrated) return
+   const catalogPrefs = {
+     filterExt,
+     filterCat,
+     filterColorCollection,
+     filterPMin,
+     filterPMax,
+     sort: nextSort,
+     view,
+   }
+   if (typeof window !== 'undefined') {
+     localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+   }
+   syncSettings({ catalogPrefs })
+ }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, view, syncSettings])
  
-  // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
-  useEffect(() => {
-    if (!catalogPrefsHydrated) return
-    const catalogPrefs = {
-      filterExt,
-      filterCat,
-      filterColorCollection,
-      filterPMin,
-      filterPMax,
-      sort,
-      view,
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
-    }
-    syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, view, syncSettings])
+ // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
+ useEffect(() => {
+   if (!catalogPrefsHydrated) return
+   const catalogPrefs = {
+     filterExt,
+     filterCat,
+     filterColorCollection,
+     filterPMin,
+     filterPMax,
+     sort,
+     view,
+   }
+   if (typeof window !== 'undefined') {
+     localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
+   }
+   syncSettings({ catalogPrefs })
+ }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, view, syncSettings])
  
-  const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
-  const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
-  const [bannerInterval, setBannerIntervalVal] = useState(4.5)
-  const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); syncSettings({ bannerInterval: v }) }, [syncSettings])
-  const saveHeroVideoUrl = useCallback((v) => { setHeroVideoUrl(v); syncSettings({ heroVideoUrl: v }) }, [syncSettings])
-  const saveHeroVideoThumbnail = useCallback((v) => { setHeroVideoThumbnail(v); syncSettings({ heroVideoThumbnail: v }) }, [syncSettings])
-  const saveHeroMediaOrder = useCallback((v) => { setHeroMediaOrder(v); syncSettings({ heroMediaOrder: v }) }, [syncSettings])
-  const saveBrandLogo = useCallback((v) => { setBrandLogo(v); syncSettings({ brandLogo: v }) }, [syncSettings])
-  const saveBrandName = useCallback((v) => { setBrandName(v); syncSettings({ brandName: v }) }, [syncSettings])
-  const saveBrandTagline = useCallback((v) => { setBrandTagline(v); syncSettings({ brandTagline: v }) }, [syncSettings])
-  const saveColorCollections = useCallback((next) => {
-    setColorCollections(next)
-    if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
-    syncSettings({ colorCollections: next })
-  }, [syncSettings])
+ const saveBanners = useCallback((b) => { setBanners(b); syncSettings({ banners: b }) }, [syncSettings])
+ const saveAspect = useCallback((a) => { setBannerAspect(a); syncSettings({ bannerAspect: a }) }, [syncSettings])
+ const [bannerInterval, setBannerIntervalVal] = useState(4.5)
+ const saveBannerInterval = useCallback((v) => { setBannerIntervalVal(v); syncSettings({ bannerInterval: v }) }, [syncSettings])
+ const saveHeroVideoUrl = useCallback((v) => { setHeroVideoUrl(v); syncSettings({ heroVideoUrl: v }) }, [syncSettings])
+ const saveHeroVideoThumbnail = useCallback((v) => { setHeroVideoThumbnail(v); syncSettings({ heroVideoThumbnail: v }) }, [syncSettings])
+ const saveHeroMediaOrder = useCallback((v) => { setHeroMediaOrder(v); syncSettings({ heroMediaOrder: v }) }, [syncSettings])
+ const saveBrandLogo = useCallback((v) => { setBrandLogo(v); syncSettings({ brandLogo: v }) }, [syncSettings])
+ const saveBrandName = useCallback((v) => { setBrandName(v); syncSettings({ brandName: v }) }, [syncSettings])
+ const saveBrandTagline = useCallback((v) => { setBrandTagline(v); syncSettings({ brandTagline: v }) }, [syncSettings])
+ const saveColorCollections = useCallback((next) => {
+   setColorCollections(next)
+   if (typeof window !== 'undefined') localStorage.setItem('qnh-color-collections', JSON.stringify(next))
+   syncSettings({ colorCollections: next })
+ }, [syncSettings])
  
-  const saveColorCollectionSets = useCallback((next) => {
-    setColorCollectionSets(next)
-    if (typeof window !== 'undefined') localStorage.setItem(COLOR_COLLECTION_SETS_KEY, JSON.stringify(next))
-    syncSettings({ colorCollectionSets: next })
-  }, [syncSettings])
+ const saveColorCollectionSets = useCallback((next) => {
+   setColorCollectionSets(next)
+   if (typeof window !== 'undefined') localStorage.setItem(COLOR_COLLECTION_SETS_KEY, JSON.stringify(next))
+   syncSettings({ colorCollectionSets: next })
+ }, [syncSettings])
  
-  const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
-  const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
-  const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
-  const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
-  const { copy, copied } = useCopy()
+ const [heroTitle, setHeroTitle] = useState('Sip, Savor & Go.')
+ const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
+ const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
+ const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
+ const { copy, copied } = useCopy()
  
-  const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
+ const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
  
-  const getSkuBase = useCallback((product = null) => getProductSkuBase(product), [])
+ const getSkuBase = useCallback((product = null) => getProductSkuBase(product), [])
  
-  const openProductModal = useCallback((product, options = {}) => {
-    if (!product) return
-    const { updateUrl = true } = options
-    setViewProduct(product)
-    setVmImg(0)
-    setVmColorKey('')
-    setYtPlaying(false)
+ const openProductModal = useCallback((product, options = {}) => {
+   if (!product) return
+   const { updateUrl = true } = options
+   setViewProduct(product)
+   setVmImg(0)
+   setVmColorKey('')
+   setYtPlaying(false)
  
-    if (updateUrl && typeof window !== 'undefined') {
-      const skuBase = getProductSkuBase(product)
-      if (skuBase) {
-        const url = new URL(window.location.href)
-        url.searchParams.set('sku', skuBase)
-        window.history.pushState({ productSku: skuBase }, '', url.toString())
-      }
-    }
-  }, [])
+   if (updateUrl && typeof window !== 'undefined') {
+     const skuBase = getProductSkuBase(product)
+     if (skuBase) {
+       const url = new URL(window.location.href)
+       url.searchParams.set('sku', skuBase)
+       window.history.pushState({ productSku: skuBase }, '', url.toString())
+     }
+   }
+ }, [])
  
-  const closeProductModal = useCallback(() => {
-    setViewProduct(null)
-    setVmColorKey('')
-    setYtPlaying(false)
+ const closeProductModal = useCallback(() => {
+   setViewProduct(null)
+   setVmColorKey('')
+   setYtPlaying(false)
  
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href)
-      if (url.searchParams.has('sku')) {
-        url.searchParams.delete('sku')
-        window.history.pushState({}, '', url.toString())
-      }
-    }
-  }, [])
+   if (typeof window !== 'undefined') {
+     const url = new URL(window.location.href)
+     if (url.searchParams.has('sku')) {
+       url.searchParams.delete('sku')
+       window.history.pushState({}, '', url.toString())
+     }
+   }
+ }, [])
  
-  const copyProductLink = useCallback((product) => {
-    if (typeof window === 'undefined' || !product) return
-    const skuBase = getProductSkuBase(product)
-    if (!skuBase) return
-    const link = `${window.location.origin}${window.location.pathname}?sku=${encodeURIComponent(skuBase)}`
-    copy(link)
-  }, [copy])
+ const copyProductLink = useCallback((product) => {
+   if (typeof window === 'undefined' || !product) return
+   const skuBase = getProductSkuBase(product)
+   if (!skuBase) return
+   const link = `${window.location.origin}${window.location.pathname}?sku=${encodeURIComponent(skuBase)}`
+   copy(link)
+ }, [copy])
  
-  useEffect(() => {
-    if (!products.length || typeof window === 'undefined') return
+ useEffect(() => {
+   if (!products.length || typeof window === 'undefined') return
  
-    const openFromUrl = () => {
-      const skuParam = new URL(window.location.href).searchParams.get('sku')
-      if (!skuParam) return
-      const match = products.find(product => productMatchesSku(product, skuParam))
-      if (!match) return
+   const openFromUrl = () => {
+     const skuParam = new URL(window.location.href).searchParams.get('sku')
+     if (!skuParam) return
+     const match = products.find(product => productMatchesSku(product, skuParam))
+     if (!match) return
  
-      openProductModal(match, { updateUrl: false })
-      window.requestAnimationFrame(() => {
-        productCardRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      })
-    }
+     openProductModal(match, { updateUrl: false })
+     window.requestAnimationFrame(() => {
+       productCardRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+     })
+   }
  
-    openFromUrl()
-    window.addEventListener('popstate', openFromUrl)
-    return () => window.removeEventListener('popstate', openFromUrl)
-  }, [products, openProductModal])
+   openFromUrl()
+   window.addEventListener('popstate', openFromUrl)
+   return () => window.removeEventListener('popstate', openFromUrl)
+ }, [products, openProductModal])
  
-  const buildInquiryText = useCallback((product, lines, message) => {
-    const packing = parseInt(product?.packing, 10) || 0
-    const safeLines = Array.isArray(lines) ? lines : []
-    const requestedLines = safeLines
-      .map((line) => {
-        const packs = parseInt(line?.packs, 10) || 0
-        const color = product?.colors?.find(c => c.code === line?.colorCode) || product?.colors?.[0] || null
-        const units = packs && packing ? packs * packing : 0
-        return { color, packs, units }
-      })
-      .filter(line => line.packs > 0)
+ const buildInquiryText = useCallback((product, lines, message) => {
+   const packing = parseInt(product?.packing, 10) || 0
+   const safeLines = Array.isArray(lines) ? lines : []
+   const requestedLines = safeLines
+     .map((line) => {
+       const packs = parseInt(line?.packs, 10) || 0
+       const color = product?.colors?.find(c => c.code === line?.colorCode) || product?.colors?.[0] || null
+       const units = packs && packing ? packs * packing : 0
+       return { color, packs, units }
+     })
+     .filter(line => line.packs > 0)
  
-    const skuBase = getSkuBase(product)
-    const totalPacks = requestedLines.reduce((sum, line) => sum + line.packs, 0)
-    const totalUnits = requestedLines.reduce((sum, line) => sum + line.units, 0)
-    const requestSummary = requestedLines.length
-      ? requestedLines.map((line, index) => {
-          const colorLabel = line.color ? `${line.color.name} (${line.color.code})` : 'Color'
-          const skuLabel = line.color?.sku ? ` | SKU: ${line.color.sku}` : ''
-          const unitsLabel = line.units ? ` | Estimated Units: ${line.units} pcs` : ''
-          return `${index + 1}. ${colorLabel}${skuLabel} | Packs/Cartons: ${line.packs}${unitsLabel}`
-        }).join('\n')
-      : '1. Color / SKU: | Packs/Cartons:'
+   const skuBase = getSkuBase(product)
+   const totalPacks = requestedLines.reduce((sum, line) => sum + line.packs, 0)
+   const totalUnits = requestedLines.reduce((sum, line) => sum + line.units, 0)
+   const requestSummary = requestedLines.length
+     ? requestedLines.map((line, index) => {
+         const colorLabel = line.color ? `${line.color.name} (${line.color.code})` : 'Color'
+         const skuLabel = line.color?.sku ? ` | SKU: ${line.color.sku}` : ''
+         const unitsLabel = line.units ? ` | Estimated Units: ${line.units} pcs` : ''
+         return `${index + 1}. ${colorLabel}${skuLabel} | Packs/Cartons: ${line.packs}${unitsLabel}`
+       }).join('\n')
+     : '1. Color / SKU: | Packs/Cartons:'
  
-    return [
-      'Hi Quencha Team,',
-      '',
-      'I would like to inquire about bulk orders / corporate gifting / UV printing.',
-      '',
-      product ? `Product: ${product.name}` : 'Product / SKU:',
-      skuBase ? `SKU Base: ${skuBase}` : '',
-      product?.srp ? `SRP: ₱${Number(product.srp).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '',
-      packing ? `Packing: ${packing} pcs per pack/carton` : 'Packing:',
-      '',
-      'Requested Colors / Quantities:',
-      requestSummary,
-      '',
-      totalPacks ? `Total Packs/Cartons: ${totalPacks}` : '',
-      totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
-      '',
-      'Company / Name:',
-      'Contact Number:',
-      'Delivery Area:',
-      '',
-      message?.trim() ? `Message / Notes:
+   return [
+     'Hi Quencha Team,',
+     '',
+     'I would like to inquire about bulk orders / corporate gifting / UV printing.',
+     '',
+     product ? `Product: ${product.name}` : 'Product / SKU:',
+     skuBase ? `SKU Base: ${skuBase}` : '',
+     product?.srp ? `SRP: ₱${Number(product.srp).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '',
+     packing ? `Packing: ${packing} pcs per pack/carton` : 'Packing:',
+     '',
+     'Requested Colors / Quantities:',
+     requestSummary,
+     '',
+     totalPacks ? `Total Packs/Cartons: ${totalPacks}` : '',
+     totalUnits ? `Estimated Total Units: ${totalUnits} pcs` : '',
+     '',
+     'Company / Name:',
+     'Contact Number:',
+     'Delivery Area:',
+     '',
+     message?.trim() ? `Message / Notes:
 ${message.trim()}` : 'Message / Notes:',
-      '',
-      'Thank you.'
-    ].filter(line => line !== '').join('\n')
-  }, [getSkuBase])
- 
-  const buildInquiryHref = useCallback((product, lines, message) => {
-    const email = 'design@sunbeamsimpexinc.com'
-    const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
-    const body = buildInquiryText(product, lines, message)
-    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  }, [buildInquiryText])
- 
-  // ── API HELPERS ──
-  const apiCreateProduct = useCallback(async (product) => {
-    const res = await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) })
-    if (!res.ok) throw new Error('Create product failed')
-    return res.json().catch(() => product)
-  }, [])
- 
-  const apiSaveProduct = useCallback(async (id, data) => {
-    const res = await fetch('/api/products/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) })
-    if (!res.ok) throw new Error('Save product failed')
-    return res.json().catch(() => data)
-  }, [])
- 
-  // ── IMAGE UPLOAD via Vercel Blob ──
-  const uploadImageToBlob = useCallback(async (file, options = {}) => {
-    const shouldCompress = options.compress !== false
-    const uploadFile = shouldCompress ? await compressImageFile(file) : file
- 
-    const fd = new FormData()
-    fd.append('file', uploadFile)
- 
-    const res = await fetch('/api/upload', { method:'POST', body: fd })
-    if (!res.ok) {
-      let message = `Upload failed (${res.status})`
-      try {
-        const payload = await res.json()
-        message = payload?.error || payload?.message || message
-      } catch {}
-      const mb = (uploadFile.size / 1024 / 1024).toFixed(2)
-      throw new Error(`${message} — ${uploadFile.type || 'unknown type'}, ${mb}MB`)
-    }
-    const { url } = await res.json()
-    if (!url) throw new Error('Upload completed but no URL was returned')
-    return url
-  }, [])
- 
-  const handleBrandLogoUpload = useCallback(async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const allowed = ['image/png','image/jpeg','image/webp','image/svg+xml']
-    if (!allowed.includes(file.type)) {
-      setBrandUploadErr('Please upload a PNG, JPG, WebP, or SVG logo.')
-      e.target.value = ''
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setBrandUploadErr('Logo file is too large. Please keep it under 5MB.')
-      e.target.value = ''
-      return
-    }
-    setBrandUploadErr('Uploading logo...')
-    try {
-      const url = await uploadImageToBlob(file, { compress: file.type !== 'image/svg+xml' })
-      saveBrandLogo(url)
-      setBrandUploadErr('')
-    } catch (err) {
-      console.error(err)
-      setBrandUploadErr(err?.message || 'Logo upload failed. Please try again.')
-    }
-    e.target.value = ''
-  }, [saveBrandLogo, uploadImageToBlob])
-  const [editOpen, setEditOpen] = useState(false)
-  const [editTarget, setEditTarget] = useState(null) // null = new
-  const [inqOpen, setInqOpen] = useState(false)
-  const [inqProduct, setInqProduct] = useState(null)
-  const [inqLines, setInqLines] = useState([])
-  const [inqMessage, setInqMessage] = useState('')
-  const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
- 
-  const openInquiry = useCallback((product = null) => {
-    const firstColorCode = product?.colors?.[0]?.code || ''
-    setInqProduct(product)
-    setInqLines([{ colorCode: firstColorCode, packs: '1' }])
-    setInqMessage('')
-    setInqOpen(true)
-  }, [])
- 
-  // Edit form
-  const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
-  const [editTab, setEditTab] = useState('details')
-  const [badgeInput, setBadgeInput] = useState('')
-  const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
-  const [uploadErr, setUploadErr] = useState('')
-  const [dragImageIndex, setDragImageIndex] = useState(null)
-  const [dragOverImageIndex, setDragOverImageIndex] = useState(null)
-  const [dragOverImagePosition, setDragOverImagePosition] = useState('before')
-  const [addingNewExt, setAddingNewExt] = useState(false)
-  const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
-  const [addingNewCat, setAddingNewCat] = useState(false)
-  const [inlineNewCat, setInlineNewCat] = useState({label:'',icon:'🏷️'})
-  const fileRef = useRef(null)
- 
-  // ── PASSWORD FLOW ──
-  const requestAuth = useCallback((intent) => {
-    // intent = 'topbar' | 'newProduct' | product-object
-    if (isAuthed) { handleAuthSuccess(intent); return }
-    setPwIntent(intent); setPwValue(''); setPwError(''); setPwShow(false); setPwOpen(true)
-    setTimeout(() => pwRef.current?.focus(), 100)
-  }, [isAuthed]) // eslint-disable-line
- 
-  const handleAuthSuccess = useCallback((intent) => {
-    setIsAuthed(true)
-    if (intent === 'topbar') { setEditMode(true) }
-    else if (intent === 'newProduct') { openNewProduct() }
-    else if (intent && typeof intent === 'object') { openEdit(intent) }
-  }, []) // eslint-disable-line
- 
-  const submitPassword = () => {
-    if (pwValue === EDIT_PASSWORD) {
-      setPwOpen(false)
-      handleAuthSuccess(pwIntent)
-    } else {
-      setPwError('Incorrect password. Try again.')
-      setPwValue('')
-      setTimeout(() => pwRef.current?.focus(), 50)
-    }
-  }
- 
-  const exitEdit = () => { setEditMode(false) }
- 
-  // ── EDIT HELPERS ──
-  const openEdit = (p) => {
-    setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
-    setEditOpen(true)
-  }
-  const openNewProduct = () => {
-    setEditTarget(null)
-    setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
-    setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
-    setEditOpen(true)
-  }
- 
-  const saveProduct = async () => {
-    if (!ef.name.trim()) { alert('Product name is required.'); return }
-    const srp = parseFloat(ef.srp)
-    if (!srp || srp <= 0) { alert('Valid price is required.'); return }
- 
-    const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
-    const normalizedImages = normalizeProductImages(ef.images || [])
-    const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
-    const cleanedImages = normalizedImages.filter(img => !String(img?.src || '').startsWith('data:'))
- 
-    if (temporaryImages.length) {
-      setUploadErr(`${temporaryImages.length} failed preview image${temporaryImages.length === 1 ? '' : 's'} removed before saving. Please re-upload those images after saving.`)
-      setEf(f => ({ ...f, images: cleanedImages }))
-    }
- 
-    const data = stripEmbeddedDataImagesFromProduct({
-      ...ef,
-      colors: normalizedColors,
-      images: cleanedImages,
-      srp,
-      packing: parseInt(ef.packing) || 0,
-      dimensions: ef.dimensions,
-      barcode: ef.barcode||'',
-      barcodeImage: ef.barcodeImage||'',
-      qrCode: ef.qrCode||'',
-      qrImage: ef.qrImage||'',
-      youtube: ef.youtube||''
-    })
- 
-    try {
-      if (editTarget) {
-        const saved = { ...editTarget, ...data, updatedAt: new Date().toISOString() }
-        const updated = products.map(p => p.id === editTarget.id ? saved : p)
-        setProducts(updated)
-        await apiSaveProduct(editTarget.id, saved)
-        setEditOpen(false)
-        setViewProduct(saved)
-        setVmImg(0)
-        setVmColorKey('')
-        setYtPlaying(false)
-      } else {
-        const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
-        setProducts([...products, saved])
-        await apiCreateProduct(saved)
-        setEditOpen(false)
-      }
-    } catch (err) {
-      console.error(err)
-      alert('Could not save this product. Please check the API route or internet connection, then try again.')
-    }
-  }
- 
-  const deleteProduct = async (id) => {
-    if (!confirm('Delete this product? This cannot be undone.')) return
-    setProducts(products.filter(p => p.id !== id))
-    setEditOpen(false); setViewProduct(null)
-    await fetch('/api/products/' + id, { method: 'DELETE' }).catch(console.error)
-  }
- 
-  const moveProductOrder = useCallback((fromId, toId) => {
-    if (!editMode || sort !== 'default' || !fromId || !toId || fromId === toId) return
-    setProducts(prev => {
-      const fromIndex = prev.findIndex(p => p.id === fromId)
-      const toIndex = prev.findIndex(p => p.id === toId)
-      if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return prev
- 
-      const next = [...prev]
-      const [moved] = next.splice(fromIndex, 1)
-      next.splice(toIndex, 0, moved)
- 
-      const reordered = next.map((p, index) => ({
-        ...p,
-        sortOrder: index,
-        updatedAt: new Date().toISOString()
-      }))
- 
-      // Persist the manual order so it stays after refresh/redeploy.
-      reordered.forEach(p => apiSaveProduct(p.id, p))
-      return reordered
-    })
-  }, [editMode, sort, apiSaveProduct])
- 
-  // Badges
-  const addBadge = () => { const b = badgeInput.trim(); if (b && !ef.badges.includes(b)) { setEf(f=>({...f,badges:[...f.badges,b]})); setBadgeInput('') } }
-  const removeBadge = (b) => setEf(f=>({...f,badges:f.badges.filter(x=>x!==b)}))
- 
-  // Colors
-  const addColor = () => {
-    const { name, code, sku } = newColor
-    const hexes = getColorHexes(newColor)
-    if (!name || !code || !sku) { alert('Name, code, and SKU required.'); return }
-    setEf(f=>({...f,colors:[...f.colors,normalizeColorVariant({name,code:code.toUpperCase(),hex:hexes[0]||'#B9DCD2',hexes,collection:newColor.collection||'OG',sku:sku.toUpperCase()})]}))
-    setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
-  }
-  const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
-  const moveColor = (from, to) => setEf(f=>{
-    if (to < 0 || to >= f.colors.length || from === to) return f
-    const colors = [...f.colors]
-    const [moved] = colors.splice(from, 1)
-    colors.splice(to, 0, moved)
-    return {...f, colors}
-  })
-  const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
-  const updateColorHex = (i, hexIndex, value) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
-    if (j !== i) return c
-    const hexValue = normalizeHexValue(value, getColorHexes(c)[hexIndex] || '#B9DCD2')
-    const hexes = getColorHexes(c).map((h,idx)=>idx===hexIndex?hexValue:h)
-    return normalizeColorVariant({...c,hex:hexes[0],hexes})
-  })}))
-  const pasteColorHex = (i, hexIndex, value) => {
-    const parsed = extractHexValues(value)
-    if (!parsed.length) return
-    setEf(f=>({...f,colors:f.colors.map((c,j)=>{
-      if (j !== i) return c
-      const current = getColorHexes(c)
-      const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
-      return normalizeColorVariant({...c,hex:hexes[0],hexes})
-    })}))
-  }
-  const addColorHex = (i) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
-    if (j !== i) return c
-    const hexes = [...getColorHexes(c), '#B9DCD2']
-    return normalizeColorVariant({...c,hex:hexes[0],hexes})
-  })}))
-  const removeColorHex = (i, hexIndex) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
-    if (j !== i) return c
-    const hexes = getColorHexes(c).filter((_,idx)=>idx!==hexIndex)
-    return normalizeColorVariant({...c,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
-  })}))
-  const updateNewColorHex = (hexIndex, value) => setNewColor(n=>{
-    const hexValue = normalizeHexValue(value, getColorHexes(n)[hexIndex] || '#B9DCD2')
-    const hexes = getColorHexes(n).map((h,idx)=>idx===hexIndex?hexValue:h)
-    return normalizeColorVariant({...n,hex:hexes[0],hexes})
-  })
-  const pasteNewColorHex = (hexIndex, value) => {
-    const parsed = extractHexValues(value)
-    if (!parsed.length) return
-    setNewColor(n=>{
-      const current = getColorHexes(n)
-      const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
-      return normalizeColorVariant({...n,hex:hexes[0],hexes})
-    })
-  }
-  const addNewColorHex = () => setNewColor(n=>{
-    const hexes = [...getColorHexes(n), '#B9DCD2']
-    return normalizeColorVariant({...n,hex:hexes[0],hexes})
-  })
-  const removeNewColorHex = (hexIndex) => setNewColor(n=>{
-    const hexes = getColorHexes(n).filter((_,idx)=>idx!==hexIndex)
-    return normalizeColorVariant({...n,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
-  })
- 
-  const updateCollection = (value, patch) => {
-    const next = colorCollections.map(c=>c.value===value?{...c,...patch}:c)
-    saveColorCollections(next)
-  }
-  const addCollection = () => {
-    const label = newCollection.label.trim()
-    if (!label) return
-    const value = label.replace(/\s+/g,' ').trim()
-    if (colorCollections.some(c=>c.value.toLowerCase()===value.toLowerCase())) return
-    saveColorCollections([...colorCollections,{value,label,color:newCollection.color||'#279989'}])
-    setNewCollection({label:'',color:'#279989'})
-  }
- 
-  const collectionSetCount = (value) => (colorCollectionSets[value] || []).length
- 
-  const colorWithCurrentSkuBase = (color, skuBase) => {
-    const code = String(color.code || '').toUpperCase().replace(/\s+/g, '')
-    const hexes = getColorHexes(color)
-    return normalizeColorVariant({
-      ...color,
-      code,
-      hex: hexes[0] || color.hex || '#B9DCD2',
-      hexes,
-      sku: skuBase && code ? `${skuBase}-${code}` : String(color.sku || '').toUpperCase(),
-      collection: color.collection || 'Other'
-    })
-  }
- 
-  const addCollectionSetToProduct = (collectionValue) => {
-    const set = colorCollectionSets[collectionValue] || []
-    if (!set.length) {
-      alert('No saved colors yet for this collection. Add colors to a product, assign them to this collection, then click Save Set.')
-      return
-    }
-    const skuBase = getEditableSkuBase()
-    if (!skuBase) {
-      alert('Please add or edit the SKU Base in the Details tab first, then try again.')
-      return
-    }
-    setEf(f => {
-      const existing = new Set((f.colors || []).map(c => String(c.code || '').toUpperCase()))
-      const additions = set
-        .map(c => colorWithCurrentSkuBase({ ...c, collection: collectionValue }, skuBase))
-        .filter(c => c.code && !existing.has(c.code))
-      if (!additions.length) return f
-      return { ...f, colors: [...f.colors, ...additions] }
-    })
-  }
- 
-  const saveCollectionSetFromCurrentProduct = (collectionValue) => {
-    const variants = (ef.colors || [])
-      .filter(c => (c.collection || defaultColorCollection(c)) === collectionValue)
-      .map(c => {
-        const hexes = getColorHexes(c)
-        return normalizeColorVariant({
-          name: c.name,
-          code: String(c.code || '').toUpperCase(),
-          hex: hexes[0] || '#B9DCD2',
-          hexes,
-          collection: collectionValue
-        })
-      })
-      .filter(c => c.name && c.code)
- 
-    if (!variants.length) {
-      alert('No color variants are assigned to this collection yet.')
-      return
-    }
-    saveColorCollectionSets({ ...colorCollectionSets, [collectionValue]: variants })
-    alert('Color collection set saved. You can now quick-add it to other products.')
-  }
- 
- 
-  const openCollectionSetEditor = (collectionValue) => {
-    const saved = colorCollectionSets[collectionValue] || DEFAULT_COLOR_COLLECTION_SETS[collectionValue] || []
-    setEditingCollectionSet(collectionValue)
-    setCollectionSetDraft(saved.map(c => normalizeColorVariant({ ...c, collection: collectionValue })))
-    setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
-  }
- 
-  const closeCollectionSetEditor = () => {
-    setEditingCollectionSet('')
-    setCollectionSetDraft([])
-    setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
-  }
- 
-  const updateCollectionSetDraft = (index, patch) => {
-    setCollectionSetDraft(list => list.map((item, idx) => {
-      if (idx !== index) return item
-      const next = { ...item, ...patch }
-      if (patch.hexes) next.hex = patch.hexes[0] || next.hex || '#B9DCD2'
-      if (patch.hex) next.hexes = [patch.hex]
-      return normalizeColorVariant({ ...next, collection: editingCollectionSet })
-    }))
-  }
- 
-  const updateCollectionSetDraftHexes = (index, value) => {
-    const hexes = extractHexValues(value)
-    updateCollectionSetDraft(index, { hexes: hexes.length ? hexes : ['#B9DCD2'] })
-  }
- 
-  const removeCollectionSetDraftColor = (index) => {
-    setCollectionSetDraft(list => list.filter((_, idx) => idx !== index))
-  }
- 
-  const moveCollectionSetDraftColor = (fromIndex, toIndex) => {
-    setCollectionSetDraft(list => {
-      if (toIndex < 0 || toIndex >= list.length || fromIndex === toIndex) return list
-      const next = [...list]
-      const [moved] = next.splice(fromIndex, 1)
-      next.splice(toIndex, 0, moved)
-      return next
-    })
-  }
- 
-  const addCollectionSetDraftColor = () => {
-    const name = newCollectionSetColor.name.trim()
-    const code = newCollectionSetColor.code.trim().toUpperCase()
-    const hexes = extractHexValues(newCollectionSetColor.hex)
-    if (!name || !code) return
-    setCollectionSetDraft(list => [
-      ...list,
-      normalizeColorVariant({ name, code, hex: hexes[0] || '#B9DCD2', hexes: hexes.length ? hexes : ['#B9DCD2'], collection: editingCollectionSet })
-    ])
-    setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
-  }
- 
-  const saveCollectionSetDraft = () => {
-    if (!editingCollectionSet) return
-    const cleaned = collectionSetDraft
-      .map(c => normalizeColorVariant({ ...c, code: String(c.code || '').toUpperCase(), collection: editingCollectionSet }))
-      .filter(c => c.name && c.code)
-    if (!cleaned.length) {
-      alert('Please add at least one color before saving this collection set.')
-      return
-    }
-    saveColorCollectionSets({ ...colorCollectionSets, [editingCollectionSet]: cleaned })
-    closeCollectionSetEditor()
-  }
- 
-  // SKU Base — bulk-edit all color variant SKUs from Details tab
-  const getEditableSkuBase = () => {
-    const first = ef.colors?.[0]
-    if (!first?.sku) return ''
-    const sku = String(first.sku).toUpperCase()
-    const code = String(first.code || '').toUpperCase()
-    if (code && sku.endsWith(`-${code}`)) return sku.slice(0, -(code.length + 1))
-    return sku.split('-').slice(0, -1).join('-') || sku
-  }
- 
-  const updateAllColorSkusFromBase = (base) => {
-    const cleaned = base.toUpperCase().replace(/\s+/g, '')
-    setEf(f => ({
-      ...f,
-      colors: f.colors.map(c => {
-        const code = String(c.code || '').toUpperCase().replace(/\s+/g, '')
-        return { ...c, code, sku: code ? `${cleaned}-${code}` : cleaned }
-      })
-    }))
-  }
- 
-  // Images
-  const handleImgUpload = async (e) => {
-    const file = e.target.files[0]; if (!file) return
-    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, WebP, or GIF.'); e.target.value = ''; return }
-    if (file.size > 25*1024*1024) { setUploadErr('File too large. Max 25MB before compression.'); e.target.value = ''; return }
-    setUploadErr('Compressing and uploading image...')
-    try {
-      const url = await uploadImageToBlob(file)
-      setEf(f=>({...f,images:[...normalizeProductImages(f.images),{src:url,colorSku:'',colorCode:'',colorName:''}]}))
-      setUploadErr('')
-    } catch (err) {
-      console.error(err)
-      setUploadErr(err?.message || 'Upload failed. Please try again.')
-    }
-    e.target.value = ''
-  }
- 
-  const uploadFilesForColor = async (fileList, color) => {
-    const files = Array.from(fileList || [])
-    if (!files.length || !color) return
- 
-    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
-    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
- 
-    if (!validFiles.length) {
-      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
-      return
-    }
- 
-    let skipped = files.length - validFiles.length
-    let failed = 0
-    const uploaded = []
- 
-    setUploadErr(`Compressing and uploading ${validFiles.length} image${validFiles.length === 1 ? '' : 's'}...`)
- 
-    // Upload sequentially. This is more reliable than firing many /api/upload requests at once.
-    for (const file of validFiles) {
-      try {
-        const url = await uploadImageToBlob(file)
-        uploaded.push({ src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
-      } catch (err) {
-        failed += 1
-        console.error('Color image upload failed:', err)
-      }
-    }
- 
-    if (uploaded.length) {
-      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
-    }
- 
-    if (failed || skipped) {
-      setUploadErr(`${uploaded.length} image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
-    } else {
-      setUploadErr('')
-    }
-  }
- 
-  const uploadFilesGeneral = async (fileList) => {
-    const files = Array.from(fileList || [])
-    if (!files.length) return
- 
-    const allowed = ['image/jpeg','image/png','image/webp','image/gif']
-    const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
- 
-    if (!validFiles.length) {
-      setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
-      return
-    }
- 
-    let skipped = files.length - validFiles.length
-    let failed = 0
-    const uploaded = []
- 
-    setUploadErr(`Compressing and uploading ${validFiles.length} general image${validFiles.length === 1 ? '' : 's'}...`)
- 
-    for (const file of validFiles) {
-      try {
-        const url = await uploadImageToBlob(file)
-        uploaded.push({ src: url, colorSku: '', colorCode: '', colorName: '' })
-      } catch (err) {
-        failed += 1
-        console.error('General image upload failed:', err)
-      }
-    }
- 
-    if (uploaded.length) {
-      setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
-    }
- 
-    if (failed || skipped) {
-      setUploadErr(`${uploaded.length} general image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
-    } else {
-      setUploadErr('')
-    }
-  }
- 
-  const setMainImage = (index) => {
-    setEf(f => {
-      const imgs = [...normalizeProductImages(f.images)]
-      if (index <= 0 || index >= imgs.length) return { ...f, images: imgs }
-      const [item] = imgs.splice(index, 1)
-      imgs.unshift(item)
-      return { ...f, images: imgs }
-    })
-  }
- 
-  const getTemporaryImageCount = useCallback(() => {
-    return normalizeProductImages(ef.images || []).filter(img => String(img?.src || '').startsWith('data:')).length
-  }, [ef.images])
- 
-  const removeTemporaryImages = useCallback(() => {
-    const current = normalizeProductImages(ef.images || [])
-    const cleaned = current.filter(img => !String(img?.src || '').startsWith('data:'))
-    const removed = current.length - cleaned.length
-    setEf(f => ({ ...f, images: cleaned }))
-    setUploadErr(removed ? `Removed ${removed} failed preview image${removed === 1 ? '' : 's'}. You can now re-upload them.` : '')
-  }, [ef.images])
- 
-  const removeImg = (i) => setEf(f=>({...f,images:normalizeProductImages(f.images).filter((_,j)=>j!==i)}))
-  const moveImg = (from, to, position = 'before') => {
-    setEf(f => {
-      const imgs = [...normalizeProductImages(f.images)]
-      if (from < 0 || to < 0 || from >= imgs.length || to >= imgs.length) return { ...f, images: imgs }
-      let insertIndex = position === 'after' ? to + 1 : to
-      if (from < insertIndex) insertIndex -= 1
-      if (from === insertIndex) return { ...f, images: imgs }
-      const [item] = imgs.splice(from, 1)
-      imgs.splice(insertIndex, 0, item)
-      return { ...f, images: imgs }
-    })
-  }
- 
-  const clearImageDropGuide = () => {
-    setDragOverImageIndex(null)
-    setDragOverImagePosition('before')
-  }
- 
-  const handleImageDragStart = (e, index) => {
-    setDragImageIndex(index)
-    clearImageDropGuide()
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/plain', String(index))
-  }
- 
-  const handleImageDragOver = (e, index) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-    if (dragImageIndex === null || dragImageIndex === index) {
-      clearImageDropGuide()
-      return
-    }
-    const rect = e.currentTarget.getBoundingClientRect()
-    const position = e.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
-    setDragOverImageIndex(index)
-    setDragOverImagePosition(position)
-  }
- 
-  const handleImageDrop = (e, toIndex) => {
-    e.preventDefault()
-    const fromRaw = dragImageIndex ?? Number(e.dataTransfer.getData('text/plain'))
-    const fromIndex = Number(fromRaw)
-    if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex, dragOverImagePosition)
-    setDragImageIndex(null)
-    touchImageDragIndexRef.current = null
-    clearImageDropGuide()
-  }
- 
-  const findImageThumbFromPoint = (x, y) => {
-    if (typeof document === 'undefined') return null
-    const el = document.elementFromPoint(x, y)?.closest?.('[data-img-index]')
-    return el || null
-  }
- 
-  const handleImageTouchStart = (e, index) => {
-    if (e.target?.closest?.('button,label,input,select')) return
-    touchImageDragIndexRef.current = index
-    setDragImageIndex(index)
-    clearImageDropGuide()
-  }
- 
-  const handleImageTouchMove = (e) => {
-    const fromIndex = touchImageDragIndexRef.current
-    if (fromIndex === null || fromIndex === undefined) return
-    const touch = e.touches?.[0]
-    if (!touch) return
-    const target = findImageThumbFromPoint(touch.clientX, touch.clientY)
-    if (!target) return
-    const toIndex = Number(target.dataset.imgIndex)
-    if (!Number.isFinite(toIndex) || toIndex === fromIndex) {
-      clearImageDropGuide()
-      return
-    }
-    e.preventDefault()
-    const rect = target.getBoundingClientRect()
-    const position = touch.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
-    setDragOverImageIndex(toIndex)
-    setDragOverImagePosition(position)
-  }
- 
-  const handleImageTouchEnd = () => {
-    const fromIndex = touchImageDragIndexRef.current
-    if (fromIndex !== null && fromIndex !== undefined && dragOverImageIndex !== null && Number.isFinite(Number(dragOverImageIndex))) {
-      moveImg(Number(fromIndex), Number(dragOverImageIndex), dragOverImagePosition)
-    }
-    touchImageDragIndexRef.current = null
-    setDragImageIndex(null)
-    clearImageDropGuide()
-  }
- 
-  const assignImageColor = (index, colorSku) => {
-    setEf(f => {
-      const selectedColor = (f.colors || []).find(c => c.sku === colorSku)
-      const nextImages = normalizeProductImages(f.images).map((img, i) => {
-        if (i !== index) return img
-        return {
-          ...img,
-          colorSku: selectedColor?.sku || '',
-          colorCode: selectedColor?.code || '',
-          colorName: selectedColor?.name || '',
-        }
-      })
-      return { ...f, images: nextImages }
-    })
-  }
- 
- 
- 
-  // ── QUENCHABLES BUILDER ──
-  const quenchCollectionMeta = useMemo(() => {
-    return colorCollections.find(c => c.value === quenchCollection) || DEFAULT_COLOR_COLLECTIONS.find(c => c.value === quenchCollection) || { value: quenchCollection, label: quenchCollection, color: 'var(--tl)' }
-  }, [colorCollections, quenchCollection])
- 
-  const getQuenchColors = useCallback((product, collection = quenchCollection) => {
-    return (product?.colors || []).filter(color => defaultColorCollection(color) === collection)
-  }, [quenchCollection])
- 
-  const quenchAvailableColors = useMemo(() => {
-    return colorCollectionSets?.[quenchCollection] || []
-  }, [colorCollectionSets, quenchCollection])
- 
-  const quenchProducts = useMemo(() => {
-    return products.filter(product => getQuenchColors(product).length > 0)
-  }, [products, getQuenchColors])
- 
-  const quenchProductsByCat = useMemo(() => {
-    return quenchProducts.filter(product => product.cat === quenchCat)
-  }, [quenchProducts, quenchCat])
- 
-  const quenchTotals = useMemo(() => {
-    const totalPacks = quenchItems.reduce((sum, item) => sum + Number(item.packs || 0), 0)
-    const totalUnits = quenchItems.reduce((sum, item) => sum + Number(item.units || 0), 0)
-    const totalSrp = quenchItems.reduce((sum, item) => sum + (Number(item.srp || 0) * Number(item.units || 0)), 0)
-    return { totalPacks, totalUnits, totalSrp }
-  }, [quenchItems])
- 
-  const selectedQuenchSkuSet = useMemo(() => {
-    return new Set(quenchItems.map(item => item.sku).filter(Boolean))
-  }, [quenchItems])
- 
-  const startQuenchables = useCallback((collection = quenchCollection) => {
-    setQuenchCollection(collection)
-    setQuenchStep('collection')
-    setQuenchOpen(true)
-  }, [quenchCollection])
- 
-  const addQuenchItem = useCallback((product) => {
-    const colors = getQuenchColors(product)
-    if (!colors.length) return
-    const selectedSku = quenchColor[product.id] || colors[0].sku
-    const selectedColor = colors.find(c => c.sku === selectedSku) || colors[0]
-    const packs = Math.max(1, Number(quenchQty[product.id] || 1))
-    const packing = Number(product.packing || 1)
-    const units = packs * packing
- 
-    setQuenchItems(items => {
-      const alreadySelected = items.some(item => item.sku === selectedColor.sku)
-      if (alreadySelected) return items
-      return [
-        ...items,
-        {
-          id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
-          productId: product.id,
-          productName: product.name,
-          colorName: selectedColor.name,
-          colorCode: selectedColor.code,
-          sku: selectedColor.sku,
-          packs,
-          packing,
-          units,
-          srp: Number(product.srp || 0),
-        }
-      ]
-    })
-    setQuenchStep('review')
-  }, [getQuenchColors, quenchColor, quenchQty])
- 
-  const removeQuenchItem = useCallback((id) => {
-    setQuenchItems(items => items.filter(item => item.id !== id))
-  }, [])
- 
-  const buildQuenchablesHref = useCallback(() => {
-    const collectionLabel = quenchCollectionMeta.label || quenchCollection
-    const subject = `Quenchables Inquiry - ${collectionLabel} Set`
-    const lines = [
-      'Hi Quencha Team,',
-      '',
-      'I would like to inquire about this Quenchables set:',
-      '',
-      `Collection: ${collectionLabel}`,
-      '',
-      'Items:',
-      ...quenchItems.flatMap((item, index) => [
-        `${index + 1}. ${item.productName}`,
-        `   Color: ${item.colorName}`,
-        `   SKU: ${item.sku}`,
-        `   Packs/Cartons: ${item.packs}`,
-        `   Packing: ${item.packing} pcs/carton`,
-        `   Estimated Units: ${item.units} pcs`,
-        `   SRP: ₱${Number(item.srp || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
-        '',
-      ]),
-      `Total Packs/Cartons: ${quenchTotals.totalPacks}`,
-      `Estimated Total Units: ${quenchTotals.totalUnits} pcs`,
-      `Estimated SRP Total: ₱${quenchTotals.totalSrp.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
-      '',
-      quenchMessage ? `Notes: ${quenchMessage}` : 'Notes:',
-      '',
-      'Thank you.'
-    ]
-    return `mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
-  }, [quenchCollection, quenchCollectionMeta, quenchItems, quenchMessage, quenchTotals])
- 
-  // ── FILTERED ──
-  const filtered = useMemo(() => {
-    let list = products.map((p, index) => ({
-      ...p,
-      __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
-    }))
-    if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
-    if (filterCat) list = list.filter(p => p.cat === filterCat)
-    if (filterColorCollection !== 'all') {
-      list = list.filter(p => (p.colors || []).some(c => defaultColorCollection(c) === filterColorCollection))
-    }
-    if (filterPMin !== null) list = list.filter(p => p.srp >= filterPMin)
-    if (filterPMax !== null) list = list.filter(p => p.srp <= filterPMax)
-    if (search) {
-      const q = search.toLowerCase()
-      list = list.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.colors.some(c => c.sku.toLowerCase().includes(q)))
-    }
-    if (sort === 'default') list.sort((a,b) => a.__manualIndex - b.__manualIndex)
-    if (sort === 'price-asc') list.sort((a,b) => a.srp - b.srp)
-    if (sort === 'price-desc') list.sort((a,b) => b.srp - a.srp)
-    if (sort === 'name-asc') list.sort((a,b) => a.name.localeCompare(b.name))
-    if (sort === 'sku-asc') list.sort((a,b) => getFirstSku(a).localeCompare(getFirstSku(b)))
-    if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
-    return list
-  }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
- 
-  const counts = useMemo(() => {
-    const ext = { all: products.length }, cat = {}, collection = { all: products.length }
-    products.forEach(p => {
-      ext[p.ext] = (ext[p.ext]||0)+1
-      cat[p.cat] = (cat[p.cat]||0)+1
- 
-      const productCollections = new Set((p.colors || []).map(c => defaultColorCollection(c)).filter(Boolean))
-      productCollections.forEach(col => {
-        collection[col] = (collection[col] || 0) + 1
-      })
-    })
-    return { ext, cat, collection }
-  }, [products])
- 
-  const grouped = useMemo(() => {
-    const g = {}
-    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; if(!g[p.ext][p.cat])g[p.ext][p.cat]=[]; g[p.ext][p.cat].push(p) })
-    return g
-  }, [filtered])
- 
-  // ── SIDEBAR ──
-  const SidebarContent = ({ closeOnSelect = false } = {}) => {
-    const closeMobileSidebar = () => {
-      if (!closeOnSelect) return
-      setShowMobileFilter(false)
-      window.setTimeout(() => {
-        focusSearchResults()
-      }, 180)
-    }
-    return (
-    <>
-      <div className="sb-hero">
-        <div className="sb-hl">Catalog</div>
-        <div className="sb-total">{products.length}</div>
-        <div className="sb-sub">products</div>
-      </div>
-      <div className="sb-sec">
-        <span className="sb-lbl">Extension</span>
-        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterExt('all'); closeMobileSidebar()}}>
-          <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Products</span><span className="fb-cnt">{counts.ext['all']||0}</span>
-        </button>
-        {exts.map(o=>(
-          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>{setFilterExt(o.value); closeMobileSidebar()}}>
-            <span className="fb-dot" style={{background:o.color}}/><span className="fb-lbl">{o.label}</span><span className="fb-cnt">{counts.ext[o.value]||0}</span>
-          </button>
-        ))}
-        {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>{setExtMgrOpen(true); closeMobileSidebar()}}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Extensions</span></button>}
-      </div>
-      <hr className="sb-div"/>
-      <div className="sb-sec">
-        <span className="sb-lbl">Category Filter</span>
-        <div className="filter-pill-wrap">
-          {cats.map(c=>(
-            <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
-              <span className="filter-pill-l"><span className="filter-pill-ico">{c.icon}</span><span className="filter-pill-label">{c.label}</span></span>
-              <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
-            </button>
-          ))}
-          {editMode && <button className="filter-pill manage-pill" onClick={()=>{setCatMgrOpen(true); closeMobileSidebar()}}><span>⚙️ Manage Categories</span></button>}
-        </div>
-      </div>
-      <hr className="sb-div"/>
-      <div className="sb-sec">
-        <span className="sb-lbl">Color Collection Filter</span>
-        <div className="filter-pill-wrap">
-          <button className={`filter-pill full ${filterColorCollection==='all'?'on':''}`} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
-            <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:'var(--cy)'}}/><span className="filter-pill-label">All Collections</span></span>
-            <span className="filter-pill-count">{counts.collection?.all||0}</span>
-          </button>
-          {colorCollections.map(col=>(
-            <button key={col.value} className={`filter-pill ${filterColorCollection===col.value?'on':''}`} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
-              <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:col.color||'var(--tl)'}}/><span className="filter-pill-label">{col.label}</span></span>
-              <span className="filter-pill-count">{counts.collection?.[col.value]||0}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <hr className="sb-div"/>
-      <div className="sb-sec">
-        <span className="sb-lbl">Price Range</span>
-        <div className="pc-wrap">
-          {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
-            const on = filterPMin===o.mn && filterPMax===o.mx
-            return <button key={o.l} className={`pc ${on?'on':''}`} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
-          })}
-        </div>
-      </div>
-      {(filterExt!=='all'||filterCat||filterColorCollection!=='all'||filterPMin!==null) && (
-        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
-      )}
-    </>
-    )
-  }
- 
-  // ── PRODUCT CARD ──
-  const Card = ({ p }) => {
-    const mainImg = getImageSrc(p.images?.[0])
-    const colors = p.colors.slice(0, 6)
-    const extra = p.colors.length > 6 ? p.colors.length - 6 : 0
-    const extEntry = exts.find(x=>x.value===p.ext)
-    const extColor = extEntry?.color || EXT_COLORS[p.ext] || 'var(--gr)'
-    const showExtTag = !!p.ext && p.ext !== 'core'
-    return (
-      <div
-        ref={el => { if (el) productCardRefs.current[p.id] = el; else delete productCardRefs.current[p.id] }}
-        className={`pcard ${editMode?'em':''} ${dragProductId===p.id?'dragging':''}`}
-        draggable={editMode && sort === 'default'}
-        onDragStart={editMode && sort === 'default' ? (e) => {
-          setDragProductId(p.id)
-          e.dataTransfer.effectAllowed = 'move'
-          e.dataTransfer.setData('text/plain', p.id)
-        } : undefined}
-        onDragOver={editMode && sort === 'default' ? (e) => {
-          e.preventDefault()
-          e.dataTransfer.dropEffect = 'move'
-        } : undefined}
-        onDrop={editMode && sort === 'default' ? (e) => {
-          e.preventDefault()
-          const fromId = e.dataTransfer.getData('text/plain') || dragProductId
-          moveProductOrder(fromId, p.id)
-          setDragProductId(null)
-        } : undefined}
-        onDragEnd={() => setDragProductId(null)}
-        onClick={editMode ? undefined : () => openProductModal(p)}
-      >
-        {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
- 
-        <div className="c-img-wrap">
-          {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
-          {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
-        </div>
- 
-        <div className="c-body">
-          <div className="c-name">{p.name}</div>
-          {getSkuBase(p) && (
-            <span className="c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
-              {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
-            </span>
-          )}
-          <div className="c-desc">{p.desc}</div>
-          <div className="c-badges">{p.badges.slice(0,3).map(b=><span key={b} className="c-badge">{b}</span>)}</div>
-          <div className="c-colors">
-            {colors.map(c=><span key={c.code} className="c-dot" style={{background:swatchBackground(c)}} title={getColorHexes(c).length > 1 ? `${c.name} (${getColorHexes(c).length} colors)` : c.name}/>) }
-            {extra > 0 && <span className="c-more">+{extra}</span>}
-          </div>
-          {/* Footer: SRP and Packing same font/size */}
-          <div className="c-foot">
-            <div className="c-stats">
-              <div className="c-stat">
-                <div className="c-stat-val">₱{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
-                <div className="c-stat-lbl">SRP</div>
-              </div>
-              <div className="c-stat-divider"/>
-              <div className="c-stat">
-                <div className="c-stat-val">{p.packing}</div>
-                <div className="c-stat-lbl">Pack</div>
-              </div>
-            </div>
-          </div>
- 
-        </div>
-      </div>
-    )
-  }
- 
-  // ── RENDER ──
-  const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
-  const vpImages = vp ? normalizeProductImages(vp.images || []) : []
-  const generalVmImages = vpImages.filter(isGeneralImage)
-  const activeVmColor = vp && vmColorKey
-    ? (vp.colors || []).find(color => getColorKey(color) === vmColorKey)
-    : null
-  const activeVmColorKey = activeVmColor ? getColorKey(activeVmColor) : ''
-  const filteredVmImages = activeVmColor ? vpImages.filter(img => imageMatchesColor(img, activeVmColor)) : []
-  const visibleVmImages = activeVmColor ? filteredVmImages : generalVmImages
-  const safeVmImg = visibleVmImages.length ? Math.min(vmImg, visibleVmImages.length - 1) : 0
-  return (
-    <div>
-      {/* TOPBAR */}
-      <header className={`qnh-topbar ${editMode?'edit-on':''}`}>
-        <button className="tb-menu-btn" onClick={()=>setShowMobileFilter(true)} title="Open filters">☰</button>
-        <a
-          className="tb-brand"
-          href="#"
-          onClick={(e)=>{ if(editMode){ e.preventDefault(); setBrandEditOpen(true) } }}
-          title={editMode ? 'Edit brand logo and topbar text' : (brandName || brandTagline || 'Brand')}
-        >
-          {brandLogo ? <img className="tb-logo" src={brandLogo} alt={brandName || 'Brand logo'}/> : (editMode ? <span className="tb-logo-placeholder">+</span> : null)}
-          {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
-          {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
-          {editMode && <span className="tb-brand-edit">Edit</span>}
-        </a>
-        <div className="tb-search-wrap">
-          <input
-            ref={searchInputRef}
-            className="tb-search"
-            value={search}
-            onChange={e=>setSearch(e.target.value)}
-            onKeyDown={e=>{ if(e.key==='Enter') runSearch() }}
-            placeholder="Search products, SKUs…"
-          />
-          {search && <button className="tb-clear" onClick={()=>{setSearch(''); searchInputRef.current?.focus()}} title="Clear search">✕</button>}
-          <button className="tb-search-btn" onClick={runSearch} title="Search and go to results" aria-label="Search and go to results">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.4"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          </button>
-        </div>
-        <div className="tb-actions">
-          {/* Edit mode — secondary, subtle */}
-          <button className={`tb-edit-btn ${editMode?'on':''}`} onClick={editMode ? exitEdit : ()=>requestAuth('topbar')} title={editMode ? 'Save & Exit' : 'Edit Mode'}>
-            {editMode ? <span style={{fontSize:14,fontWeight:900,lineHeight:1}}>✕</span> : <PencilIcon/>}
-            <span className="tb-edit-tooltip">{editMode ? 'Save & Exit' : 'Edit Mode'}</span>
-          </button>
-        </div>
-      </header>
- 
-      {/* LAYOUT */}
-      <div className="qnh-layout">
-        <aside className="qnh-sidebar"><SidebarContent/></aside>
-        <main className="qnh-main">
- 
-          {/* Hero Carousel */}
-          <HeroCarousel
-            banners={banners}
-            aspect={bannerAspect}
-            interval={bannerInterval}
-            editMode={editMode}
-            onEditClick={()=>setBannerEditOpen(true)}
-            heroTitle={heroTitle}
-            heroSub={heroSub}
-            onTitleChange={saveHeroTitle}
-            onSubChange={saveHeroSub}
-            heroVideoUrl={heroVideoUrl}
-            heroVideoThumbnail={heroVideoThumbnail}
-            mediaOrder={heroMediaOrder}
-            onBannerClick={(link)=>{
-              if(!link) return
-              if(link.startsWith('http')){window.open(link,'_blank');return}
-              // internal: #sip, #savor, #go, #accessories, or product id
-              const el=document.getElementById(link.replace('#',''))
-              if(el){el.scrollIntoView({behavior:'smooth'})}
-              else{
-                const cat=link.replace('#','')
-                const cats=['sip','savor','go','accessories']
-                if(cats.some(c=>c.value===cat)){setFilterCat(cat)}
-              }
-            }}
-          />
- 
- 
- 
-          {/* Quenchables Builder Entry */}
-          <section className="quench-hero">
-            <div>
-              <div className="quench-eyebrow">Shop the Set</div>
-              <h2 className="quench-title">Build Your Quenchables</h2>
-              <p className="quench-sub">Mix, match, and create your Quencha combo by collection. Choose your tumbler, lunch essentials, bags, and accessories in one set.</p>
-              <div className="quench-actions">
-                <button className="quench-start" onClick={()=>startQuenchables('Horizon')}>Start Building →</button>
-                <div className="quench-mini-collections">
-                  {colorCollections.map(col => (
-                    <button key={col.value} className="quench-chip" onClick={()=>startQuenchables(col.value)}>{col.label}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="quench-visual" aria-hidden="true">
-              {(colorCollectionSets?.Horizon || DEFAULT_COLOR_COLLECTION_SETS.Horizon).slice(0,4).map(c => (
-                <span key={c.code} className="quench-visual-dot" style={{background:swatchBackground(c)}} />
-              ))}
-            </div>
-          </section>
- 
-          {/* Toolbar */}
-          <div className="toolbar" ref={resultsRef}>
-            <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
-            <select className="sort-sel" value={sort} onChange={e=>saveCatalogSort(e.target.value)}>
-              <option value="default">Sort: Manual Order</option>
-              <option value="sku-asc">SKU: A → Z</option>
-              <option value="sku-desc">SKU: Z → A</option>
-              <option value="price-asc">Price: Low → High</option>
-              <option value="price-desc">Price: High → Low</option>
-              <option value="name-asc">Name: A → Z</option>
-            </select>
-            {editMode && sort === 'default' && <span className="reorder-hint">Drag products to rearrange</span>}
-            <div className="vbtns">
-              <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>saveCatalogView('col-4')} title="4 columns">⊞</button>
-              <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>saveCatalogView('col-2')} title="2 columns">⊟</button>
-              <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>saveCatalogView('col-1')} title="1 column">▬</button>
-            </div>
-          </div>
- 
-          {/* Products */}
-          {(() => {
-            // Build render order: no-ext bucket first, then known exts, then any unknown ext keys
-            const knownExtVals = exts.map(x=>x.value)
-            const allExtKeys = Object.keys(grouped)
-            const noExtProds = grouped[''] || {}
-            const unknownExtKeys = allExtKeys.filter(k => k !== '' && !knownExtVals.includes(k))
-            const orderedExtKeys = [...knownExtVals, ...unknownExtKeys]
- 
-            // All cat values to iterate (known cats + '' for no-cat + any unknown cat keys)
-            const knownCatVals = cats.map(c=>c.value)
-            const allCatKeysInGrouped = [...new Set(Object.values(grouped).flatMap(g=>Object.keys(g)))]
-            const unknownCatKeys = allCatKeysInGrouped.filter(k => k !== '' && !knownCatVals.includes(k))
-            const orderedCatKeys = ['', ...knownCatVals, ...unknownCatKeys]
- 
-            const renderSection = (ext, cat, prods) => {
-              if (!prods?.length) return null
-              const catLabel = cat === '' ? null : (cats.find(c=>c.value===cat)?.label || cat)
-              const extEntry = exts.find(x=>x.value===ext)
-              const extLabel = ext === '' ? null : (extEntry?.label || ext)
-              const extColor = extEntry?.color || EXT_COLORS[ext] || 'var(--gr)'
-              return (
-                <div key={`${ext||'none'}-${cat||'none'}`}>
-                  <div className="cat-hdr">
-                    <div className="cat-line"/>
-                    {catLabel && <span className="cat-nm">{catLabel}</span>}
-                    {extLabel && <span className="ext-tag" style={{background:extColor}}>{extLabel}</span>}
-                    <span className="cat-cnt">{prods.length} item{prods.length>1?'s':''}</span>
-                    <div className="cat-line"/>
-                  </div>
-                  <div className={`pgrid ${view}`}>
-                    {prods.map(p => <Card key={p.id} p={p}/>)}
-                  </div>
-                </div>
-              )
-            }
- 
-            return (
-              <>
-                {/* No-ext products first */}
-                {orderedCatKeys.map(cat => renderSection('', cat, noExtProds[cat]))}
-                {/* Known + unknown ext products */}
-                {orderedExtKeys.map(ext => !grouped[ext] ? null :
-                  orderedCatKeys.map(cat => renderSection(ext, cat, grouped[ext][cat]))
-                )}
-              </>
-            )
-          })()}
-        </main>
-      </div>
- 
-      {/* MOBILE FILTER */}
-      <button className="mob-filter-btn" onClick={()=>setShowMobileFilter(true)}>☰ Filters</button>
-      {showMobileFilter && (
-        <div className="mob-overlay" onClick={()=>setShowMobileFilter(false)}>
-          <div className="mob-drawer" onClick={e=>e.stopPropagation()}>
-            <button className="drawer-close" onClick={()=>setShowMobileFilter(false)}>✕</button>
-            <SidebarContent closeOnSelect/>
-          </div>
-        </div>
-      )}
- 
- 
- 
-      {/* QUENCHABLES BUILDER MODAL */}
-      {quenchOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setQuenchOpen(false)}}>
-          <div className="modal quench-modal">
-            <div className="m-hdr quench-head">
-              <div>
-                <div className="quench-eyebrow">Quenchables</div>
-                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Build Your Quencha Combo</div>
-                <div className="quench-progress">
-                  {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>{
-                    const disabled = key === 'inquiry' && !quenchItems.length
-                    return (
-                      <button type="button" key={key} disabled={disabled} onClick={()=>{ if(!disabled) setQuenchStep(key) }} className={`quench-step ${quenchStep===key?'on':''}`} aria-label={`Go to ${label} step`}>
-                        <span className="quench-step-dot">{index+1}</span>{label}
-                      </button>
-                    )
-                  })}
-                </div>
-                {quenchStep !== 'collection' && (
-                  <button type="button" className="quench-back" onClick={()=>setQuenchStep(quenchStep==='inquiry'?'review':quenchStep==='review'?'products':'collection')}>← Back</button>
-                )}
-              </div>
-              <button className="m-close" onClick={()=>setQuenchOpen(false)}>✕</button>
-            </div>
-            <div className="m-body">
-              <div className={`quench-body ${['review','inquiry'].includes(quenchStep) ? 'no-side' : ''}`}>
-                <aside className="quench-side">
-                  <div className="quench-side-title">Choose Collection</div>
-                  {colorCollections.map(col => {
-                    const setCount = (colorCollectionSets?.[col.value] || []).length
-                    return (
-                      <button key={col.value} className={`quench-collection-btn ${quenchCollection===col.value?'on':''}`} onClick={()=>{setQuenchCollection(col.value);setQuenchStep('collection')}}>
-                        <span className="quench-collection-dot" style={{background:col.color}} />
-                        <span>
-                          <span className="quench-collection-name">{col.label}</span>
-                          <span className="quench-collection-sub">{setCount} color{setCount===1?'':'s'} available</span>
-                        </span>
-                      </button>
-                    )
-                  })}
-                  <div className="quench-set">
-                    <div className="quench-set-title">Your Set</div>
-                    {quenchItems.length ? quenchItems.slice(0,3).map(item=>(
-                      <div key={item.id} className="quench-set-item">
-                        <div>
-                          <div className="quench-set-name">{item.productName}</div>
-                          <div className="quench-set-meta">{item.colorName} · {item.packs} pack{item.packs===1?'':'s'} · {item.units} pcs</div>
-                        </div>
-                      </div>
-                    )) : <div className="quench-empty">No items added yet.</div>}
-                    {quenchItems.length > 3 && <div className="quench-set-meta">+ {quenchItems.length - 3} more item{quenchItems.length - 3 === 1 ? '' : 's'}</div>}
-                  </div>
-                </aside>
-                <div className="quench-main">
-                  {quenchStep === 'collection' && (
-                    <>
-                      <div className="quench-feature-card">
-                        <div>
-                          <div className="quench-feature-title">{quenchCollectionMeta.label} Collection</div>
-                          <div className="quench-feature-sub">Start with a collection vibe, then build a matching set across drinkware, lunch, bags, and accessories.</div>
-                          <div className="quench-color-row">
-                            {quenchAvailableColors.map(color=><span key={color.code} className="quench-color-dot" title={color.name} style={{background:swatchBackground(color)}} />)}
-                          </div>
-                        </div>
-                        <button className="quench-next" onClick={()=>setQuenchStep('products')}>Next: Choose Products →</button>
-                      </div>
-                    </>
-                  )}
-                  {quenchStep === 'products' && (
-                    <>
-                      <div className="quench-tabs">
-                        {cats.map(cat=>(
-                          <button key={cat.value} className={`quench-tab ${quenchCat===cat.value?'on':''}`} onClick={()=>setQuenchCat(cat.value)}>{cat.icon} {cat.label}</button>
-                        ))}
-                      </div>
-                      {quenchProductsByCat.length ? (
-                        <div className="quench-product-grid">
-                          {quenchProductsByCat.map(product => {
-                            const colors = getQuenchColors(product)
-                            const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
-                            const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
-                            const qty = Math.max(1, Number(quenchQty[product.id] || 1))
-                            const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
-                            const alreadyInSet = selectedQuenchSkuSet.has(selectedSku)
-                            return (
-                              <div key={product.id} className={`quench-product ${alreadyInSet ? 'already-selected' : ''}`}>
-                                <div className="quench-prod-top">
-                                  {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
-                                  <div>
-                                    <div className="quench-prod-name">{product.name}</div>
-                                    <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
-                                  </div>
-                                </div>
-                                <div className="quench-form-row">
-                                  <select className="quench-select" value={selectedSku} onChange={e=>setQuenchColor(prev=>({...prev,[product.id]:e.target.value}))}>
-                                    {colors.map(color=><option key={color.sku} value={color.sku}>{color.name} · {color.sku}</option>)}
-                                  </select>
-                                  <input className="quench-input" type="number" min="1" value={qty} onChange={e=>setQuenchQty(prev=>({...prev,[product.id]:e.target.value}))} />
-                                </div>
-                                <div className="quench-set-meta">Selected: {selectedColor?.name} · Estimated units: {qty * Number(product.packing || 1)} pcs</div>
-                                {alreadyInSet && <div className="quench-selected-pill">✓ Already in set</div>}
-                                <button className="quench-add" disabled={alreadyInSet} onClick={()=>addQuenchItem(product)}>{alreadyInSet ? 'Already Selected' : 'Add to Quenchables'}</button>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      ) : <div className="quench-empty">No products in this category have {quenchCollectionMeta.label} colors yet.</div>}
-                      <button className="quench-next" onClick={()=>setQuenchStep('review')}>Review Set →</button>
-                    </>
-                  )}
-                  {quenchStep === 'review' && (
-                    <>
-                      <div className="quench-set">
-                        <div className="quench-set-title">Your Quenchables Set</div>
-                        {quenchItems.length ? quenchItems.map(item=>(
-                          <div key={item.id} className="quench-set-item">
-                            <div>
-                              <div className="quench-set-name">{item.productName}</div>
-                              <div className="quench-set-meta">Color: {item.colorName}<br/>SKU: {item.sku}<br/>Packs/Cartons: {item.packs} · Packing: {item.packing} pcs · Units: {item.units} pcs</div>
-                            </div>
-                            <button className="quench-remove" onClick={()=>removeQuenchItem(item.id)}>Remove</button>
-                          </div>
-                        )) : <div className="quench-empty">Add products first to build your Quenchables set.</div>}
-                      </div>
-                      <div className="quench-summary">
-                        <div className="quench-total"><div className="quench-total-val">{quenchItems.length}</div><div className="quench-total-lbl">Items</div></div>
-                        <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalPacks}</div><div className="quench-total-lbl">Packs</div></div>
-                        <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalUnits}</div><div className="quench-total-lbl">Units</div></div>
-                      </div>
-                      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-                        <button className="quench-tab" onClick={()=>setQuenchStep('products')}>+ Add More Products</button>
-                        <button className="quench-next" disabled={!quenchItems.length} onClick={()=>setQuenchStep('inquiry')}>Continue to Inquiry →</button>
-                      </div>
-                    </>
-                  )}
-                  {quenchStep === 'inquiry' && (
-                    <>
-                      <div className="quench-feature-card">
-                        <div>
-                          <div className="quench-feature-title">Send Quenchables Inquiry</div>
-                          <div className="quench-feature-sub">Your email app will open with your selected Quenchables set, SKUs, quantities, packing, and notes.</div>
-                        </div>
-                      </div>
-                      <textarea className="quench-note" value={quenchMessage} onChange={e=>setQuenchMessage(e.target.value)} placeholder="Add notes, target colors, delivery questions, or customer details…" />
-                      <a className="quench-send" href={buildQuenchablesHref()} onClick={e=>{ if(!quenchItems.length) e.preventDefault() }}>📩 Send Quenchables Inquiry</a>
-                      <button className="quench-tab" onClick={()=>setQuenchStep('review')}>← Back to Review</button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* PASSWORD MODAL */}
-      {pwOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setPwOpen(false)}}>
-          <div className="pw-modal">
-            <div className="pw-hdr">
-              <div className="pw-icon">🔐</div>
-              <div className="pw-title">Edit Access</div>
-              <div className="pw-sub">Enter password to unlock editing</div>
-            </div>
-            <div className="pw-body">
-              <label className="pw-lbl">Password</label>
-              <div className="pw-wrap">
-                <input
-                  ref={pwRef}
-                  type={pwShow ? 'text' : 'password'}
-                  className={`pw-in ${pwError ? 'err' : ''}`}
-                  value={pwValue}
-                  onChange={e => { setPwValue(e.target.value); setPwError('') }}
-                  onKeyDown={e => e.key === 'Enter' && submitPassword()}
-                  placeholder="Enter password…"
-                  autoComplete="off"
-                />
-                <button className="pw-eye" onClick={()=>setPwShow(s=>!s)}>{pwShow ? '🙈' : '👁'}</button>
-              </div>
-              <div className="pw-err">{pwError && <><span>⚠️</span>{pwError}</>}</div>
-              <button className="pw-submit" onClick={submitPassword}>Unlock Editing</button>
-              <button className="pw-cancel" onClick={()=>setPwOpen(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* VIEW MODAL */}
-      {vp && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)closeProductModal()}}>
-          <div className="modal">
-            <div className="m-hdr" style={{background:'var(--sf4)'}}>
-              <div>
-                {(() => {
-                  const extLabel = exts.find(x=>x.value===vp.ext)?.label || vp.ext || ''
-                  const catLabel = cats.find(c=>c.value===vp.cat)?.label || vp.cat || ''
-                  const parts = [extLabel, catLabel].filter(Boolean)
-                  return parts.length > 0 ? (
-                    <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{parts.join(' · ')}</div>
-                  ) : null
-                })()}
-                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
-                {getSkuBase(vp) && (
-                  <code
-                    onClick={()=>copy(getSkuBase(vp))}
-                    style={{fontSize:11,fontWeight:700,fontFamily:'monospace',background:'rgba(39,153,137,.1)',color:'var(--tl)',borderRadius:4,padding:'2px 8px',marginTop:5,display:'inline-block',letterSpacing:'.04em',cursor:'pointer',transition:'background .15s'}}
-                    title="Click to copy SKU"
-                  >
-                    {copied===getSkuBase(vp) ? '✓ Copied!' : getSkuBase(vp)}
-                  </code>
-                )}
-              </div>
-              <button className="m-close" onClick={closeProductModal}>✕</button>
-            </div>
-            <div className="m-body">
-              <div>
-                <div className="vm-main-wrap" ref={vmImageRef}>
-                  {visibleVmImages.length > 0 ? <img src={getImageSrc(visibleVmImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
-                </div>
-                {visibleVmImages.length > 1 && (
-                  <div className="vm-thumbs">
-                    {visibleVmImages.map((img,i) => (
-                      <div key={`${getImageSrc(img)}-${i}`} className={`vm-thumb ${i===safeVmImg?'on':''}`} onClick={()=>setVmImg(i)}>
-                        <img src={getImageSrc(img)} alt=""/>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              {/* Color swatches + SKUs */}
-              {vp.colors.length > 0 && (
-                <div>
-                  <span className="vm-color-sec-lbl">Colors</span>
-                  {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
-                    <div key={group.name} style={{marginBottom:10}}>
-                      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
-                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
-                        <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
-                      </div>
-                      <div className="vm-color-grid">
-                        {group.colors.map(clr=>{
-                          const linkedImageIndexes = findImageIndexesForColor(vp, clr)
-                          const hasLinkedImage = linkedImageIndexes.length > 0
-                          const colorKey = getColorKey(clr)
-                          const isActive = activeVmColorKey === colorKey
-                          return (
-                            <div
-                              key={clr.sku}
-                              className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
-                              onClick={()=>{
-                                if (!hasLinkedImage) return
-                                setVmColorKey(isActive ? '' : colorKey)
-                                setVmImg(0)
-                                if (typeof window !== 'undefined' && window.innerWidth <= 700) {
-                                  setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
-                                }
-                              }}
-                              title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
-                            >
-                              <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
-                              <div className="vm-color-info">
-                                <span className="vm-color-name">{clr.name}</span>
-                                <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {vp.youtube && getYouTubeId(vp.youtube) && (
-                <YouTubeBlock ytUrl={vp.youtube}/>
-              )}
-              <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
-              <p className="vm-desc">{vp.desc}</p>
-              <div className="vm-price-row vm-price-row-under-desc">
-                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
-                <div className="vm-pdiv"/>
-                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
-              </div>
-              {vp.colors?.length > 0 && (
-                <div className="vm-variant-table-card">
-                  <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Color SKU / Barcode</span>
-                  <div className="vm-variant-table-wrap">
-                    <table className="vm-variant-table">
-                      <thead>
-                        <tr>
-                          <th>Color</th>
-                          <th>Product Code</th>
-                          <th>Barcode</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {vp.colors.map((clr, idx) => {
-                          const variantBarcode = clr.barcode || clr.barcodeValue || vp.barcode || ''
-                          const variantBarcodeImage = clr.barcodeImage || clr.barcodeUrl || vp.barcodeImage || ''
-                          return (
-                            <tr key={`${clr.sku || clr.code || clr.name}-${idx}`}>
-                              <td>
-                                <div className="vm-variant-color">
-                                  <span className="vm-variant-swatch" style={{background:swatchBackground(clr)}}/>
-                                  <span>{clr.name || clr.code || 'Color'}</span>
-                                </div>
-                              </td>
-                              <td>
-                                <code className="vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
-                                  {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
-                                </code>
-                              </td>
-                              <td>
-                                <div className="vm-variant-barcode">
-                                  {variantBarcodeImage ? (
-                                    <img
-                                      src={variantBarcodeImage}
-                                      alt={`${clr.name || 'Color'} barcode`}
-                                      onClick={()=>setCodeLightbox({src:variantBarcodeImage,label:`${clr.name || 'Color'} Barcode`})}
-                                      title="Click to enlarge"
-                                    />
-                                  ) : variantBarcode ? (
-                                    <code>{variantBarcode}</code>
-                                  ) : (
-                                    <span style={{color:'rgba(99,102,106,.55)',fontWeight:700}}>—</span>
-                                  )}
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-              {(vp.dimensions || vp.barcode) && (
-                <div className="vm-meta-row">
-                  {vp.dimensions && typeof vp.dimensions==='object' &&
-                    vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
-                    <div className="vm-meta-item" style={{flex:'1 1 100%'}}>
-                      <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
-                      <div style={{overflowX:'auto'}}>
-                        <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
-                          {vp.dimensions.headers.some(h=>h.trim()) && (
-                            <thead>
-                              <tr>
-                                {vp.dimensions.headers.map((h,i)=>(
-                                  <th key={i} style={{background:'var(--tl)',color:'#fff',padding:'6px 12px',textAlign:'left',fontSize:10,letterSpacing:'.08em',fontWeight:700,whiteSpace:'nowrap'}}>{h||'—'}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                          )}
-                          <tbody>
-                            {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
-                              <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
-                                {row.map((cell,ci)=>(
-                                  <td key={ci} style={{padding:'7px 12px',borderBottom:'1px solid rgba(185,220,210,.3)',fontSize:13,fontWeight:ci===0?600:400,color:ci===0?'var(--bk)':'var(--gr)'}}>{cell||'—'}</td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-                  {(vp.barcode || vp.barcodeImage) && (
-                    <div className="vm-meta-item">
-                      <span className="vm-meta-lbl">Barcode</span>
-                      {vp.barcodeImage ? (
-                        <img
-                          src={vp.barcodeImage}
-                          alt="Barcode"
-                          onClick={()=>setCodeLightbox({src:vp.barcodeImage,label:'Barcode'})}
-                          style={{maxWidth:'100%',maxHeight:60,objectFit:'contain',marginTop:4,borderRadius:4,cursor:'zoom-in'}}
-                          title="Click to enlarge"
-                        />
-                      ) : (
-                        <code className="vm-meta-code">{vp.barcode}</code>
-                      )}
-                      {vp.barcode && vp.barcodeImage && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block'}}>{vp.barcode}</code>
-                      )}
-                    </div>
-                  )}
-                  {(vp.qrCode || vp.qrImage) && (
-                    <div className="vm-meta-item">
-                      <span className="vm-meta-lbl">QR Code</span>
-                      {vp.qrImage && (
-                        <img
-                          src={vp.qrImage}
-                          alt="QR Code"
-                          onClick={()=>setCodeLightbox({src:vp.qrImage,label:'QR Code'})}
-                          style={{width:72,height:72,objectFit:'contain',marginTop:4,borderRadius:4,border:'1px solid rgba(185,220,210,.4)',padding:4,background:'#fff',cursor:'zoom-in'}}
-                          title="Click to enlarge"
-                        />
-                      )}
-                      {vp.qrCode && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{vp.qrCode}</code>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-              <div className="vm-actions">
-                <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
-                  <PencilIcon/>
-                </button>
-                <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
-                  {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Copy Product Link'}
-                </button>
-                <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal(); openInquiry(product) }}>📩 Bulk Inquiry</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* EDIT MODAL */}
-      {editOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setEditOpen(false)}}>
-          <div className="modal edit-modal-inner">
-            <div className="m-hdr em-hdr">
-              <div>
-                <div className="em-badge">{editTarget ? '✏️ Editing' : '+ New Product'}</div>
-                <div className="em-title">{ef.name || (editTarget ? 'Edit Product' : 'New Product')}</div>
-              </div>
-              <button className="m-close" onClick={()=>setEditOpen(false)}>✕</button>
-            </div>
-            <div className="em-tabs">
-              {[['details','📋 Details'],['colors',`🎨 Colors (${ef.colors.length})`],['images',`🖼 Images (${ef.images.length})`]].map(([t,l])=>(
-                <button key={t} className={`em-tab ${editTab===t?'on':''}`} onClick={()=>setEditTab(t)}>{l}</button>
-              ))}
-            </div>
-            {editTab === 'details' && (
-              <div className="em-panel">
-                <div className="f-col">
-                  <label className="f-lbl">Product Name *</label>
-                  <input className="f-in" value={ef.name} onChange={e=>setEf(f=>({...f,name:e.target.value}))} placeholder="e.g. Insulated Tumbler 550ml"/>
-                </div>
-                <div className="f-row">
-                  <div className="f-col">
-                    <label className="f-lbl">Extension</label>
-                    {addingNewExt ? (
-                      <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
-                        <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Extension</div>
-                        <div style={{display:'flex',gap:6,alignItems:'center'}}>
-                          <input type="color" value={inlineNewExt.color} onChange={e=>setInlineNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
-                          <input value={inlineNewExt.label} onChange={e=>setInlineNewExt(n=>({...n,label:e.target.value}))} placeholder="Extension name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
-                        </div>
-                        <div style={{display:'flex',gap:6}}>
-                          <button onClick={()=>{
-                            const val = inlineNewExt.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
-                            if(!inlineNewExt.label.trim()||exts.some(x=>x.value===val)) return
-                            const newEntry = {value:val,label:inlineNewExt.label.trim(),color:inlineNewExt.color}
-                            setExts(prev=>[...prev,newEntry])
-                            setEf(f=>({...f,ext:val}))
-                            setInlineNewExt({label:'',color:'#279989'})
-                            setAddingNewExt(false)
-                          }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
-                          <button onClick={()=>{setAddingNewExt(false);setInlineNewExt({label:'',color:'#279989'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
-                        </div>
-                      </div>
-                    ) : (
-                      <select className="f-sel" value={ef.ext} onChange={e=>{
-                        if(e.target.value==='__add_new__'){setAddingNewExt(true)}
-                        else{setEf(f=>({...f,ext:e.target.value}))}
-                      }}>
-                        <option value="">— No Extension —</option>
-                        {exts.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
-                        <option value="__add_new__">+ Add new extension…</option>
-                      </select>
-                    )}
-                  </div>
-                  <div className="f-col">
-                    <label className="f-lbl">Category <span style={{fontWeight:400,color:'var(--gr)'}}>— optional</span></label>
-                    {addingNewCat ? (
-                      <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
-                        <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Category</div>
-                        <div style={{display:'flex',gap:6,alignItems:'center'}}>
-                          <input value={inlineNewCat.icon} onChange={e=>setInlineNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:36,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
-                          <input value={inlineNewCat.label} onChange={e=>setInlineNewCat(n=>({...n,label:e.target.value}))} placeholder="Category name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
-                        </div>
-                        <div style={{display:'flex',gap:6}}>
-                          <button onClick={()=>{
-                            const val = inlineNewCat.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
-                            if(!inlineNewCat.label.trim()||cats.some(c=>c.value===val)) return
-                            const newEntry = {value:val,label:inlineNewCat.label.trim(),icon:inlineNewCat.icon||'🏷️'}
-                            setCats(prev=>[...prev,newEntry])
-                            setEf(f=>({...f,cat:val}))
-                            setInlineNewCat({label:'',icon:'🏷️'})
-                            setAddingNewCat(false)
-                          }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
-                          <button onClick={()=>{setAddingNewCat(false);setInlineNewCat({label:'',icon:'🏷️'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{display:'flex',gap:6}}>
-                        <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>{
-                          if(e.target.value==='__add_new__'){setAddingNewCat(true)}
-                          else{setEf(f=>({...f,cat:e.target.value}))}
-                        }}>
-                          <option value="">— No Category —</option>
-                          {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
-                          <option value="__add_new__">+ Add new category…</option>
-                        </select>
-                        {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">SKU Base <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                  <input
-                    className="f-in"
-                    value={getEditableSkuBase()}
-                    onChange={e=>updateAllColorSkusFromBase(e.target.value)}
-                    placeholder="e.g. QNH-TWB680"
-                    disabled={!ef.colors?.length}
-                  />
-                  <div className="f-hint" style={{marginTop:6}}>Editing this updates all color SKUs using the color codes. You can still edit each full SKU in the Colors tab.</div>
-                </div>
-                <div className="f-row">
-                  <div className="f-col">
-                    <label className="f-lbl">SRP (₱) *</label>
-                    <input className="f-in" type="number" step="0.01" min="0" value={ef.srp} onChange={e=>setEf(f=>({...f,srp:e.target.value}))} placeholder="799.75"/>
-                  </div>
-                  <div className="f-col">
-                    <label className="f-lbl">Packing Qty</label>
-                    <input className="f-in" type="number" min="1" value={ef.packing} onChange={e=>setEf(f=>({...f,packing:e.target.value}))} placeholder="16"/>
-                  </div>
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">Description</label>
-                  <textarea className="f-ta" rows={4} value={ef.desc} onChange={e=>setEf(f=>({...f,desc:e.target.value}))} placeholder="Describe the product…"/>
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">Dimensions <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                  <DimensionsEditor value={ef.dimensions} onChange={val=>setEf(f=>({...f,dimensions:val}))}/>
-                </div>
-                <div className="f-row">
-                  {/* BARCODE */}
-                  <div className="f-col">
-                    <label className="f-lbl">Barcode <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                    <input className="f-in" value={ef.barcode} onChange={e=>setEf(f=>({...f,barcode:e.target.value}))} placeholder="e.g. 9780201350395" style={{marginBottom:6}}/>
-                    <CodeImageUpload
-                      label="Barcode Image"
-                      value={ef.barcodeImage}
-                      onChange={img=>setEf(f=>({...f,barcodeImage:img}))}
-                      onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
-                      onClear={()=>setEf(f=>({...f,barcodeImage:''}))}
-                    />
-                  </div>
-                  {/* QR CODE */}
-                  <div className="f-col">
-                    <label className="f-lbl">QR Code <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                    <input className="f-in" value={ef.qrCode} onChange={e=>setEf(f=>({...f,qrCode:e.target.value}))} placeholder="e.g. https://…" style={{marginBottom:6}}/>
-                    <CodeImageUpload
-                      label="QR Code Image"
-                      value={ef.qrImage}
-                      onChange={img=>setEf(f=>({...f,qrImage:img}))}
-                      onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
-                      onClear={()=>setEf(f=>({...f,qrImage:''}))}
-                    />
-                  </div>
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">YouTube Video <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                  <input className="f-in" value={ef.youtube} onChange={e=>setEf(f=>({...f,youtube:e.target.value}))} placeholder="https://youtube.com/watch?v=… or https://youtu.be/…"/>
-                  {ef.youtube && getYouTubeId(ef.youtube) && (
-                    <div style={{marginTop:6,fontSize:11,color:'var(--tl)',display:'flex',alignItems:'center',gap:4}}>
-                      ✓ Valid YouTube link detected
-                    </div>
-                  )}
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">Feature Badges</label>
-                  <div className="badge-list">{ef.badges.map(b=><span key={b} className="badge-tag">{b}<button onClick={()=>removeBadge(b)}>✕</button></span>)}</div>
-                  <div className="add-row" style={{marginTop:8}}>
-                    <input className="f-in" value={badgeInput} onChange={e=>setBadgeInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addBadge()}}} placeholder="e.g. BPA-Free, Double Wall…"/>
-                    <button className="add-btn" onClick={addBadge}>Add</button>
-                  </div>
-                </div>
-              </div>
-            )}
-            {editTab === 'colors' && (
-              <div className="em-panel">
-                <div className="f-hint">Each color variant gets its own SKU. Use + Add to apply a saved collection set to this product. Use Edit Set to manage the reusable colors for OG, XPRESS, Horizon, Bloom, Poply, or your custom collection groups. Saved collection sets are stored in site settings so they will not reset when you add new products.</div>
-                <div className="color-collection-panel">
-                  <div className="collection-head">
-                    <span className="collection-title">Color collections / group titles</span>
-                  </div>
-                  <div className="collection-grid">
-                    {colorCollections.map(col=>{
-                      const savedCount = collectionSetCount(col.value)
-                      const isEditingThisSet = editingCollectionSet === col.value
-                      return (
-                        <div key={col.value} className={`collection-item ${isEditingThisSet ? 'editing-set' : ''}`}>
-                          <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
-                          <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
-                          <div className="collection-actions">
-                            <span className="collection-set-count">{savedCount} colors</span>
-                            <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
-                            <button type="button" className="collection-edit-set" onClick={()=>isEditingThisSet ? closeCollectionSetEditor() : openCollectionSetEditor(col.value)}>{isEditingThisSet ? 'Close' : 'Edit Set'}</button>
-                          </div>
-                          <div className="collection-set-preview">
-                            {(colorCollectionSets[col.value] || []).map(item=>(
-                              <span key={`${col.value}-${item.code}`} className="collection-color-chip" title={`${item.name} (${item.code})`}>
-                                <i style={{background:swatchBackground(item)}}/>{item.name}
-                              </span>
-                            ))}
-                          </div>
-                          {isEditingThisSet && (() => {
-                            const activeCollection = col
-                            return (
-                              <div className="collection-set-editor">
-                                <div className="collection-set-editor-head">
-                                  <div>
-                                    <span className="collection-set-editor-kicker">Editing saved colors</span>
-                                    <div className="collection-set-editor-name">{activeCollection.label} Collection Set</div>
-                                  </div>
-                                  <button type="button" className="collection-set-editor-close" onClick={closeCollectionSetEditor}>×</button>
-                                </div>
-                                <div className="collection-set-editor-list">
-                                  {collectionSetDraft.map((item, idx) => (
-                                    <div key={`${editingCollectionSet}-${idx}`} className="collection-set-row">
-                                      <div className="collection-set-move" aria-label={`Reorder ${item.name || 'color'}`}>
-                                        <button type="button" disabled={idx===0} onClick={()=>moveCollectionSetDraftColor(idx, idx-1)} title="Move color up">↑</button>
-                                        <button type="button" disabled={idx===collectionSetDraft.length-1} onClick={()=>moveCollectionSetDraftColor(idx, idx+1)} title="Move color down">↓</button>
-                                      </div>
-                                      <input type="color" value={getColorHexes(item)[0] || '#B9DCD2'} onChange={e=>updateCollectionSetDraft(idx,{ hex:e.target.value })}/>
-                                      <input type="text" value={item.name || ''} onChange={e=>updateCollectionSetDraft(idx,{ name:e.target.value })} placeholder="Color name"/>
-                                      <input type="text" value={item.code || ''} onChange={e=>updateCollectionSetDraft(idx,{ code:e.target.value.toUpperCase() })} placeholder="Code"/>
-                                      <input type="text" value={getColorHexes(item).join(', ')} onChange={e=>updateCollectionSetDraftHexes(idx,e.target.value)} placeholder="#HEX or #HEX, #HEX"/>
-                                      <button type="button" className="collection-set-remove" onClick={()=>removeCollectionSetDraftColor(idx)} title="Remove color">×</button>
-                                    </div>
-                                  ))}
-                                </div>
-                                <div className="collection-set-add-inline">
-                                  <input type="color" value={normalizeHexValue(newCollectionSetColor.hex, '#B9DCD2')} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))}/>
-                                  <input type="text" value={newCollectionSetColor.name} onChange={e=>setNewCollectionSetColor(v=>({...v,name:e.target.value}))} placeholder="New color name"/>
-                                  <input type="text" value={newCollectionSetColor.code} onChange={e=>setNewCollectionSetColor(v=>({...v,code:e.target.value.toUpperCase()}))} placeholder="Code"/>
-                                  <input type="text" value={newCollectionSetColor.hex} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))} placeholder="#HEX or #HEX, #HEX"/>
-                                  <button type="button" onClick={addCollectionSetDraftColor}>+ Add Color</button>
-                                </div>
-                                <div className="collection-set-editor-actions">
-                                  <button type="button" className="collection-set-cancel" onClick={closeCollectionSetEditor}>Cancel</button>
-                                  <button type="button" className="collection-set-save" onClick={saveCollectionSetDraft}>Save Collection Set</button>
-                                </div>
-                              </div>
-                            )
-                          })()}
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <div className="collection-add-row">
-                    <input type="color" value={newCollection.color} onChange={e=>setNewCollection(n=>({...n,color:e.target.value}))}/>
-                    <input type="text" value={newCollection.label} onChange={e=>setNewCollection(n=>({...n,label:e.target.value}))} placeholder="Add group title, e.g. Seasonal, Pastel, Male, Female" onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addCollection()}}}/>
-                    <button type="button" onClick={addCollection}>+ Add Group</button>
-                  </div>
-                </div>
-                <div style={{background:'var(--bg)',borderRadius:10,padding:12}}>
-                  <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
-                  {ef.colors.length === 0
-                    ? <p style={{fontSize:12,color:'var(--gr)',padding:'4px 0'}}>No colors yet. Add one below.</p>
-                    : ef.colors.map((c,i)=>(
-                      <div key={i} className="color-row">
-                        <div className="color-move-controls" aria-label={`Reorder ${c.name || 'color'}`}>
-                          <button type="button" className="move-btn" disabled={i===0} onClick={()=>moveColor(i,i-1)} title="Move color up">↑</button>
-                          <button type="button" className="move-btn" disabled={i===ef.colors.length-1} onClick={()=>moveColor(i,i+1)} title="Move color down">↓</button>
-                        </div>
-                        <div className="multi-swatch-edit">
-                          {getColorHexes(c).map((hex, hi)=>(
-                            <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
-                              <input type="color" className="cp" value={hex} onChange={e=>updateColorHex(i,hi,e.target.value)}/>
-                              <input
-                                className="hex-in"
-                                value={hex}
-                                onChange={e=>pasteColorHex(i,hi,e.target.value)}
-                                onPaste={e=>{e.preventDefault(); pasteColorHex(i,hi,e.clipboardData.getData('text'))}}
-                                placeholder="#HEX"
-                                spellCheck={false}
-                              />
-                              {getColorHexes(c).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeColorHex(i,hi)}>×</button>}
-                            </span>
-                          ))}
-                          <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={()=>addColorHex(i)}>+</button>
-                        </div>
-                        <select className="collection-select" value={c.collection || defaultColorCollection(c)} onChange={e=>updateColor(i,'collection',e.target.value)}>
-                          {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
-                          <option value="Other">Other</option>
-                        </select>
-                        <input className="in-sm" value={c.name} onChange={e=>updateColor(i,'name',e.target.value)} placeholder="Name"/>
-                        <input className="in-sm" value={c.code} onChange={e=>updateColor(i,'code',e.target.value)} placeholder="Code" maxLength={4}/>
-                        <input className="in-sm" value={c.sku} onChange={e=>updateColor(i,'sku',e.target.value)} placeholder="SKU"/>
-                        <button className="rm-btn" onClick={()=>removeColor(i)}>✕</button>
-                      </div>
-                    ))
-                  }
-                </div>
-                <div className="add-color-form">
-                  <div className="sub-hd">Add Color Variant</div>
-                  <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
-                  <div className="color-row new-color-row">
-                    <div className="color-move-placeholder">New</div>
-                    <div className="multi-swatch-edit">
-                      {getColorHexes(newColor).map((hex, hi)=>(
-                        <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
-                          <input type="color" className="cp" value={hex} onChange={e=>updateNewColorHex(hi,e.target.value)}/>
-                          <input
-                            className="hex-in"
-                            value={hex}
-                            onChange={e=>pasteNewColorHex(hi,e.target.value)}
-                            onPaste={e=>{e.preventDefault(); pasteNewColorHex(hi,e.clipboardData.getData('text'))}}
-                            placeholder="#HEX"
-                            spellCheck={false}
-                          />
-                          {getColorHexes(newColor).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeNewColorHex(hi)}>×</button>}
-                        </span>
-                      ))}
-                      <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={addNewColorHex}>+</button>
-                    </div>
-                    <select className="collection-select" value={newColor.collection || 'OG'} onChange={e=>setNewColor(n=>({...n,collection:e.target.value}))}>
-                      {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
-                      <option value="Other">Other</option>
-                    </select>
-                    <input className="in-sm" value={newColor.name} onChange={e=>setNewColor(n=>({...n,name:e.target.value}))} placeholder="Name"/>
-                    <input className="in-sm" value={newColor.code} onChange={e=>setNewColor(n=>({...n,code:e.target.value.toUpperCase()}))} placeholder="Code" maxLength={4}/>
-                    <input className="in-sm" value={newColor.sku} onChange={e=>setNewColor(n=>({...n,sku:e.target.value.toUpperCase()}))} placeholder="Full SKU"/>
-                    <button className="add-btn" style={{borderRadius:6,padding:'6px 10px',fontSize:12}} onClick={addColor}>+</button>
-                  </div>
-                </div>
-              </div>
-            )}
-            {editTab === 'images' && (
-              <div className="em-panel">
-                <div className="f-hint">Upload product images. General images have their own section, and each color has its own upload area. Drag thumbnails to rearrange their order. Tick Main on any image to make it the product card/main image.</div>
-                <div className="color-image-panel">
-                  <div className="color-image-panel-head">
-                    <div>
-                      <div className="color-image-title">General product images</div>
-                      <div className="color-image-sub">Upload main lifestyle, infographics, packaging, or any product photos not tied to a specific color.</div>
-                    </div>
-                  </div>
-                  <div className="color-image-grid">
-                    {(() => {
-                      const generalAssigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => isGeneralImage(item.img))
-                      return (
-                        <div className="color-image-card general-image-card">
-                          <div className="color-image-card-top">
-                            <span className="general-image-swatch"/>
-                            <div style={{minWidth:0,flex:1}}>
-                              <div className="color-image-name">General Images</div>
-                              <div className="color-image-sku">Main gallery / no color assignment</div>
-                            </div>
-                          </div>
-                          {generalAssigned.length > 0 ? (
-                            <div className="color-image-thumbs">
-                              {generalAssigned.map(({img, index}) => (
-                                <span
-                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
-                                  key={`general-${index}`}
-                                  data-img-index={index}
-                                  draggable
-                                  onTouchStart={(e)=>handleImageTouchStart(e,index)}
-                                  onTouchMove={handleImageTouchMove}
-                                  onTouchEnd={handleImageTouchEnd}
-                                  onTouchCancel={handleImageTouchEnd}
-                                  onDragStart={(e)=>handleImageDragStart(e,index)}
-                                  onDragOver={(e)=>handleImageDragOver(e,index)}
-                                  onDrop={(e)=>handleImageDrop(e,index)}
-                                  onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
-                                  title="Drag to rearrange thumbnail order"
-                                >
-                                  {index===0 && <span className="main-tag">Main</span>}
-                                  <img src={getImageSrc(img)} alt=""/>
-                                  <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
-                                  <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
-                                    <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
-                                  </label>
-                                </span>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="color-image-empty">No general photos yet</div>
-                          )}
-                          <label className="color-upload-btn">
-                            + Upload general product photos
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={e=>{
-                                uploadFilesGeneral(e.target.files)
-                                e.target.value = ''
-                              }}
-                            />
-                          </label>
-                        </div>
-                      )
-                    })()}
-                  </div>
-                </div>
- 
-                <div className="color-image-panel">
-                  <div className="color-image-panel-head">
-                    <div>
-                      <div className="color-image-title">Images per color</div>
-                      <div className="color-image-sub">Upload multiple product photos for each color. When customers click a color, the first assigned image will show.</div>
-                    </div>
-                  </div>
-                  <div className="color-image-grid">
-                    {(ef.colors || []).map(color => {
-                      const assigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => imageMatchesColor(item.img, color))
-                      return (
-                        <div className="color-image-card" key={color.sku || color.code || color.name}>
-                          <div className="color-image-card-top">
-                            <span className="color-image-swatch" style={{background:swatchBackground(color)}}/>
-                            <div style={{minWidth:0,flex:1}}>
-                              <div className="color-image-name">{color.name}</div>
-                              <div className="color-image-sku">{color.sku}</div>
-                            </div>
-                          </div>
-                          {assigned.length > 0 ? (
-                            <div className="color-image-thumbs">
-                              {assigned.map(({img, index}) => (
-                                <span
-                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
-                                  key={`${color.sku || color.code}-${index}`}
-                                  data-img-index={index}
-                                  draggable
-                                  onTouchStart={(e)=>handleImageTouchStart(e,index)}
-                                  onTouchMove={handleImageTouchMove}
-                                  onTouchEnd={handleImageTouchEnd}
-                                  onTouchCancel={handleImageTouchEnd}
-                                  onDragStart={(e)=>handleImageDragStart(e,index)}
-                                  onDragOver={(e)=>handleImageDragOver(e,index)}
-                                  onDrop={(e)=>handleImageDrop(e,index)}
-                                  onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
-                                  title="Drag to rearrange thumbnail order"
-                                >
-                                  {index===0 && <span className="main-tag">Main</span>}
-                                  <img src={getImageSrc(img)} alt=""/>
-                                  <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
-                                  <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
-                                    <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
-                                  </label>
-                                </span>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="color-image-empty">No uploaded photos yet</div>
-                          )}
-                          <label className="color-upload-btn">
-                            + Upload photos for {color.name}
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={e=>{
-                                uploadFilesForColor(e.target.files, color)
-                                e.target.value = ''
-                              }}
-                            />
-                          </label>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-                {getTemporaryImageCount() > 0 && (
-                  <button type="button" className="cancel-btn" style={{width:'100%',justifyContent:'center'}} onClick={removeTemporaryImages}>
-                    Remove failed preview images ({getTemporaryImageCount()})
-                  </button>
-                )}
-                {uploadErr && <div className="f-error">{uploadErr}</div>}
-                <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload}/>
-              </div>
-            )}
-            <div className="m-footer">
-              {editTarget && <button className="del-btn" onClick={()=>deleteProduct(editTarget.id)}>🗑 Delete</button>}
-              <div className="m-footer-r">
-                <button className="cancel-btn" onClick={()=>setEditOpen(false)}>Cancel</button>
-                <button className="save-btn" onClick={saveProduct}>{editTarget ? '✓ Save Changes' : '+ Add Product'}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* BRAND LOGO + TOPBAR TEXT MODAL */}
-      {brandEditOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setBrandEditOpen(false)}}>
-          <div className="modal" style={{maxWidth:560}}>
-            <div className="m-hdr" style={{background:'var(--sf4)'}}>
-              <div>
-                <div style={{fontSize:10,fontWeight:900,letterSpacing:'.12em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Top Bar Branding</div>
-                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.1}}>Brand Logo & Text</div>
-              </div>
-              <button className="m-close" onClick={()=>setBrandEditOpen(false)}>✕</button>
-            </div>
-            <div className="m-body">
-              <div className="f-col">
-                <label className="f-lbl">Brand Logo</label>
-                <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
-                  <div style={{width:120,height:58,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.06em',flexShrink:0}}>
-                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8,background:'rgba(255,255,255,.08)'}}/> : 'NO LOGO'}
-                  </div>
-                  <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
-                    <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-                      <label className="add-btn" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'9px 14px',cursor:'pointer'}}>
-                        Upload Logo
-                        <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} onChange={handleBrandLogoUpload}/>
-                      </label>
-                      {brandLogo && <button className="cancel-btn" onClick={()=>{saveBrandLogo('');setBrandUploadErr('')}}>Remove</button>}
-                    </div>
-                    <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG or SVG under 2MB. Leave text fields blank if you want to show logo only.</div>
-                  </div>
-                </div>
-                {brandUploadErr && <div className="f-error">{brandUploadErr}</div>}
-              </div>
- 
-              <div className="f-row">
-                <div className="f-col">
-                  <label className="f-lbl">Brand Name</label>
-                  <input className="f-in" value={brandName} onChange={e=>saveBrandName(e.target.value)} placeholder="Leave blank to hide brand name"/>
-                </div>
-                <div className="f-col">
-                  <label className="f-lbl">Text Beside Brand Name</label>
-                  <input className="f-in" value={brandTagline} onChange={e=>saveBrandTagline(e.target.value)} placeholder="Leave blank to hide tagline"/>
-                </div>
-              </div>
- 
-              <div className="f-col">
-                <label className="f-lbl">Preview</label>
-                <div style={{background:'var(--tl)',borderRadius:8,padding:'12px 16px',display:'flex',alignItems:'center',gap:8,minHeight:58}}>
-                  {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:30,width:'auto',maxWidth:140,objectFit:'contain'}}/>}
-                  {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
-                  {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
-                  {!brandLogo && !brandName?.trim() && !brandTagline?.trim() && <span style={{color:'rgba(255,255,255,.65)',fontSize:12}}>Nothing will show in the brand area.</span>}
-                </div>
-              </div>
-            </div>
-            <div className="m-footer">
-              <span style={{fontSize:12,color:'var(--gr)'}}>Changes autosave to site settings.</span>
-              <div className="m-footer-r"><button className="save-btn" onClick={()=>setBrandEditOpen(false)}>Done</button></div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* CODE LIGHTBOX */}
-      {codeLightbox && (
-        <CodeLightbox
-          src={codeLightbox.src}
-          label={codeLightbox.label}
-          onClose={()=>setCodeLightbox(null)}
-        />
-      )}
- 
-      {/* LOADING */}
-      {loading && (
-        <div style={{position:'fixed',inset:0,zIndex:999,background:'var(--sf4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
-          <div style={{fontSize:24,fontWeight:900,color:'var(--tl)',letterSpacing:'-.01em',fontFamily:'var(--fn)',textAlign:'center'}}>QUENCHA</div>
-          <div style={{width:40,height:40,border:'3px solid rgba(39,153,137,.2)',borderTop:'3px solid var(--tl)',borderRadius:'50%',animation:'spin 0.8s linear infinite',margin:'0 auto'}}/>
-          <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-        </div>
-      )}
- 
-      {/* BANNER EDIT MODAL */}
-      {bannerEditOpen && (
-        <BannerEditModal
-          banners={banners}
-          aspect={bannerAspect}
-          interval={bannerInterval}
-          onIntervalChange={saveBannerInterval}
-          heroVideoUrl={heroVideoUrl}
-          heroVideoThumbnail={heroVideoThumbnail}
-          heroMediaOrder={heroMediaOrder}
-          onHeroVideoUrlChange={saveHeroVideoUrl}
-          onHeroVideoThumbnailChange={saveHeroVideoThumbnail}
-          onHeroMediaOrderChange={saveHeroMediaOrder}
-          onAspectChange={saveAspect}
-          onAdd={b=>saveBanners([...banners,b])}
-          onRemove={id=>saveBanners(banners.filter(b=>b.id!==id))}
-          onMove={(from,to)=>{const b=[...banners];const[item]=b.splice(from,1);b.splice(to,0,item);saveBanners(b)}}
-          onUpdateBanner={(id,field,val)=>saveBanners(banners.map(b=>b.id===id?{...b,[field]:val}:b))}
-          onClose={()=>setBannerEditOpen(false)}
-          onUpload={uploadImageToBlob}
-        />
-      )}
- 
-      {/* INQUIRY MODAL */}
-      {inqOpen && (() => {
-        const colors = inqProduct?.colors || []
-        const packingNum = parseInt(inqProduct?.packing, 10) || 0
-        const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', packs: '1' }]
-        const enrichedLines = activeLines.map((line) => {
-          const selectedColor = colors.find(c => c.code === line.colorCode) || colors[0] || null
-          const packsNum = parseInt(line.packs, 10) || 0
-          const units = packsNum && packingNum ? packsNum * packingNum : 0
-          return { ...line, selectedColor, packsNum, units }
-        })
-        const totalPacks = enrichedLines.reduce((sum, line) => sum + line.packsNum, 0)
-        const totalUnits = enrichedLines.reduce((sum, line) => sum + line.units, 0)
-        const inquiryHref = buildInquiryHref(inqProduct, activeLines, inqMessage)
-        const updateLine = (index, patch) => setInqLines(lines => {
-          const base = lines?.length ? lines : activeLines
-          return base.map((line, i) => i === index ? { ...line, ...patch } : line)
-        })
-        const addLine = () => setInqLines(lines => {
-          const base = lines?.length ? lines : activeLines
-          return [...base, { colorCode: colors[0]?.code || '', packs: '1' }]
-        })
-        const removeLine = (index) => setInqLines(lines => {
-          const base = lines?.length ? lines : activeLines
-          return base.length > 1 ? base.filter((_, i) => i !== index) : base
-        })
- 
-        return (
-          <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
-            <div className="modal" style={{maxWidth:640}}>
-              <div className="m-hdr" style={{background:'var(--sf4)'}}>
-                <div>
-                  <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Corporate & Wholesale</div>
-                  <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Bulk Inquiry</div>
-                </div>
-                <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
-              </div>
-              <div className="m-body" style={{gap:14}}>
-                <p style={{fontSize:14,color:'var(--gr)'}}>Select the preferred color/s and quantity first, then send the inquiry through email.</p>
- 
-                <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
-                  <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
-                  <div style={{fontSize:16,fontWeight:900,color:'var(--bk)',lineHeight:1.25}}>{inqProduct?.name || 'General Quencha bulk inquiry'}</div>
-                  {inqProduct?.colors?.[0]?.sku && <div style={{fontSize:12,color:'var(--gr)'}}>SKU Base: <strong style={{color:'var(--tl)'}}>{getSkuBase(inqProduct)}</strong></div>}
-                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginTop:4}}>
-                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
-                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Packing</div>
-                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{packingNum ? `${packingNum} pcs` : 'TBC'}</div>
-                    </div>
-                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
-                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Packs</div>
-                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalPacks || '—'}</div>
-                    </div>
-                    <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
-                      <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Units</div>
-                      <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalUnits ? `${totalUnits} pcs` : '—'}</div>
-                    </div>
-                  </div>
-                </div>
- 
-                <div className="f-col">
-                  <label className="f-lbl">Color & Quantity</label>
-                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
-                    {enrichedLines.map((line, index) => (
-                      <div key={index} style={{background:'var(--bg)',border:'1px solid rgba(185,220,210,.55)',borderRadius:10,padding:10,display:'flex',flexDirection:'column',gap:8}}>
-                        <div style={{display:'grid',gridTemplateColumns:'1fr 120px 34px',gap:8,alignItems:'center'}}>
-                          <select
-                            className="f-sel"
-                            value={line.colorCode || ''}
-                            onChange={e=>updateLine(index, { colorCode: e.target.value })}
-                            disabled={!colors.length}
-                          >
-                            {colors.length ? colors.map(color => (
-                              <option key={color.sku || color.code} value={color.code}>{color.name} — {color.code}</option>
-                            )) : <option value="">Select color</option>}
-                          </select>
-                          <input
-                            className="f-in"
-                            type="number"
-                            min="1"
-                            value={line.packs}
-                            onChange={e=>updateLine(index, { packs: e.target.value })}
-                            placeholder="Packs"
-                          />
-                          <button
-                            type="button"
-                            className="rm-btn"
-                            onClick={()=>removeLine(index)}
-                            disabled={enrichedLines.length <= 1}
-                            style={{height:38,border:'1px solid rgba(239,68,68,.2)',borderRadius:8,background:'rgba(239,68,68,.04)',opacity:enrichedLines.length <= 1 ? .35 : 1}}
-                            title="Remove color"
-                          >
-                            ×
-                          </button>
-                        </div>
-                        <div style={{display:'flex',flexWrap:'wrap',gap:8,fontSize:11,color:'var(--gr)'}}>
-                          {line.selectedColor?.hex && <span style={{width:12,height:12,borderRadius:'50%',background:line.selectedColor.hex,border:'1px solid rgba(0,0,0,.1)',display:'inline-block',marginTop:2}}/>}
-                          {line.selectedColor?.sku && <span>SKU: <strong style={{color:'var(--tl)'}}>{line.selectedColor.sku}</strong></span>}
-                          {packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    className="add-btn"
-                    onClick={addLine}
-                    style={{alignSelf:'flex-start',background:'rgba(39,153,137,.12)',color:'var(--tl)',border:'1px solid rgba(39,153,137,.25)',marginTop:2}}
-                  >
-                    + Add another color
-                  </button>
-                  {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total per color.</div>}
-                </div>
- 
-                <div className="f-col">
-                  <label className="f-lbl">Note / Message</label>
-                  <textarea
-                    className="f-ta"
-                    rows={4}
-                    value={inqMessage}
-                    onChange={e=>setInqMessage(e.target.value)}
-                    placeholder="Add UV printing details, delivery area, deadline, or other notes…"
-                  />
-                </div>
- 
-                <a
-                  className="inq-link"
-                  href={inquiryHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{width:'100%',justifyContent:'center'}}
-                >
-                  📩 Send Inquiry via Email
-                </a>
-              </div>
-            </div>
-          </div>
-        )
-      })()}
- 
-      {/* CATEGORY MANAGER MODAL */}
-      {catMgrOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setCatMgrOpen(false)}}>
-          <div className="modal" style={{maxWidth:480}}>
-            <div className="m-hdr" style={{background:'var(--sf4)'}}>
-              <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
-                <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Categories</div>
-              </div>
-              <button className="m-close" onClick={()=>setCatMgrOpen(false)}>✕</button>
-            </div>
-            <div className="m-body" style={{gap:10}}>
-              {/* Existing categories */}
-              {cats.map((c,i)=>(
-                <div key={c.value} style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
-                  <input value={c.icon} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,icon:e.target.value}:x))} style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'4px 0',background:'#fff',outline:'none'}}/>
-                  <input value={c.label} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,label:e.target.value}:x))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
-                  <input value={c.value} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,value:e.target.value}:x))} placeholder="value (no spaces)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>setCats(cats.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
-                </div>
-              ))}
-              {/* Add new category */}
-              <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Category</div>
-                <div style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr auto',gap:8,alignItems:'center'}}>
-                  <input value={newCat.icon} onChange={e=>setNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
-                  <input value={newCat.label} onChange={e=>setNewCat(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
-                  <input value={newCat.value} onChange={e=>setNewCat(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>{
-                    const val = newCat.value || newCat.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
-                    if(!newCat.label.trim()||cats.some(c=>c.value===val)) return
-                    setCats([...cats,{value:val,label:newCat.label,icon:newCat.icon||'🏷️'}])
-                    setNewCat({value:'',label:'',icon:'🏷️'})
-                  }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
-                </div>
-              </div>
-            </div>
-            <div className="m-footer">
-              <div/>
-              <div className="m-footer-r">
-                <button className="cancel-btn" onClick={()=>setCatMgrOpen(false)}>Cancel</button>
-                <button className="save-btn" onClick={()=>setCatMgrOpen(false)}>✓ Done</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* EXTENSION MANAGER MODAL */}
-      {extMgrOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setExtMgrOpen(false)}}>
-          <div className="modal" style={{maxWidth:480}}>
-            <div className="m-hdr" style={{background:'var(--sf4)'}}>
-              <div>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
-                <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Extensions</div>
-              </div>
-              <button className="m-close" onClick={()=>setExtMgrOpen(false)}>✕</button>
-            </div>
-            <div className="m-body" style={{gap:10}}>
-              {exts.map((x,i)=>(
-                <div key={x.value} style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
-                  <input type="color" value={x.color} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,color:e.target.value}:o))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
-                  <input value={x.label} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,label:e.target.value}:o))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
-                  <input value={x.value} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,value:e.target.value}:o))} placeholder="key" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>setExts(exts.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
-                </div>
-              ))}
-              <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
-                <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Extension</div>
-                <div style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr auto',gap:8,alignItems:'center'}}>
-                  <input type="color" value={newExt.color} onChange={e=>setNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
-                  <input value={newExt.label} onChange={e=>setNewExt(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
-                  <input value={newExt.value} onChange={e=>setNewExt(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>{
-                    const val = newExt.value || newExt.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
-                    if(!newExt.label.trim()||exts.some(x=>x.value===val)) return
-                    setExts([...exts,{value:val,label:newExt.label.trim(),color:newExt.color}])
-                    setNewExt({value:'',label:'',color:'#279989'})
-                  }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
-                </div>
-              </div>
-            </div>
-            <div className="m-footer">
-              <div/>
-              <div className="m-footer-r">
-                <button className="cancel-btn" onClick={()=>setExtMgrOpen(false)}>Cancel</button>
-                <button className="save-btn" onClick={()=>setExtMgrOpen(false)}>✓ Done</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
- 
-      {/* EDIT BAR */}
-      {editMode && (
-        <div className="edit-bar">
-          <div style={{display:'flex',alignItems:'center',gap:8}}>
-            <span className="edit-dot"/>
-            <span className="eb-lbl">Edit Mode</span>
-            <span className="eb-cnt">{products.length} products</span>
-          </div>
-          <div style={{display:'flex',gap:8}}>
-            <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
-            <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
-            <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
-            <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+     '',
+     'Thank you.'
+   ].filter(line => line !== '').join('\n')
+ }, [getSkuBase])
+ 
+ const buildInquiryHref = useCallback((product, lines, message) => {
+   const email = 'design@sunbeamsimpexinc.com'
+   const subject = product ? `Quencha Bulk Inquiry - ${product.name}` : 'Quencha Bulk Inquiry'
+   const body = buildInquiryText(product, lines, message)
+   return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+ }, [buildInquiryText])
+ 
+ // ── API HELPERS ──
+ const apiCreateProduct = useCallback(async (product) => {
+   const res = await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(product) })
+   if (!res.ok) throw new Error('Create product failed')
+   return res.json().catch(() => product)
+ }, [])
+ 
+ const apiSaveProduct = useCallback(async (id, data) => {
+   const res = await fetch('/api/products/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) })
+   if (!res.ok) throw new Error('Save product failed')
+   return res.json().catch(() => data)
+ }, [])
+ 
+ // ── IMAGE UPLOAD via Vercel Blob ──
+ const uploadImageToBlob = useCallback(async (file, options = {}) => {
+   const shouldCompress = options.compress !== false
+   const uploadFile = shouldCompress ? await compressImageFile(file) : file
+ 
+   const fd = new FormData()
+   fd.append('file', uploadFile)
+ 
+   const res = await fetch('/api/upload', { method:'POST', body: fd })
+   if (!res.ok) {
+     let message = `Upload failed (${res.status})`
+     try {
+       const payload = await res.json()
+       message = payload?.error || payload?.message || message
+     } catch {}
+     const mb = (uploadFile.size / 1024 / 1024).toFixed(2)
+     throw new Error(`${message} — ${uploadFile.type || 'unknown type'}, ${mb}MB`)
+   }
+   const { url } = await res.json()
+   if (!url) throw new Error('Upload completed but no URL was returned')
+   return url
+ }, [])
+ 
+ const handleBrandLogoUpload = useCallback(async (e) => {
+   const file = e.target.files?.[0]
+   if (!file) return
+   const allowed = ['image/png','image/jpeg','image/webp','image/svg+xml']
+   if (!allowed.includes(file.type)) {
+     setBrandUploadErr('Please upload a PNG, JPG, WebP, or SVG logo.')
+     e.target.value = ''
+     return
+   }
+   if (file.size > 5 * 1024 * 1024) {
+     setBrandUploadErr('Logo file is too large. Please keep it under 5MB.')
+     e.target.value = ''
+     return
+   }
+   setBrandUploadErr('Uploading logo...')
+   try {
+     const url = await uploadImageToBlob(file, { compress: file.type !== 'image/svg+xml' })
+     saveBrandLogo(url)
+     setBrandUploadErr('')
+   } catch (err) {
+     console.error(err)
+     setBrandUploadErr(err?.message || 'Logo upload failed. Please try again.')
+   }
+   e.target.value = ''
+ }, [saveBrandLogo, uploadImageToBlob])
+ const [editOpen, setEditOpen] = useState(false)
+ const [editTarget, setEditTarget] = useState(null) // null = new
+ const [inqOpen, setInqOpen] = useState(false)
+ const [inqProduct, setInqProduct] = useState(null)
+ const [inqLines, setInqLines] = useState([])
+ const [inqMessage, setInqMessage] = useState('')
+ const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
+ 
+ const openInquiry = useCallback((product = null) => {
+   const firstColorCode = product?.colors?.[0]?.code || ''
+   setInqProduct(product)
+   setInqLines([{ colorCode: firstColorCode, packs: '1' }])
+   setInqMessage('')
+   setInqOpen(true)
+ }, [])
+ 
+ // Edit form
+ const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
+ const [editTab, setEditTab] = useState('details')
+ const [badgeInput, setBadgeInput] = useState('')
+ const [newColor, setNewColor] = useState({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
+ const [uploadErr, setUploadErr] = useState('')
+ const [dragImageIndex, setDragImageIndex] = useState(null)
+ const [dragOverImageIndex, setDragOverImageIndex] = useState(null)
+ const [dragOverImagePosition, setDragOverImagePosition] = useState('before')
+ const [addingNewExt, setAddingNewExt] = useState(false)
+ const [inlineNewExt, setInlineNewExt] = useState({label:'',color:'#279989'})
+ const [addingNewCat, setAddingNewCat] = useState(false)
+ const [inlineNewCat, setInlineNewCat] = useState({label:'',icon:'🏷️'})
+ const fileRef = useRef(null)
+ 
+ // ── PASSWORD FLOW ──
+ const requestAuth = useCallback((intent) => {
+   // intent = 'topbar' | 'newProduct' | product-object
+   if (isAuthed) { handleAuthSuccess(intent); return }
+   setPwIntent(intent); setPwValue(''); setPwError(''); setPwShow(false); setPwOpen(true)
+   setTimeout(() => pwRef.current?.focus(), 100)
+ }, [isAuthed]) // eslint-disable-line
+ 
+ const handleAuthSuccess = useCallback((intent) => {
+   setIsAuthed(true)
+   if (intent === 'topbar') { setEditMode(true) }
+   else if (intent === 'newProduct') { openNewProduct() }
+   else if (intent && typeof intent === 'object') { openEdit(intent) }
+ }, []) // eslint-disable-line
+ 
+ const submitPassword = () => {
+   if (pwValue === EDIT_PASSWORD) {
+     setPwOpen(false)
+     handleAuthSuccess(pwIntent)
+   } else {
+     setPwError('Incorrect password. Try again.')
+     setPwValue('')
+     setTimeout(() => pwRef.current?.focus(), 50)
+   }
+ }
+ 
+ const exitEdit = () => { setEditMode(false) }
+ 
+ // ── EDIT HELPERS ──
+ const openEdit = (p) => {
+   setEditTarget(p)
+   setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
+   setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+   setEditOpen(true)
+ }
+ const openNewProduct = () => {
+   setEditTarget(null)
+   setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
+   setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
+   setEditOpen(true)
+ }
+ 
+ const saveProduct = async () => {
+   if (!ef.name.trim()) { alert('Product name is required.'); return }
+   const srp = parseFloat(ef.srp)
+   if (!srp || srp <= 0) { alert('Valid price is required.'); return }
+ 
+   const normalizedColors = (ef.colors || []).map(c => normalizeColorVariant(c))
+   const normalizedImages = normalizeProductImages(ef.images || [])
+   const temporaryImages = normalizedImages.filter(img => String(img?.src || '').startsWith('data:'))
+   const cleanedImages = normalizedImages.filter(img => !String(img?.src || '').startsWith('data:'))
+ 
+   if (temporaryImages.length) {
+     setUploadErr(`${temporaryImages.length} failed preview image${temporaryImages.length === 1 ? '' : 's'} removed before saving. Please re-upload those images after saving.`)
+     setEf(f => ({ ...f, images: cleanedImages }))
+   }
+ 
+   const data = stripEmbeddedDataImagesFromProduct({
+     ...ef,
+     colors: normalizedColors,
+     images: cleanedImages,
+     srp,
+     packing: parseInt(ef.packing) || 0,
+     dimensions: ef.dimensions,
+     barcode: ef.barcode||'',
+     barcodeImage: ef.barcodeImage||'',
+     qrCode: ef.qrCode||'',
+     qrImage: ef.qrImage||'',
+     youtube: ef.youtube||''
+   })
+ 
+   try {
+     if (editTarget) {
+       const saved = { ...editTarget, ...data, updatedAt: new Date().toISOString() }
+       const updated = products.map(p => p.id === editTarget.id ? saved : p)
+       setProducts(updated)
+       await apiSaveProduct(editTarget.id, saved)
+       setEditOpen(false)
+       setViewProduct(saved)
+       setVmImg(0)
+       setVmColorKey('')
+       setYtPlaying(false)
+     } else {
+       const saved = { ...data, id: 'p' + Date.now(), sortOrder: products.length, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+       setProducts([...products, saved])
+       await apiCreateProduct(saved)
+       setEditOpen(false)
+     }
+   } catch (err) {
+     console.error(err)
+     alert('Could not save this product. Please check the API route or internet connection, then try again.')
+   }
+ }
+ 
+ const deleteProduct = async (id) => {
+   if (!confirm('Delete this product? This cannot be undone.')) return
+   setProducts(products.filter(p => p.id !== id))
+   setEditOpen(false); setViewProduct(null)
+   await fetch('/api/products/' + id, { method: 'DELETE' }).catch(console.error)
+ }
+ 
+ const moveProductOrder = useCallback((fromId, toId) => {
+   if (!editMode || sort !== 'default' || !fromId || !toId || fromId === toId) return
+   setProducts(prev => {
+     const fromIndex = prev.findIndex(p => p.id === fromId)
+     const toIndex = prev.findIndex(p => p.id === toId)
+     if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return prev
+ 
+     const next = [...prev]
+     const [moved] = next.splice(fromIndex, 1)
+     next.splice(toIndex, 0, moved)
+ 
+     const reordered = next.map((p, index) => ({
+       ...p,
+       sortOrder: index,
+       updatedAt: new Date().toISOString()
+     }))
+ 
+     // Persist the manual order so it stays after refresh/redeploy.
+     reordered.forEach(p => apiSaveProduct(p.id, p))
+     return reordered
+   })
+ }, [editMode, sort, apiSaveProduct])
+ 
+ // Badges
+ const addBadge = () => { const b = badgeInput.trim(); if (b && !ef.badges.includes(b)) { setEf(f=>({...f,badges:[...f.badges,b]})); setBadgeInput('') } }
+ const removeBadge = (b) => setEf(f=>({...f,badges:f.badges.filter(x=>x!==b)}))
+ 
+ // Colors
+ const addColor = () => {
+   const { name, code, sku } = newColor
+   const hexes = getColorHexes(newColor)
+   if (!name || !code || !sku) { alert('Name, code, and SKU required.'); return }
+   setEf(f=>({...f,colors:[...f.colors,normalizeColorVariant({name,code:code.toUpperCase(),hex:hexes[0]||'#B9DCD2',hexes,collection:newColor.collection||'OG',sku:sku.toUpperCase()})]}))
+   setNewColor({ name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:'' })
+ }
+ const removeColor = (i) => setEf(f=>({...f,colors:f.colors.filter((_,j)=>j!==i)}))
+ const moveColor = (from, to) => setEf(f=>{
+   if (to < 0 || to >= f.colors.length || from === to) return f
+   const colors = [...f.colors]
+   const [moved] = colors.splice(from, 1)
+   colors.splice(to, 0, moved)
+   return {...f, colors}
+ })
+ const updateColor = (i,k,v) => setEf(f=>({...f,colors:f.colors.map((c,j)=>j===i?normalizeColorVariant({...c,[k]:k==='sku'||k==='code'?v.toUpperCase():v}):c)}))
+ const updateColorHex = (i, hexIndex, value) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+   if (j !== i) return c
+   const hexValue = normalizeHexValue(value, getColorHexes(c)[hexIndex] || '#B9DCD2')
+   const hexes = getColorHexes(c).map((h,idx)=>idx===hexIndex?hexValue:h)
+   return normalizeColorVariant({...c,hex:hexes[0],hexes})
+ })}))
+ const pasteColorHex = (i, hexIndex, value) => {
+   const parsed = extractHexValues(value)
+   if (!parsed.length) return
+   setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+     if (j !== i) return c
+     const current = getColorHexes(c)
+     const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
+     return normalizeColorVariant({...c,hex:hexes[0],hexes})
+   })}))
+ }
+ const addColorHex = (i) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+   if (j !== i) return c
+   const hexes = [...getColorHexes(c), '#B9DCD2']
+   return normalizeColorVariant({...c,hex:hexes[0],hexes})
+ })}))
+ const removeColorHex = (i, hexIndex) => setEf(f=>({...f,colors:f.colors.map((c,j)=>{
+   if (j !== i) return c
+   const hexes = getColorHexes(c).filter((_,idx)=>idx!==hexIndex)
+   return normalizeColorVariant({...c,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
+ })}))
+ const updateNewColorHex = (hexIndex, value) => setNewColor(n=>{
+   const hexValue = normalizeHexValue(value, getColorHexes(n)[hexIndex] || '#B9DCD2')
+   const hexes = getColorHexes(n).map((h,idx)=>idx===hexIndex?hexValue:h)
+   return normalizeColorVariant({...n,hex:hexes[0],hexes})
+ })
+ const pasteNewColorHex = (hexIndex, value) => {
+   const parsed = extractHexValues(value)
+   if (!parsed.length) return
+   setNewColor(n=>{
+     const current = getColorHexes(n)
+     const hexes = parsed.length > 1 ? parsed : current.map((h,idx)=>idx===hexIndex?parsed[0]:h)
+     return normalizeColorVariant({...n,hex:hexes[0],hexes})
+   })
+ }
+ const addNewColorHex = () => setNewColor(n=>{
+   const hexes = [...getColorHexes(n), '#B9DCD2']
+   return normalizeColorVariant({...n,hex:hexes[0],hexes})
+ })
+ const removeNewColorHex = (hexIndex) => setNewColor(n=>{
+   const hexes = getColorHexes(n).filter((_,idx)=>idx!==hexIndex)
+   return normalizeColorVariant({...n,hex:hexes[0]||'#B9DCD2',hexes:hexes.length?hexes:['#B9DCD2']})
+ })
+ 
+ const updateCollection = (value, patch) => {
+   const next = colorCollections.map(c=>c.value===value?{...c,...patch}:c)
+   saveColorCollections(next)
+ }
+ const addCollection = () => {
+   const label = newCollection.label.trim()
+   if (!label) return
+   const value = label.replace(/\s+/g,' ').trim()
+   if (colorCollections.some(c=>c.value.toLowerCase()===value.toLowerCase())) return
+   saveColorCollections([...colorCollections,{value,label,color:newCollection.color||'#279989'}])
+   setNewCollection({label:'',color:'#279989'})
+ }
+ 
+ const collectionSetCount = (value) => (colorCollectionSets[value] || []).length
+ 
+ const colorWithCurrentSkuBase = (color, skuBase) => {
+   const code = String(color.code || '').toUpperCase().replace(/\s+/g, '')
+   const hexes = getColorHexes(color)
+   return normalizeColorVariant({
+     ...color,
+     code,
+     hex: hexes[0] || color.hex || '#B9DCD2',
+     hexes,
+     sku: skuBase && code ? `${skuBase}-${code}` : String(color.sku || '').toUpperCase(),
+     collection: color.collection || 'Other'
+   })
+ }
+ 
+ const addCollectionSetToProduct = (collectionValue) => {
+   const set = colorCollectionSets[collectionValue] || []
+   if (!set.length) {
+     alert('No saved colors yet for this collection. Add colors to a product, assign them to this collection, then click Save Set.')
+     return
+   }
+   const skuBase = getEditableSkuBase()
+   if (!skuBase) {
+     alert('Please add or edit the SKU Base in the Details tab first, then try again.')
+     return
+   }
+   setEf(f => {
+     const existing = new Set((f.colors || []).map(c => String(c.code || '').toUpperCase()))
+     const additions = set
+       .map(c => colorWithCurrentSkuBase({ ...c, collection: collectionValue }, skuBase))
+       .filter(c => c.code && !existing.has(c.code))
+     if (!additions.length) return f
+     return { ...f, colors: [...f.colors, ...additions] }
+   })
+ }
+ 
+ const saveCollectionSetFromCurrentProduct = (collectionValue) => {
+   const variants = (ef.colors || [])
+     .filter(c => (c.collection || defaultColorCollection(c)) === collectionValue)
+     .map(c => {
+       const hexes = getColorHexes(c)
+       return normalizeColorVariant({
+         name: c.name,
+         code: String(c.code || '').toUpperCase(),
+         hex: hexes[0] || '#B9DCD2',
+         hexes,
+         collection: collectionValue
+       })
+     })
+     .filter(c => c.name && c.code)
+ 
+   if (!variants.length) {
+     alert('No color variants are assigned to this collection yet.')
+     return
+   }
+   saveColorCollectionSets({ ...colorCollectionSets, [collectionValue]: variants })
+   alert('Color collection set saved. You can now quick-add it to other products.')
+ }
+ 
+ 
+ const openCollectionSetEditor = (collectionValue) => {
+   const saved = colorCollectionSets[collectionValue] || DEFAULT_COLOR_COLLECTION_SETS[collectionValue] || []
+   setEditingCollectionSet(collectionValue)
+   setCollectionSetDraft(saved.map(c => normalizeColorVariant({ ...c, collection: collectionValue })))
+   setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
+ }
+ 
+ const closeCollectionSetEditor = () => {
+   setEditingCollectionSet('')
+   setCollectionSetDraft([])
+   setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
+ }
+ 
+ const updateCollectionSetDraft = (index, patch) => {
+   setCollectionSetDraft(list => list.map((item, idx) => {
+     if (idx !== index) return item
+     const next = { ...item, ...patch }
+     if (patch.hexes) next.hex = patch.hexes[0] || next.hex || '#B9DCD2'
+     if (patch.hex) next.hexes = [patch.hex]
+     return normalizeColorVariant({ ...next, collection: editingCollectionSet })
+   }))
+ }
+ 
+ const updateCollectionSetDraftHexes = (index, value) => {
+   const hexes = extractHexValues(value)
+   updateCollectionSetDraft(index, { hexes: hexes.length ? hexes : ['#B9DCD2'] })
+ }
+ 
+ const removeCollectionSetDraftColor = (index) => {
+   setCollectionSetDraft(list => list.filter((_, idx) => idx !== index))
+ }
+ 
+ const moveCollectionSetDraftColor = (fromIndex, toIndex) => {
+   setCollectionSetDraft(list => {
+     if (toIndex < 0 || toIndex >= list.length || fromIndex === toIndex) return list
+     const next = [...list]
+     const [moved] = next.splice(fromIndex, 1)
+     next.splice(toIndex, 0, moved)
+     return next
+   })
+ }
+ 
+ const addCollectionSetDraftColor = () => {
+   const name = newCollectionSetColor.name.trim()
+   const code = newCollectionSetColor.code.trim().toUpperCase()
+   const hexes = extractHexValues(newCollectionSetColor.hex)
+   if (!name || !code) return
+   setCollectionSetDraft(list => [
+     ...list,
+     normalizeColorVariant({ name, code, hex: hexes[0] || '#B9DCD2', hexes: hexes.length ? hexes : ['#B9DCD2'], collection: editingCollectionSet })
+   ])
+   setNewCollectionSetColor({ name:'', code:'', hex:'#B9DCD2' })
+ }
+ 
+ const saveCollectionSetDraft = () => {
+   if (!editingCollectionSet) return
+   const cleaned = collectionSetDraft
+     .map(c => normalizeColorVariant({ ...c, code: String(c.code || '').toUpperCase(), collection: editingCollectionSet }))
+     .filter(c => c.name && c.code)
+   if (!cleaned.length) {
+     alert('Please add at least one color before saving this collection set.')
+     return
+   }
+   saveColorCollectionSets({ ...colorCollectionSets, [editingCollectionSet]: cleaned })
+   closeCollectionSetEditor()
+ }
+ 
+ // SKU Base — bulk-edit all color variant SKUs from Details tab
+ const getEditableSkuBase = () => {
+   const first = ef.colors?.[0]
+   if (!first?.sku) return ''
+   const sku = String(first.sku).toUpperCase()
+   const code = String(first.code || '').toUpperCase()
+   if (code && sku.endsWith(`-${code}`)) return sku.slice(0, -(code.length + 1))
+   return sku.split('-').slice(0, -1).join('-') || sku
+ }
+ 
+ const updateAllColorSkusFromBase = (base) => {
+   const cleaned = base.toUpperCase().replace(/\s+/g, '')
+   setEf(f => ({
+     ...f,
+     colors: f.colors.map(c => {
+       const code = String(c.code || '').toUpperCase().replace(/\s+/g, '')
+       return { ...c, code, sku: code ? `${cleaned}-${code}` : cleaned }
+     })
+   }))
+ }
+ 
+ // Images
+ const handleImgUpload = async (e) => {
+   const file = e.target.files[0]; if (!file) return
+   if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { setUploadErr('Invalid file type. Use JPG, PNG, WebP, or GIF.'); e.target.value = ''; return }
+   if (file.size > 25*1024*1024) { setUploadErr('File too large. Max 25MB before compression.'); e.target.value = ''; return }
+   setUploadErr('Compressing and uploading image...')
+   try {
+     const url = await uploadImageToBlob(file)
+     setEf(f=>({...f,images:[...normalizeProductImages(f.images),{src:url,colorSku:'',colorCode:'',colorName:''}]}))
+     setUploadErr('')
+   } catch (err) {
+     console.error(err)
+     setUploadErr(err?.message || 'Upload failed. Please try again.')
+   }
+   e.target.value = ''
+ }
+ 
+ const uploadFilesForColor = async (fileList, color) => {
+   const files = Array.from(fileList || [])
+   if (!files.length || !color) return
+ 
+   const allowed = ['image/jpeg','image/png','image/webp','image/gif']
+   const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
+ 
+   if (!validFiles.length) {
+     setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
+     return
+   }
+ 
+   let skipped = files.length - validFiles.length
+   let failed = 0
+   const uploaded = []
+ 
+   setUploadErr(`Compressing and uploading ${validFiles.length} image${validFiles.length === 1 ? '' : 's'}...`)
+ 
+   // Upload sequentially. This is more reliable than firing many /api/upload requests at once.
+   for (const file of validFiles) {
+     try {
+       const url = await uploadImageToBlob(file)
+       uploaded.push({ src: url, colorSku: color.sku || '', colorCode: color.code || '', colorName: color.name || '' })
+     } catch (err) {
+       failed += 1
+       console.error('Color image upload failed:', err)
+     }
+   }
+ 
+   if (uploaded.length) {
+     setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
+   }
+ 
+   if (failed || skipped) {
+     setUploadErr(`${uploaded.length} image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
+   } else {
+     setUploadErr('')
+   }
+ }
+ 
+ const uploadFilesGeneral = async (fileList) => {
+   const files = Array.from(fileList || [])
+   if (!files.length) return
+ 
+   const allowed = ['image/jpeg','image/png','image/webp','image/gif']
+   const validFiles = files.filter(file => allowed.includes(file.type) && file.size <= 25*1024*1024)
+ 
+   if (!validFiles.length) {
+     setUploadErr('Invalid file type or file too large. Use JPG, PNG, WebP, or GIF up to 25MB each. JPG/PNG/WebP will be compressed to JPG before upload.')
+     return
+   }
+ 
+   let skipped = files.length - validFiles.length
+   let failed = 0
+   const uploaded = []
+ 
+   setUploadErr(`Compressing and uploading ${validFiles.length} general image${validFiles.length === 1 ? '' : 's'}...`)
+ 
+   for (const file of validFiles) {
+     try {
+       const url = await uploadImageToBlob(file)
+       uploaded.push({ src: url, colorSku: '', colorCode: '', colorName: '' })
+     } catch (err) {
+       failed += 1
+       console.error('General image upload failed:', err)
+     }
+   }
+ 
+   if (uploaded.length) {
+     setEf(f => ({ ...f, images: [...normalizeProductImages(f.images), ...uploaded] }))
+   }
+ 
+   if (failed || skipped) {
+     setUploadErr(`${uploaded.length} general image${uploaded.length === 1 ? '' : 's'} uploaded. ${failed ? `${failed} failed. ` : ''}${skipped ? `${skipped} skipped due to file type/size. ` : ''}Please try failed images again.`)
+   } else {
+     setUploadErr('')
+   }
+ }
+ 
+ const setMainImage = (index) => {
+   setEf(f => {
+     const imgs = [...normalizeProductImages(f.images)]
+     if (index <= 0 || index >= imgs.length) return { ...f, images: imgs }
+     const [item] = imgs.splice(index, 1)
+     imgs.unshift(item)
+     return { ...f, images: imgs }
+   })
+ }
+ 
+ const getTemporaryImageCount = useCallback(() => {
+   return normalizeProductImages(ef.images || []).filter(img => String(img?.src || '').startsWith('data:')).length
+ }, [ef.images])
+ 
+ const removeTemporaryImages = useCallback(() => {
+   const current = normalizeProductImages(ef.images || [])
+   const cleaned = current.filter(img => !String(img?.src || '').startsWith('data:'))
+   const removed = current.length - cleaned.length
+   setEf(f => ({ ...f, images: cleaned }))
+   setUploadErr(removed ? `Removed ${removed} failed preview image${removed === 1 ? '' : 's'}. You can now re-upload them.` : '')
+ }, [ef.images])
+ 
+ const removeImg = (i) => setEf(f=>({...f,images:normalizeProductImages(f.images).filter((_,j)=>j!==i)}))
+ const moveImg = (from, to, position = 'before') => {
+   setEf(f => {
+     const imgs = [...normalizeProductImages(f.images)]
+     if (from < 0 || to < 0 || from >= imgs.length || to >= imgs.length) return { ...f, images: imgs }
+     let insertIndex = position === 'after' ? to + 1 : to
+     if (from < insertIndex) insertIndex -= 1
+     if (from === insertIndex) return { ...f, images: imgs }
+     const [item] = imgs.splice(from, 1)
+     imgs.splice(insertIndex, 0, item)
+     return { ...f, images: imgs }
+   })
+ }
+ 
+ const clearImageDropGuide = () => {
+   setDragOverImageIndex(null)
+   setDragOverImagePosition('before')
+ }
+ 
+ const handleImageDragStart = (e, index) => {
+   setDragImageIndex(index)
+   clearImageDropGuide()
+   e.dataTransfer.effectAllowed = 'move'
+   e.dataTransfer.setData('text/plain', String(index))
+ }
+ 
+ const handleImageDragOver = (e, index) => {
+   e.preventDefault()
+   e.dataTransfer.dropEffect = 'move'
+   if (dragImageIndex === null || dragImageIndex === index) {
+     clearImageDropGuide()
+     return
+   }
+   const rect = e.currentTarget.getBoundingClientRect()
+   const position = e.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
+   setDragOverImageIndex(index)
+   setDragOverImagePosition(position)
+ }
+ 
+ const handleImageDrop = (e, toIndex) => {
+   e.preventDefault()
+   const fromRaw = dragImageIndex ?? Number(e.dataTransfer.getData('text/plain'))
+   const fromIndex = Number(fromRaw)
+   if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex, dragOverImagePosition)
+   setDragImageIndex(null)
+   touchImageDragIndexRef.current = null
+   clearImageDropGuide()
+ }
+ 
+ const findImageThumbFromPoint = (x, y) => {
+   if (typeof document === 'undefined') return null
+   const el = document.elementFromPoint(x, y)?.closest?.('[data-img-index]')
+   return el || null
+ }
+ 
+ const handleImageTouchStart = (e, index) => {
+   if (e.target?.closest?.('button,label,input,select')) return
+   touchImageDragIndexRef.current = index
+   setDragImageIndex(index)
+   clearImageDropGuide()
+ }
+ 
+ const handleImageTouchMove = (e) => {
+   const fromIndex = touchImageDragIndexRef.current
+   if (fromIndex === null || fromIndex === undefined) return
+   const touch = e.touches?.[0]
+   if (!touch) return
+   const target = findImageThumbFromPoint(touch.clientX, touch.clientY)
+   if (!target) return
+   const toIndex = Number(target.dataset.imgIndex)
+   if (!Number.isFinite(toIndex) || toIndex === fromIndex) {
+     clearImageDropGuide()
+     return
+   }
+   e.preventDefault()
+   const rect = target.getBoundingClientRect()
+   const position = touch.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
+   setDragOverImageIndex(toIndex)
+   setDragOverImagePosition(position)
+ }
+ 
+ const handleImageTouchEnd = () => {
+   const fromIndex = touchImageDragIndexRef.current
+   if (fromIndex !== null && fromIndex !== undefined && dragOverImageIndex !== null && Number.isFinite(Number(dragOverImageIndex))) {
+     moveImg(Number(fromIndex), Number(dragOverImageIndex), dragOverImagePosition)
+   }
+   touchImageDragIndexRef.current = null
+   setDragImageIndex(null)
+   clearImageDropGuide()
+ }
+ 
+ const assignImageColor = (index, colorSku) => {
+   setEf(f => {
+     const selectedColor = (f.colors || []).find(c => c.sku === colorSku)
+     const nextImages = normalizeProductImages(f.images).map((img, i) => {
+       if (i !== index) return img
+       return {
+         ...img,
+         colorSku: selectedColor?.sku || '',
+         colorCode: selectedColor?.code || '',
+         colorName: selectedColor?.name || '',
+       }
+     })
+     return { ...f, images: nextImages }
+   })
+ }
+ 
+ 
+ 
+ // ── QUENCHABLES BUILDER ──
+ const quenchCollectionMeta = useMemo(() => {
+   return colorCollections.find(c => c.value === quenchCollection) || DEFAULT_COLOR_COLLECTIONS.find(c => c.value === quenchCollection) || { value: quenchCollection, label: quenchCollection, color: 'var(--tl)' }
+ }, [colorCollections, quenchCollection])
+ 
+ const getQuenchColors = useCallback((product, collection = quenchCollection) => {
+   return (product?.colors || []).filter(color => defaultColorCollection(color) === collection)
+ }, [quenchCollection])
+ 
+ const quenchAvailableColors = useMemo(() => {
+   return colorCollectionSets?.[quenchCollection] || []
+ }, [colorCollectionSets, quenchCollection])
+ 
+ const quenchProducts = useMemo(() => {
+   return products.filter(product => getQuenchColors(product).length > 0)
+ }, [products, getQuenchColors])
+ 
+ const quenchProductsByCat = useMemo(() => {
+   return quenchProducts.filter(product => product.cat === quenchCat)
+ }, [quenchProducts, quenchCat])
+ 
+ const quenchTotals = useMemo(() => {
+   const totalPacks = quenchItems.reduce((sum, item) => sum + Number(item.packs || 0), 0)
+   const totalUnits = quenchItems.reduce((sum, item) => sum + Number(item.units || 0), 0)
+   const totalSrp = quenchItems.reduce((sum, item) => sum + (Number(item.srp || 0) * Number(item.units || 0)), 0)
+   return { totalPacks, totalUnits, totalSrp }
+ }, [quenchItems])
+ 
+ const selectedQuenchSkuSet = useMemo(() => {
+   return new Set(quenchItems.map(item => item.sku).filter(Boolean))
+ }, [quenchItems])
+ 
+ const startQuenchables = useCallback((collection = quenchCollection) => {
+   setQuenchCollection(collection)
+   setQuenchStep('collection')
+   setQuenchOpen(true)
+ }, [quenchCollection])
+ 
+ const addQuenchItem = useCallback((product) => {
+   const colors = getQuenchColors(product)
+   if (!colors.length) return
+   const selectedSku = quenchColor[product.id] || colors[0].sku
+   const selectedColor = colors.find(c => c.sku === selectedSku) || colors[0]
+   const packs = Math.max(1, Number(quenchQty[product.id] || 1))
+   const packing = Number(product.packing || 1)
+   const units = packs * packing
+ 
+   setQuenchItems(items => {
+     const alreadySelected = items.some(item => item.sku === selectedColor.sku)
+     if (alreadySelected) return items
+     return [
+       ...items,
+       {
+         id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
+         productId: product.id,
+         productName: product.name,
+         colorName: selectedColor.name,
+         colorCode: selectedColor.code,
+         sku: selectedColor.sku,
+         packs,
+         packing,
+         units,
+         srp: Number(product.srp || 0),
+       }
+     ]
+   })
+   setQuenchStep('review')
+ }, [getQuenchColors, quenchColor, quenchQty])
+ 
+ const removeQuenchItem = useCallback((id) => {
+   setQuenchItems(items => items.filter(item => item.id !== id))
+ }, [])
+ 
+ const buildQuenchablesHref = useCallback(() => {
+   const collectionLabel = quenchCollectionMeta.label || quenchCollection
+   const subject = `Quenchables Inquiry - ${collectionLabel} Set`
+   const lines = [
+     'Hi Quencha Team,',
+     '',
+     'I would like to inquire about this Quenchables set:',
+     '',
+     `Collection: ${collectionLabel}`,
+     '',
+     'Items:',
+     ...quenchItems.flatMap((item, index) => [
+       `${index + 1}. ${item.productName}`,
+       `   Color: ${item.colorName}`,
+       `   SKU: ${item.sku}`,
+       `   Packs/Cartons: ${item.packs}`,
+       `   Packing: ${item.packing} pcs/carton`,
+       `   Estimated Units: ${item.units} pcs`,
+       `   SRP: ₱${Number(item.srp || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+       '',
+     ]),
+     `Total Packs/Cartons: ${quenchTotals.totalPacks}`,
+     `Estimated Total Units: ${quenchTotals.totalUnits} pcs`,
+     `Estimated SRP Total: ₱${quenchTotals.totalSrp.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+     '',
+     quenchMessage ? `Notes: ${quenchMessage}` : 'Notes:',
+     '',
+     'Thank you.'
+   ]
+   return `mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
+ }, [quenchCollection, quenchCollectionMeta, quenchItems, quenchMessage, quenchTotals])
+ 
+ // ── FILTERED ──
+ const filtered = useMemo(() => {
+   let list = products.map((p, index) => ({
+     ...p,
+     __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
+   }))
+   if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
+   if (filterCat) list = list.filter(p => p.cat === filterCat)
+   if (filterColorCollection !== 'all') {
+     list = list.filter(p => (p.colors || []).some(c => defaultColorCollection(c) === filterColorCollection))
+   }
+   if (filterPMin !== null) list = list.filter(p => p.srp >= filterPMin)
+   if (filterPMax !== null) list = list.filter(p => p.srp <= filterPMax)
+   if (search) {
+     const q = search.toLowerCase()
+     list = list.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.colors.some(c => c.sku.toLowerCase().includes(q)))
+   }
+   if (sort === 'default') list.sort((a,b) => a.__manualIndex - b.__manualIndex)
+   if (sort === 'price-asc') list.sort((a,b) => a.srp - b.srp)
+   if (sort === 'price-desc') list.sort((a,b) => b.srp - a.srp)
+   if (sort === 'name-asc') list.sort((a,b) => a.name.localeCompare(b.name))
+   if (sort === 'sku-asc') list.sort((a,b) => getFirstSku(a).localeCompare(getFirstSku(b)))
+   if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
+   return list
+ }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
+ 
+ const counts = useMemo(() => {
+   const ext = { all: products.length }, cat = {}, collection = { all: products.length }
+   products.forEach(p => {
+     ext[p.ext] = (ext[p.ext]||0)+1
+     cat[p.cat] = (cat[p.cat]||0)+1
+ 
+     const productCollections = new Set((p.colors || []).map(c => defaultColorCollection(c)).filter(Boolean))
+     productCollections.forEach(col => {
+       collection[col] = (collection[col] || 0) + 1
+     })
+   })
+   return { ext, cat, collection }
+ }, [products])
+ 
+ const grouped = useMemo(() => {
+   const g = {}
+   filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; if(!g[p.ext][p.cat])g[p.ext][p.cat]=[]; g[p.ext][p.cat].push(p) })
+   return g
+ }, [filtered])
+ 
+ // ── SIDEBAR ──
+ const SidebarContent = ({ closeOnSelect = false } = {}) => {
+   const closeMobileSidebar = () => {
+     if (!closeOnSelect) return
+     setShowMobileFilter(false)
+     window.setTimeout(() => {
+       focusSearchResults()
+     }, 180)
+   }
+   return (
+   <>
+     <div className="sb-hero">
+       <div className="sb-hl">Catalog</div>
+       <div className="sb-total">{products.length}</div>
+       <div className="sb-sub">products</div>
+     </div>
+     <div className="sb-sec">
+       <span className="sb-lbl">Extension</span>
+       <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterExt('all'); closeMobileSidebar()}}>
+         <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Products</span><span className="fb-cnt">{counts.ext['all']||0}</span>
+       </button>
+       {exts.map(o=>(
+         <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>{setFilterExt(o.value); closeMobileSidebar()}}>
+           <span className="fb-dot" style={{background:o.color}}/><span className="fb-lbl">{o.label}</span><span className="fb-cnt">{counts.ext[o.value]||0}</span>
+         </button>
+       ))}
+       {editMode && <button className="fb" style={{borderLeftColor:'transparent',opacity:.7}} onClick={()=>{setExtMgrOpen(true); closeMobileSidebar()}}><span className="fb-ico">⚙️</span><span className="fb-lbl">Manage Extensions</span></button>}
+     </div>
+     <hr className="sb-div"/>
+     <div className="sb-sec">
+       <span className="sb-lbl">Category Filter</span>
+       <div className="filter-pill-wrap">
+         {cats.map(c=>(
+           <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
+             <span className="filter-pill-l"><span className="filter-pill-ico">{c.icon}</span><span className="filter-pill-label">{c.label}</span></span>
+             <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
+           </button>
+         ))}
+         {editMode && <button className="filter-pill manage-pill" onClick={()=>{setCatMgrOpen(true); closeMobileSidebar()}}><span>⚙️ Manage Categories</span></button>}
+       </div>
+     </div>
+     <hr className="sb-div"/>
+     <div className="sb-sec">
+       <span className="sb-lbl">Color Collection Filter</span>
+       <div className="filter-pill-wrap">
+         <button className={`filter-pill full ${filterColorCollection==='all'?'on':''}`} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
+           <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:'var(--cy)'}}/><span className="filter-pill-label">All Collections</span></span>
+           <span className="filter-pill-count">{counts.collection?.all||0}</span>
+         </button>
+         {colorCollections.map(col=>(
+           <button key={col.value} className={`filter-pill ${filterColorCollection===col.value?'on':''}`} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
+             <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:col.color||'var(--tl)'}}/><span className="filter-pill-label">{col.label}</span></span>
+             <span className="filter-pill-count">{counts.collection?.[col.value]||0}</span>
+           </button>
+         ))}
+       </div>
+     </div>
+     <hr className="sb-div"/>
+     <div className="sb-sec">
+       <span className="sb-lbl">Price Range</span>
+       <div className="pc-wrap">
+         {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
+           const on = filterPMin===o.mn && filterPMax===o.mx
+           return <button key={o.l} className={`pc ${on?'on':''}`} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
+         })}
+       </div>
+     </div>
+     {(filterExt!=='all'||filterCat||filterColorCollection!=='all'||filterPMin!==null) && (
+       <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
+     )}
+   </>
+   )
+ }
+ 
+ // ── PRODUCT CARD ──
+ const Card = ({ p }) => {
+   const mainImg = getImageSrc(p.images?.[0])
+   const colors = p.colors.slice(0, 6)
+   const extra = p.colors.length > 6 ? p.colors.length - 6 : 0
+   const extEntry = exts.find(x=>x.value===p.ext)
+   const extColor = extEntry?.color || EXT_COLORS[p.ext] || 'var(--gr)'
+   const showExtTag = !!p.ext && p.ext !== 'core'
+   return (
+     <div
+       ref={el => { if (el) productCardRefs.current[p.id] = el; else delete productCardRefs.current[p.id] }}
+       className={`pcard ${editMode?'em':''} ${dragProductId===p.id?'dragging':''}`}
+       draggable={editMode && sort === 'default'}
+       onDragStart={editMode && sort === 'default' ? (e) => {
+         setDragProductId(p.id)
+         e.dataTransfer.effectAllowed = 'move'
+         e.dataTransfer.setData('text/plain', p.id)
+       } : undefined}
+       onDragOver={editMode && sort === 'default' ? (e) => {
+         e.preventDefault()
+         e.dataTransfer.dropEffect = 'move'
+       } : undefined}
+       onDrop={editMode && sort === 'default' ? (e) => {
+         e.preventDefault()
+         const fromId = e.dataTransfer.getData('text/plain') || dragProductId
+         moveProductOrder(fromId, p.id)
+         setDragProductId(null)
+       } : undefined}
+       onDragEnd={() => setDragProductId(null)}
+       onClick={editMode ? undefined : () => openProductModal(p)}
+     >
+       {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
+ 
+       <div className="c-img-wrap">
+         {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
+         {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
+       </div>
+ 
+       <div className="c-body">
+         <div className="c-name">{p.name}</div>
+         {getSkuBase(p) && (
+           <span className="c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
+             {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
+           </span>
+         )}
+         <div className="c-desc">{p.desc}</div>
+         <div className="c-badges">{p.badges.slice(0,3).map(b=><span key={b} className="c-badge">{b}</span>)}</div>
+         <div className="c-colors">
+           {colors.map(c=><span key={c.code} className="c-dot" style={{background:swatchBackground(c)}} title={getColorHexes(c).length > 1 ? `${c.name} (${getColorHexes(c).length} colors)` : c.name}/>) }
+           {extra > 0 && <span className="c-more">+{extra}</span>}
+         </div>
+         {/* Footer: SRP and Packing same font/size */}
+         <div className="c-foot">
+           <div className="c-stats">
+             <div className="c-stat">
+               <div className="c-stat-val">₱{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
+               <div className="c-stat-lbl">SRP</div>
+             </div>
+             <div className="c-stat-divider"/>
+             <div className="c-stat">
+               <div className="c-stat-val">{p.packing}</div>
+               <div className="c-stat-lbl">Pack</div>
+             </div>
+           </div>
+         </div>
+ 
+       </div>
+     </div>
+   )
+ }
+ 
+ // ── RENDER ──
+ const vp = viewProduct ? { youtube: '', ...(products.find(p => p.id === viewProduct.id) || viewProduct) } : null
+ const vpImages = vp ? normalizeProductImages(vp.images || []) : []
+ const generalVmImages = vpImages.filter(isGeneralImage)
+ const activeVmColor = vp && vmColorKey
+   ? (vp.colors || []).find(color => getColorKey(color) === vmColorKey)
+   : null
+ const activeVmColorKey = activeVmColor ? getColorKey(activeVmColor) : ''
+ const filteredVmImages = activeVmColor ? vpImages.filter(img => imageMatchesColor(img, activeVmColor)) : []
+ const visibleVmImages = activeVmColor ? filteredVmImages : generalVmImages
+ const safeVmImg = visibleVmImages.length ? Math.min(vmImg, visibleVmImages.length - 1) : 0
+ return (
+   <div>
+     {/* TOPBAR */}
+     <header className={`qnh-topbar ${editMode?'edit-on':''}`}>
+       <button className="tb-menu-btn" onClick={()=>setShowMobileFilter(true)} title="Open filters">☰</button>
+       <a
+         className="tb-brand"
+         href="#"
+         onClick={(e)=>{ if(editMode){ e.preventDefault(); setBrandEditOpen(true) } }}
+         title={editMode ? 'Edit brand logo and topbar text' : (brandName || brandTagline || 'Brand')}
+       >
+         {brandLogo ? <img className="tb-logo" src={brandLogo} alt={brandName || 'Brand logo'}/> : (editMode ? <span className="tb-logo-placeholder">+</span> : null)}
+         {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
+         {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
+         {editMode && <span className="tb-brand-edit">Edit</span>}
+       </a>
+       <div className="tb-search-wrap">
+         <input
+           ref={searchInputRef}
+           className="tb-search"
+           value={search}
+           onChange={e=>setSearch(e.target.value)}
+           onKeyDown={e=>{ if(e.key==='Enter') runSearch() }}
+           placeholder="Search products, SKUs…"
+         />
+         {search && <button className="tb-clear" onClick={()=>{setSearch(''); searchInputRef.current?.focus()}} title="Clear search">✕</button>}
+         <button className="tb-search-btn" onClick={runSearch} title="Search and go to results" aria-label="Search and go to results">
+           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.4"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+         </button>
+       </div>
+       <div className="tb-actions">
+         {/* Edit mode — secondary, subtle */}
+         <button className={`tb-edit-btn ${editMode?'on':''}`} onClick={editMode ? exitEdit : ()=>requestAuth('topbar')} title={editMode ? 'Save & Exit' : 'Edit Mode'}>
+           {editMode ? <span style={{fontSize:14,fontWeight:900,lineHeight:1}}>✕</span> : <PencilIcon/>}
+           <span className="tb-edit-tooltip">{editMode ? 'Save & Exit' : 'Edit Mode'}</span>
+         </button>
+       </div>
+     </header>
+ 
+     {/* LAYOUT */}
+     <div className="qnh-layout">
+       <aside className="qnh-sidebar"><SidebarContent/></aside>
+       <main className="qnh-main">
+ 
+         {/* Hero Carousel */}
+         <HeroCarousel
+           banners={banners}
+           aspect={bannerAspect}
+           interval={bannerInterval}
+           editMode={editMode}
+           onEditClick={()=>setBannerEditOpen(true)}
+           heroTitle={heroTitle}
+           heroSub={heroSub}
+           onTitleChange={saveHeroTitle}
+           onSubChange={saveHeroSub}
+           heroVideoUrl={heroVideoUrl}
+           heroVideoThumbnail={heroVideoThumbnail}
+           mediaOrder={heroMediaOrder}
+           onBannerClick={(link)=>{
+             if(!link) return
+             if(link.startsWith('http')){window.open(link,'_blank');return}
+             // internal: #sip, #savor, #go, #accessories, or product id
+             const el=document.getElementById(link.replace('#',''))
+             if(el){el.scrollIntoView({behavior:'smooth'})}
+             else{
+               const cat=link.replace('#','')
+               const cats=['sip','savor','go','accessories']
+               if(cats.some(c=>c.value===cat)){setFilterCat(cat)}
+             }
+           }}
+         />
+ 
+ 
+ 
+         {/* Quenchables Builder Entry */}
+         <section className="quench-hero">
+           <div>
+             <div className="quench-eyebrow">Shop the Set</div>
+             <h2 className="quench-title">Build Your Quenchables</h2>
+             <p className="quench-sub">Mix, match, and create your Quencha combo by collection. Choose your tumbler, lunch essentials, bags, and accessories in one set.</p>
+             <div className="quench-actions">
+               <button className="quench-start" onClick={()=>startQuenchables('Horizon')}>Start Building →</button>
+               <div className="quench-mini-collections">
+                 {colorCollections.map(col => (
+                   <button key={col.value} className="quench-chip" onClick={()=>startQuenchables(col.value)}>{col.label}</button>
+                 ))}
+               </div>
+             </div>
+           </div>
+           <div className="quench-visual" aria-hidden="true">
+             {(colorCollectionSets?.Horizon || DEFAULT_COLOR_COLLECTION_SETS.Horizon).slice(0,4).map(c => (
+               <span key={c.code} className="quench-visual-dot" style={{background:swatchBackground(c)}} />
+             ))}
+           </div>
+         </section>
+ 
+         {/* Toolbar */}
+         <div className="toolbar" ref={resultsRef}>
+           <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
+           <select className="sort-sel" value={sort} onChange={e=>saveCatalogSort(e.target.value)}>
+             <option value="default">Sort: Manual Order</option>
+             <option value="sku-asc">SKU: A → Z</option>
+             <option value="sku-desc">SKU: Z → A</option>
+             <option value="price-asc">Price: Low → High</option>
+             <option value="price-desc">Price: High → Low</option>
+             <option value="name-asc">Name: A → Z</option>
+           </select>
+           {editMode && sort === 'default' && <span className="reorder-hint">Drag products to rearrange</span>}
+           <div className="vbtns">
+             <button className={`vbtn ${view==='col-4'?'on':''}`} onClick={()=>saveCatalogView('col-4')} title="4 columns">⊞</button>
+             <button className={`vbtn ${view==='col-2'?'on':''}`} onClick={()=>saveCatalogView('col-2')} title="2 columns">⊟</button>
+             <button className={`vbtn ${view==='col-1'?'on':''}`} onClick={()=>saveCatalogView('col-1')} title="1 column">▬</button>
+           </div>
+         </div>
+ 
+         {/* Products */}
+         {(() => {
+           // Build render order: no-ext bucket first, then known exts, then any unknown ext keys
+           const knownExtVals = exts.map(x=>x.value)
+           const allExtKeys = Object.keys(grouped)
+           const noExtProds = grouped[''] || {}
+           const unknownExtKeys = allExtKeys.filter(k => k !== '' && !knownExtVals.includes(k))
+           const orderedExtKeys = [...knownExtVals, ...unknownExtKeys]
+ 
+           // All cat values to iterate (known cats + '' for no-cat + any unknown cat keys)
+           const knownCatVals = cats.map(c=>c.value)
+           const allCatKeysInGrouped = [...new Set(Object.values(grouped).flatMap(g=>Object.keys(g)))]
+           const unknownCatKeys = allCatKeysInGrouped.filter(k => k !== '' && !knownCatVals.includes(k))
+           const orderedCatKeys = ['', ...knownCatVals, ...unknownCatKeys]
+ 
+           const renderSection = (ext, cat, prods) => {
+             if (!prods?.length) return null
+             const catLabel = cat === '' ? null : (cats.find(c=>c.value===cat)?.label || cat)
+             const extEntry = exts.find(x=>x.value===ext)
+             const extLabel = ext === '' ? null : (extEntry?.label || ext)
+             const extColor = extEntry?.color || EXT_COLORS[ext] || 'var(--gr)'
+             return (
+               <div key={`${ext||'none'}-${cat||'none'}`}>
+                 <div className="cat-hdr">
+                   <div className="cat-line"/>
+                   {catLabel && <span className="cat-nm">{catLabel}</span>}
+                   {extLabel && <span className="ext-tag" style={{background:extColor}}>{extLabel}</span>}
+                   <span className="cat-cnt">{prods.length} item{prods.length>1?'s':''}</span>
+                   <div className="cat-line"/>
+                 </div>
+                 <div className={`pgrid ${view}`}>
+                   {prods.map(p => <Card key={p.id} p={p}/>)}
+                 </div>
+               </div>
+             )
+           }
+ 
+           return (
+             <>
+               {/* No-ext products first */}
+               {orderedCatKeys.map(cat => renderSection('', cat, noExtProds[cat]))}
+               {/* Known + unknown ext products */}
+               {orderedExtKeys.map(ext => !grouped[ext] ? null :
+                 orderedCatKeys.map(cat => renderSection(ext, cat, grouped[ext][cat]))
+               )}
+             </>
+           )
+         })()}
+       </main>
+     </div>
+ 
+     {/* MOBILE FILTER */}
+     <button className="mob-filter-btn" onClick={()=>setShowMobileFilter(true)}>☰ Filters</button>
+     {showMobileFilter && (
+       <div className="mob-overlay" onClick={()=>setShowMobileFilter(false)}>
+         <div className="mob-drawer" onClick={e=>e.stopPropagation()}>
+           <button className="drawer-close" onClick={()=>setShowMobileFilter(false)}>✕</button>
+           <SidebarContent closeOnSelect/>
+         </div>
+       </div>
+     )}
+ 
+ 
+ 
+     {/* QUENCHABLES BUILDER MODAL */}
+     {quenchOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setQuenchOpen(false)}}>
+         <div className="modal quench-modal">
+           <div className="m-hdr quench-head">
+             <div>
+               <div className="quench-eyebrow">Quenchables</div>
+               <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Build Your Quencha Combo</div>
+               <div className="quench-progress">
+                 {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>{
+                   const disabled = key === 'inquiry' && !quenchItems.length
+                   return (
+                     <button type="button" key={key} disabled={disabled} onClick={()=>{ if(!disabled) setQuenchStep(key) }} className={`quench-step ${quenchStep===key?'on':''}`} aria-label={`Go to ${label} step`}>
+                       <span className="quench-step-dot">{index+1}</span>{label}
+                     </button>
+                   )
+                 })}
+               </div>
+               {quenchStep !== 'collection' && (
+                 <button type="button" className="quench-back" onClick={()=>setQuenchStep(quenchStep==='inquiry'?'review':quenchStep==='review'?'products':'collection')}>← Back</button>
+               )}
+             </div>
+             <button className="m-close" onClick={()=>setQuenchOpen(false)}>✕</button>
+           </div>
+           <div className="m-body">
+             <div className={`quench-body ${['review','inquiry'].includes(quenchStep) ? 'no-side' : ''}`}>
+               <aside className="quench-side">
+                 <div className="quench-side-title">Choose Collection</div>
+                 {colorCollections.map(col => {
+                   const setCount = (colorCollectionSets?.[col.value] || []).length
+                   return (
+                     <button key={col.value} className={`quench-collection-btn ${quenchCollection===col.value?'on':''}`} onClick={()=>{setQuenchCollection(col.value);setQuenchStep('collection')}}>
+                       <span className="quench-collection-dot" style={{background:col.color}} />
+                       <span>
+                         <span className="quench-collection-name">{col.label}</span>
+                         <span className="quench-collection-sub">{setCount} color{setCount===1?'':'s'} available</span>
+                       </span>
+                     </button>
+                   )
+                 })}
+                 <div className="quench-set">
+                   <div className="quench-set-title">Your Set</div>
+                   {quenchItems.length ? quenchItems.slice(0,3).map(item=>(
+                     <div key={item.id} className="quench-set-item">
+                       <div>
+                         <div className="quench-set-name">{item.productName}</div>
+                         <div className="quench-set-meta">{item.colorName} · {item.packs} pack{item.packs===1?'':'s'} · {item.units} pcs</div>
+                       </div>
+                     </div>
+                   )) : <div className="quench-empty">No items added yet.</div>}
+                   {quenchItems.length > 3 && <div className="quench-set-meta">+ {quenchItems.length - 3} more item{quenchItems.length - 3 === 1 ? '' : 's'}</div>}
+                 </div>
+               </aside>
+               <div className="quench-main">
+                 {quenchStep === 'collection' && (
+                   <>
+                     <div className="quench-feature-card">
+                       <div>
+                         <div className="quench-feature-title">{quenchCollectionMeta.label} Collection</div>
+                         <div className="quench-feature-sub">Start with a collection vibe, then build a matching set across drinkware, lunch, bags, and accessories.</div>
+                         <div className="quench-color-row">
+                           {quenchAvailableColors.map(color=><span key={color.code} className="quench-color-dot" title={color.name} style={{background:swatchBackground(color)}} />)}
+                         </div>
+                       </div>
+                       <button className="quench-next" onClick={()=>setQuenchStep('products')}>Next: Choose Products →</button>
+                     </div>
+                   </>
+                 )}
+                 {quenchStep === 'products' && (
+                   <>
+                     <div className="quench-tabs">
+                       {cats.map(cat=>(
+                         <button key={cat.value} className={`quench-tab ${quenchCat===cat.value?'on':''}`} onClick={()=>setQuenchCat(cat.value)}>{cat.icon} {cat.label}</button>
+                       ))}
+                     </div>
+                     {quenchProductsByCat.length ? (
+                       <div className="quench-product-grid">
+                         {quenchProductsByCat.map(product => {
+                           const colors = getQuenchColors(product)
+                           const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
+                           const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
+                           const qty = Math.max(1, Number(quenchQty[product.id] || 1))
+                           const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
+                           const alreadyInSet = selectedQuenchSkuSet.has(selectedSku)
+                           return (
+                             <div key={product.id} className={`quench-product ${alreadyInSet ? 'already-selected' : ''}`}>
+                               <div className="quench-prod-top">
+                                 {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
+                                 <div>
+                                   <div className="quench-prod-name">{product.name}</div>
+                                   <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
+                                 </div>
+                               </div>
+                               <div className="quench-form-row">
+                                 <select className="quench-select" value={selectedSku} onChange={e=>setQuenchColor(prev=>({...prev,[product.id]:e.target.value}))}>
+                                   {colors.map(color=><option key={color.sku} value={color.sku}>{color.name} · {color.sku}</option>)}
+                                 </select>
+                                 <input className="quench-input" type="number" min="1" value={qty} onChange={e=>setQuenchQty(prev=>({...prev,[product.id]:e.target.value}))} />
+                               </div>
+                               <div className="quench-set-meta">Selected: {selectedColor?.name} · Estimated units: {qty * Number(product.packing || 1)} pcs</div>
+                               {alreadyInSet && <div className="quench-selected-pill">✓ Already in set</div>}
+                               <button className="quench-add" disabled={alreadyInSet} onClick={()=>addQuenchItem(product)}>{alreadyInSet ? 'Already Selected' : 'Add to Quenchables'}</button>
+                             </div>
+                           )
+                         })}
+                       </div>
+                     ) : <div className="quench-empty">No products in this category have {quenchCollectionMeta.label} colors yet.</div>}
+                     <button className="quench-next" onClick={()=>setQuenchStep('review')}>Review Set →</button>
+                   </>
+                 )}
+                 {quenchStep === 'review' && (
+                   <>
+                     <div className="quench-set">
+                       <div className="quench-set-title">Your Quenchables Set</div>
+                       {quenchItems.length ? quenchItems.map(item=>(
+                         <div key={item.id} className="quench-set-item">
+                           <div>
+                             <div className="quench-set-name">{item.productName}</div>
+                             <div className="quench-set-meta">Color: {item.colorName}<br/>SKU: {item.sku}<br/>Packs/Cartons: {item.packs} · Packing: {item.packing} pcs · Units: {item.units} pcs</div>
+                           </div>
+                           <button className="quench-remove" onClick={()=>removeQuenchItem(item.id)}>Remove</button>
+                         </div>
+                       )) : <div className="quench-empty">Add products first to build your Quenchables set.</div>}
+                     </div>
+                     <div className="quench-summary">
+                       <div className="quench-total"><div className="quench-total-val">{quenchItems.length}</div><div className="quench-total-lbl">Items</div></div>
+                       <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalPacks}</div><div className="quench-total-lbl">Packs</div></div>
+                       <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalUnits}</div><div className="quench-total-lbl">Units</div></div>
+                     </div>
+                     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                       <button className="quench-tab" onClick={()=>setQuenchStep('products')}>+ Add More Products</button>
+                       <button className="quench-next" disabled={!quenchItems.length} onClick={()=>setQuenchStep('inquiry')}>Continue to Inquiry →</button>
+                     </div>
+                   </>
+                 )}
+                 {quenchStep === 'inquiry' && (
+                   <>
+                     <div className="quench-feature-card">
+                       <div>
+                         <div className="quench-feature-title">Send Quenchables Inquiry</div>
+                         <div className="quench-feature-sub">Your email app will open with your selected Quenchables set, SKUs, quantities, packing, and notes.</div>
+                       </div>
+                     </div>
+                     <textarea className="quench-note" value={quenchMessage} onChange={e=>setQuenchMessage(e.target.value)} placeholder="Add notes, target colors, delivery questions, or customer details…" />
+                     <a className="quench-send" href={buildQuenchablesHref()} onClick={e=>{ if(!quenchItems.length) e.preventDefault() }}>📩 Send Quenchables Inquiry</a>
+                     <button className="quench-tab" onClick={()=>setQuenchStep('review')}>← Back to Review</button>
+                   </>
+                 )}
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* PASSWORD MODAL */}
+     {pwOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setPwOpen(false)}}>
+         <div className="pw-modal">
+           <div className="pw-hdr">
+             <div className="pw-icon">🔐</div>
+             <div className="pw-title">Edit Access</div>
+             <div className="pw-sub">Enter password to unlock editing</div>
+           </div>
+           <div className="pw-body">
+             <label className="pw-lbl">Password</label>
+             <div className="pw-wrap">
+               <input
+                 ref={pwRef}
+                 type={pwShow ? 'text' : 'password'}
+                 className={`pw-in ${pwError ? 'err' : ''}`}
+                 value={pwValue}
+                 onChange={e => { setPwValue(e.target.value); setPwError('') }}
+                 onKeyDown={e => e.key === 'Enter' && submitPassword()}
+                 placeholder="Enter password…"
+                 autoComplete="off"
+               />
+               <button className="pw-eye" onClick={()=>setPwShow(s=>!s)}>{pwShow ? '🙈' : '👁'}</button>
+             </div>
+             <div className="pw-err">{pwError && <><span>⚠️</span>{pwError}</>}</div>
+             <button className="pw-submit" onClick={submitPassword}>Unlock Editing</button>
+             <button className="pw-cancel" onClick={()=>setPwOpen(false)}>Cancel</button>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* VIEW MODAL */}
+     {vp && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)closeProductModal()}}>
+         <div className="modal">
+           <div className="m-hdr" style={{background:'var(--sf4)'}}>
+             <div>
+               {(() => {
+                 const extLabel = exts.find(x=>x.value===vp.ext)?.label || vp.ext || ''
+                 const catLabel = cats.find(c=>c.value===vp.cat)?.label || vp.cat || ''
+                 const parts = [extLabel, catLabel].filter(Boolean)
+                 return parts.length > 0 ? (
+                   <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{parts.join(' · ')}</div>
+                 ) : null
+               })()}
+               <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
+               {getSkuBase(vp) && (
+                 <code
+                   onClick={()=>copy(getSkuBase(vp))}
+                   style={{fontSize:11,fontWeight:700,fontFamily:'monospace',background:'rgba(39,153,137,.1)',color:'var(--tl)',borderRadius:4,padding:'2px 8px',marginTop:5,display:'inline-block',letterSpacing:'.04em',cursor:'pointer',transition:'background .15s'}}
+                   title="Click to copy SKU"
+                 >
+                   {copied===getSkuBase(vp) ? '✓ Copied!' : getSkuBase(vp)}
+                 </code>
+               )}
+             </div>
+             <button className="m-close" onClick={closeProductModal}>✕</button>
+           </div>
+           <div className="m-body">
+             <div>
+               <div className="vm-main-wrap" ref={vmImageRef}>
+                 {visibleVmImages.length > 0 ? <img src={getImageSrc(visibleVmImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
+               </div>
+               {visibleVmImages.length > 1 && (
+                 <div className="vm-thumbs">
+                   {visibleVmImages.map((img,i) => (
+                     <div key={`${getImageSrc(img)}-${i}`} className={`vm-thumb ${i===safeVmImg?'on':''}`} onClick={()=>setVmImg(i)}>
+                       <img src={getImageSrc(img)} alt=""/>
+                     </div>
+                   ))}
+                 </div>
+               )}
+             </div>
+             {/* Color swatches + SKUs */}
+             {vp.colors.length > 0 && (
+               <div>
+                 <span className="vm-color-sec-lbl">Colors</span>
+                 {groupColorsByCollection(vp.colors, colorCollections).map(group=>(
+                   <div key={group.name} style={{marginBottom:10}}>
+                     <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
+                       <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999}}>{group.name}</span>
+                       <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
+                     </div>
+                     <div className="vm-color-grid">
+                       {group.colors.map(clr=>{
+                         const linkedImageIndexes = findImageIndexesForColor(vp, clr)
+                         const hasLinkedImage = linkedImageIndexes.length > 0
+                         const colorKey = getColorKey(clr)
+                         const isActive = activeVmColorKey === colorKey
+                         return (
+                           <div
+                             key={clr.sku}
+                             className={`vm-color-item ${isActive?'color-active':''} ${copied===clr.sku?'sku-copied':''}`}
+                             onClick={()=>{
+                               if (!hasLinkedImage) return
+                               setVmColorKey(isActive ? '' : colorKey)
+                               setVmImg(0)
+                               if (typeof window !== 'undefined' && window.innerWidth <= 700) {
+                                 setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
+                               }
+                             }}
+                             title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
+                           >
+                             <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
+                             <div className="vm-color-info">
+                               <span className="vm-color-name">{clr.name}</span>
+                               <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                             </div>
+                           </div>
+                         )
+                       })}
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             )}
+             {vp.youtube && getYouTubeId(vp.youtube) && (
+               <YouTubeBlock ytUrl={vp.youtube}/>
+             )}
+             <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
+             <p className="vm-desc">{vp.desc}</p>
+             <div className="vm-price-row vm-price-row-under-desc">
+               <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
+               <div className="vm-pdiv"/>
+               <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
+             </div>
+             {vp.colors?.length > 0 && (
+               <div className="vm-variant-table-card">
+                 <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Color SKU / Barcode</span>
+                 <div className="vm-variant-table-wrap">
+                   <table className="vm-variant-table">
+                     <thead>
+                       <tr>
+                         <th>Color</th>
+                         <th>Product Code</th>
+                         <th>Barcode</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {vp.colors.map((clr, idx) => {
+                         const variantBarcode = clr.barcode || clr.barcodeValue || vp.barcode || ''
+                         const variantBarcodeImage = clr.barcodeImage || clr.barcodeUrl || vp.barcodeImage || ''
+                         return (
+                           <tr key={`${clr.sku || clr.code || clr.name}-${idx}`}>
+                             <td>
+                               <div className="vm-variant-color">
+                                 <span className="vm-variant-swatch" style={{background:swatchBackground(clr)}}/>
+                                 <span>{clr.name || clr.code || 'Color'}</span>
+                               </div>
+                             </td>
+                             <td>
+                               <code className="vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
+                                 {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
+                               </code>
+                             </td>
+                             <td>
+                               <div className="vm-variant-barcode">
+                                 {variantBarcodeImage ? (
+                                   <img
+                                     src={variantBarcodeImage}
+                                     alt={`${clr.name || 'Color'} barcode`}
+                                     onClick={()=>setCodeLightbox({src:variantBarcodeImage,label:`${clr.name || 'Color'} Barcode`})}
+                                     title="Click to enlarge"
+                                   />
+                                 ) : variantBarcode ? (
+                                   <code>{variantBarcode}</code>
+                                 ) : (
+                                   <span style={{color:'rgba(99,102,106,.55)',fontWeight:700}}>—</span>
+                                 )}
+                               </div>
+                             </td>
+                           </tr>
+                         )
+                       })}
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+             )}
+             {(vp.dimensions || vp.barcode) && (
+               <div className="vm-meta-row">
+                 {vp.dimensions && typeof vp.dimensions==='object' &&
+                   vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
+                   <div className="vm-meta-item" style={{flex:'1 1 100%'}}>
+                     <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
+                     <div style={{overflowX:'auto'}}>
+                       <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
+                         {vp.dimensions.headers.some(h=>h.trim()) && (
+                           <thead>
+                             <tr>
+                               {vp.dimensions.headers.map((h,i)=>(
+                                 <th key={i} style={{background:'var(--tl)',color:'#fff',padding:'6px 12px',textAlign:'left',fontSize:10,letterSpacing:'.08em',fontWeight:700,whiteSpace:'nowrap'}}>{h||'—'}</th>
+                               ))}
+                             </tr>
+                           </thead>
+                         )}
+                         <tbody>
+                           {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
+                             <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
+                               {row.map((cell,ci)=>(
+                                 <td key={ci} style={{padding:'7px 12px',borderBottom:'1px solid rgba(185,220,210,.3)',fontSize:13,fontWeight:ci===0?600:400,color:ci===0?'var(--bk)':'var(--gr)'}}>{cell||'—'}</td>
+                               ))}
+                             </tr>
+                           ))}
+                         </tbody>
+                       </table>
+                     </div>
+                   </div>
+                 )}
+                 {(vp.barcode || vp.barcodeImage) && (
+                   <div className="vm-meta-item">
+                     <span className="vm-meta-lbl">Barcode</span>
+                     {vp.barcodeImage ? (
+                       <img
+                         src={vp.barcodeImage}
+                         alt="Barcode"
+                         onClick={()=>setCodeLightbox({src:vp.barcodeImage,label:'Barcode'})}
+                         style={{maxWidth:'100%',maxHeight:60,objectFit:'contain',marginTop:4,borderRadius:4,cursor:'zoom-in'}}
+                         title="Click to enlarge"
+                       />
+                     ) : (
+                       <code className="vm-meta-code">{vp.barcode}</code>
+                     )}
+                     {vp.barcode && vp.barcodeImage && (
+                       <code className="vm-meta-code" style={{marginTop:4,display:'block'}}>{vp.barcode}</code>
+                     )}
+                   </div>
+                 )}
+                 {(vp.qrCode || vp.qrImage) && (
+                   <div className="vm-meta-item">
+                     <span className="vm-meta-lbl">QR Code</span>
+                     {vp.qrImage && (
+                       <img
+                         src={vp.qrImage}
+                         alt="QR Code"
+                         onClick={()=>setCodeLightbox({src:vp.qrImage,label:'QR Code'})}
+                         style={{width:72,height:72,objectFit:'contain',marginTop:4,borderRadius:4,border:'1px solid rgba(185,220,210,.4)',padding:4,background:'#fff',cursor:'zoom-in'}}
+                         title="Click to enlarge"
+                       />
+                     )}
+                     {vp.qrCode && (
+                       <code className="vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{vp.qrCode}</code>
+                     )}
+                   </div>
+                 )}
+               </div>
+             )}
+             <div className="vm-actions">
+               <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
+                 <PencilIcon/>
+               </button>
+               <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
+                 {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Copy Product Link'}
+               </button>
+               <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal(); openInquiry(product) }}>📩 Bulk Inquiry</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* EDIT MODAL */}
+     {editOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setEditOpen(false)}}>
+         <div className="modal edit-modal-inner">
+           <div className="m-hdr em-hdr">
+             <div>
+               <div className="em-badge">{editTarget ? '✏️ Editing' : '+ New Product'}</div>
+               <div className="em-title">{ef.name || (editTarget ? 'Edit Product' : 'New Product')}</div>
+             </div>
+             <button className="m-close" onClick={()=>setEditOpen(false)}>✕</button>
+           </div>
+           <div className="em-tabs">
+             {[['details','📋 Details'],['colors',`🎨 Colors (${ef.colors.length})`],['images',`🖼 Images (${ef.images.length})`]].map(([t,l])=>(
+               <button key={t} className={`em-tab ${editTab===t?'on':''}`} onClick={()=>setEditTab(t)}>{l}</button>
+             ))}
+           </div>
+           {editTab === 'details' && (
+             <div className="em-panel">
+               <div className="f-col">
+                 <label className="f-lbl">Product Name *</label>
+                 <input className="f-in" value={ef.name} onChange={e=>setEf(f=>({...f,name:e.target.value}))} placeholder="e.g. Insulated Tumbler 550ml"/>
+               </div>
+               <div className="f-row">
+                 <div className="f-col">
+                   <label className="f-lbl">Extension</label>
+                   {addingNewExt ? (
+                     <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
+                       <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Extension</div>
+                       <div style={{display:'flex',gap:6,alignItems:'center'}}>
+                         <input type="color" value={inlineNewExt.color} onChange={e=>setInlineNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                         <input value={inlineNewExt.label} onChange={e=>setInlineNewExt(n=>({...n,label:e.target.value}))} placeholder="Extension name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
+                       </div>
+                       <div style={{display:'flex',gap:6}}>
+                         <button onClick={()=>{
+                           const val = inlineNewExt.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                           if(!inlineNewExt.label.trim()||exts.some(x=>x.value===val)) return
+                           const newEntry = {value:val,label:inlineNewExt.label.trim(),color:inlineNewExt.color}
+                           setExts(prev=>[...prev,newEntry])
+                           setEf(f=>({...f,ext:val}))
+                           setInlineNewExt({label:'',color:'#279989'})
+                           setAddingNewExt(false)
+                         }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
+                         <button onClick={()=>{setAddingNewExt(false);setInlineNewExt({label:'',color:'#279989'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
+                       </div>
+                     </div>
+                   ) : (
+                     <select className="f-sel" value={ef.ext} onChange={e=>{
+                       if(e.target.value==='__add_new__'){setAddingNewExt(true)}
+                       else{setEf(f=>({...f,ext:e.target.value}))}
+                     }}>
+                       <option value="">— No Extension —</option>
+                       {exts.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+                       <option value="__add_new__">+ Add new extension…</option>
+                     </select>
+                   )}
+                 </div>
+                 <div className="f-col">
+                   <label className="f-lbl">Category <span style={{fontWeight:400,color:'var(--gr)'}}>— optional</span></label>
+                   {addingNewCat ? (
+                     <div style={{display:'flex',flexDirection:'column',gap:6,background:'var(--sf4)',border:'1.5px solid rgba(39,153,137,.3)',borderRadius:8,padding:'10px 12px'}}>
+                       <div style={{fontSize:10,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase'}}>New Category</div>
+                       <div style={{display:'flex',gap:6,alignItems:'center'}}>
+                         <input value={inlineNewCat.icon} onChange={e=>setInlineNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:36,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
+                         <input value={inlineNewCat.label} onChange={e=>setInlineNewCat(n=>({...n,label:e.target.value}))} placeholder="Category name…" style={{flex:1,fontFamily:'var(--fn)',fontSize:12,border:'1px solid rgba(185,220,210,.6)',borderRadius:6,padding:'7px 10px',outline:'none',background:'#fff'}}/>
+                       </div>
+                       <div style={{display:'flex',gap:6}}>
+                         <button onClick={()=>{
+                           const val = inlineNewCat.label.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                           if(!inlineNewCat.label.trim()||cats.some(c=>c.value===val)) return
+                           const newEntry = {value:val,label:inlineNewCat.label.trim(),icon:inlineNewCat.icon||'🏷️'}
+                           setCats(prev=>[...prev,newEntry])
+                           setEf(f=>({...f,cat:val}))
+                           setInlineNewCat({label:'',icon:'🏷️'})
+                           setAddingNewCat(false)
+                         }} style={{flex:1,background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add & Select</button>
+                         <button onClick={()=>{setAddingNewCat(false);setInlineNewCat({label:'',icon:'🏷️'})}} style={{padding:'7px 10px',background:'var(--bg)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontFamily:'var(--fn)',fontSize:12,fontWeight:700,color:'var(--gr)',cursor:'pointer'}}>Cancel</button>
+                       </div>
+                     </div>
+                   ) : (
+                     <div style={{display:'flex',gap:6}}>
+                       <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>{
+                         if(e.target.value==='__add_new__'){setAddingNewCat(true)}
+                         else{setEf(f=>({...f,cat:e.target.value}))}
+                       }}>
+                         <option value="">— No Category —</option>
+                         {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
+                         <option value="__add_new__">+ Add new category…</option>
+                       </select>
+                       {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
+                     </div>
+                   )}
+                 </div>
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">SKU Base <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                 <input
+                   className="f-in"
+                   value={getEditableSkuBase()}
+                   onChange={e=>updateAllColorSkusFromBase(e.target.value)}
+                   placeholder="e.g. QNH-TWB680"
+                   disabled={!ef.colors?.length}
+                 />
+                 <div className="f-hint" style={{marginTop:6}}>Editing this updates all color SKUs using the color codes. You can still edit each full SKU in the Colors tab.</div>
+               </div>
+               <div className="f-row">
+                 <div className="f-col">
+                   <label className="f-lbl">SRP (₱) *</label>
+                   <input className="f-in" type="number" step="0.01" min="0" value={ef.srp} onChange={e=>setEf(f=>({...f,srp:e.target.value}))} placeholder="799.75"/>
+                 </div>
+                 <div className="f-col">
+                   <label className="f-lbl">Packing Qty</label>
+                   <input className="f-in" type="number" min="1" value={ef.packing} onChange={e=>setEf(f=>({...f,packing:e.target.value}))} placeholder="16"/>
+                 </div>
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">Description</label>
+                 <textarea className="f-ta" rows={4} value={ef.desc} onChange={e=>setEf(f=>({...f,desc:e.target.value}))} placeholder="Describe the product…"/>
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">Dimensions <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                 <DimensionsEditor value={ef.dimensions} onChange={val=>setEf(f=>({...f,dimensions:val}))}/>
+               </div>
+               <div className="f-row">
+                 {/* BARCODE */}
+                 <div className="f-col">
+                   <label className="f-lbl">Barcode <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                   <input className="f-in" value={ef.barcode} onChange={e=>setEf(f=>({...f,barcode:e.target.value}))} placeholder="e.g. 9780201350395" style={{marginBottom:6}}/>
+                   <CodeImageUpload
+                     label="Barcode Image"
+                     value={ef.barcodeImage}
+                     onChange={img=>setEf(f=>({...f,barcodeImage:img}))}
+                     onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
+                     onClear={()=>setEf(f=>({...f,barcodeImage:''}))}
+                   />
+                 </div>
+                 {/* QR CODE */}
+                 <div className="f-col">
+                   <label className="f-lbl">QR Code <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                   <input className="f-in" value={ef.qrCode} onChange={e=>setEf(f=>({...f,qrCode:e.target.value}))} placeholder="e.g. https://…" style={{marginBottom:6}}/>
+                   <CodeImageUpload
+                     label="QR Code Image"
+                     value={ef.qrImage}
+                     onChange={img=>setEf(f=>({...f,qrImage:img}))}
+                     onUpload={(file)=>uploadImageToBlob(file,{compress:false})}
+                     onClear={()=>setEf(f=>({...f,qrImage:''}))}
+                   />
+                 </div>
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">YouTube Video <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                 <input className="f-in" value={ef.youtube} onChange={e=>setEf(f=>({...f,youtube:e.target.value}))} placeholder="https://youtube.com/watch?v=… or https://youtu.be/…"/>
+                 {ef.youtube && getYouTubeId(ef.youtube) && (
+                   <div style={{marginTop:6,fontSize:11,color:'var(--tl)',display:'flex',alignItems:'center',gap:4}}>
+                     ✓ Valid YouTube link detected
+                   </div>
+                 )}
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">Feature Badges</label>
+                 <div className="badge-list">{ef.badges.map(b=><span key={b} className="badge-tag">{b}<button onClick={()=>removeBadge(b)}>✕</button></span>)}</div>
+                 <div className="add-row" style={{marginTop:8}}>
+                   <input className="f-in" value={badgeInput} onChange={e=>setBadgeInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addBadge()}}} placeholder="e.g. BPA-Free, Double Wall…"/>
+                   <button className="add-btn" onClick={addBadge}>Add</button>
+                 </div>
+               </div>
+             </div>
+           )}
+           {editTab === 'colors' && (
+             <div className="em-panel">
+               <div className="f-hint">Each color variant gets its own SKU. Use + Add to apply a saved collection set to this product. Use Edit Set to manage the reusable colors for OG, XPRESS, Horizon, Bloom, Poply, or your custom collection groups. Saved collection sets are stored in site settings so they will not reset when you add new products.</div>
+               <div className="color-collection-panel">
+                 <div className="collection-head">
+                   <span className="collection-title">Color collections / group titles</span>
+                 </div>
+                 <div className="collection-grid">
+                   {colorCollections.map(col=>{
+                     const savedCount = collectionSetCount(col.value)
+                     const isEditingThisSet = editingCollectionSet === col.value
+                     return (
+                       <div key={col.value} className={`collection-item ${isEditingThisSet ? 'editing-set' : ''}`}>
+                         <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
+                         <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
+                         <div className="collection-actions">
+                           <span className="collection-set-count">{savedCount} colors</span>
+                           <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
+                           <button type="button" className="collection-edit-set" onClick={()=>isEditingThisSet ? closeCollectionSetEditor() : openCollectionSetEditor(col.value)}>{isEditingThisSet ? 'Close' : 'Edit Set'}</button>
+                         </div>
+                         <div className="collection-set-preview">
+                           {(colorCollectionSets[col.value] || []).map(item=>(
+                             <span key={`${col.value}-${item.code}`} className="collection-color-chip" title={`${item.name} (${item.code})`}>
+                               <i style={{background:swatchBackground(item)}}/>{item.name}
+                             </span>
+                           ))}
+                         </div>
+                         {isEditingThisSet && (() => {
+                           const activeCollection = col
+                           return (
+                             <div className="collection-set-editor">
+                               <div className="collection-set-editor-head">
+                                 <div>
+                                   <span className="collection-set-editor-kicker">Editing saved colors</span>
+                                   <div className="collection-set-editor-name">{activeCollection.label} Collection Set</div>
+                                 </div>
+                                 <button type="button" className="collection-set-editor-close" onClick={closeCollectionSetEditor}>×</button>
+                               </div>
+                               <div className="collection-set-editor-list">
+                                 {collectionSetDraft.map((item, idx) => (
+                                   <div key={`${editingCollectionSet}-${idx}`} className="collection-set-row">
+                                     <div className="collection-set-move" aria-label={`Reorder ${item.name || 'color'}`}>
+                                       <button type="button" disabled={idx===0} onClick={()=>moveCollectionSetDraftColor(idx, idx-1)} title="Move color up">↑</button>
+                                       <button type="button" disabled={idx===collectionSetDraft.length-1} onClick={()=>moveCollectionSetDraftColor(idx, idx+1)} title="Move color down">↓</button>
+                                     </div>
+                                     <input type="color" value={getColorHexes(item)[0] || '#B9DCD2'} onChange={e=>updateCollectionSetDraft(idx,{ hex:e.target.value })}/>
+                                     <input type="text" value={item.name || ''} onChange={e=>updateCollectionSetDraft(idx,{ name:e.target.value })} placeholder="Color name"/>
+                                     <input type="text" value={item.code || ''} onChange={e=>updateCollectionSetDraft(idx,{ code:e.target.value.toUpperCase() })} placeholder="Code"/>
+                                     <input type="text" value={getColorHexes(item).join(', ')} onChange={e=>updateCollectionSetDraftHexes(idx,e.target.value)} placeholder="#HEX or #HEX, #HEX"/>
+                                     <button type="button" className="collection-set-remove" onClick={()=>removeCollectionSetDraftColor(idx)} title="Remove color">×</button>
+                                   </div>
+                                 ))}
+                               </div>
+                               <div className="collection-set-add-inline">
+                                 <input type="color" value={normalizeHexValue(newCollectionSetColor.hex, '#B9DCD2')} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))}/>
+                                 <input type="text" value={newCollectionSetColor.name} onChange={e=>setNewCollectionSetColor(v=>({...v,name:e.target.value}))} placeholder="New color name"/>
+                                 <input type="text" value={newCollectionSetColor.code} onChange={e=>setNewCollectionSetColor(v=>({...v,code:e.target.value.toUpperCase()}))} placeholder="Code"/>
+                                 <input type="text" value={newCollectionSetColor.hex} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))} placeholder="#HEX or #HEX, #HEX"/>
+                                 <button type="button" onClick={addCollectionSetDraftColor}>+ Add Color</button>
+                               </div>
+                               <div className="collection-set-editor-actions">
+                                 <button type="button" className="collection-set-cancel" onClick={closeCollectionSetEditor}>Cancel</button>
+                                 <button type="button" className="collection-set-save" onClick={saveCollectionSetDraft}>Save Collection Set</button>
+                               </div>
+                             </div>
+                           )
+                         })()}
+                       </div>
+                     )
+                   })}
+                 </div>
+                 <div className="collection-add-row">
+                   <input type="color" value={newCollection.color} onChange={e=>setNewCollection(n=>({...n,color:e.target.value}))}/>
+                   <input type="text" value={newCollection.label} onChange={e=>setNewCollection(n=>({...n,label:e.target.value}))} placeholder="Add group title, e.g. Seasonal, Pastel, Male, Female" onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addCollection()}}}/>
+                   <button type="button" onClick={addCollection}>+ Add Group</button>
+                 </div>
+               </div>
+               <div style={{background:'var(--bg)',borderRadius:10,padding:12}}>
+                 <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
+                 {ef.colors.length === 0
+                   ? <p style={{fontSize:12,color:'var(--gr)',padding:'4px 0'}}>No colors yet. Add one below.</p>
+                   : ef.colors.map((c,i)=>(
+                     <div key={i} className="color-row">
+                       <div className="color-move-controls" aria-label={`Reorder ${c.name || 'color'}`}>
+                         <button type="button" className="move-btn" disabled={i===0} onClick={()=>moveColor(i,i-1)} title="Move color up">↑</button>
+                         <button type="button" className="move-btn" disabled={i===ef.colors.length-1} onClick={()=>moveColor(i,i+1)} title="Move color down">↓</button>
+                       </div>
+                       <div className="multi-swatch-edit">
+                         {getColorHexes(c).map((hex, hi)=>(
+                           <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
+                             <input type="color" className="cp" value={hex} onChange={e=>updateColorHex(i,hi,e.target.value)}/>
+                             <input
+                               className="hex-in"
+                               value={hex}
+                               onChange={e=>pasteColorHex(i,hi,e.target.value)}
+                               onPaste={e=>{e.preventDefault(); pasteColorHex(i,hi,e.clipboardData.getData('text'))}}
+                               placeholder="#HEX"
+                               spellCheck={false}
+                             />
+                             {getColorHexes(c).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeColorHex(i,hi)}>×</button>}
+                           </span>
+                         ))}
+                         <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={()=>addColorHex(i)}>+</button>
+                       </div>
+                       <select className="collection-select" value={c.collection || defaultColorCollection(c)} onChange={e=>updateColor(i,'collection',e.target.value)}>
+                         {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
+                         <option value="Other">Other</option>
+                       </select>
+                       <input className="in-sm" value={c.name} onChange={e=>updateColor(i,'name',e.target.value)} placeholder="Name"/>
+                       <input className="in-sm" value={c.code} onChange={e=>updateColor(i,'code',e.target.value)} placeholder="Code" maxLength={4}/>
+                       <input className="in-sm" value={c.sku} onChange={e=>updateColor(i,'sku',e.target.value)} placeholder="SKU"/>
+                       <button className="rm-btn" onClick={()=>removeColor(i)}>✕</button>
+                     </div>
+                   ))
+                 }
+               </div>
+               <div className="add-color-form">
+                 <div className="sub-hd">Add Color Variant</div>
+                 <div className="color-table-head"><span>Order</span><span>HEX colors</span><span>Collection</span><span>Name</span><span>Code</span><span>SKU</span><span/></div>
+                 <div className="color-row new-color-row">
+                   <div className="color-move-placeholder">New</div>
+                   <div className="multi-swatch-edit">
+                     {getColorHexes(newColor).map((hex, hi)=>(
+                       <span key={hi} className="swatch-input-wrap" title={hi===0?'Main color':'Additional color'}>
+                         <input type="color" className="cp" value={hex} onChange={e=>updateNewColorHex(hi,e.target.value)}/>
+                         <input
+                           className="hex-in"
+                           value={hex}
+                           onChange={e=>pasteNewColorHex(hi,e.target.value)}
+                           onPaste={e=>{e.preventDefault(); pasteNewColorHex(hi,e.clipboardData.getData('text'))}}
+                           placeholder="#HEX"
+                           spellCheck={false}
+                         />
+                         {getColorHexes(newColor).length > 1 && <button type="button" className="swatch-rm" onClick={()=>removeNewColorHex(hi)}>×</button>}
+                       </span>
+                     ))}
+                     <button type="button" className="swatch-add" title="Add another HEX color to this variant" onClick={addNewColorHex}>+</button>
+                   </div>
+                   <select className="collection-select" value={newColor.collection || 'OG'} onChange={e=>setNewColor(n=>({...n,collection:e.target.value}))}>
+                     {colorCollections.map(col=><option key={col.value} value={col.value}>{col.label}</option>)}
+                     <option value="Other">Other</option>
+                   </select>
+                   <input className="in-sm" value={newColor.name} onChange={e=>setNewColor(n=>({...n,name:e.target.value}))} placeholder="Name"/>
+                   <input className="in-sm" value={newColor.code} onChange={e=>setNewColor(n=>({...n,code:e.target.value.toUpperCase()}))} placeholder="Code" maxLength={4}/>
+                   <input className="in-sm" value={newColor.sku} onChange={e=>setNewColor(n=>({...n,sku:e.target.value.toUpperCase()}))} placeholder="Full SKU"/>
+                   <button className="add-btn" style={{borderRadius:6,padding:'6px 10px',fontSize:12}} onClick={addColor}>+</button>
+                 </div>
+               </div>
+             </div>
+           )}
+           {editTab === 'images' && (
+             <div className="em-panel">
+               <div className="f-hint">Upload product images. General images have their own section, and each color has its own upload area. Drag thumbnails to rearrange their order. Tick Main on any image to make it the product card/main image.</div>
+               <div className="color-image-panel">
+                 <div className="color-image-panel-head">
+                   <div>
+                     <div className="color-image-title">General product images</div>
+                     <div className="color-image-sub">Upload main lifestyle, infographics, packaging, or any product photos not tied to a specific color.</div>
+                   </div>
+                 </div>
+                 <div className="color-image-grid">
+                   {(() => {
+                     const generalAssigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => isGeneralImage(item.img))
+                     return (
+                       <div className="color-image-card general-image-card">
+                         <div className="color-image-card-top">
+                           <span className="general-image-swatch"/>
+                           <div style={{minWidth:0,flex:1}}>
+                             <div className="color-image-name">General Images</div>
+                             <div className="color-image-sku">Main gallery / no color assignment</div>
+                           </div>
+                         </div>
+                         {generalAssigned.length > 0 ? (
+                           <div className="color-image-thumbs">
+                             {generalAssigned.map(({img, index}) => (
+                               <span
+                                 className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
+                                 key={`general-${index}`}
+                                 data-img-index={index}
+                                 draggable
+                                 onTouchStart={(e)=>handleImageTouchStart(e,index)}
+                                 onTouchMove={handleImageTouchMove}
+                                 onTouchEnd={handleImageTouchEnd}
+                                 onTouchCancel={handleImageTouchEnd}
+                                 onDragStart={(e)=>handleImageDragStart(e,index)}
+                                 onDragOver={(e)=>handleImageDragOver(e,index)}
+                                 onDrop={(e)=>handleImageDrop(e,index)}
+                                 onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
+                                 title="Drag to rearrange thumbnail order"
+                               >
+                                 {index===0 && <span className="main-tag">Main</span>}
+                                 <img src={getImageSrc(img)} alt=""/>
+                                 <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                 <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
+                                   <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
+                                 </label>
+                               </span>
+                             ))}
+                           </div>
+                         ) : (
+                           <div className="color-image-empty">No general photos yet</div>
+                         )}
+                         <label className="color-upload-btn">
+                           + Upload general product photos
+                           <input
+                             type="file"
+                             accept="image/*"
+                             multiple
+                             onChange={e=>{
+                               uploadFilesGeneral(e.target.files)
+                               e.target.value = ''
+                             }}
+                           />
+                         </label>
+                       </div>
+                     )
+                   })()}
+                 </div>
+               </div>
+ 
+               <div className="color-image-panel">
+                 <div className="color-image-panel-head">
+                   <div>
+                     <div className="color-image-title">Images per color</div>
+                     <div className="color-image-sub">Upload multiple product photos for each color. When customers click a color, the first assigned image will show.</div>
+                   </div>
+                 </div>
+                 <div className="color-image-grid">
+                   {(ef.colors || []).map(color => {
+                     const assigned = normalizeProductImages(ef.images).map((img, index) => ({ img, index })).filter(item => imageMatchesColor(item.img, color))
+                     return (
+                       <div className="color-image-card" key={color.sku || color.code || color.name}>
+                         <div className="color-image-card-top">
+                           <span className="color-image-swatch" style={{background:swatchBackground(color)}}/>
+                           <div style={{minWidth:0,flex:1}}>
+                             <div className="color-image-name">{color.name}</div>
+                             <div className="color-image-sku">{color.sku}</div>
+                           </div>
+                         </div>
+                         {assigned.length > 0 ? (
+                           <div className="color-image-thumbs">
+                             {assigned.map(({img, index}) => (
+                               <span
+                                 className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
+                                 key={`${color.sku || color.code}-${index}`}
+                                 data-img-index={index}
+                                 draggable
+                                 onTouchStart={(e)=>handleImageTouchStart(e,index)}
+                                 onTouchMove={handleImageTouchMove}
+                                 onTouchEnd={handleImageTouchEnd}
+                                 onTouchCancel={handleImageTouchEnd}
+                                 onDragStart={(e)=>handleImageDragStart(e,index)}
+                                 onDragOver={(e)=>handleImageDragOver(e,index)}
+                                 onDrop={(e)=>handleImageDrop(e,index)}
+                                 onDragEnd={()=>{setDragImageIndex(null);clearImageDropGuide()}}
+                                 title="Drag to rearrange thumbnail order"
+                               >
+                                 {index===0 && <span className="main-tag">Main</span>}
+                                 <img src={getImageSrc(img)} alt=""/>
+                                 <button type="button" onMouseDown={e=>e.stopPropagation()} onClick={()=>removeImg(index)} title="Remove image">×</button>
+                                 <label className="color-main-check" title="Set as main product image" onClick={e=>e.stopPropagation()}>
+                                   <input type="checkbox" checked={index===0} onChange={()=>setMainImage(index)} /> Main
+                                 </label>
+                               </span>
+                             ))}
+                           </div>
+                         ) : (
+                           <div className="color-image-empty">No uploaded photos yet</div>
+                         )}
+                         <label className="color-upload-btn">
+                           + Upload photos for {color.name}
+                           <input
+                             type="file"
+                             accept="image/*"
+                             multiple
+                             onChange={e=>{
+                               uploadFilesForColor(e.target.files, color)
+                               e.target.value = ''
+                             }}
+                           />
+                         </label>
+                       </div>
+                     )
+                   })}
+                 </div>
+               </div>
+               {getTemporaryImageCount() > 0 && (
+                 <button type="button" className="cancel-btn" style={{width:'100%',justifyContent:'center'}} onClick={removeTemporaryImages}>
+                   Remove failed preview images ({getTemporaryImageCount()})
+                 </button>
+               )}
+               {uploadErr && <div className="f-error">{uploadErr}</div>}
+               <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload}/>
+             </div>
+           )}
+           <div className="m-footer">
+             {editTarget && <button className="del-btn" onClick={()=>deleteProduct(editTarget.id)}>🗑 Delete</button>}
+             <div className="m-footer-r">
+               <button className="cancel-btn" onClick={()=>setEditOpen(false)}>Cancel</button>
+               <button className="save-btn" onClick={saveProduct}>{editTarget ? '✓ Save Changes' : '+ Add Product'}</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* BRAND LOGO + TOPBAR TEXT MODAL */}
+     {brandEditOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setBrandEditOpen(false)}}>
+         <div className="modal" style={{maxWidth:560}}>
+           <div className="m-hdr" style={{background:'var(--sf4)'}}>
+             <div>
+               <div style={{fontSize:10,fontWeight:900,letterSpacing:'.12em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Top Bar Branding</div>
+               <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.1}}>Brand Logo & Text</div>
+             </div>
+             <button className="m-close" onClick={()=>setBrandEditOpen(false)}>✕</button>
+           </div>
+           <div className="m-body">
+             <div className="f-col">
+               <label className="f-lbl">Brand Logo</label>
+               <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
+                 <div style={{width:120,height:58,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.06em',flexShrink:0}}>
+                   {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8,background:'rgba(255,255,255,.08)'}}/> : 'NO LOGO'}
+                 </div>
+                 <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
+                   <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                     <label className="add-btn" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'9px 14px',cursor:'pointer'}}>
+                       Upload Logo
+                       <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} onChange={handleBrandLogoUpload}/>
+                     </label>
+                     {brandLogo && <button className="cancel-btn" onClick={()=>{saveBrandLogo('');setBrandUploadErr('')}}>Remove</button>}
+                   </div>
+                   <div style={{fontSize:11,color:'var(--gr)',lineHeight:1.45}}>Best format: transparent PNG or SVG under 2MB. Leave text fields blank if you want to show logo only.</div>
+                 </div>
+               </div>
+               {brandUploadErr && <div className="f-error">{brandUploadErr}</div>}
+             </div>
+ 
+             <div className="f-row">
+               <div className="f-col">
+                 <label className="f-lbl">Brand Name</label>
+                 <input className="f-in" value={brandName} onChange={e=>saveBrandName(e.target.value)} placeholder="Leave blank to hide brand name"/>
+               </div>
+               <div className="f-col">
+                 <label className="f-lbl">Text Beside Brand Name</label>
+                 <input className="f-in" value={brandTagline} onChange={e=>saveBrandTagline(e.target.value)} placeholder="Leave blank to hide tagline"/>
+               </div>
+             </div>
+ 
+             <div className="f-col">
+               <label className="f-lbl">Preview</label>
+               <div style={{background:'var(--tl)',borderRadius:8,padding:'12px 16px',display:'flex',alignItems:'center',gap:8,minHeight:58}}>
+                 {brandLogo && <img src={brandLogo} alt="Brand logo preview" style={{height:30,width:'auto',maxWidth:140,objectFit:'contain'}}/>}
+                 {brandName?.trim() && <span className="tb-wm">{brandName}</span>}
+                 {brandTagline?.trim() && <span className="tb-tg">{brandTagline}</span>}
+                 {!brandLogo && !brandName?.trim() && !brandTagline?.trim() && <span style={{color:'rgba(255,255,255,.65)',fontSize:12}}>Nothing will show in the brand area.</span>}
+               </div>
+             </div>
+           </div>
+           <div className="m-footer">
+             <span style={{fontSize:12,color:'var(--gr)'}}>Changes autosave to site settings.</span>
+             <div className="m-footer-r"><button className="save-btn" onClick={()=>setBrandEditOpen(false)}>Done</button></div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* CODE LIGHTBOX */}
+     {codeLightbox && (
+       <CodeLightbox
+         src={codeLightbox.src}
+         label={codeLightbox.label}
+         onClose={()=>setCodeLightbox(null)}
+       />
+     )}
+ 
+     {/* LOADING */}
+     {loading && (
+       <div style={{position:'fixed',inset:0,zIndex:999,background:'var(--sf4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
+         <div style={{fontSize:24,fontWeight:900,color:'var(--tl)',letterSpacing:'-.01em',fontFamily:'var(--fn)',textAlign:'center'}}>QUENCHA</div>
+         <div style={{width:40,height:40,border:'3px solid rgba(39,153,137,.2)',borderTop:'3px solid var(--tl)',borderRadius:'50%',animation:'spin 0.8s linear infinite',margin:'0 auto'}}/>
+         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+       </div>
+     )}
+ 
+     {/* BANNER EDIT MODAL */}
+     {bannerEditOpen && (
+       <BannerEditModal
+         banners={banners}
+         aspect={bannerAspect}
+         interval={bannerInterval}
+         onIntervalChange={saveBannerInterval}
+         heroVideoUrl={heroVideoUrl}
+         heroVideoThumbnail={heroVideoThumbnail}
+         heroMediaOrder={heroMediaOrder}
+         onHeroVideoUrlChange={saveHeroVideoUrl}
+         onHeroVideoThumbnailChange={saveHeroVideoThumbnail}
+         onHeroMediaOrderChange={saveHeroMediaOrder}
+         onAspectChange={saveAspect}
+         onAdd={b=>saveBanners([...banners,b])}
+         onRemove={id=>saveBanners(banners.filter(b=>b.id!==id))}
+         onMove={(from,to)=>{const b=[...banners];const[item]=b.splice(from,1);b.splice(to,0,item);saveBanners(b)}}
+         onUpdateBanner={(id,field,val)=>saveBanners(banners.map(b=>b.id===id?{...b,[field]:val}:b))}
+         onClose={()=>setBannerEditOpen(false)}
+         onUpload={uploadImageToBlob}
+       />
+     )}
+ 
+     {/* INQUIRY MODAL */}
+     {inqOpen && (() => {
+       const colors = inqProduct?.colors || []
+       const packingNum = parseInt(inqProduct?.packing, 10) || 0
+       const activeLines = inqLines?.length ? inqLines : [{ colorCode: colors[0]?.code || '', packs: '1' }]
+       const enrichedLines = activeLines.map((line) => {
+         const selectedColor = colors.find(c => c.code === line.colorCode) || colors[0] || null
+         const packsNum = parseInt(line.packs, 10) || 0
+         const units = packsNum && packingNum ? packsNum * packingNum : 0
+         return { ...line, selectedColor, packsNum, units }
+       })
+       const totalPacks = enrichedLines.reduce((sum, line) => sum + line.packsNum, 0)
+       const totalUnits = enrichedLines.reduce((sum, line) => sum + line.units, 0)
+       const inquiryHref = buildInquiryHref(inqProduct, activeLines, inqMessage)
+       const updateLine = (index, patch) => setInqLines(lines => {
+         const base = lines?.length ? lines : activeLines
+         return base.map((line, i) => i === index ? { ...line, ...patch } : line)
+       })
+       const addLine = () => setInqLines(lines => {
+         const base = lines?.length ? lines : activeLines
+         return [...base, { colorCode: colors[0]?.code || '', packs: '1' }]
+       })
+       const removeLine = (index) => setInqLines(lines => {
+         const base = lines?.length ? lines : activeLines
+         return base.length > 1 ? base.filter((_, i) => i !== index) : base
+       })
+ 
+       return (
+         <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setInqOpen(false)}}>
+           <div className="modal" style={{maxWidth:640}}>
+             <div className="m-hdr" style={{background:'var(--sf4)'}}>
+               <div>
+                 <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Corporate & Wholesale</div>
+                 <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Bulk Inquiry</div>
+               </div>
+               <button className="m-close" onClick={()=>setInqOpen(false)}>✕</button>
+             </div>
+             <div className="m-body" style={{gap:14}}>
+               <p style={{fontSize:14,color:'var(--gr)'}}>Select the preferred color/s and quantity first, then send the inquiry through email.</p>
+ 
+               <div style={{background:'var(--sf4)',border:'1px solid rgba(185,220,210,.6)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:8}}>
+                 <div style={{fontSize:11,fontWeight:800,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase'}}>Inquiry Item</div>
+                 <div style={{fontSize:16,fontWeight:900,color:'var(--bk)',lineHeight:1.25}}>{inqProduct?.name || 'General Quencha bulk inquiry'}</div>
+                 {inqProduct?.colors?.[0]?.sku && <div style={{fontSize:12,color:'var(--gr)'}}>SKU Base: <strong style={{color:'var(--tl)'}}>{getSkuBase(inqProduct)}</strong></div>}
+                 <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginTop:4}}>
+                   <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                     <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Packing</div>
+                     <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{packingNum ? `${packingNum} pcs` : 'TBC'}</div>
+                   </div>
+                   <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                     <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Packs</div>
+                     <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalPacks || '—'}</div>
+                   </div>
+                   <div style={{background:'#fff',border:'1px solid rgba(185,220,210,.55)',borderRadius:8,padding:'10px 12px'}}>
+                     <div style={{fontSize:10,fontWeight:800,letterSpacing:'.08em',color:'var(--gr)',textTransform:'uppercase'}}>Total Units</div>
+                     <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>{totalUnits ? `${totalUnits} pcs` : '—'}</div>
+                   </div>
+                 </div>
+               </div>
+ 
+               <div className="f-col">
+                 <label className="f-lbl">Color & Quantity</label>
+                 <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                   {enrichedLines.map((line, index) => (
+                     <div key={index} style={{background:'var(--bg)',border:'1px solid rgba(185,220,210,.55)',borderRadius:10,padding:10,display:'flex',flexDirection:'column',gap:8}}>
+                       <div style={{display:'grid',gridTemplateColumns:'1fr 120px 34px',gap:8,alignItems:'center'}}>
+                         <select
+                           className="f-sel"
+                           value={line.colorCode || ''}
+                           onChange={e=>updateLine(index, { colorCode: e.target.value })}
+                           disabled={!colors.length}
+                         >
+                           {colors.length ? colors.map(color => (
+                             <option key={color.sku || color.code} value={color.code}>{color.name} — {color.code}</option>
+                           )) : <option value="">Select color</option>}
+                         </select>
+                         <input
+                           className="f-in"
+                           type="number"
+                           min="1"
+                           value={line.packs}
+                           onChange={e=>updateLine(index, { packs: e.target.value })}
+                           placeholder="Packs"
+                         />
+                         <button
+                           type="button"
+                           className="rm-btn"
+                           onClick={()=>removeLine(index)}
+                           disabled={enrichedLines.length <= 1}
+                           style={{height:38,border:'1px solid rgba(239,68,68,.2)',borderRadius:8,background:'rgba(239,68,68,.04)',opacity:enrichedLines.length <= 1 ? .35 : 1}}
+                           title="Remove color"
+                         >
+                           ×
+                         </button>
+                       </div>
+                       <div style={{display:'flex',flexWrap:'wrap',gap:8,fontSize:11,color:'var(--gr)'}}>
+                         {line.selectedColor?.hex && <span style={{width:12,height:12,borderRadius:'50%',background:line.selectedColor.hex,border:'1px solid rgba(0,0,0,.1)',display:'inline-block',marginTop:2}}/>}
+                         {line.selectedColor?.sku && <span>SKU: <strong style={{color:'var(--tl)'}}>{line.selectedColor.sku}</strong></span>}
+                         {packingNum > 0 && line.packsNum > 0 && <span>{line.packsNum} pack{line.packsNum > 1 ? 's' : ''} × {packingNum} pcs = <strong>{line.units} pcs</strong></span>}
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+                 <button
+                   type="button"
+                   className="add-btn"
+                   onClick={addLine}
+                   style={{alignSelf:'flex-start',background:'rgba(39,153,137,.12)',color:'var(--tl)',border:'1px solid rgba(39,153,137,.25)',marginTop:2}}
+                 >
+                   + Add another color
+                 </button>
+                 {packingNum > 0 && <div className="f-hint">Example: 5 packs × {packingNum} pcs = {5 * packingNum} pcs total per color.</div>}
+               </div>
+ 
+               <div className="f-col">
+                 <label className="f-lbl">Note / Message</label>
+                 <textarea
+                   className="f-ta"
+                   rows={4}
+                   value={inqMessage}
+                   onChange={e=>setInqMessage(e.target.value)}
+                   placeholder="Add UV printing details, delivery area, deadline, or other notes…"
+                 />
+               </div>
+ 
+               <a
+                 className="inq-link"
+                 href={inquiryHref}
+                 target="_blank"
+                 rel="noreferrer"
+                 style={{width:'100%',justifyContent:'center'}}
+               >
+                 📩 Send Inquiry via Email
+               </a>
+             </div>
+           </div>
+         </div>
+       )
+     })()}
+ 
+     {/* CATEGORY MANAGER MODAL */}
+     {catMgrOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setCatMgrOpen(false)}}>
+         <div className="modal" style={{maxWidth:480}}>
+           <div className="m-hdr" style={{background:'var(--sf4)'}}>
+             <div>
+               <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
+               <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Categories</div>
+             </div>
+             <button className="m-close" onClick={()=>setCatMgrOpen(false)}>✕</button>
+           </div>
+           <div className="m-body" style={{gap:10}}>
+             {/* Existing categories */}
+             {cats.map((c,i)=>(
+               <div key={c.value} style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
+                 <input value={c.icon} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,icon:e.target.value}:x))} style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'4px 0',background:'#fff',outline:'none'}}/>
+                 <input value={c.label} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,label:e.target.value}:x))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
+                 <input value={c.value} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,value:e.target.value}:x))} placeholder="value (no spaces)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                 <button onClick={()=>setCats(cats.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+               </div>
+             ))}
+             {/* Add new category */}
+             <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
+               <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Category</div>
+               <div style={{display:'grid',gridTemplateColumns:'44px 1fr 1fr auto',gap:8,alignItems:'center'}}>
+                 <input value={newCat.icon} onChange={e=>setNewCat(n=>({...n,icon:e.target.value}))} placeholder="🏷️" style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 0',background:'#fff',outline:'none'}}/>
+                 <input value={newCat.label} onChange={e=>setNewCat(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
+                 <input value={newCat.value} onChange={e=>setNewCat(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                 <button onClick={()=>{
+                   const val = newCat.value || newCat.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                   if(!newCat.label.trim()||cats.some(c=>c.value===val)) return
+                   setCats([...cats,{value:val,label:newCat.label,icon:newCat.icon||'🏷️'}])
+                   setNewCat({value:'',label:'',icon:'🏷️'})
+                 }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
+               </div>
+             </div>
+           </div>
+           <div className="m-footer">
+             <div/>
+             <div className="m-footer-r">
+               <button className="cancel-btn" onClick={()=>setCatMgrOpen(false)}>Cancel</button>
+               <button className="save-btn" onClick={()=>setCatMgrOpen(false)}>✓ Done</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* EXTENSION MANAGER MODAL */}
+     {extMgrOpen && (
+       <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setExtMgrOpen(false)}}>
+         <div className="modal" style={{maxWidth:480}}>
+           <div className="m-hdr" style={{background:'var(--sf4)'}}>
+             <div>
+               <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Edit Mode</div>
+               <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Manage Extensions</div>
+             </div>
+             <button className="m-close" onClick={()=>setExtMgrOpen(false)}>✕</button>
+           </div>
+           <div className="m-body" style={{gap:10}}>
+             {exts.map((x,i)=>(
+               <div key={x.value} style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr 36px',gap:8,alignItems:'center',background:'var(--bg)',borderRadius:8,padding:'8px 10px',border:'1px solid rgba(185,220,210,.5)'}}>
+                 <input type="color" value={x.color} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,color:e.target.value}:o))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                 <input value={x.label} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,label:e.target.value}:o))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
+                 <input value={x.value} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,value:e.target.value}:o))} placeholder="key" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                 <button onClick={()=>setExts(exts.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+               </div>
+             ))}
+             <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
+               <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:8}}>Add New Extension</div>
+               <div style={{display:'grid',gridTemplateColumns:'36px 1fr 1fr auto',gap:8,alignItems:'center'}}>
+                 <input type="color" value={newExt.color} onChange={e=>setNewExt(n=>({...n,color:e.target.value}))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
+                 <input value={newExt.label} onChange={e=>setNewExt(n=>({...n,label:e.target.value}))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:12,background:'#fff',outline:'none',width:'100%'}}/>
+                 <input value={newExt.value} onChange={e=>setNewExt(n=>({...n,value:e.target.value.toLowerCase().replace(/\s+/g,'-')}))} placeholder="key (auto)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'7px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
+                 <button onClick={()=>{
+                   const val = newExt.value || newExt.label.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')
+                   if(!newExt.label.trim()||exts.some(x=>x.value===val)) return
+                   setExts([...exts,{value:val,label:newExt.label.trim(),color:newExt.color}])
+                   setNewExt({value:'',label:'',color:'#279989'})
+                 }} style={{whiteSpace:'nowrap',padding:'7px 14px',background:'var(--tl)',color:'#fff',border:'none',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add</button>
+               </div>
+             </div>
+           </div>
+           <div className="m-footer">
+             <div/>
+             <div className="m-footer-r">
+               <button className="cancel-btn" onClick={()=>setExtMgrOpen(false)}>Cancel</button>
+               <button className="save-btn" onClick={()=>setExtMgrOpen(false)}>✓ Done</button>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+ 
+     {/* EDIT BAR */}
+     {editMode && (
+       <div className="edit-bar">
+         <div style={{display:'flex',alignItems:'center',gap:8}}>
+           <span className="edit-dot"/>
+           <span className="eb-lbl">Edit Mode</span>
+           <span className="eb-cnt">{products.length} products</span>
+         </div>
+         <div style={{display:'flex',gap:8}}>
+           <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
+           <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
+           <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
+           <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
+         </div>
+       </div>
+     )}
+   </div>
+ )
 }
 function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspectChange, heroVideoUrl, heroVideoThumbnail, heroMediaOrder, onHeroVideoUrlChange, onHeroVideoThumbnailChange, onHeroMediaOrderChange, onAdd, onRemove, onMove, onUpdateBanner, onClose, onUpload }) {
-  const fileRef = useRef(null)
-  const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
-  const [bannerUploadErr, setBannerUploadErr] = useState('')
+ const fileRef = useRef(null)
+ const [editingBanner, setEditingBanner] = useState(null) // id of banner being edited
+ const [bannerUploadErr, setBannerUploadErr] = useState('')
  
-  const handleFile = async (e) => {
-    const file = e.target.files[0]; if (!file) return
-    if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { e.target.value = ''; return }
-    setBannerUploadErr('Uploading banner...')
-    try {
-      if (!onUpload) throw new Error('Upload route is not configured.')
-      const url = await onUpload(file)
-      onAdd({ id: 'b' + Date.now(), image: url, alt: file.name.split('.')[0], title:'', subtitle:'', link:'' })
-      setBannerUploadErr('')
-    } catch (err) {
-      console.error(err)
-      setBannerUploadErr(err?.message || 'Banner upload failed. Please try again.')
-    }
-    e.target.value = ''
-  }
+ const handleFile = async (e) => {
+   const file = e.target.files[0]; if (!file) return
+   if (!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) { e.target.value = ''; return }
+   setBannerUploadErr('Uploading banner...')
+   try {
+     if (!onUpload) throw new Error('Upload route is not configured.')
+     const url = await onUpload(file)
+     onAdd({ id: 'b' + Date.now(), image: url, alt: file.name.split('.')[0], title:'', subtitle:'', link:'' })
+     setBannerUploadErr('')
+   } catch (err) {
+     console.error(err)
+     setBannerUploadErr(err?.message || 'Banner upload failed. Please try again.')
+   }
+   e.target.value = ''
+ }
  
-  const editingData = banners.find(b=>b.id===editingBanner)
+ const editingData = banners.find(b=>b.id===editingBanner)
  
-  return (
-    <div style={{position:'fixed',inset:0,zIndex:600,background:'rgba(39,153,137,.15)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}} onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
-      <div style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:600,maxHeight:'90vh',display:'flex',flexDirection:'column',boxShadow:'0 24px 80px rgba(39,153,137,.22)'}}>
-        <div style={{background:'var(--sf4)',padding:'20px 24px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,borderRadius:'16px 16px 0 0',flexShrink:0}}>
-          <div>
-            <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Hero Section</div>
-            <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Banner Manager</div>
-          </div>
-          <button onClick={onClose} style={{background:'rgba(0,0,0,.07)',border:'none',borderRadius:'50%',width:34,height:34,cursor:'pointer',fontSize:14,color:'var(--gr)',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
-        </div>
-        {bannerUploadErr && <div style={{padding:'9px 24px',background:'rgba(245,158,11,.08)',borderBottom:'1px solid rgba(245,158,11,.16)',fontSize:12,fontWeight:700,color:'#92400e'}}>{bannerUploadErr}</div>}
+ return (
+   <div style={{position:'fixed',inset:0,zIndex:600,background:'rgba(39,153,137,.15)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}} onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+     <div style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:600,maxHeight:'90vh',display:'flex',flexDirection:'column',boxShadow:'0 24px 80px rgba(39,153,137,.22)'}}>
+       <div style={{background:'var(--sf4)',padding:'20px 24px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,borderRadius:'16px 16px 0 0',flexShrink:0}}>
+         <div>
+           <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4}}>Hero Section</div>
+           <div style={{fontSize:20,fontWeight:900,color:'var(--tl)'}}>Banner Manager</div>
+         </div>
+         <button onClick={onClose} style={{background:'rgba(0,0,0,.07)',border:'none',borderRadius:'50%',width:34,height:34,cursor:'pointer',fontSize:14,color:'var(--gr)',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+       </div>
+       {bannerUploadErr && <div style={{padding:'9px 24px',background:'rgba(245,158,11,.08)',borderBottom:'1px solid rgba(245,158,11,.16)',fontSize:12,fontWeight:700,color:'#92400e'}}>{bannerUploadErr}</div>}
  
-        <div style={{overflow:'auto',padding:24,display:'flex',flexDirection:'column',gap:18,flex:1}}>
-          {/* Media layout */}
-          <div>
-            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Hero Layout</div>
-            <div className="aspect-btns" style={{flexWrap:'wrap',gap:8}}>
-              <button className={`aspect-btn ${heroMediaOrder!=='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('banner-video')}>Banner Left · Video Right</button>
-              <button className={`aspect-btn ${heroMediaOrder==='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('video-banner')}>Video Left · Banner Right</button>
-            </div>
-            <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>Controls the two-column arrangement below the headline.</div>
-          </div>
+       <div style={{overflow:'auto',padding:24,display:'flex',flexDirection:'column',gap:18,flex:1}}>
+         {/* Media layout */}
+         <div>
+           <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Hero Layout</div>
+           <div className="aspect-btns" style={{flexWrap:'wrap',gap:8}}>
+             <button className={`aspect-btn ${heroMediaOrder!=='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('banner-video')}>Banner Left · Video Right</button>
+             <button className={`aspect-btn ${heroMediaOrder==='video-banner'?'on':''}`} onClick={()=>onHeroMediaOrderChange('video-banner')}>Video Left · Banner Right</button>
+           </div>
+           <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>Controls the two-column arrangement below the headline.</div>
+         </div>
  
-          {/* YouTube video */}
-          <div>
-            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>YouTube Video</div>
-            <div style={{display:'flex',flexDirection:'column',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:12}}>
-              <div>
-                <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>YouTube Link</div>
-                <input value={heroVideoUrl||''} onChange={e=>onHeroVideoUrlChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="https://www.youtube.com/watch?v=..."/>
-              </div>
-              <div>
-                <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Custom Thumbnail URL (optional)</div>
-                <input value={heroVideoThumbnail||''} onChange={e=>onHeroVideoThumbnailChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="Leave blank to use YouTube thumbnail automatically"/>
-              </div>
-              {getYouTubeId(heroVideoUrl) && (
-                <div style={{border:'1px solid rgba(185,220,210,.65)',borderRadius:8,overflow:'hidden',background:'#111'}}>
-                  <div style={{position:'relative',width:'100%',aspectRatio:'16 / 9',overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                    <img
-                      src={heroVideoThumbnail || `https://img.youtube.com/vi/${getYouTubeId(heroVideoUrl)}/hqdefault.jpg`}
-                      alt="Video thumbnail preview"
-                      style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',display:'block'}}
-                    />
-                    <span style={{position:'relative',zIndex:1,width:42,height:42,borderRadius:'50%',background:'rgba(255,255,255,.9)',color:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,paddingLeft:3}}>▶</span>
-                  </div>
-                </div>
-              )}
-              <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-                <button
-                  type="button"
-                  onClick={()=>{ onHeroVideoUrlChange(''); onHeroVideoThumbnailChange('') }}
-                  style={{border:'1px solid rgba(239,68,68,.25)',background:'rgba(239,68,68,.06)',color:'#b91c1c',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
-                >
-                  Remove Video
-                </button>
-                <button
-                  type="button"
-                  onClick={()=>onHeroVideoThumbnailChange('')}
-                  style={{border:'1px solid var(--sf7)',background:'#fff',color:'var(--tl)',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
-                >
-                  Use Auto Thumbnail
-                </button>
-              </div>
-              <div style={{fontSize:10,color:'var(--gr)'}}>Paste or replace the YouTube link anytime. Thumbnail preview is locked to a 16:9 frame and will crop neatly if needed.</div>
-            </div>
-          </div>
+         {/* YouTube video */}
+         <div>
+           <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>YouTube Video</div>
+           <div style={{display:'flex',flexDirection:'column',gap:8,background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:12}}>
+             <div>
+               <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>YouTube Link</div>
+               <input value={heroVideoUrl||''} onChange={e=>onHeroVideoUrlChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="https://www.youtube.com/watch?v=..."/>
+             </div>
+             <div>
+               <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Custom Thumbnail URL (optional)</div>
+               <input value={heroVideoThumbnail||''} onChange={e=>onHeroVideoThumbnailChange(e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:6,padding:'8px 10px',outline:'none',background:'#fff'}} placeholder="Leave blank to use YouTube thumbnail automatically"/>
+             </div>
+             {getYouTubeId(heroVideoUrl) && (
+               <div style={{border:'1px solid rgba(185,220,210,.65)',borderRadius:8,overflow:'hidden',background:'#111'}}>
+                 <div style={{position:'relative',width:'100%',aspectRatio:'16 / 9',overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                   <img
+                     src={heroVideoThumbnail || `https://img.youtube.com/vi/${getYouTubeId(heroVideoUrl)}/hqdefault.jpg`}
+                     alt="Video thumbnail preview"
+                     style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',display:'block'}}
+                   />
+                   <span style={{position:'relative',zIndex:1,width:42,height:42,borderRadius:'50%',background:'rgba(255,255,255,.9)',color:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,paddingLeft:3}}>▶</span>
+                 </div>
+               </div>
+             )}
+             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+               <button
+                 type="button"
+                 onClick={()=>{ onHeroVideoUrlChange(''); onHeroVideoThumbnailChange('') }}
+                 style={{border:'1px solid rgba(239,68,68,.25)',background:'rgba(239,68,68,.06)',color:'#b91c1c',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
+               >
+                 Remove Video
+               </button>
+               <button
+                 type="button"
+                 onClick={()=>onHeroVideoThumbnailChange('')}
+                 style={{border:'1px solid var(--sf7)',background:'#fff',color:'var(--tl)',borderRadius:7,padding:'7px 10px',fontFamily:'var(--fn)',fontSize:11,fontWeight:800,cursor:'pointer'}}
+               >
+                 Use Auto Thumbnail
+               </button>
+             </div>
+             <div style={{fontSize:10,color:'var(--gr)'}}>Paste or replace the YouTube link anytime. Thumbnail preview is locked to a 16:9 frame and will crop neatly if needed.</div>
+           </div>
+         </div>
  
-          {/* Aspect ratio */}
-          <div>
-            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Aspect Ratio</div>
-            <div className="aspect-btns">
-              {[['custom','Custom'],['16:9','16 : 9'],['1:1','1 : 1']].map(([v,l])=>(
-                <button key={v} className={`aspect-btn ${aspect===v?'on':''}`} onClick={()=>onAspectChange(v)}>{l}</button>
-              ))}
-            </div>
-            <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>
-              {aspect==='custom' && 'Height follows the first banner image uploaded.'}
-              {aspect==='16:9' && 'Fixed widescreen ratio — good for landscape product photos.'}
-              {aspect==='1:1' && 'Square format — good for product-focused imagery.'}
-            </div>
-          </div>
+         {/* Aspect ratio */}
+         <div>
+           <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Aspect Ratio</div>
+           <div className="aspect-btns">
+             {[['custom','Custom'],['16:9','16 : 9'],['1:1','1 : 1']].map(([v,l])=>(
+               <button key={v} className={`aspect-btn ${aspect===v?'on':''}`} onClick={()=>onAspectChange(v)}>{l}</button>
+             ))}
+           </div>
+           <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>
+             {aspect==='custom' && 'Height follows the first banner image uploaded.'}
+             {aspect==='16:9' && 'Fixed widescreen ratio — good for landscape product photos.'}
+             {aspect==='1:1' && 'Square format — good for product-focused imagery.'}
+           </div>
+         </div>
  
-          {/* Auto-advance interval */}
-          <div>
-            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Slide Transition</div>
-            <div className="aspect-btns" style={{flexWrap:'wrap',gap:8}}>
-              {[[0,'Manual'],[3,'3s'],[4.5,'4.5s'],[6,'6s'],[8,'8s'],[10,'10s']].map(([v,l])=>(
-                <button
-                  key={v}
-                  className={`aspect-btn ${interval===v?'on':''}`}
-                  onClick={()=>onIntervalChange(v)}
-                  style={{minWidth:56}}
-                >{l}</button>
-              ))}
-            </div>
-            <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>
-              {interval===0 ? 'Banners only advance on manual swipe.' : `Banners auto-advance every ${interval}s. Swipe anytime to override.`}
-            </div>
-          </div>
+         {/* Auto-advance interval */}
+         <div>
+           <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Slide Transition</div>
+           <div className="aspect-btns" style={{flexWrap:'wrap',gap:8}}>
+             {[[0,'Manual'],[3,'3s'],[4.5,'4.5s'],[6,'6s'],[8,'8s'],[10,'10s']].map(([v,l])=>(
+               <button
+                 key={v}
+                 className={`aspect-btn ${interval===v?'on':''}`}
+                 onClick={()=>onIntervalChange(v)}
+                 style={{minWidth:56}}
+               >{l}</button>
+             ))}
+           </div>
+           <div style={{fontSize:11,color:'var(--gr)',marginTop:6}}>
+             {interval===0 ? 'Banners only advance on manual swipe.' : `Banners auto-advance every ${interval}s. Swipe anytime to override.`}
+           </div>
+         </div>
  
-          {/* Banner list */}
-          <div>
-            <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Banners ({banners.length})</div>
-            <div className="banner-grid">
-              {banners.map((b,i)=>(
-                <div key={b.id} style={{display:'flex',flexDirection:'column',gap:4}}>
-                  <div className="banner-thumb" style={{cursor:'pointer',outline:editingBanner===b.id?'2px solid var(--cy)':'none'}}>
-                    <img src={b.image} alt={b.alt}/>
-                    <div className="bt-actions">
-                      {i>0 && <button onClick={()=>onMove(i,i-1)}>←</button>}
-                      {i<banners.length-1 && <button onClick={()=>onMove(i,i+1)}>→</button>}
-                      <button onClick={()=>setEditingBanner(editingBanner===b.id?null:b.id)} style={{background:'rgba(45,204,211,.9)',color:'#fff',border:'none',borderRadius:4,padding:'3px 6px',cursor:'pointer',fontSize:11}}>✏️</button>
-                      <button className="bt-rm" onClick={()=>{onRemove(b.id);if(editingBanner===b.id)setEditingBanner(null)}}>✕</button>
-                    </div>
-                  </div>
-                  {/* Inline editor for this banner */}
-                  {editingBanner===b.id && (
-                    <div style={{background:'var(--bg)',borderRadius:8,padding:10,border:'1px solid var(--sf7)',display:'flex',flexDirection:'column',gap:7}}>
-                      <div>
-                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Banner Title</div>
-                        <input value={b.title||''} onChange={e=>onUpdateBanner(b.id,'title',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="e.g. New Arrivals"/>
-                      </div>
-                      <div>
-                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Subtitle</div>
-                        <input value={b.subtitle||''} onChange={e=>onUpdateBanner(b.id,'subtitle',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="e.g. Shop the latest collection"/>
-                      </div>
-                      <div>
-                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Link (on click)</div>
-                        <input value={b.link||''} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="#sip · #savor · #go · #accessories · or https://…"/>
-                        <div style={{fontSize:10,color:'var(--gr)',marginTop:3}}>Use #sip, #savor, #go, #accessories to filter by category</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div className="banner-add-zone" onClick={()=>fileRef.current?.click()}>
-                <span style={{fontSize:22,color:'var(--tl)'}}>+</span>
-                <span style={{fontSize:11,fontWeight:700,color:'var(--tl)'}}>Add Banner</span>
-                <span style={{fontSize:10,color:'var(--gr)'}}>JPG, PNG, WebP</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
-        <div style={{padding:'14px 24px',borderTop:'1px solid rgba(185,220,210,.4)',background:'#fff',borderRadius:'0 0 16px 16px',flexShrink:0}}>
-          <button onClick={onClose} style={{background:'var(--tl)',color:'#fff',border:'none',borderRadius:8,padding:'10px 24px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',width:'100%'}}>Done</button>
-        </div>
-      </div>
-    </div>
-  )
+         {/* Banner list */}
+         <div>
+           <div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',color:'var(--tl)',textTransform:'uppercase',marginBottom:10}}>Banners ({banners.length})</div>
+           <div className="banner-grid">
+             {banners.map((b,i)=>(
+               <div key={b.id} style={{display:'flex',flexDirection:'column',gap:4}}>
+                 <div className="banner-thumb" style={{cursor:'pointer',outline:editingBanner===b.id?'2px solid var(--cy)':'none'}}>
+                   <img src={b.image} alt={b.alt}/>
+                   <div className="bt-actions">
+                     {i>0 && <button onClick={()=>onMove(i,i-1)}>←</button>}
+                     {i<banners.length-1 && <button onClick={()=>onMove(i,i+1)}>→</button>}
+                     <button onClick={()=>setEditingBanner(editingBanner===b.id?null:b.id)} style={{background:'rgba(45,204,211,.9)',color:'#fff',border:'none',borderRadius:4,padding:'3px 6px',cursor:'pointer',fontSize:11}}>✏️</button>
+                     <button className="bt-rm" onClick={()=>{onRemove(b.id);if(editingBanner===b.id)setEditingBanner(null)}}>✕</button>
+                   </div>
+                 </div>
+                 {/* Inline editor for this banner */}
+                 {editingBanner===b.id && (
+                   <div style={{background:'var(--bg)',borderRadius:8,padding:10,border:'1px solid var(--sf7)',display:'flex',flexDirection:'column',gap:7}}>
+                     <div>
+                       <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Banner Title</div>
+                       <input value={b.title||''} onChange={e=>onUpdateBanner(b.id,'title',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="e.g. New Arrivals"/>
+                     </div>
+                     <div>
+                       <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Subtitle</div>
+                       <input value={b.subtitle||''} onChange={e=>onUpdateBanner(b.id,'subtitle',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="e.g. Shop the latest collection"/>
+                     </div>
+                     <div>
+                       <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Link (on click)</div>
+                       <input value={b.link||''} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="#sip · #savor · #go · #accessories · or https://…"/>
+                       <div style={{fontSize:10,color:'var(--gr)',marginTop:3}}>Use #sip, #savor, #go, #accessories to filter by category</div>
+                     </div>
+                   </div>
+                 )}
+               </div>
+             ))}
+             <div className="banner-add-zone" onClick={()=>fileRef.current?.click()}>
+               <span style={{fontSize:22,color:'var(--tl)'}}>+</span>
+               <span style={{fontSize:11,fontWeight:700,color:'var(--tl)'}}>Add Banner</span>
+               <span style={{fontSize:10,color:'var(--gr)'}}>JPG, PNG, WebP</span>
+             </div>
+           </div>
+         </div>
+       </div>
+       <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleFile}/>
+       <div style={{padding:'14px 24px',borderTop:'1px solid rgba(185,220,210,.4)',background:'#fff',borderRadius:'0 0 16px 16px',flexShrink:0}}>
+         <button onClick={onClose} style={{background:'var(--tl)',color:'#fff',border:'none',borderRadius:8,padding:'10px 24px',fontFamily:'var(--fn)',fontSize:13,fontWeight:700,cursor:'pointer',width:'100%'}}>Done</button>
+       </div>
+     </div>
+   </div>
+ )
 }
