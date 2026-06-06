@@ -1,5 +1,3 @@
-
-
 'use client'
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
  
@@ -1718,7 +1716,7 @@ button{touch-action:manipulation}
   }
 }
  
- 
+
 /* ─── FINAL MOBILE SIDEBAR FILTER UI FIX — CATEGORY + COLOR COLLECTIONS ─── */
 @media (max-width: 700px) {
   .mob-drawer{
@@ -1858,9 +1856,9 @@ button{touch-action:manipulation}
   }
   .mob-drawer .sb-div{margin:18px 16px!important;border-top-color:rgba(39,153,137,.13)!important}
 }
- 
- 
- 
+
+
+
 /* ─── FINAL MOBILE SIDEBAR COMPACT FILTER FIX — NO CATEGORY ICONS ─── */
 @media (max-width: 700px) {
   .mob-drawer{
@@ -2616,14 +2614,14 @@ function savedNumberOrNull(value) {
   const num = Number(value)
   return Number.isFinite(num) ? num : null
 }
- 
- 
+
+
 // ─── EMBEDDED IMAGE CLEANUP ──────────────────────────────────────────────────
 // Base64/data URL images make /api/products and /api/settings very heavy because
 // they are stored inside JSON and cannot be cached like normal image files.
 // Keep only CDN/Blob/static URLs in saved catalog data.
 const isEmbeddedDataImage = (value) => typeof value === 'string' && /^data:image\//i.test(value.trim())
- 
+
 function stripEmbeddedDataImagesFromProduct(product = {}) {
   const cleanImages = Array.isArray(product.images)
     ? product.images.filter(img => {
@@ -2631,7 +2629,7 @@ function stripEmbeddedDataImagesFromProduct(product = {}) {
         return !isEmbeddedDataImage(src)
       })
     : []
- 
+
   const cleanColors = Array.isArray(product.colors)
     ? product.colors.map(color => {
         const next = { ...color }
@@ -2642,7 +2640,7 @@ function stripEmbeddedDataImagesFromProduct(product = {}) {
         return next
       })
     : []
- 
+
   return {
     ...product,
     images: cleanImages,
@@ -2651,12 +2649,12 @@ function stripEmbeddedDataImagesFromProduct(product = {}) {
     qrImage: isEmbeddedDataImage(product.qrImage) ? '' : (product.qrImage || ''),
   }
 }
- 
+
 function stripEmbeddedDataImagesFromSettings(settings = {}) {
   const cleanBanners = Array.isArray(settings.banners)
     ? settings.banners.filter(banner => !isEmbeddedDataImage(banner?.image))
     : settings.banners
- 
+
   return {
     ...settings,
     banners: cleanBanners,
@@ -2664,7 +2662,7 @@ function stripEmbeddedDataImagesFromSettings(settings = {}) {
     heroVideoThumbnail: isEmbeddedDataImage(settings.heroVideoThumbnail) ? '' : (settings.heroVideoThumbnail || ''),
   }
 }
- 
+
 function hasEmbeddedDataImages(value) {
   try { return JSON.stringify(value).includes('data:image/') }
   catch { return false }
@@ -2705,9 +2703,9 @@ export default function QuenchaCatalog() {
       const existingProducts = Array.isArray(prods) ? prods : []
       const cleanedProducts = existingProducts.map(p => stripEmbeddedDataImagesFromProduct({ youtube: '', ...p }))
       const cleanedSettings = stripEmbeddedDataImagesFromSettings(settings || {})
- 
+
       setProducts(cleanedProducts)
- 
+
       // One-time cleanup: if old Base64 images are already saved in Redis, remove
       // them after the first load so future visits no longer download them in JSON.
       existingProducts.forEach((product, index) => {
@@ -3927,9 +3925,13 @@ ${message.trim()}` : 'Message / Notes:',
       <div className="sb-sec">
         <span className="sb-lbl">Category Filter</span>
         <div className="filter-pill-wrap">
-          {cats.map(c=>(
+          <button className={`filter-pill full ${!filterCat?'on':''}`} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
+            <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
+            <span className="filter-pill-count">{products.length}</span>
+          </button>
+          {cats.filter(c=>['sip','savor','go'].includes(c.value)).map(c=>(
             <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
-              <span className="filter-pill-l"><span className="filter-pill-label">{c.label}</span></span>
+              <span className="filter-pill-l"><span className="filter-pill-label">{{sip:'SIP',savor:'SAVOR',go:'GO'}[c.value] || c.label}</span></span>
               <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
             </button>
           ))}
