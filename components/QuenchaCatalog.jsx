@@ -2064,14 +2064,22 @@ button{touch-action:manipulation}
   letter-spacing:.02em!important;
 }
 
-/* Product card SKU now matches the full product page SKU style */
+/* FINAL FIX: product card SKU copied from full product page SKU style */
 .c-sku{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
-  font-size:13px!important;
+  font-family:monospace!important;
+  font-size:11px!important;
   font-weight:700!important;
-  letter-spacing:.06em!important;
+  letter-spacing:.04em!important;
   line-height:1.2!important;
   color:var(--tl)!important;
+  background:rgba(39,153,137,.1)!important;
+  border:0!important;
+  border-radius:4px!important;
+  padding:2px 8px!important;
+  margin-top:5px!important;
+  display:inline-block!important;
+  align-self:flex-start!important;
+  width:fit-content!important;
 }
 `
  
