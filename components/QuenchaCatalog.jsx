@@ -494,12 +494,12 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-set-editor-name{font-size:16px;font-weight:900;color:var(--tl)}
 .collection-set-editor-close{border:none;border-radius:999px;background:rgba(185,220,210,.35);color:var(--tl);width:32px;height:32px;font-size:14px;font-weight:900;cursor:pointer}
 .collection-set-editor-list{display:flex;flex-direction:column;gap:8px}
-.collection-set-row{display:grid;grid-template-columns:34px 1.2fr .65fr 1.3fr 30px;gap:8px;align-items:center;background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:10px;padding:8px}
+.collection-set-row{display:grid;grid-template-columns:54px 34px minmax(130px,1.2fr) 70px minmax(170px,1.3fr) 38px;gap:8px;align-items:center;background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:12px;padding:10px}
 .collection-set-row input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
 .collection-set-row input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;background:#fff;outline:none}
 .collection-set-row input[type=text]:focus{border-color:var(--tl)}
-.collection-set-remove{width:28px;height:28px;border-radius:50%;border:none;background:rgba(239,68,68,.1);color:#b91c1c;font-weight:900;cursor:pointer}
-.collection-set-add-inline{display:grid;grid-template-columns:34px 1.2fr .65fr 1.3fr auto;gap:8px;align-items:center;margin-top:10px;background:rgba(185,220,210,.22);border:1px dashed rgba(39,153,137,.24);border-radius:10px;padding:8px}
+.collection-set-move{display:flex;gap:4px;align-items:center;justify-content:center}.collection-set-move button{width:24px;height:24px;border-radius:7px;border:1px solid rgba(39,153,137,.18);background:#fff;color:var(--tl);font-size:12px;font-weight:900;cursor:pointer}.collection-set-move button:disabled{opacity:.32;cursor:not-allowed}.collection-set-remove{width:32px;height:32px;border-radius:10px;border:1px solid rgba(239,68,68,.18);background:rgba(239,68,68,.08);color:#b91c1c;font-size:15px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}.collection-set-remove:hover{background:rgba(239,68,68,.16)}
+.collection-set-add-inline{display:grid;grid-template-columns:34px minmax(130px,1.2fr) 70px minmax(170px,1.3fr) auto;gap:8px;align-items:center;margin-top:10px;background:rgba(185,220,210,.22);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:10px}
 .collection-set-add-inline input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
 .collection-set-add-inline input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;background:#fff;outline:none}
 .collection-set-add-inline button{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
@@ -533,7 +533,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
 .collection-select:focus{border-color:var(--tl);background:#fff}
 @media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-actions{grid-template-columns:68px minmax(0,1fr) 78px}.collection-set-count{width:68px}.collection-edit-set{width:78px}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.vm-color-item{padding:8px 7px;gap:7px}.vm-color-swatch{width:36px;height:36px}.vm-color-name{font-size:12px}.vm-color-sku{font-size:10px}.collection-set-row,.collection-set-add-inline{grid-template-columns:34px 1fr .65fr}.collection-set-row input:nth-of-type(4),.collection-set-add-inline input:nth-of-type(4){grid-column:1/-1}.collection-set-remove,.collection-set-add-inline button{grid-column:1/-1;width:100%}}
+@media(max-width:560px){.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.vm-color-item{padding:8px 7px;gap:7px}.vm-color-swatch{width:36px;height:36px}.vm-color-name{font-size:12px}.vm-color-sku{font-size:10px}.collection-set-row{grid-template-columns:54px 34px 1fr 64px}.collection-set-row input:nth-of-type(4){grid-column:1/-1}.collection-set-remove{grid-column:1/-1;width:100%}.collection-set-add-inline{grid-template-columns:34px 1fr 64px}.collection-set-add-inline input:nth-of-type(4),.collection-set-add-inline button{grid-column:1/-1;width:100%}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
 .rm-btn{background:none;border:none;cursor:pointer;color:rgba(239,68,68,.5);font-size:16px;transition:var(--tr)}
@@ -2450,6 +2450,16 @@ ${message.trim()}` : 'Message / Notes:',
    setCollectionSetDraft(list => list.filter((_, idx) => idx !== index))
  }
  
+ const moveCollectionSetDraftColor = (fromIndex, toIndex) => {
+   setCollectionSetDraft(list => {
+     if (toIndex < 0 || toIndex >= list.length || fromIndex === toIndex) return list
+     const next = [...list]
+     const [moved] = next.splice(fromIndex, 1)
+     next.splice(toIndex, 0, moved)
+     return next
+   })
+ }
+ 
  const addCollectionSetDraftColor = () => {
    const name = newCollectionSetColor.name.trim()
    const code = newCollectionSetColor.code.trim().toUpperCase()
@@ -3704,14 +3714,15 @@ ${message.trim()}` : 'Message / Notes:',
                  <div className="collection-grid">
                    {colorCollections.map(col=>{
                      const savedCount = collectionSetCount(col.value)
+                     const isEditingThisSet = editingCollectionSet === col.value
                      return (
-                       <div key={col.value} className="collection-item">
+                       <div key={col.value} className={`collection-item ${isEditingThisSet ? 'editing-set' : ''}`}>
                          <input type="color" value={col.color || '#279989'} onChange={e=>updateCollection(col.value,{color:e.target.value})}/>
                          <input className="collection-name" value={col.label} onChange={e=>updateCollection(col.value,{label:e.target.value})} placeholder="Collection name"/>
                          <div className="collection-actions">
                            <span className="collection-set-count">{savedCount} colors</span>
                            <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
-                           <button type="button" className="collection-edit-set" onClick={()=>openCollectionSetEditor(col.value)}>Edit Set</button>
+                           <button type="button" className="collection-edit-set" onClick={()=>isEditingThisSet ? closeCollectionSetEditor() : openCollectionSetEditor(col.value)}>{isEditingThisSet ? 'Close' : 'Edit Set'}</button>
                          </div>
                          <div className="collection-set-preview">
                            {(colorCollectionSets[col.value] || []).map(item=>(
@@ -3720,46 +3731,50 @@ ${message.trim()}` : 'Message / Notes:',
                              </span>
                            ))}
                          </div>
+                         {isEditingThisSet && (() => {
+                           const activeCollection = col
+                           return (
+                             <div className="collection-set-editor">
+                               <div className="collection-set-editor-head">
+                                 <div>
+                                   <span className="collection-set-editor-kicker">Editing saved colors</span>
+                                   <div className="collection-set-editor-name">{activeCollection.label} Collection Set</div>
+                                 </div>
+                                 <button type="button" className="collection-set-editor-close" onClick={closeCollectionSetEditor}>×</button>
+                               </div>
+                               <div className="collection-set-editor-list">
+                                 {collectionSetDraft.map((item, idx) => (
+                                   <div key={`${editingCollectionSet}-${idx}`} className="collection-set-row">
+                                     <div className="collection-set-move" aria-label={`Reorder ${item.name || 'color'}`}>
+                                       <button type="button" disabled={idx===0} onClick={()=>moveCollectionSetDraftColor(idx, idx-1)} title="Move color up">↑</button>
+                                       <button type="button" disabled={idx===collectionSetDraft.length-1} onClick={()=>moveCollectionSetDraftColor(idx, idx+1)} title="Move color down">↓</button>
+                                     </div>
+                                     <input type="color" value={getColorHexes(item)[0] || '#B9DCD2'} onChange={e=>updateCollectionSetDraft(idx,{ hex:e.target.value })}/>
+                                     <input type="text" value={item.name || ''} onChange={e=>updateCollectionSetDraft(idx,{ name:e.target.value })} placeholder="Color name"/>
+                                     <input type="text" value={item.code || ''} onChange={e=>updateCollectionSetDraft(idx,{ code:e.target.value.toUpperCase() })} placeholder="Code"/>
+                                     <input type="text" value={getColorHexes(item).join(', ')} onChange={e=>updateCollectionSetDraftHexes(idx,e.target.value)} placeholder="#HEX or #HEX, #HEX"/>
+                                     <button type="button" className="collection-set-remove" onClick={()=>removeCollectionSetDraftColor(idx)} title="Remove color">×</button>
+                                   </div>
+                                 ))}
+                               </div>
+                               <div className="collection-set-add-inline">
+                                 <input type="color" value={normalizeHexValue(newCollectionSetColor.hex, '#B9DCD2')} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))}/>
+                                 <input type="text" value={newCollectionSetColor.name} onChange={e=>setNewCollectionSetColor(v=>({...v,name:e.target.value}))} placeholder="New color name"/>
+                                 <input type="text" value={newCollectionSetColor.code} onChange={e=>setNewCollectionSetColor(v=>({...v,code:e.target.value.toUpperCase()}))} placeholder="Code"/>
+                                 <input type="text" value={newCollectionSetColor.hex} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))} placeholder="#HEX or #HEX, #HEX"/>
+                                 <button type="button" onClick={addCollectionSetDraftColor}>+ Add Color</button>
+                               </div>
+                               <div className="collection-set-editor-actions">
+                                 <button type="button" className="collection-set-cancel" onClick={closeCollectionSetEditor}>Cancel</button>
+                                 <button type="button" className="collection-set-save" onClick={saveCollectionSetDraft}>Save Collection Set</button>
+                               </div>
+                             </div>
+                           )
+                         })()}
                        </div>
                      )
                    })}
                  </div>
-                 {editingCollectionSet && (() => {
-                   const activeCollection = colorCollections.find(c => c.value === editingCollectionSet) || { label: editingCollectionSet, color:'#279989' }
-                   return (
-                     <div className="collection-set-editor">
-                       <div className="collection-set-editor-head">
-                         <div>
-                           <span className="collection-set-editor-kicker">Editing saved colors</span>
-                           <div className="collection-set-editor-name">{activeCollection.label} Collection Set</div>
-                         </div>
-                         <button type="button" className="collection-set-editor-close" onClick={closeCollectionSetEditor}>×</button>
-                       </div>
-                       <div className="collection-set-editor-list">
-                         {collectionSetDraft.map((item, idx) => (
-                           <div key={`${editingCollectionSet}-${idx}`} className="collection-set-row">
-                             <input type="color" value={getColorHexes(item)[0] || '#B9DCD2'} onChange={e=>updateCollectionSetDraft(idx,{ hex:e.target.value })}/>
-                             <input type="text" value={item.name || ''} onChange={e=>updateCollectionSetDraft(idx,{ name:e.target.value })} placeholder="Color name"/>
-                             <input type="text" value={item.code || ''} onChange={e=>updateCollectionSetDraft(idx,{ code:e.target.value.toUpperCase() })} placeholder="Code"/>
-                             <input type="text" value={getColorHexes(item).join(', ')} onChange={e=>updateCollectionSetDraftHexes(idx,e.target.value)} placeholder="#HEX or #HEX, #HEX"/>
-                             <button type="button" className="collection-set-remove" onClick={()=>removeCollectionSetDraftColor(idx)}>×</button>
-                           </div>
-                         ))}
-                       </div>
-                       <div className="collection-set-add-inline">
-                         <input type="color" value={normalizeHexValue(newCollectionSetColor.hex, '#B9DCD2')} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))}/>
-                         <input type="text" value={newCollectionSetColor.name} onChange={e=>setNewCollectionSetColor(v=>({...v,name:e.target.value}))} placeholder="New color name"/>
-                         <input type="text" value={newCollectionSetColor.code} onChange={e=>setNewCollectionSetColor(v=>({...v,code:e.target.value.toUpperCase()}))} placeholder="Code"/>
-                         <input type="text" value={newCollectionSetColor.hex} onChange={e=>setNewCollectionSetColor(v=>({...v,hex:e.target.value}))} placeholder="#HEX or #HEX, #HEX"/>
-                         <button type="button" onClick={addCollectionSetDraftColor}>+ Add Color</button>
-                       </div>
-                       <div className="collection-set-editor-actions">
-                         <button type="button" className="collection-set-cancel" onClick={closeCollectionSetEditor}>Cancel</button>
-                         <button type="button" className="collection-set-save" onClick={saveCollectionSetDraft}>Save Collection Set</button>
-                       </div>
-                     </div>
-                   )
-                 })()}
                  <div className="collection-add-row">
                    <input type="color" value={newCollection.color} onChange={e=>setNewCollection(n=>({...n,color:e.target.value}))}/>
                    <input type="text" value={newCollection.label} onChange={e=>setNewCollection(n=>({...n,label:e.target.value}))} placeholder="Add group title, e.g. Seasonal, Pastel, Male, Female" onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addCollection()}}}/>
