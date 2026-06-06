@@ -476,14 +476,19 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-item input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer;flex-shrink:0;grid-row:1/3}
 .collection-name{min-width:0;font-family:var(--fn);font-size:12px;font-weight:800;color:var(--bk);border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;outline:none;background:var(--bg);width:100%;grid-column:2/3}
 .collection-name:focus{border-color:var(--tl);background:#fff}
-.collection-actions{grid-column:2/3;display:grid;grid-template-columns:74px minmax(0,1fr) 72px;gap:8px;width:100%;align-items:center}
+.collection-actions{grid-column:2/3;display:grid;grid-template-columns:74px minmax(0,1fr) 72px 72px;gap:8px;width:100%;align-items:center}
 .collection-set-count{width:74px;height:32px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:var(--tl);background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.12);border-radius:999px;white-space:nowrap;text-align:center;line-height:1}
-.collection-add-set,.collection-save-set{border:none;border-radius:8px;padding:8px 10px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:32px;min-width:0}
+.collection-add-set,.collection-save-set,.collection-reset-set{border:none;border-radius:8px;padding:8px 10px;font-family:var(--fn);font-size:10px;font-weight:900;letter-spacing:.02em;cursor:pointer;transition:var(--tr);white-space:nowrap;min-height:32px;min-width:0}
 .collection-add-set{background:var(--tl);color:#fff;overflow:hidden;text-overflow:ellipsis}
 .collection-add-set:hover:not(:disabled){background:var(--tl2);transform:translateY(-1px)}
 .collection-save-set{background:rgba(255,255,255,.85);color:var(--tl);border:1px solid rgba(39,153,137,.18);width:72px;padding-left:6px;padding-right:6px}
-.collection-save-set:hover{background:#fff;border-color:var(--tl)}
+.collection-reset-set{background:rgba(255,255,255,.72);color:var(--gr);border:1px solid rgba(39,153,137,.14);width:72px;padding-left:6px;padding-right:6px}
+.collection-save-set:hover,.collection-reset-set:hover{background:#fff;border-color:var(--tl);color:var(--tl)}
 .collection-add-set:disabled{opacity:.45;cursor:not-allowed;background:rgba(39,153,137,.35);transform:none}
+ 
+.collection-set-preview{grid-column:2/3;display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.collection-color-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(185,220,210,.65);background:rgba(247,250,249,.86);border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900;color:var(--gr);line-height:1}
+.collection-color-chip i{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .collection-add-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;margin-top:12px;background:rgba(255,255,255,.65);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:10px}
 .collection-add-row input[type=color]{width:38px;height:38px;border:none;background:none;padding:2px;cursor:pointer}
 .collection-add-row input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:9px 11px;outline:none;background:#fff}
@@ -510,7 +515,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .hex-in:focus{color:var(--tl)}
 .collection-select{width:100%;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--bk);background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:6px;padding:7px 8px;outline:none}
 .collection-select:focus{border-color:var(--tl);background:#fff}
-@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-actions{grid-template-columns:68px minmax(0,1fr) 68px}.collection-set-count{width:68px}.collection-save-set{width:68px}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.color-table-head{display:none}.color-row{grid-template-columns:1fr;gap:8px}.color-move-controls{justify-content:flex-start}.multi-swatch-edit{display:grid;grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-item{grid-template-columns:34px minmax(0,1fr)}.collection-actions{grid-template-columns:68px minmax(0,1fr) 68px 68px}.collection-set-count{width:68px}.collection-save-set,.collection-reset-set{width:68px}.collection-add-row{grid-template-columns:38px minmax(0,1fr)}.collection-add-row button{grid-column:1/-1}.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.vm-color-item{padding:8px 7px;gap:7px}.vm-color-swatch{width:36px;height:36px}.vm-color-name{font-size:12px}.vm-color-sku{font-size:10px}}
 .in-sm{font-family:var(--fn);font-size:13px;color:var(--bk);background:var(--bg);border:1px solid var(--sf7);border-radius:6px;padding:6px 8px;outline:none;width:100%}
 .in-sm:focus{border-color:var(--tl)}
@@ -955,10 +960,6 @@ const DEFAULT_COLOR_COLLECTION_SETS = {
    { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'OG' },
  ],
  XPRESS: [
-   { name:'Snow', code:'WT', hex:'#F5F5F0', hexes:['#F5F5F0'], collection:'XPRESS' },
-   { name:'Sand', code:'TP', hex:'#C8C5BE', hexes:['#C8C5BE'], collection:'XPRESS' },
-   { name:'Stone', code:'GY', hex:'#8A8780', hexes:['#8A8780'], collection:'XPRESS' },
-   { name:'Onyx', code:'BK', hex:'#2A2A28', hexes:['#2A2A28'], collection:'XPRESS' },
    { name:'Autumn Sunset', code:'AS', hex:'#D4894A', hexes:['#D4894A'], collection:'XPRESS' },
    { name:'Forest Green', code:'FG', hex:'#3D6B4F', hexes:['#3D6B4F'], collection:'XPRESS' },
    { name:'Twilight Teal', code:'TT', hex:'#2B8090', hexes:['#2B8090'], collection:'XPRESS' },
@@ -989,7 +990,10 @@ function normalizeCollectionSetMap(map) {
  const normalized = {}
  Object.entries(source).forEach(([key, list]) => {
    if (!Array.isArray(list)) return
-   normalized[key] = list
+   const cleanedList = key === 'XPRESS'
+     ? list.filter(item => ['AS','FG','TT','CO'].includes(String(item.code || '').toUpperCase()))
+     : list
+   normalized[key] = cleanedList
      .map(item => normalizeColorVariant({ ...item, collection: item.collection || key }))
      .filter(item => item.name && item.code)
  })
@@ -2393,6 +2397,14 @@ ${message.trim()}` : 'Message / Notes:',
    alert('Color collection set saved. You can now quick-add it to other products.')
  }
  
+ 
+ const resetCollectionSetToDefault = (collectionValue) => {
+   const defaults = DEFAULT_COLOR_COLLECTION_SETS[collectionValue] || []
+   if (!defaults.length) return
+   const resetSet = defaults.map(c => normalizeColorVariant({ ...c, collection: collectionValue }))
+   saveColorCollectionSets({ ...colorCollectionSets, [collectionValue]: resetSet })
+ }
+ 
  // SKU Base — bulk-edit all color variant SKUs from Details tab
  const getEditableSkuBase = () => {
    const first = ef.colors?.[0]
@@ -3614,7 +3626,7 @@ ${message.trim()}` : 'Message / Notes:',
            )}
            {editTab === 'colors' && (
              <div className="em-panel">
-               <div className="f-hint">Each color variant gets its own SKU. Use + Add beside a collection title to quickly add saved colors like Horizon, OG, XPRESS, Bloom, or Poply to this product. Use Save Set after editing a collection’s colors so you can reuse it on other products.</div>
+               <div className="f-hint">Each color variant gets its own SKU. Use + Add beside a collection title to quickly add saved colors like Horizon, OG, XPRESS, Bloom, or Poply to this product. Use Save Set after editing a product’s colors, or Reset to restore the default collection set. XPRESS now uses only Autumn Sunset, Forest Green, Twilight Teal, and Coral Oasis.</div>
                <div className="color-collection-panel">
                  <div className="collection-head">
                    <span className="collection-title">Color collections / group titles</span>
@@ -3629,7 +3641,15 @@ ${message.trim()}` : 'Message / Notes:',
                          <div className="collection-actions">
                            <span className="collection-set-count">{savedCount} colors</span>
                            <button type="button" className="collection-add-set" disabled={!savedCount} onClick={()=>addCollectionSetToProduct(col.value)}>+ Add {col.label}</button>
-                           <button type="button" className="collection-save-set" onClick={()=>saveCollectionSetFromCurrentProduct(col.value)}>Save Set</button>
+                           <button type="button" className="collection-save-set" onClick={()=>saveCollectionSetFromCurrentProduct(col.value)}>Save</button>
+                           <button type="button" className="collection-reset-set" onClick={()=>resetCollectionSetToDefault(col.value)}>Reset</button>
+                         </div>
+                         <div className="collection-set-preview">
+                           {(colorCollectionSets[col.value] || []).map(item=>(
+                             <span key={`${col.value}-${item.code}`} className="collection-color-chip" title={`${item.name} (${item.code})`}>
+                               <i style={{background:swatchBackground(item)}}/>{item.name}
+                             </span>
+                           ))}
                          </div>
                        </div>
                      )
