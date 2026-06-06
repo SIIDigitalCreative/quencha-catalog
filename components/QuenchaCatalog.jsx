@@ -1717,170 +1717,148 @@ button{touch-action:manipulation}
 }
  
 
-/* ─── FINAL MOBILE SIDEBAR FILTER UI FIX — CATEGORY + COLOR COLLECTIONS ─── */
-@media (max-width: 700px) {
-  .mob-drawer{
-    width:min(78vw,320px)!important;
-    background:linear-gradient(180deg,#EAF8F5 0%,#F4FBF9 100%)!important;
-    padding-top:48px!important;
-  }
-  .mob-drawer .sb-sec{padding:16px 16px 10px!important}
-  .mob-drawer .sb-lbl{
-    display:block!important;
-    padding:0 0 12px!important;
-    font-size:13px!important;
-    line-height:1.15!important;
-    letter-spacing:.14em!important;
-    color:rgba(39,153,137,.78)!important;
-  }
-  .mob-drawer .filter-pill-wrap{
-    display:grid!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:10px!important;
-    padding:0!important;
-    width:100%!important;
-  }
-  .mob-drawer .filter-pill{
-    width:100%!important;
-    min-height:78px!important;
-    height:auto!important;
-    border-radius:22px!important;
-    padding:12px 10px!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:8px!important;
-    text-align:center!important;
-    background:rgba(255,255,255,.88)!important;
-    border:1.5px solid rgba(39,153,137,.14)!important;
-    box-shadow:0 4px 14px rgba(39,153,137,.07)!important;
-    color:var(--tl)!important;
-    overflow:hidden!important;
-  }
-  .mob-drawer .filter-pill:hover,
-  .mob-drawer .filter-pill.on{
-    background:rgba(45,204,211,.14)!important;
-    border-color:var(--tl)!important;
-    box-shadow:0 8px 20px rgba(39,153,137,.12)!important;
-    transform:none!important;
-  }
-  .mob-drawer .filter-pill.full{
-    grid-column:1/-1!important;
-    min-height:60px!important;
-    flex-direction:row!important;
-    justify-content:space-between!important;
-    padding:12px 16px!important;
-    text-align:left!important;
-  }
-  .mob-drawer .filter-pill-l{
-    width:100%!important;
-    min-width:0!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:6px!important;
-    overflow:visible!important;
-  }
-  .mob-drawer .filter-pill.full .filter-pill-l{
-    width:auto!important;
-    flex-direction:row!important;
-    justify-content:flex-start!important;
-    gap:9px!important;
-  }
-  .mob-drawer .filter-pill-ico{
-    width:34px!important;
-    height:34px!important;
-    border-radius:50%!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    background:rgba(185,220,210,.38)!important;
-    border:1px solid rgba(39,153,137,.12)!important;
-    font-size:19px!important;
-    line-height:1!important;
-    flex:0 0 34px!important;
-  }
-  .mob-drawer .filter-pill-dot{
-    width:22px!important;
-    height:22px!important;
-    border-radius:50%!important;
-    flex:0 0 22px!important;
-    border:3px solid #fff!important;
-    box-shadow:0 2px 8px rgba(0,0,0,.14)!important;
-  }
-  .mob-drawer .filter-pill-label{
-    display:block!important;
-    width:100%!important;
-    max-width:100%!important;
-    color:var(--tl)!important;
-    font-size:12px!important;
-    line-height:1.12!important;
-    font-weight:900!important;
-    letter-spacing:-.01em!important;
-    white-space:normal!important;
-    overflow:visible!important;
-    text-overflow:clip!important;
-  }
-  .mob-drawer .filter-pill.full .filter-pill-label{
-    width:auto!important;
-    white-space:nowrap!important;
-    font-size:14px!important;
-  }
-  .mob-drawer .filter-pill-count{
-    min-width:40px!important;
-    height:28px!important;
-    padding:0 10px!important;
-    border-radius:999px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    background:rgba(39,153,137,.09)!important;
-    border:1px solid rgba(39,153,137,.10)!important;
-    color:var(--tl)!important;
-    font-size:14px!important;
-    font-weight:900!important;
-    line-height:1!important;
-    flex-shrink:0!important;
-  }
-  .mob-drawer .filter-pill.on .filter-pill-count{
-    background:#fff!important;
-    border-color:rgba(39,153,137,.18)!important;
-  }
-  .mob-drawer .manage-pill{
-    grid-column:1/-1!important;
-    min-height:46px!important;
-    flex-direction:row!important;
-    border-style:dashed!important;
-  }
-  .mob-drawer .sb-div{margin:18px 16px!important;border-top-color:rgba(39,153,137,.13)!important}
-}
-
-
-
-/* ─── FINAL MOBILE SIDEBAR COMPACT FILTER FIX — NO CATEGORY ICONS ─── */
+/* ─── FINAL MOBILE SIDEBAR COMPACT FILTER SYSTEM — CONSISTENT TYPE + NO CATEGORY ICONS ─── */
 @media (max-width: 700px) {
   .mob-drawer{
     width:min(78vw,320px)!important;
     background:#E6F4F1!important;
     padding-top:44px!important;
   }
-  .mob-drawer .sb-sec{padding:12px 12px 4px!important}
-  .mob-drawer .sb-lbl{display:block!important;padding:4px 8px 8px!important;font-size:10px!important;line-height:1.15!important;letter-spacing:.14em!important;color:rgba(39,153,137,.62)!important}
-  .mob-drawer .filter-pill-wrap{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:4px 12px 10px!important;width:100%!important}
-  .mob-drawer .filter-pill{width:100%!important;min-height:38px!important;height:38px!important;border-radius:999px!important;padding:7px 9px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;text-align:left!important;background:rgba(255,255,255,.62)!important;border:1px solid rgba(39,153,137,.16)!important;box-shadow:0 2px 8px rgba(39,153,137,.04)!important;color:rgba(58,58,58,.68)!important;overflow:hidden!important;transform:none!important}
-  .mob-drawer .filter-pill:hover,.mob-drawer .filter-pill.on{background:rgba(255,255,255,.72)!important;border-color:var(--tl)!important;color:var(--tl)!important;box-shadow:0 2px 10px rgba(39,153,137,.08)!important;transform:none!important}
-  .mob-drawer .filter-pill.full{grid-column:1/-1!important;min-height:42px!important;height:42px!important;flex-direction:row!important;justify-content:space-between!important;padding:8px 12px!important;text-align:left!important}
-  .mob-drawer .filter-pill-l,.mob-drawer .filter-pill.full .filter-pill-l{width:auto!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:7px!important;overflow:hidden!important}
-  .mob-drawer .filter-pill-ico{display:none!important}
-  .mob-drawer .filter-pill-dot{width:10px!important;height:10px!important;flex:0 0 10px!important;border-radius:999px!important;border:2px solid rgba(255,255,255,.8)!important;box-shadow:0 1px 3px rgba(0,0,0,.12)!important}
-  .mob-drawer .filter-pill-label,.mob-drawer .filter-pill.full .filter-pill-label{display:block!important;width:auto!important;max-width:100%!important;color:inherit!important;font-size:11px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:-.01em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .mob-drawer .filter-pill-count{min-width:28px!important;height:22px!important;padding:1px 7px!important;border-radius:999px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(39,153,137,.08)!important;border:1px solid rgba(39,153,137,.10)!important;color:var(--tl)!important;font-size:11px!important;font-weight:900!important;line-height:1!important;flex-shrink:0!important}
-  .mob-drawer .filter-pill.on .filter-pill-count{background:rgba(45,204,211,.18)!important;border-color:rgba(39,153,137,.10)!important}
-  .mob-drawer .manage-pill{grid-column:1/-1!important;height:38px!important;min-height:38px!important;justify-content:center!important;border-style:dashed!important}
-  .mob-drawer .sb-div{margin:8px 16px!important;border-top-color:rgba(39,153,137,.12)!important}
+
+  .mob-drawer .sb-sec{
+    padding:12px 12px 4px!important;
+  }
+
+  .mob-drawer .sb-lbl{
+    display:block!important;
+    padding:4px 8px 8px!important;
+    font-size:10px!important;
+    line-height:1.15!important;
+    font-weight:900!important;
+    letter-spacing:.14em!important;
+    color:rgba(39,153,137,.62)!important;
+  }
+
+  .mob-drawer .filter-pill-wrap{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    padding:4px 12px 10px!important;
+    width:100%!important;
+  }
+
+  .mob-drawer .filter-pill{
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    border-radius:999px!important;
+    padding:7px 9px!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:7px!important;
+    text-align:left!important;
+    background:rgba(255,255,255,.62)!important;
+    border:1px solid rgba(39,153,137,.16)!important;
+    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
+    color:rgba(58,58,58,.68)!important;
+    overflow:hidden!important;
+    transform:none!important;
+  }
+
+  .mob-drawer .filter-pill:hover,
+  .mob-drawer .filter-pill.on{
+    background:rgba(255,255,255,.72)!important;
+    border-color:var(--tl)!important;
+    color:var(--tl)!important;
+    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
+    transform:none!important;
+  }
+
+  .mob-drawer .filter-pill.full{
+    grid-column:1/-1!important;
+    height:42px!important;
+    min-height:42px!important;
+    padding:8px 12px!important;
+  }
+
+  .mob-drawer .filter-pill-l,
+  .mob-drawer .filter-pill.full .filter-pill-l{
+    width:auto!important;
+    min-width:0!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:7px!important;
+    overflow:hidden!important;
+  }
+
+  .mob-drawer .filter-pill-ico{
+    display:none!important;
+  }
+
+  .mob-drawer .filter-pill-dot{
+    width:10px!important;
+    height:10px!important;
+    flex:0 0 10px!important;
+    border-radius:999px!important;
+    border:2px solid rgba(255,255,255,.8)!important;
+    box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+  }
+
+  .mob-drawer .filter-pill-label,
+  .mob-drawer .filter-pill.full .filter-pill-label{
+    display:block!important;
+    width:auto!important;
+    max-width:100%!important;
+    color:inherit!important;
+    font-size:11px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .mob-drawer .filter-pill-count{
+    min-width:28px!important;
+    height:22px!important;
+    padding:1px 7px!important;
+    border-radius:999px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(39,153,137,.08)!important;
+    border:1px solid rgba(39,153,137,.10)!important;
+    color:var(--tl)!important;
+    font-size:11px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    flex-shrink:0!important;
+  }
+
+  .mob-drawer .filter-pill.on .filter-pill-count{
+    background:rgba(45,204,211,.18)!important;
+    border-color:rgba(39,153,137,.10)!important;
+  }
+
+  .mob-drawer .manage-pill{
+    grid-column:1/-1!important;
+    height:38px!important;
+    min-height:38px!important;
+    justify-content:center!important;
+    border-style:dashed!important;
+  }
+
+  .mob-drawer .sb-div{
+    margin:8px 16px!important;
+    border-top-color:rgba(39,153,137,.12)!important;
+  }
 }
+
 `
  
  
