@@ -358,7 +358,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-stat-val{font-size:16px;font-weight:900;color:var(--tl);line-height:1.1}
 .c-stat-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);opacity:.8}
 .c-stat-divider{width:1px;height:28px;background:rgba(185,220,210,.5);align-self:flex-end;margin-bottom:2px}
-.c-sku{display:inline-block;font-size:10px;font-weight:700;font-family:monospace;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:4px;padding:2px 6px;color:var(--gr);align-self:flex-start;width:fit-content}
+.c-sku{display:inline-block;font-size:10px;font-weight:500;font-family:monospace;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:4px;padding:2px 6px;color:var(--gr);align-self:flex-start;width:fit-content}
  
 /* EMPTY */
 .empty{text-align:center;padding:80px 20px;color:var(--gr)}
@@ -428,7 +428,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-variant-table tr:last-child td{border-bottom:none}
 .vm-variant-color{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--bk);white-space:nowrap}
 .vm-variant-swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0}
-.vm-variant-sku{font-family:monospace;font-weight:900;color:var(--tl);letter-spacing:.02em;white-space:nowrap}
+.vm-variant-sku{font-family:monospace;font-weight:500;color:var(--tl);letter-spacing:.02em;white-space:nowrap}
 .vm-variant-barcode{display:flex;align-items:center;gap:8px;min-height:34px}
 .vm-variant-barcode img{max-width:128px;max-height:38px;object-fit:contain;background:#fff;border-radius:4px;cursor:zoom-in}
 .vm-variant-barcode code{font-family:monospace;font-size:11px;font-weight:800;color:var(--gr);white-space:nowrap}
@@ -442,7 +442,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-color-swatch{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .vm-color-info{display:flex;flex-direction:column;gap:2px;min-width:0}
 .vm-color-name{font-size:12px;font-weight:700;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vm-color-sku{font-family:monospace;font-size:10px;font-weight:700;color:var(--tl);letter-spacing:.04em;transition:color .15s}
+.vm-color-sku{font-family:monospace;font-size:10px;font-weight:500;color:var(--tl);letter-spacing:.04em;transition:color .15s}
 .copyable{cursor:pointer;user-select:none}
 .vm-color-item.copyable:hover{background:rgba(185,220,210,.5);border-color:var(--cy)}
 .vm-color-item.sku-copied{background:rgba(45,204,211,.1);border-color:var(--cy)}
@@ -574,7 +574,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .color-image-card-top{display:flex;align-items:center;gap:9px;min-width:0}
 .color-image-swatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 1px 4px rgba(0,0,0,.16);flex-shrink:0}
 .color-image-name{font-size:12px;font-weight:900;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.color-image-sku{font-family:monospace;font-size:10px;font-weight:800;color:var(--tl);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.color-image-sku{font-family:monospace;font-size:10px;font-weight:500;color:var(--tl);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .color-image-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:10px;overflow:visible;padding:2px 0 0;min-height:auto;align-items:start}
 .color-image-thumb{width:100%;min-height:112px;border-radius:10px;background:var(--sf4);border:1px solid rgba(185,220,210,.7);flex-shrink:0;position:relative;padding:6px;display:flex;flex-direction:column;gap:6px;overflow:hidden;cursor:grab;transition:transform .16s ease, opacity .16s ease, border-color .16s ease, box-shadow .16s ease}
 .color-image-thumb:active{cursor:grabbing}
@@ -1361,11 +1361,11 @@ button{touch-action:manipulation}
   font-weight:900!important;
   letter-spacing:-.015em!important;
 }
-.c-sku,.vm-code,.vm-color-sku,.quench-code,.quench-prod-sku{
+.c-sku,.vm-code,.vm-color-sku,.quench-code,.quench-prod-sku,.vm-variant-sku,.color-image-sku{
   font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
-  font-size:11px!important;
-  font-weight:900!important;
-  letter-spacing:.035em!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.025em!important;
   color:var(--tl)!important;
 }
  
@@ -2050,6 +2050,23 @@ button{touch-action:manipulation}
   }
 }
 
+
+/* FINAL FIX: SKU CODE FONT CONSISTENCY */
+.c-sku,
+.vm-code,
+.vm-color-sku,
+.vm-variant-sku,
+.color-image-sku,
+.quench-code,
+.quench-prod-sku{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.02em!important;
+}
+.c-sku{
+  line-height:1.2!important;
+}
 `
  
  
