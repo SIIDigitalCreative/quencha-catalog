@@ -1142,6 +1142,364 @@ button{touch-action:manipulation}
  .q-collections,.q-collection-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
  
+/* ──────────────────────────────────────────────────────────────
+  UI CONSISTENCY FIX: MOBILE MODAL SCROLL + HERO/QUENCHABLES TYPE
+  This override keeps all top feature sections on one visual system
+  and fixes mobile product modal scrolling.
+────────────────────────────────────────────────────────────── */
+.hero,
+.quench-hero{
+ background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.92))!important;
+ border:1px solid rgba(39,153,137,.13)!important;
+ border-radius:var(--q-radius-xl)!important;
+ box-shadow:var(--q-shadow-soft)!important;
+}
+ 
+.h-ey,
+.quench-eyebrow{
+ font-family:var(--fn)!important;
+ font-size:clamp(10px,1.1vw,12px)!important;
+ line-height:1.15!important;
+ font-weight:900!important;
+ letter-spacing:.14em!important;
+ text-transform:uppercase!important;
+ color:var(--tl)!important;
+ opacity:.78!important;
+ margin-bottom:8px!important;
+}
+ 
+.h-ti,
+.quench-title{
+ font-family:var(--fn)!important;
+ font-size:clamp(32px,4vw,48px)!important;
+ line-height:1.05!important;
+ font-weight:900!important;
+ letter-spacing:-.035em!important;
+ color:var(--tl)!important;
+ margin:0 0 10px!important;
+}
+ 
+.h-su,
+.quench-sub{
+ font-family:var(--fn)!important;
+ font-size:clamp(14px,1.25vw,15px)!important;
+ line-height:1.62!important;
+ font-weight:400!important;
+ color:rgba(39,153,137,.72)!important;
+ margin:0 0 20px!important;
+ max-width:620px!important;
+}
+ 
+.quench-start,
+.q-primary,
+.save-btn,
+.vm-inq-btn{
+ font-size:14px!important;
+ font-weight:900!important;
+ border-radius:14px!important;
+}
+ 
+@media (max-width:640px){
+ /* Top feature sections: same spacing and typography on mobile */
+ .hero,
+ .quench-hero{
+   padding:28px 24px!important;
+   margin:18px 0 22px!important;
+   border-radius:24px!important;
+ }
+ 
+ .h-ey,
+ .quench-eyebrow{
+   font-size:11px!important;
+   letter-spacing:.15em!important;
+   margin-bottom:10px!important;
+ }
+ 
+ .h-ti,
+ .quench-title{
+   font-size:34px!important;
+   line-height:1.04!important;
+   color:var(--tl)!important;
+ }
+ 
+ .h-su,
+ .quench-sub{
+   font-size:15px!important;
+   line-height:1.62!important;
+   color:rgba(39,153,137,.70)!important;
+ }
+ 
+ .quench-start{
+   width:100%!important;
+   min-height:52px!important;
+   font-size:15px!important;
+ }
+ 
+ /* Mobile product/detail modal: fix stuck/non-scrolling behavior */
+ .modal-bg{
+   padding:0!important;
+   align-items:stretch!important;
+   justify-content:stretch!important;
+   background:#fff!important;
+   backdrop-filter:none!important;
+   overflow:hidden!important;
+ }
+ 
+ .modal{
+   width:100vw!important;
+   height:100dvh!important;
+   max-width:none!important;
+   max-height:none!important;
+   border-radius:0!important;
+   box-shadow:none!important;
+   display:flex!important;
+   flex-direction:column!important;
+   overflow:hidden!important;
+ }
+ 
+ .m-hdr{
+   flex:0 0 auto!important;
+   position:relative!important;
+   padding:28px 64px 24px 24px!important;
+   border-radius:0!important;
+ }
+ 
+ .m-body{
+   flex:1 1 auto!important;
+   min-height:0!important;
+   overflow-y:auto!important;
+   -webkit-overflow-scrolling:touch!important;
+   overscroll-behavior:contain!important;
+   padding:20px 18px 104px!important;
+   max-height:none!important;
+ }
+ 
+ .m-footer{
+   flex:0 0 auto!important;
+   position:relative!important;
+   bottom:auto!important;
+   z-index:5!important;
+   border-radius:0!important;
+   padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
+   background:rgba(255,255,255,.98)!important;
+   backdrop-filter:blur(10px)!important;
+ }
+ 
+ .m-close{
+   position:absolute!important;
+   top:18px!important;
+   right:16px!important;
+   width:48px!important;
+   height:48px!important;
+   font-size:20px!important;
+   z-index:10!important;
+ }
+}
+ 
+ 
+ 
+/* ──────────────────────────────────────────────────────────────
+  FINAL FULL UI AUDIT LOCK — consistent type, sections, modals
+  Applies to all public catalog, product modal, Quenchables, sidebar,
+  edit/admin, inquiry, and mobile screens.
+────────────────────────────────────────────────────────────── */
+:root{
+ --ui-label:11px;
+ --ui-body:14px;
+ --ui-helper:12px;
+ --ui-btn:14px;
+ --ui-radius-card:18px;
+ --ui-radius-section:24px;
+ --ui-line:1.55;
+}
+ 
+/* Typography hierarchy */
+.h-ey,.quench-eyebrow,.sb-lbl,.cat-nm,.vm-tlbl,.f-lbl,.sub-hd,.collection-title,.qey,.q-step-label,.q-section-eyebrow,.em-badge,.pw-lbl{
+ font-family:var(--fn)!important;
+ font-size:var(--ui-label)!important;
+ line-height:1.15!important;
+ font-weight:900!important;
+ letter-spacing:.14em!important;
+ text-transform:uppercase!important;
+ color:var(--tl)!important;
+ opacity:.82!important;
+}
+.h-ti,.quench-title{
+ font-family:var(--fn)!important;
+ font-size:clamp(34px,4vw,46px)!important;
+ line-height:1.06!important;
+ font-weight:900!important;
+ letter-spacing:-.035em!important;
+ color:var(--tl)!important;
+ margin:0 0 10px!important;
+}
+.h-su,.quench-sub,.vm-desc,.c-desc,.quench-feature-sub,.quench-set-meta,.f-hint,.uz-sub,.pw-sub{
+ font-family:var(--fn)!important;
+ font-size:var(--ui-body)!important;
+ line-height:var(--ui-line)!important;
+ font-weight:400!important;
+ color:rgba(58,58,58,.64)!important;
+}
+.c-name,.vm-color-name,.quench-feature-title,.quench-set-name,.quench-prod-name,.em-title,.pw-title{
+ font-family:var(--fn)!important;
+ color:var(--q-text)!important;
+ font-weight:900!important;
+ letter-spacing:-.015em!important;
+}
+.c-sku,.vm-code,.vm-color-sku,.quench-code,.quench-prod-sku{
+ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+ font-size:11px!important;
+ font-weight:900!important;
+ letter-spacing:.035em!important;
+ color:var(--tl)!important;
+}
+ 
+/* Section consistency: main intro and Quenchables use the same system */
+.hero,.quench-hero{
+ background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(247,250,249,.96))!important;
+ border:1px solid rgba(39,153,137,.14)!important;
+ border-radius:var(--ui-radius-section)!important;
+ box-shadow:0 8px 28px rgba(39,153,137,.08)!important;
+ padding:clamp(24px,4vw,44px)!important;
+ margin:0 0 28px!important;
+}
+.quench-hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:24px!important;align-items:center!important}
+.h-text,.quench-hero>div:first-child{max-width:720px!important}
+.h-su,.quench-sub{max-width:620px!important;color:rgba(39,153,137,.72)!important}
+.quench-actions{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;margin-top:18px!important}
+.quench-mini-collections{display:flex!important;gap:8px!important;flex-wrap:wrap!important}
+.quench-chip,.pc,.fb{
+ min-height:36px!important;
+ border-radius:999px!important;
+ border:1px solid rgba(39,153,137,.18)!important;
+ background:#fff!important;
+ color:var(--tl)!important;
+ font-family:var(--fn)!important;
+ font-size:12px!important;
+ font-weight:900!important;
+ padding:8px 14px!important;
+}
+ 
+/* Button consistency */
+.quench-start,.quench-next,.quench-send,.quench-add,.add-btn,.save-btn,.vm-inq-btn,.pw-submit,.tb-inq,.collection-add-set,.collection-add-row button{
+ min-height:44px!important;
+ border-radius:14px!important;
+ background:var(--tl)!important;
+ color:#fff!important;
+ border:1px solid var(--tl)!important;
+ font-size:var(--ui-btn)!important;
+ font-weight:900!important;
+ padding:11px 18px!important;
+ box-shadow:0 10px 24px rgba(39,153,137,.16)!important;
+ text-decoration:none!important;
+}
+.cancel-btn,.collection-save-set,.qb-back,.quench-tab{
+ min-height:42px!important;
+ border-radius:14px!important;
+ background:#fff!important;
+ color:var(--tl)!important;
+ border:1.5px solid rgba(39,153,137,.22)!important;
+ font-size:13px!important;
+ font-weight:900!important;
+ padding:10px 16px!important;
+}
+.del-btn,.quench-remove,.rm-btn{
+ border-radius:14px!important;
+ background:rgba(239,68,68,.08)!important;
+ color:#b91c1c!important;
+ border:1.5px solid rgba(239,68,68,.22)!important;
+ font-weight:900!important;
+}
+ 
+/* Card consistency */
+.pcard,.vm-color-item,.quench-product,.quench-set,.quench-feature-card,.quench-total,.collection-item,.collection-set-editor,.color-row,.img-color-card,.img-general-card,.upload-zone,.f-in,.f-sel,.f-ta,.in-sm,.sort-sel{
+ border-radius:var(--ui-radius-card)!important;
+ border:1px solid rgba(39,153,137,.16)!important;
+ box-shadow:0 2px 14px rgba(39,153,137,.06)!important;
+}
+.pcard,.quench-product,.quench-set,.quench-feature-card,.collection-item,.collection-set-editor,.color-row,.img-color-card,.img-general-card{background:#fff!important}
+ 
+/* Modal consistency */
+.modal-bg{background:rgba(39,153,137,.16)!important;backdrop-filter:blur(7px)!important}
+.modal{border-radius:24px!important;border:1px solid rgba(39,153,137,.14)!important;box-shadow:0 22px 70px rgba(39,153,137,.20)!important}
+.m-hdr{background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(255,255,255,.96))!important;border-bottom:1px solid rgba(39,153,137,.12)!important}
+.m-close{background:rgba(39,153,137,.08)!important;color:var(--q-text)!important}
+ 
+/* Edit/admin inputs and collection set editor */
+.em-panel{background:linear-gradient(180deg,#fff,rgba(247,250,249,.94))!important}
+.collection-item{grid-template-columns:42px minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;padding:14px!important}
+.collection-actions{grid-column:1/-1!important;display:grid!important;grid-template-columns:auto 1fr auto!important;gap:10px!important;align-items:center!important}
+.collection-set-count{min-width:88px!important;text-align:center!important;white-space:nowrap!important}
+.collection-set-editor{margin:12px 0 18px!important;padding:16px!important;background:rgba(255,255,255,.88)!important}
+.collection-color-edit-row{display:grid!important;grid-template-columns:34px 70px minmax(0,1fr) 64px 36px!important;gap:8px!important;align-items:center!important;padding:10px!important}
+.collection-color-edit-row input{min-height:38px!important;border-radius:12px!important;border:1px solid rgba(39,153,137,.18)!important;padding:8px 10px!important;font-size:13px!important}
+.collection-color-remove{width:34px!important;height:34px!important;min-height:34px!important;border-radius:10px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(239,68,68,.08)!important;color:#b91c1c!important;border:1px solid rgba(239,68,68,.20)!important;font-size:15px!important;line-height:1!important;padding:0!important}
+.collection-move-btn{width:32px!important;height:32px!important;min-height:32px!important;border-radius:10px!important;background:#fff!important;color:var(--tl)!important;border:1px solid rgba(39,153,137,.18)!important;padding:0!important;font-weight:900!important}
+ 
+/* Product modal color grid */
+.vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+.vm-color-item{min-height:66px!important;padding:10px!important;display:flex!important;align-items:center!important;gap:10px!important}
+.vm-color-swatch{width:34px!important;height:34px!important;flex:0 0 34px!important}
+ 
+/* Quenchables builder */
+.quench-modal{background:#fff!important}
+.quench-head{background:linear-gradient(135deg,rgba(185,220,210,.42),rgba(255,255,255,.96))!important;border-bottom:1px solid rgba(39,153,137,.12)!important}
+.quench-layout{gap:18px!important}
+.quench-step,.quench-step-dot{font-family:var(--fn)!important;font-weight:900!important}
+.quench-step-dot{background:rgba(185,220,210,.45)!important;color:var(--tl)!important}
+.quench-step.on .quench-step-dot{background:var(--tl)!important;color:#fff!important}
+.quench-collection-btn{border-radius:18px!important;border:1px solid rgba(39,153,137,.16)!important;background:#fff!important;padding:14px!important;box-shadow:0 2px 14px rgba(39,153,137,.05)!important}
+.quench-collection-btn.on{border-color:var(--tl)!important;background:rgba(185,220,210,.22)!important;box-shadow:0 8px 22px rgba(39,153,137,.10)!important}
+.quench-product-grid{gap:12px!important}
+.quench-prod-img{border-radius:14px!important;background:rgba(185,220,210,.26)!important}
+.quench-input,.quench-select,.quench-note{border-radius:14px!important;border:1.5px solid rgba(39,153,137,.20)!important;background:#fff!important;font-family:var(--fn)!important;font-size:13px!important;color:var(--q-text)!important}
+ 
+@media(max-width:700px){
+ :root{--ui-body:14px;--ui-btn:14px}
+ .qnh-main{padding:22px 16px 100px!important}
+ .hero,.quench-hero{padding:28px 24px!important;margin:18px 0 24px!important;border-radius:24px!important}
+ .quench-hero{display:block!important}
+ .h-ti,.quench-title{font-size:34px!important;line-height:1.06!important;letter-spacing:-.035em!important}
+ .h-su,.quench-sub{font-size:15px!important;line-height:1.62!important;color:rgba(39,153,137,.70)!important;margin-bottom:18px!important}
+ .h-ey,.quench-eyebrow{font-size:11px!important;margin-bottom:10px!important}
+ .quench-start{width:100%!important;min-height:52px!important;font-size:15px!important}
+ .quench-mini-collections{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
+ .quench-chip{font-size:12px!important;min-height:44px!important;text-align:center!important;justify-content:center!important}
+ 
+ /* Reliable mobile modal scrolling: overlay scrolls as full page */
+ .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
+ .modal{width:100vw!important;max-width:none!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;border:none!important;overflow:visible!important;display:block!important}
+ .m-hdr{position:relative!important;border-radius:0!important;padding:28px 70px 24px 24px!important}
+ .m-body{overflow:visible!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
+ .m-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:30!important;border-radius:0!important;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(12px)!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;box-shadow:0 -8px 24px rgba(39,153,137,.10)!important}
+ .m-close{position:absolute!important;top:18px!important;right:16px!important;width:48px!important;height:48px!important;border-radius:50%!important;font-size:20px!important;z-index:10!important}
+ .m-footer-r{width:100%!important;display:grid!important;grid-template-columns:1fr 1.5fr!important;gap:10px!important;margin-left:0!important}
+ 
+ .vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .vm-color-item{padding:10px 8px!important;gap:8px!important;min-height:74px!important}
+ .vm-color-swatch{width:32px!important;height:32px!important;flex-basis:32px!important}
+ .vm-color-name{font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .vm-color-sku{font-size:9.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ 
+ .collection-grid{grid-template-columns:1fr!important}
+ .collection-item{grid-template-columns:40px minmax(0,1fr)!important;padding:14px!important}
+ .collection-actions{grid-template-columns:1fr!important;gap:8px!important}
+ .collection-set-count,.collection-add-set,.collection-save-set{width:100%!important;min-width:0!important}
+ .collection-color-edit-row{grid-template-columns:34px 66px minmax(0,1fr) 58px 34px!important;gap:7px!important;padding:9px!important}
+ 
+ .quench-modal{width:100vw!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;overflow:visible!important}
+ .quench-body{overflow:visible!important;max-height:none!important;padding:18px!important}
+ .quench-layout{grid-template-columns:1fr!important}
+ .quench-side{order:2!important}
+ .quench-main{order:1!important}
+ .quench-progress{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+ .quench-step{font-size:0!important;justify-content:center!important;padding:6px!important}
+ .quench-step-dot{width:34px!important;height:34px!important;font-size:13px!important}
+ .quench-product-grid{grid-template-columns:1fr!important}
+ .quench-form-row{grid-template-columns:1fr 78px!important}
+ .quench-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+}
+ 
 `
  
  
