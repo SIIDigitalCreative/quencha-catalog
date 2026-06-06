@@ -1933,6 +1933,87 @@ button{touch-action:manipulation}
   }
 }
 
+
+/* ─── FINAL FIX: EXTENSION BUTTONS + COUNT BADGES MATCH FILTER SYSTEM ─── */
+@media (max-width: 700px) {
+  .mob-drawer .sb-sec{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+
+  .mob-drawer .fb{
+    width:100%!important;
+    min-height:42px!important;
+    height:42px!important;
+    padding:8px 12px!important;
+    margin:0 0 7px!important;
+    border-radius:14px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:8px!important;
+    background:rgba(255,255,255,.62)!important;
+    border:1px solid rgba(39,153,137,.16)!important;
+    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
+    color:rgba(58,58,58,.68)!important;
+    transform:none!important;
+  }
+
+  .mob-drawer .fb:hover,
+  .mob-drawer .fb.on{
+    background:rgba(255,255,255,.72)!important;
+    border-color:var(--tl)!important;
+    color:var(--tl)!important;
+    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
+    transform:none!important;
+  }
+
+  .mob-drawer .fb-dot{
+    width:10px!important;
+    height:10px!important;
+    flex:0 0 10px!important;
+    border-radius:999px!important;
+    box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+  }
+
+  .mob-drawer .fb-lbl{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    font-family:var(--fn)!important;
+    font-size:12px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .mob-drawer .fb-cnt{
+    min-width:30px!important;
+    height:22px!important;
+    padding:1px 8px!important;
+    border-radius:999px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(39,153,137,.08)!important;
+    border:1px solid rgba(39,153,137,.10)!important;
+    color:var(--tl)!important;
+    font-family:var(--fn)!important;
+    font-size:12px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    font-variant-numeric:tabular-nums!important;
+    flex-shrink:0!important;
+  }
+
+  .mob-drawer .fb.on .fb-cnt{
+    background:rgba(45,204,211,.18)!important;
+    border-color:rgba(39,153,137,.10)!important;
+  }
+}
+
 `
  
  
