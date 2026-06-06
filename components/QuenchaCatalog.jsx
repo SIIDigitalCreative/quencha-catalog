@@ -1859,6 +1859,80 @@ button{touch-action:manipulation}
   }
 }
 
+/* ─── FINAL FIX: MOBILE SIDEBAR FILTER SELECTION NAMES SAME FONT SIZE ─── */
+@media (max-width: 700px) {
+  .mob-drawer .fb,
+  .mob-drawer .filter-pill,
+  .mob-drawer .pc{
+    font-family:var(--fn)!important;
+    font-size:12px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:-.01em!important;
+    color:rgba(58,58,58,.68)!important;
+  }
+
+  .mob-drawer .fb.on,
+  .mob-drawer .filter-pill.on,
+  .mob-drawer .pc.on{
+    color:var(--tl)!important;
+  }
+
+  .mob-drawer .fb-lbl,
+  .mob-drawer .filter-pill-label,
+  .mob-drawer .filter-pill.full .filter-pill-label,
+  .mob-drawer .pc{
+    font-family:var(--fn)!important;
+    font-size:12px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:-.01em!important;
+    text-transform:none!important;
+  }
+
+  .mob-drawer .fb-cnt,
+  .mob-drawer .filter-pill-count{
+    font-family:var(--fn)!important;
+    font-size:12px!important;
+    line-height:1!important;
+    font-weight:900!important;
+    min-width:30px!important;
+    height:22px!important;
+    padding:1px 8px!important;
+  }
+
+  .mob-drawer .pc-wrap{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    padding:4px 12px 10px!important;
+  }
+
+  .mob-drawer .pc{
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:7px 9px!important;
+    border-radius:999px!important;
+    background:rgba(255,255,255,.62)!important;
+    border:1px solid rgba(39,153,137,.16)!important;
+    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .mob-drawer .pc.on{
+    background:rgba(255,255,255,.72)!important;
+    border-color:var(--tl)!important;
+    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
+  }
+}
+
 `
  
  
@@ -5628,78 +5702,4 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
       </div>
     </div>
   )
-}
-
-/* ─── FINAL FIX: MOBILE SIDEBAR FILTER SELECTION NAMES SAME FONT SIZE ─── */
-@media (max-width: 700px) {
-  .mob-drawer .fb,
-  .mob-drawer .filter-pill,
-  .mob-drawer .pc{
-    font-family:var(--fn)!important;
-    font-size:12px!important;
-    line-height:1.1!important;
-    font-weight:900!important;
-    letter-spacing:-.01em!important;
-    color:rgba(58,58,58,.68)!important;
-  }
-
-  .mob-drawer .fb.on,
-  .mob-drawer .filter-pill.on,
-  .mob-drawer .pc.on{
-    color:var(--tl)!important;
-  }
-
-  .mob-drawer .fb-lbl,
-  .mob-drawer .filter-pill-label,
-  .mob-drawer .filter-pill.full .filter-pill-label,
-  .mob-drawer .pc{
-    font-family:var(--fn)!important;
-    font-size:12px!important;
-    line-height:1.1!important;
-    font-weight:900!important;
-    letter-spacing:-.01em!important;
-    text-transform:none!important;
-  }
-
-  .mob-drawer .fb-cnt,
-  .mob-drawer .filter-pill-count{
-    font-family:var(--fn)!important;
-    font-size:12px!important;
-    line-height:1!important;
-    font-weight:900!important;
-    min-width:30px!important;
-    height:22px!important;
-    padding:1px 8px!important;
-  }
-
-  .mob-drawer .pc-wrap{
-    display:grid!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:7px!important;
-    padding:4px 12px 10px!important;
-  }
-
-  .mob-drawer .pc{
-    width:100%!important;
-    height:38px!important;
-    min-height:38px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    padding:7px 9px!important;
-    border-radius:999px!important;
-    background:rgba(255,255,255,.62)!important;
-    border:1px solid rgba(39,153,137,.16)!important;
-    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
-    text-align:center!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-
-  .mob-drawer .pc.on{
-    background:rgba(255,255,255,.72)!important;
-    border-color:var(--tl)!important;
-    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
-  }
 }
