@@ -418,6 +418,22 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-table td{padding:8px 14px;border-bottom:1px solid rgba(185,220,210,.3);vertical-align:middle}
 .vm-table tr:last-child td{border-bottom:none}
 .vm-table tr:hover td{background:rgba(185,220,210,.08)}
+ 
+/* COLOR SKU / BARCODE TABLE */
+.vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:hidden}
+.vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch}
+.vm-variant-table{width:100%;border-collapse:collapse;min-width:520px;font-size:13px}
+.vm-variant-table th{background:var(--tl);color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;white-space:nowrap}
+.vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
+.vm-variant-table tr:last-child td{border-bottom:none}
+.vm-variant-color{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--bk);white-space:nowrap}
+.vm-variant-swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0}
+.vm-variant-sku{font-family:monospace;font-weight:900;color:var(--tl);letter-spacing:.02em;white-space:nowrap}
+.vm-variant-price{font-weight:900;color:var(--bk);white-space:nowrap}
+.vm-variant-barcode{display:flex;align-items:center;gap:8px;min-height:34px}
+.vm-variant-barcode img{max-width:128px;max-height:38px;object-fit:contain;background:#fff;border-radius:4px;cursor:zoom-in}
+.vm-variant-barcode code{font-family:monospace;font-size:11px;font-weight:800;color:var(--gr);white-space:nowrap}
+@media(max-width:700px){.vm-variant-table-card{padding:10px;margin-top:2px}.vm-variant-table{min-width:460px;font-size:12px}.vm-variant-table th{padding:7px 10px;font-size:9px}.vm-variant-table td{padding:8px 10px;font-size:12px}.vm-variant-barcode img{max-width:110px;max-height:34px}.vm-variant-sku{font-size:11px}}
 .vm-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:7px;border:1px solid rgba(0,0,0,.1)}
 .vm-code{font-family:monospace;font-size:11px;color:var(--tl)}
 /* COLOR LIST */
@@ -4189,6 +4205,61 @@ ${message.trim()}` : 'Message / Notes:',
                <div className="vm-pdiv"/>
                <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
              </div>
+             {vp.colors?.length > 0 && (
+               <div className="vm-variant-table-card">
+                 <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Color SKU / Barcode</span>
+                 <div className="vm-variant-table-wrap">
+                   <table className="vm-variant-table">
+                     <thead>
+                       <tr>
+                         <th>Color</th>
+                         <th>Product Code</th>
+                         <th>SRP</th>
+                         <th>Barcode</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {vp.colors.map((clr, idx) => {
+                         const variantBarcode = clr.barcode || clr.barcodeValue || vp.barcode || ''
+                         const variantBarcodeImage = clr.barcodeImage || clr.barcodeUrl || vp.barcodeImage || ''
+                         return (
+                           <tr key={`${clr.sku || clr.code || clr.name}-${idx}`}>
+                             <td>
+                               <div className="vm-variant-color">
+                                 <span className="vm-variant-swatch" style={{background:swatchBackground(clr)}}/>
+                                 <span>{clr.name || clr.code || 'Color'}</span>
+                               </div>
+                             </td>
+                             <td>
+                               <code className="vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
+                                 {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
+                               </code>
+                             </td>
+                             <td><span className="vm-variant-price">₱{Number(vp.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})}</span></td>
+                             <td>
+                               <div className="vm-variant-barcode">
+                                 {variantBarcodeImage ? (
+                                   <img
+                                     src={variantBarcodeImage}
+                                     alt={`${clr.name || 'Color'} barcode`}
+                                     onClick={()=>setCodeLightbox({src:variantBarcodeImage,label:`${clr.name || 'Color'} Barcode`})}
+                                     title="Click to enlarge"
+                                   />
+                                 ) : variantBarcode ? (
+                                   <code>{variantBarcode}</code>
+                                 ) : (
+                                   <span style={{color:'rgba(99,102,106,.55)',fontWeight:700}}>—</span>
+                                 )}
+                               </div>
+                             </td>
+                           </tr>
+                         )
+                       })}
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+             )}
              {(vp.dimensions || vp.barcode) && (
                <div className="vm-meta-row">
                  {vp.dimensions && typeof vp.dimensions==='object' &&
