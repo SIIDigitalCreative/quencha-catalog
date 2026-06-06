@@ -1632,7 +1632,25 @@ function swatchBackground(color) {
  if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
  const step = 100 / hexes.length
  const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
- return `linear-gradient(90deg, ${stops})`
+ return `linear-gradient(90deg, ${stops})
+ 
+/* ─── FINAL MOBILE COMPACT COLORS + SMOOTH EDIT SCROLL ─────────────────────── */
+@media (max-width:700px){
+ .vm-color-sec-lbl{font-size:11px!important;margin-bottom:8px!important;letter-spacing:.12em!important}
+ .vm-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ .vm-color-item{min-height:50px!important;padding:7px 8px!important;border-radius:14px!important;display:grid!important;grid-template-columns:26px minmax(0,1fr)!important;align-items:center!important;gap:8px!important;background:#fff!important}
+ .vm-color-swatch{width:26px!important;height:26px!important;box-shadow:0 2px 7px rgba(0,0,0,.12)!important}
+ .vm-color-name{font-size:11px!important;line-height:1.1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ .vm-color-sku{font-size:8px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;letter-spacing:.02em!important}
+ .vm-color-item.color-active{box-shadow:0 0 0 1.5px rgba(39,153,137,.25)!important;background:rgba(45,204,211,.08)!important}
+ .vm-color-grid + *, .vm-color-grid{margin-bottom:6px!important}
+ .modal.edit-modal-inner{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;border-radius:0!important}
+ .edit-modal-inner .em-panel{overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;touch-action:pan-y!important;padding-bottom:120px!important}
+ .edit-modal-inner .m-footer{position:sticky!important;bottom:0!important;z-index:8!important;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(10px)!important}
+ .color-image-thumb{touch-action:none!important;user-select:none!important;-webkit-user-select:none!important}
+ .color-image-thumb.dragging{opacity:.55!important;transform:scale(.96)!important}
+}
+`
 }
  
 function getImageSrc(image) {
@@ -2342,6 +2360,8 @@ export default function QuenchaCatalog() {
  const searchInputRef = useRef(null)
  const resultsRef = useRef(null)
  const productCardRefs = useRef({})
+ const vmImageRef = useRef(null)
+ const touchImageDragIndexRef = useRef(null)
  
  // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
  // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
@@ -3220,6 +3240,49 @@ ${message.trim()}` : 'Message / Notes:',
    const fromIndex = Number(fromRaw)
    if (Number.isFinite(fromIndex)) moveImg(fromIndex, toIndex, dragOverImagePosition)
    setDragImageIndex(null)
+   touchImageDragIndexRef.current = null
+   clearImageDropGuide()
+ }
+ 
+ const findImageThumbFromPoint = (x, y) => {
+   if (typeof document === 'undefined') return null
+   const el = document.elementFromPoint(x, y)?.closest?.('[data-img-index]')
+   return el || null
+ }
+ 
+ const handleImageTouchStart = (e, index) => {
+   if (e.target?.closest?.('button,label,input,select')) return
+   touchImageDragIndexRef.current = index
+   setDragImageIndex(index)
+   clearImageDropGuide()
+ }
+ 
+ const handleImageTouchMove = (e) => {
+   const fromIndex = touchImageDragIndexRef.current
+   if (fromIndex === null || fromIndex === undefined) return
+   const touch = e.touches?.[0]
+   if (!touch) return
+   const target = findImageThumbFromPoint(touch.clientX, touch.clientY)
+   if (!target) return
+   const toIndex = Number(target.dataset.imgIndex)
+   if (!Number.isFinite(toIndex) || toIndex === fromIndex) {
+     clearImageDropGuide()
+     return
+   }
+   e.preventDefault()
+   const rect = target.getBoundingClientRect()
+   const position = touch.clientX > rect.left + rect.width / 2 ? 'after' : 'before'
+   setDragOverImageIndex(toIndex)
+   setDragOverImagePosition(position)
+ }
+ 
+ const handleImageTouchEnd = () => {
+   const fromIndex = touchImageDragIndexRef.current
+   if (fromIndex !== null && fromIndex !== undefined && dragOverImageIndex !== null && Number.isFinite(Number(dragOverImageIndex))) {
+     moveImg(Number(fromIndex), Number(dragOverImageIndex), dragOverImagePosition)
+   }
+   touchImageDragIndexRef.current = null
+   setDragImageIndex(null)
    clearImageDropGuide()
  }
  
@@ -3943,7 +4006,7 @@ ${message.trim()}` : 'Message / Notes:',
            </div>
            <div className="m-body">
              <div>
-               <div className="vm-main-wrap">
+               <div className="vm-main-wrap" ref={vmImageRef}>
                  {visibleVmImages.length > 0 ? <img src={getImageSrc(visibleVmImages[safeVmImg])} alt={vp.name}/> : <span className="vm-main-ph">📦</span>}
                </div>
                {visibleVmImages.length > 1 && (
@@ -3980,6 +4043,9 @@ ${message.trim()}` : 'Message / Notes:',
                                if (!hasLinkedImage) return
                                setVmColorKey(isActive ? '' : colorKey)
                                setVmImg(0)
+                               if (typeof window !== 'undefined' && window.innerWidth <= 700) {
+                                 setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
+                               }
                              }}
                              title={hasLinkedImage ? `Show images for ${clr.name}` : clr.name}
                            >
@@ -4433,7 +4499,12 @@ ${message.trim()}` : 'Message / Notes:',
                                <span
                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
                                  key={`general-${index}`}
+                                 data-img-index={index}
                                  draggable
+                                 onTouchStart={(e)=>handleImageTouchStart(e,index)}
+                                 onTouchMove={handleImageTouchMove}
+                                 onTouchEnd={handleImageTouchEnd}
+                                 onTouchCancel={handleImageTouchEnd}
                                  onDragStart={(e)=>handleImageDragStart(e,index)}
                                  onDragOver={(e)=>handleImageDragOver(e,index)}
                                  onDrop={(e)=>handleImageDrop(e,index)}
@@ -4495,7 +4566,12 @@ ${message.trim()}` : 'Message / Notes:',
                                <span
                                  className={`color-image-thumb ${index===0 ? 'main-selected' : ''} ${dragImageIndex===index ? 'dragging' : ''} ${dragOverImageIndex===index && dragImageIndex!==index ? (dragOverImagePosition==='after' ? 'drop-after' : 'drop-before') : ''}`}
                                  key={`${color.sku || color.code}-${index}`}
+                                 data-img-index={index}
                                  draggable
+                                 onTouchStart={(e)=>handleImageTouchStart(e,index)}
+                                 onTouchMove={handleImageTouchMove}
+                                 onTouchEnd={handleImageTouchEnd}
+                                 onTouchCancel={handleImageTouchEnd}
                                  onDragStart={(e)=>handleImageDragStart(e,index)}
                                  onDragOver={(e)=>handleImageDragOver(e,index)}
                                  onDrop={(e)=>handleImageDrop(e,index)}
