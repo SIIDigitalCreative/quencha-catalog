@@ -2014,6 +2014,42 @@ button{touch-action:manipulation}
   }
 }
 
+
+/* ─── FINAL FIX: MOBILE SIDEBAR SMOOTH SCROLL + NO SCROLL JUMP ─── */
+@media (max-width: 700px) {
+  .mob-overlay{
+    position:fixed!important;
+    inset:0!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:none!important;
+  }
+
+  .mob-drawer{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    bottom:auto!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    scroll-behavior:smooth!important;
+    padding-bottom:calc(140px + env(safe-area-inset-bottom))!important;
+  }
+
+  .mob-drawer .sb-hero{
+    flex-shrink:0!important;
+  }
+
+  .mob-drawer .sb-sec:last-of-type{
+    padding-bottom:calc(90px + env(safe-area-inset-bottom))!important;
+  }
+}
+
 `
  
  
