@@ -6511,7 +6511,7 @@ ${message.trim()}` : 'Message / Notes:',
                               const colorKey = getColorKey(clr)
                               const isActive = activeVmColorKey === colorKey
                               return (
-                                <button
+                                <span
                                   key={clr.sku}
                                   onClick={()=>{
                                     setVmColorKey(isActive ? '' : colorKey)
@@ -6522,15 +6522,18 @@ ${message.trim()}` : 'Message / Notes:',
                                   }}
                                   title={clr.name}
                                   style={{
-                                    width:30,height:30,minWidth:30,minHeight:30,maxWidth:30,maxHeight:30,
+                                    display:'inline-block',
+                                    width:36,height:36,
                                     borderRadius:'50%',
                                     background:swatchBackground(clr),
-                                    border: isActive ? '2.5px solid var(--tl)' : '2px solid transparent',
-                                    boxShadow: isActive ? '0 0 0 2px var(--tl)' : '0 1px 5px rgba(0,0,0,.15)',
-                                    cursor:'pointer',padding:0,flexShrink:0,
-                                    outline:'none',transition:'box-shadow .15s,border .15s',
-                                    opacity: hasLinkedImage ? 1 : 0.85,
-                                    display:'block',boxSizing:'border-box',
+                                    boxShadow: isActive
+                                      ? '0 0 0 3px #fff, 0 0 0 5px var(--tl), 0 4px 10px rgba(0,0,0,.15)'
+                                      : '0 0 0 3px rgba(255,255,255,.85), 0 4px 10px rgba(0,0,0,.12)',
+                                    cursor:'pointer',
+                                    flexShrink:0,
+                                    overflow:'hidden',
+                                    transition:'box-shadow .15s',
+                                    opacity: hasLinkedImage ? 1 : 0.8,
                                   }}
                                 />
                               )
