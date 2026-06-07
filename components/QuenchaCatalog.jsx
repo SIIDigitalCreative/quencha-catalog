@@ -2165,14 +2165,13 @@ button{touch-action:manipulation}
 /* FINAL FIX: product detail table corners match Product Link button */
 .vm-variant-table-card,
 .vm-dimensions-card{
-  border-radius:12px!important;
-  overflow:visible!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
 }
 .vm-variant-table-wrap,
 .vm-dim-table-wrap{
-  border-radius:8px!important;
-  overflow-x:auto!important;
-  overflow-y:visible!important;
+  border-radius:14px!important;
+  overflow:auto!important;
   background:#fff!important;
   border:1px solid rgba(185,220,210,.45)!important;
   -webkit-overflow-scrolling:touch!important;
@@ -2180,7 +2179,6 @@ button{touch-action:manipulation}
 .vm-variant-table,
 .vm-dim-table{
   width:100%!important;
-  min-width:420px!important;
   border-collapse:separate!important;
   border-spacing:0!important;
   font-size:13px!important;
@@ -2756,7 +2754,7 @@ button[aria-label="close"]{
   border: 1px solid rgba(185,220,210,.48) !important;
   border-radius: 12px !important;
   padding: 12px !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   gap: 0 !important;
   align-items: stretch !important;
 }
@@ -2842,8 +2840,6 @@ button[aria-label="close"]{
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
   }
 
   .vm-dimensions-card .vm-dim-table.vm-variant-table{
@@ -2955,7 +2951,7 @@ button[aria-label="close"]{
   background:var(--sf4)!important;
   border:1px solid rgba(185,220,210,.48)!important;
   border-radius:12px!important;
-  overflow:visible!important;
+  overflow:hidden!important;
   display:block!important;
 }
 
@@ -2980,39 +2976,38 @@ button[aria-label="close"]{
   box-sizing:border-box!important;
   width:100%!important;
   max-width:100%!important;
+  min-width:0!important;
   margin:0!important;
   padding:0!important;
   background:#fff!important;
   border:1px solid rgba(185,220,210,.45)!important;
   border-radius:8px!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  -webkit-overflow-scrolling:touch!important;
+  overflow:hidden!important;
 }
 
 .m-body .vm-dimensions-card .vm-dim-table,
 .modal .vm-dimensions-card .vm-dim-table,
 .vm-dimensions-card .vm-dim-table{
   box-sizing:border-box!important;
-  width:auto!important;
-  min-width:420px!important;
-  max-width:none!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
   margin:0!important;
   padding:0!important;
-  table-layout:auto!important;
+  table-layout:fixed!important;
   border-collapse:collapse!important;
   border-spacing:0!important;
 }
 
 .vm-dimensions-card .vm-dim-table th:nth-child(1),
-.vm-dimensions-card .vm-dim-table td:nth-child(1){width:auto!important;}
+.vm-dimensions-card .vm-dim-table td:nth-child(1){width:38%!important;}
 
 .vm-dimensions-card .vm-dim-table th:nth-child(2),
 .vm-dimensions-card .vm-dim-table td:nth-child(2),
 .vm-dimensions-card .vm-dim-table th:nth-child(3),
 .vm-dimensions-card .vm-dim-table td:nth-child(3),
 .vm-dimensions-card .vm-dim-table th:nth-child(4),
-.vm-dimensions-card .vm-dim-table td:nth-child(4){width:auto!important;}
+.vm-dimensions-card .vm-dim-table td:nth-child(4){width:20.666%!important;}
 
 .m-body .vm-dimensions-card .vm-dim-table th,
 .modal .vm-dimensions-card .vm-dim-table th,
@@ -3020,14 +3015,16 @@ button[aria-label="close"]{
   box-sizing:border-box!important;
   background:var(--tl)!important;
   color:#fff!important;
-  padding:8px 12px!important;
+  padding:8px 10px!important;
   text-align:left!important;
-  font-size:10px!important;
+  font-size:9px!important;
   line-height:1.2!important;
   letter-spacing:.08em!important;
   font-weight:800!important;
   text-transform:uppercase!important;
   white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
 }
 
 .m-body .vm-dimensions-card .vm-dim-table td,
@@ -6590,36 +6587,36 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 </div>
               )}
-              {(vp.dimensions || vp.barcode) && (
-                <div className="vm-meta-row">
-                  {vp.dimensions && typeof vp.dimensions==='object' &&
-                    vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
-                    <div className="vm-variant-table-card vm-dimensions-card" style={{flex:'1 1 100%'}}>
-                      <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
-                      <div className="vm-variant-table-wrap vm-dim-table-wrap">
-                        <table className="vm-variant-table vm-dim-table">
-                          {vp.dimensions.headers.some(h=>h.trim()) && (
-                            <thead>
-                              <tr>
-                                {vp.dimensions.headers.map((h,i)=>(
-                                  <th key={i}>{h||'—'}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                          )}
-                          <tbody>
-                            {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
-                              <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
-                                {row.map((cell,ci)=>(
-                                  <td key={ci} className={ci===0?'vm-dim-primary':''}>{cell||'—'}</td>
-                                ))}
-                              </tr>
+              {vp.dimensions && typeof vp.dimensions==='object' &&
+                vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
+                <div className="vm-variant-table-card" style={{width:'100%',boxSizing:'border-box'}}>
+                  <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
+                  <div className="vm-variant-table-wrap" style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
+                    <table className="vm-variant-table" style={{minWidth:420,width:'100%',tableLayout:'auto'}}>
+                      {vp.dimensions.headers.some(h=>h.trim()) && (
+                        <thead>
+                          <tr>
+                            {vp.dimensions.headers.map((h,i)=>(
+                              <th key={i} style={{whiteSpace:'nowrap'}}>{h||'—'}</th>
                             ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
+                          </tr>
+                        </thead>
+                      )}
+                      <tbody>
+                        {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
+                          <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
+                            {row.map((cell,ci)=>(
+                              <td key={ci} className={ci===0?'vm-dim-primary':''}>{cell||'—'}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+              {(vp.barcode || vp.barcodeImage || vp.qrCode || vp.qrImage) && (
+                <div className="vm-meta-row">
                   {(vp.barcode || vp.barcodeImage) && (
                     <div className="vm-meta-item">
                       <span className="vm-meta-lbl">Barcode</span>
