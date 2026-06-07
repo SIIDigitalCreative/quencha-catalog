@@ -3905,7 +3905,8 @@ td .vm-variant-sku{
 
 /* SCROLL FIX — last rule wins */
 .vm-scroll-wrap{overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
-.vm-scroll-wrap table{min-width:420px!important;width:auto!important;table-layout:auto!important;}
+.vm-scroll-wrap table{min-width:420px!important;width:auto!important;table-layout:fixed!important;}
+.vm-scroll-wrap table th, .vm-scroll-wrap table td{min-width:100px!important;padding:8px 16px!important;white-space:nowrap!important;}
 
 `
  
