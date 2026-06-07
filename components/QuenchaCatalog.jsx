@@ -2170,8 +2170,9 @@ button{touch-action:manipulation}
 }
 .vm-variant-table-wrap,
 .vm-dim-table-wrap{
-  border-radius:14px!important;
-  overflow:auto!important;
+  border-radius:8px!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
   background:#fff!important;
   border:1px solid rgba(185,220,210,.45)!important;
   -webkit-overflow-scrolling:touch!important;
@@ -2179,6 +2180,7 @@ button{touch-action:manipulation}
 .vm-variant-table,
 .vm-dim-table{
   width:100%!important;
+  min-width:420px!important;
   border-collapse:separate!important;
   border-spacing:0!important;
   font-size:13px!important;
