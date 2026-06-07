@@ -3661,6 +3661,112 @@ td .vm-variant-sku{
   line-height:1.25!important;
 }
 
+
+/* =========================================================
+   FINAL UI DESIGN PASS: ONE SKU SYSTEM
+   All SKU appearances now use one class: .qnh-sku.
+   This overrides older SKU rules and inline-looking conflicts.
+   ========================================================= */
+:root{
+  --qnh-sku-bg: rgba(39,153,137,.10);
+  --qnh-sku-color: var(--tl);
+  --qnh-sku-radius: 6px;
+  --qnh-sku-pad-y: 4px;
+  --qnh-sku-pad-x: 10px;
+  --qnh-sku-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --qnh-sku-size: 11px;
+  --qnh-sku-weight: 700;
+  --qnh-sku-letter: .04em;
+  --qnh-sku-line: 1.15;
+}
+
+.qnh-sku,
+.c-sku,
+.product-detail-sku,
+.product-card-sku,
+.card-sku,
+.pc-sku,
+.vm-variant-sku,
+.vm-color-sku,
+.vm-code,
+.vm-meta-code,
+.sku-badge,
+.sku-pill,
+.pcard .qnh-sku,
+.pcard .c-sku,
+.pcard code,
+.vm-variant-table .qnh-sku,
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table code,
+.vm-hdr .qnh-sku,
+.vm-hdr code.product-detail-sku{
+  appearance:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:max-content!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:var(--qnh-sku-pad-y) var(--qnh-sku-pad-x)!important;
+  margin:0!important;
+  background:var(--qnh-sku-bg)!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:var(--qnh-sku-radius)!important;
+  box-shadow:none!important;
+  color:var(--qnh-sku-color)!important;
+  font-family:var(--qnh-sku-font)!important;
+  font-size:var(--qnh-sku-size)!important;
+  font-weight:var(--qnh-sku-weight)!important;
+  line-height:var(--qnh-sku-line)!important;
+  letter-spacing:var(--qnh-sku-letter)!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  vertical-align:middle!important;
+}
+
+/* Product page SKU under name keeps only its vertical placement */
+.product-detail-sku,
+.qnh-sku-main{
+  margin-top:5px!important;
+}
+
+/* Product card SKU placement only, style remains identical */
+.c-sku,
+.pcard .c-sku,
+.pcard .qnh-sku{
+  align-self:flex-start!important;
+}
+
+/* SKU table badge: identical placeholder/padding, no special larger table version */
+.vm-variant-sku,
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table .qnh-sku{
+  padding:var(--qnh-sku-pad-y) var(--qnh-sku-pad-x)!important;
+  background:var(--qnh-sku-bg)!important;
+  border-radius:var(--qnh-sku-radius)!important;
+  font-size:var(--qnh-sku-size)!important;
+  font-weight:var(--qnh-sku-weight)!important;
+  line-height:var(--qnh-sku-line)!important;
+}
+
+/* Copied state must never resize the badge */
+.qnh-sku.copyable,
+.vm-variant-sku.copyable,
+.c-sku.copyable,
+.product-detail-sku.copyable,
+.vm-color-sku.copyable{
+  padding:var(--qnh-sku-pad-y) var(--qnh-sku-pad-x)!important;
+  border-radius:var(--qnh-sku-radius)!important;
+  font-size:var(--qnh-sku-size)!important;
+  font-weight:var(--qnh-sku-weight)!important;
+  line-height:var(--qnh-sku-line)!important;
+}
+
 `
  
  
@@ -5792,7 +5898,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="c-body">
           <div className="c-name">{p.name}</div>
           {getSkuBase(p) && (
-            <span className="sku-badge c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
+            <span className="qnh-sku c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
               {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
             </span>
           )}
@@ -6274,7 +6380,7 @@ ${message.trim()}` : 'Message / Notes:',
                               <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
                               <div className="vm-color-info">
                                 <span className="vm-color-name">{clr.name}</span>
-                                <span className="sku-badge vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                                <span className="qnh-sku vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
                               </div>
                             </div>
                           )
@@ -6319,7 +6425,7 @@ ${message.trim()}` : 'Message / Notes:',
                                 </div>
                               </td>
                               <td>
-                                <code className="sku-badge vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
+                                <code className="qnh-sku vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
                                   {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
                                 </code>
                               </td>
