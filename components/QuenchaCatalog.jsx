@@ -2522,6 +2522,70 @@ button[aria-label="close"]{
   border-radius: var(--radius-soft) var(--radius-soft) 0 0 !important;
 }
 
+
+/* FINAL FIX: Clean product card image corner gap */
+.pcard{
+  overflow: hidden !important;
+  background: #fff !important;
+  border-radius: var(--radius-soft) !important;
+}
+
+.c-img-wrap{
+  margin: 0 !important;
+  border-radius: var(--radius-soft) var(--radius-soft) 0 0 !important;
+  overflow: hidden !important;
+  background: var(--sf4) !important;
+  display: block !important;
+}
+
+.c-img-wrap img{
+  border-radius: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+/* Prevent image area from creating a double-rounded inner corner */
+.pcard .c-img-wrap,
+.pcard .c-img-wrap img,
+.pcard .c-img-ph{
+  box-shadow: none !important;
+}
+
+
+/* FINAL FIX: Dimensions table spacing matches Color SKU / Barcode spacing */
+.vm-table-card{
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+.vm-table-card .vm-tlbl,
+.vm-table-card .vm-table-title,
+.vm-table-card > .vm-tlbl{
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+}
+
+.vm-table-card .vm-table-wrap{
+  width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-main) !important;
+}
+
+/* Mobile: keep equal side, top, and bottom spacing */
+@media (max-width: 700px){
+  .vm-table-card{
+    padding: 12px !important;
+  }
+
+  .vm-table-card .vm-table-wrap{
+    margin: 0 !important;
+    width: 100% !important;
+  }
+}
+
 `
  
  
