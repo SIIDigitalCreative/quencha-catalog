@@ -2161,6 +2161,74 @@ button{touch-action:manipulation}
   .vm-color-name{font-size:10px!important;line-height:1.12!important;}
 }
 
+
+/* FINAL FIX: product detail table corners match Product Link button */
+.vm-variant-table-card,
+.vm-dimensions-card{
+  border-radius:14px!important;
+  overflow:hidden!important;
+}
+.vm-variant-table-wrap,
+.vm-dim-table-wrap{
+  border-radius:14px!important;
+  overflow:auto!important;
+  background:#fff!important;
+  border:1px solid rgba(185,220,210,.45)!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.vm-variant-table,
+.vm-dim-table{
+  width:100%!important;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  font-size:13px!important;
+  overflow:hidden!important;
+}
+.vm-dim-table th{
+  background:var(--tl)!important;
+  color:#fff!important;
+  padding:8px 12px!important;
+  text-align:left!important;
+  font-size:10px!important;
+  letter-spacing:.08em!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.vm-dim-table td{
+  padding:9px 12px!important;
+  border-bottom:1px solid rgba(185,220,210,.32)!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  color:var(--gr)!important;
+  background:#fff!important;
+}
+.vm-dim-table tr:nth-child(even) td{
+  background:var(--bg)!important;
+}
+.vm-dim-table tr:last-child td{
+  border-bottom:none!important;
+}
+.vm-dim-primary{
+  font-weight:800!important;
+  color:var(--bk)!important;
+}
+.vm-variant-table th:first-child,
+.vm-dim-table th:first-child{
+  border-top-left-radius:14px!important;
+}
+.vm-variant-table th:last-child,
+.vm-dim-table th:last-child{
+  border-top-right-radius:14px!important;
+}
+.vm-variant-table tbody tr:last-child td:first-child,
+.vm-dim-table tbody tr:last-child td:first-child{
+  border-bottom-left-radius:14px!important;
+}
+.vm-variant-table tbody tr:last-child td:last-child,
+.vm-dim-table tbody tr:last-child td:last-child{
+  border-bottom-right-radius:14px!important;
+}
+
 `
  
  
@@ -4851,15 +4919,15 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="vm-meta-row">
                   {vp.dimensions && typeof vp.dimensions==='object' &&
                     vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
-                    <div className="vm-meta-item" style={{flex:'1 1 100%'}}>
+                    <div className="vm-meta-item vm-dimensions-card" style={{flex:'1 1 100%'}}>
                       <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
-                      <div style={{overflowX:'auto'}}>
-                        <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
+                      <div className="vm-dim-table-wrap">
+                        <table className="vm-dim-table">
                           {vp.dimensions.headers.some(h=>h.trim()) && (
                             <thead>
                               <tr>
                                 {vp.dimensions.headers.map((h,i)=>(
-                                  <th key={i} style={{background:'var(--tl)',color:'#fff',padding:'6px 12px',textAlign:'left',fontSize:10,letterSpacing:'.08em',fontWeight:700,whiteSpace:'nowrap'}}>{h||'—'}</th>
+                                  <th key={i}>{h||'—'}</th>
                                 ))}
                               </tr>
                             </thead>
@@ -4868,7 +4936,7 @@ ${message.trim()}` : 'Message / Notes:',
                             {vp.dimensions.rows.filter(r=>r.some(c=>c.trim())).map((row,ri)=>(
                               <tr key={ri} style={{background:ri%2===0?'#fff':'var(--bg)'}}>
                                 {row.map((cell,ci)=>(
-                                  <td key={ci} style={{padding:'7px 12px',borderBottom:'1px solid rgba(185,220,210,.3)',fontSize:13,fontWeight:ci===0?600:400,color:ci===0?'var(--bk)':'var(--gr)'}}>{cell||'—'}</td>
+                                  <td key={ci} className={ci===0?'vm-dim-primary':''}>{cell||'—'}</td>
                                 ))}
                               </tr>
                             ))}
