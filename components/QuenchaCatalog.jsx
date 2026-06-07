@@ -6520,12 +6520,12 @@ ${message.trim()}` : 'Message / Notes:',
                               title={clr.name}
                               style={{
                                 display:'inline-block',
-                                width:24,height:24,
+                                width:32,height:32,
                                 borderRadius:'50%',
                                 background:swatchBackground(clr),
                                 boxShadow: isActive
                                   ? '0 0 0 2px #fff, 0 0 0 4px var(--tl)'
-                                  : '0 0 0 3px rgba(255,255,255,.9), 0 2px 6px rgba(0,0,0,.13)',
+                                  : '0 0 0 2px rgba(255,255,255,.9), 0 2px 6px rgba(0,0,0,.13)',
                                 cursor:'pointer',
                                 flexShrink:0,
                                 overflow:'hidden',
@@ -6975,6 +6975,15 @@ ${message.trim()}` : 'Message / Notes:',
                         <input className="in-sm" value={c.name} onChange={e=>updateColor(i,'name',e.target.value)} placeholder="Name"/>
                         <input className="in-sm" value={c.code} onChange={e=>updateColor(i,'code',e.target.value)} placeholder="Code" maxLength={4}/>
                         <input className="in-sm" value={c.sku} onChange={e=>updateColor(i,'sku',e.target.value)} placeholder="SKU"/>
+                        <div style={{gridColumn:'1/-1',marginTop:4}}>
+                          <CodeImageUpload
+                            label={`Barcode Image — ${c.name || c.sku || 'Color'}`}
+                            value={c.barcodeImage || ''}
+                            onChange={img=>updateColor(i,'barcodeImage',img)}
+                            onUpload={(file)=>uploadImageToBlob(file,{compress:true})}
+                            onClear={()=>updateColor(i,'barcodeImage','')}
+                          />
+                        </div>
                         <button className="rm-btn" onClick={()=>removeColor(i)}>✕</button>
                       </div>
                     ))
