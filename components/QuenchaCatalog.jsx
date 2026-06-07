@@ -2938,6 +2938,175 @@ button[aria-label="close"]{
   }
 }
 
+
+/* FINAL HARD FIX: Dimensions table inner alignment */
+.m-body .vm-dimensions-card,
+.modal .vm-dimensions-card,
+.vm-dimensions-card.vm-variant-table-card{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:12px!important;
+  background:var(--sf4)!important;
+  border:1px solid rgba(185,220,210,.48)!important;
+  border-radius:12px!important;
+  overflow:hidden!important;
+  display:block!important;
+}
+
+.m-body .vm-dimensions-card .vm-meta-lbl,
+.modal .vm-dimensions-card .vm-meta-lbl,
+.vm-dimensions-card .vm-meta-lbl{
+  display:block!important;
+  margin:0 0 8px 0!important;
+  padding:0!important;
+  font-size:10px!important;
+  line-height:1.2!important;
+  font-weight:700!important;
+  letter-spacing:.08em!important;
+  color:var(--tl)!important;
+  opacity:.7!important;
+  text-transform:uppercase!important;
+}
+
+.m-body .vm-dimensions-card .vm-dim-table-wrap,
+.modal .vm-dimensions-card .vm-dim-table-wrap,
+.vm-dimensions-card .vm-dim-table-wrap{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:#fff!important;
+  border:1px solid rgba(185,220,210,.45)!important;
+  border-radius:8px!important;
+  overflow:hidden!important;
+}
+
+.m-body .vm-dimensions-card .vm-dim-table,
+.modal .vm-dimensions-card .vm-dim-table,
+.vm-dimensions-card .vm-dim-table{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  border-spacing:0!important;
+}
+
+.vm-dimensions-card .vm-dim-table th:nth-child(1),
+.vm-dimensions-card .vm-dim-table td:nth-child(1){width:38%!important;}
+
+.vm-dimensions-card .vm-dim-table th:nth-child(2),
+.vm-dimensions-card .vm-dim-table td:nth-child(2),
+.vm-dimensions-card .vm-dim-table th:nth-child(3),
+.vm-dimensions-card .vm-dim-table td:nth-child(3),
+.vm-dimensions-card .vm-dim-table th:nth-child(4),
+.vm-dimensions-card .vm-dim-table td:nth-child(4){width:20.666%!important;}
+
+.m-body .vm-dimensions-card .vm-dim-table th,
+.modal .vm-dimensions-card .vm-dim-table th,
+.vm-dimensions-card .vm-dim-table th{
+  box-sizing:border-box!important;
+  background:var(--tl)!important;
+  color:#fff!important;
+  padding:8px 10px!important;
+  text-align:left!important;
+  font-size:9px!important;
+  line-height:1.2!important;
+  letter-spacing:.08em!important;
+  font-weight:800!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.m-body .vm-dimensions-card .vm-dim-table td,
+.modal .vm-dimensions-card .vm-dim-table td,
+.vm-dimensions-card .vm-dim-table td{
+  box-sizing:border-box!important;
+  padding:9px 10px!important;
+  border-bottom:1px solid rgba(185,220,210,.32)!important;
+  text-align:left!important;
+  vertical-align:middle!important;
+  font-size:12px!important;
+  line-height:1.25!important;
+  font-weight:400!important;
+  color:var(--gr)!important;
+  background:transparent!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.vm-dimensions-card .vm-dim-table tr:last-child td{border-bottom:none!important;}
+.vm-dimensions-card .vm-dim-table td.vm-dim-primary{font-weight:800!important;color:var(--bk)!important;}
+
+@media (max-width:700px){
+  .m-body .vm-dimensions-card,
+  .modal .vm-dimensions-card,
+  .vm-dimensions-card.vm-variant-table-card{
+    width:100%!important;
+    max-width:100%!important;
+    padding:12px!important;
+  }
+  .m-body .vm-dimensions-card .vm-dim-table-wrap,
+  .modal .vm-dimensions-card .vm-dim-table-wrap,
+  .vm-dimensions-card .vm-dim-table-wrap{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  .m-body .vm-dimensions-card .vm-dim-table,
+  .modal .vm-dimensions-card .vm-dim-table,
+  .vm-dimensions-card .vm-dim-table{
+    width:100%!important;
+    min-width:0!important;
+    table-layout:fixed!important;
+  }
+}
+
+
+/* FINAL FIX: Standard SKU badge format copied from product detail page */
+.c-sku,
+.vm-code,
+.sku-badge,
+.sku-pill,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.product-detail-sku{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:8px 16px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:12px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:15px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+/* Keep card SKU aligned like the detail SKU */
+.c-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
 `
  
  
