@@ -2634,6 +2634,119 @@ button[aria-label="close"]{
   }
 }
 
+
+/* FINAL FIX: Make Dimensions section use the exact same layout rhythm as Color SKU / Barcode */
+.vm-table-card{
+  width: 100% !important;
+  background: var(--sf4) !important;
+  border: 1px solid rgba(185,220,210,.48) !important;
+  border-radius: var(--radius-soft) !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+.vm-table-card .vm-tlbl,
+.vm-table-card .vm-table-title,
+.vm-table-card > .vm-tlbl{
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .12em !important;
+  color: var(--tl) !important;
+  text-transform: uppercase !important;
+}
+
+.vm-table-card .vm-table-wrap{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  background: #fff !important;
+  border: 1px solid rgba(185,220,210,.45) !important;
+  border-radius: var(--radius-main) !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.vm-table-card .vm-table,
+.vm-table-card table{
+  width: 100% !important;
+  min-width: 420px !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+}
+
+.vm-table-card .vm-table th,
+.vm-table-card table th{
+  background: var(--tl) !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  text-align: left !important;
+  font-size: 10px !important;
+  letter-spacing: .08em !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.vm-table-card .vm-table td,
+.vm-table-card table td{
+  padding: 9px 12px !important;
+  border-bottom: 1px solid rgba(185,220,210,.32) !important;
+  vertical-align: middle !important;
+  font-size: 13px !important;
+  color: var(--gr) !important;
+}
+
+.vm-table-card .vm-table tr:last-child td,
+.vm-table-card table tr:last-child td{
+  border-bottom: none !important;
+}
+
+/* Mobile: Dimensions copies Color SKU / Barcode exactly */
+@media (max-width: 700px){
+  .vm-table-card{
+    padding: 12px !important;
+    border-radius: var(--radius-soft) !important;
+  }
+
+  .vm-table-card .vm-tlbl,
+  .vm-table-card .vm-table-title,
+  .vm-table-card > .vm-tlbl{
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    letter-spacing: .12em !important;
+  }
+
+  .vm-table-card .vm-table-wrap{
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: var(--radius-main) !important;
+  }
+
+  .vm-table-card .vm-table,
+  .vm-table-card table{
+    min-width: 390px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .vm-table-card .vm-table th,
+  .vm-table-card table th{
+    padding: 7px 10px !important;
+    font-size: 9px !important;
+  }
+
+  .vm-table-card .vm-table td,
+  .vm-table-card table td{
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
 `
  
  
