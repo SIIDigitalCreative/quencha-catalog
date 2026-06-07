@@ -2229,6 +2229,56 @@ button{touch-action:manipulation}
   border-bottom-right-radius:14px!important;
 }
 
+
+/* FINAL FIX: use Product Link button radius for all non-circular product detail rounded corners */
+:root{--qnh-link-radius:8px;}
+.vm-link-btn,
+.vm-inq-btn,
+.vm-main-wrap,
+.vm-thumb,
+.vm-color-item,
+.vm-variant-table-card,
+.vm-dimensions-card,
+.vm-dim-card,
+.dimensions-card,
+.vm-table-card,
+.vm-variant-table-wrap,
+.vm-table-wrap,
+.vm-dim-table-wrap{
+  border-radius:var(--qnh-link-radius)!important;
+  overflow:hidden!important;
+}
+.vm-variant-table,
+.vm-table,
+.vm-dim-table{
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  overflow:hidden!important;
+}
+.vm-variant-table th:first-child,
+.vm-table th:first-child,
+.vm-dim-table th:first-child{
+  border-top-left-radius:var(--qnh-link-radius)!important;
+}
+.vm-variant-table th:last-child,
+.vm-table th:last-child,
+.vm-dim-table th:last-child{
+  border-top-right-radius:var(--qnh-link-radius)!important;
+}
+.vm-variant-table tbody tr:last-child td:first-child,
+.vm-table tbody tr:last-child td:first-child,
+.vm-dim-table tbody tr:last-child td:first-child{
+  border-bottom-left-radius:var(--qnh-link-radius)!important;
+}
+.vm-variant-table tbody tr:last-child td:last-child,
+.vm-table tbody tr:last-child td:last-child,
+.vm-dim-table tbody tr:last-child td:last-child{
+  border-bottom-right-radius:var(--qnh-link-radius)!important;
+}
+@media(max-width:700px){
+  .vm-color-item{border-radius:var(--qnh-link-radius)!important;}
+}
+
 `
  
  
