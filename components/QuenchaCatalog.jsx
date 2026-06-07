@@ -2586,6 +2586,54 @@ button[aria-label="close"]{
   }
 }
 
+
+/* FINAL FIX: Dimensions table matches Color SKU / Barcode table spacing */
+.vm-table-card{
+  padding: 24px !important;
+  overflow: hidden !important;
+}
+
+.vm-table-card .vm-tlbl,
+.vm-table-card .vm-table-title,
+.vm-table-card > .vm-tlbl{
+  margin: 0 0 16px 0 !important;
+  padding: 0 !important;
+}
+
+.vm-table-card .vm-table-wrap{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-main) !important;
+}
+
+/* Remove any inner offset so the table aligns like Color SKU / Barcode */
+.vm-table-card table,
+.vm-table{
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Mobile: keep the same balanced spacing as Color SKU / Barcode */
+@media (max-width: 700px){
+  .vm-table-card{
+    padding: 24px !important;
+  }
+
+  .vm-table-card .vm-tlbl,
+  .vm-table-card .vm-table-title,
+  .vm-table-card > .vm-tlbl{
+    margin-bottom: 16px !important;
+  }
+
+  .vm-table-card .vm-table-wrap{
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
+
 `
  
  
