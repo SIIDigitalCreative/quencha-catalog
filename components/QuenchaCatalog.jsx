@@ -3404,6 +3404,94 @@ code[class*="sku"],
   text-transform:uppercase!important;
 }
 
+
+/* FINAL TRUE FIX: Single master SKU badge used everywhere
+   Master copied from product page SKU under product name.
+   This controls product cards, product page, color table, and any SKU badges. */
+.sku-badge,
+.c-sku,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.product-detail-sku,
+.vm-code,
+.vm-color-sku,
+.vm-meta-code,
+.vm-variant-sku,
+code[class*="sku"],
+[class*="sku"] code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border:0!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  text-decoration:none!important;
+}
+
+/* Same badge for Product Card SKU */
+.c-sku,
+.product-card-sku,
+.card-sku,
+.pc-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* Same badge for Product Page SKU under product name */
+.product-detail-sku,
+.vm-code,
+.sku-pill{
+  margin:0!important;
+}
+
+/* Same badge for Color SKU / Barcode table product codes */
+.vm-variant-sku{
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border-radius:7px!important;
+}
+
+/* Keep copied state same exact size */
+.vm-variant-sku.copyable,
+.c-sku.copyable,
+.vm-color-sku.copyable{
+  font-size:11px!important;
+  font-weight:700!important;
+  padding:5px 10px!important;
+  border-radius:7px!important;
+}
+
+/* Prevent any parent table/card rules from making SKU badges bigger */
+.vm-variant-table .sku-badge,
+.vm-variant-table code,
+.pcard .sku-badge,
+.pcard code,
+.vm-hdr .sku-badge,
+.vm-hdr code{
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  padding:5px 10px!important;
+  border-radius:7px!important;
+}
+
 `
  
  
@@ -5535,7 +5623,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="c-body">
           <div className="c-name">{p.name}</div>
           {getSkuBase(p) && (
-            <span className="c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
+            <span className="sku-badge c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
               {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
             </span>
           )}
@@ -6017,7 +6105,7 @@ ${message.trim()}` : 'Message / Notes:',
                               <span className="vm-color-swatch" style={{background:swatchBackground(clr)}}/>
                               <div className="vm-color-info">
                                 <span className="vm-color-name">{clr.name}</span>
-                                <span className="vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
+                                <span className="sku-badge vm-color-sku copyable" onClick={(e)=>{e.stopPropagation();copy(clr.sku)}}>{copied===clr.sku ? '✓ Copied!' : clr.sku}</span>
                               </div>
                             </div>
                           )
@@ -6062,7 +6150,7 @@ ${message.trim()}` : 'Message / Notes:',
                                 </div>
                               </td>
                               <td>
-                                <code className="vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
+                                <code className="sku-badge vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
                                   {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
                                 </code>
                               </td>
