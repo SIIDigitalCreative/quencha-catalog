@@ -3767,6 +3767,92 @@ td .vm-variant-sku{
   line-height:var(--qnh-sku-line)!important;
 }
 
+
+/* =========================================================
+   FINAL SKU DESIGN PASS
+   Source of truth: Product page SKU directly under product name.
+   The same visual style is forced across product page, product cards, and SKU table.
+   ========================================================= */
+.product-detail-sku,
+.c-sku,
+.vm-variant-sku,
+.vm-color-sku,
+.vm-code,
+.vm-meta-code,
+.sku-badge,
+.sku-pill,
+.qnh-sku,
+.pcard .product-detail-sku,
+.pcard .c-sku,
+.vm-variant-table .product-detail-sku,
+.vm-variant-table .vm-variant-sku{
+  display:inline-block!important;
+  width:fit-content!important;
+  min-width:0!important;
+  max-width:max-content!important;
+  height:auto!important;
+  min-height:0!important;
+
+  padding:2px 8px!important;
+  margin:0!important;
+
+  background:rgba(39,153,137,.10)!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:4px!important;
+  box-shadow:none!important;
+
+  color:var(--tl)!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  vertical-align:middle!important;
+}
+
+/* Product page SKU keeps only its vertical position under product title */
+.vm-hdr .product-detail-sku{
+  margin-top:5px!important;
+}
+
+/* Product card SKU placement only. Visual style stays identical. */
+.pcard .product-detail-sku,
+.pcard .c-sku,
+.c-sku{
+  align-self:flex-start!important;
+}
+
+/* SKU table visual style must not be larger than product page SKU */
+.vm-variant-table .product-detail-sku,
+.vm-variant-table .vm-variant-sku{
+  padding:2px 8px!important;
+  border-radius:4px!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+  background:rgba(39,153,137,.10)!important;
+}
+
+/* Copied state must not change the badge size */
+.product-detail-sku.copyable,
+.c-sku.copyable,
+.vm-variant-sku.copyable,
+.vm-color-sku.copyable{
+  padding:2px 8px!important;
+  border-radius:4px!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+}
+
 `
  
  
@@ -5898,7 +5984,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="c-body">
           <div className="c-name">{p.name}</div>
           {getSkuBase(p) && (
-            <span className="qnh-sku c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
+            <span className="product-detail-sku c-sku copyable" onClick={e=>{e.stopPropagation();copy(getSkuBase(p))}} title="Click to copy SKU">
               {copied===getSkuBase(p) ? '✓ Copied!' : getSkuBase(p)}
             </span>
           )}
@@ -6322,7 +6408,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
                 {getSkuBase(vp) && (
                   <code
-                    className="sku-badge product-detail-sku copyable"
+                    className="product-detail-sku copyable"
                     onClick={()=>copy(getSkuBase(vp))}
                     title="Click to copy SKU"
                   >
@@ -6425,7 +6511,7 @@ ${message.trim()}` : 'Message / Notes:',
                                 </div>
                               </td>
                               <td>
-                                <code className="qnh-sku vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
+                                <code className="product-detail-sku vm-variant-sku copyable" onClick={()=>copy(clr.sku || '')}>
                                   {copied===(clr.sku || '') ? '✓ Copied!' : (clr.sku || '—')}
                                 </code>
                               </td>
