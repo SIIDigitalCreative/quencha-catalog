@@ -6489,7 +6489,7 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 )}
               </div>
-              {/* Color swatches — 2 columns of collections, max 4 dots each */}
+              {/* Color swatches — 2 columns of collections, max 4 dots each no wrap */}
               {vp.colors.length > 0 && (() => {
                 const groups = groupColorsByCollection(vp.colors, colorCollections)
                 const pairs = []
@@ -6497,12 +6497,12 @@ ${message.trim()}` : 'Message / Notes:',
                 const renderGroup = (group) => {
                   const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
                   return (
-                    <div key={group.name}>
-                      <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:8}}>
-                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0,lineHeight:1.4}}>{group.name}</span>
-                        {activeInGroup && <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>}
+                    <div key={group.name} style={{minWidth:0}}>
+                      <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:7}}>
+                        <span style={{fontSize:9,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 7px',borderRadius:999,flexShrink:0,lineHeight:1.4,whiteSpace:'nowrap'}}>{group.name}</span>
+                        {activeInGroup && <span style={{fontSize:10,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',minWidth:0}}>{activeInGroup.name}</span>}
                       </div>
-                      <div style={{display:'flex',flexWrap:'nowrap',gap:10,overflow:'hidden'}}>
+                      <div style={{display:'flex',flexWrap:'nowrap',gap:6,alignItems:'center'}}>
                         {group.colors.slice(0,4).map(clr => {
                           const colorKey = getColorKey(clr)
                           const isActive = activeVmColorKey === colorKey
@@ -6520,12 +6520,12 @@ ${message.trim()}` : 'Message / Notes:',
                               title={clr.name}
                               style={{
                                 display:'inline-block',
-                                width:36,height:36,
+                                width:24,height:24,
                                 borderRadius:'50%',
                                 background:swatchBackground(clr),
                                 boxShadow: isActive
-                                  ? '0 0 0 3px #fff, 0 0 0 5px var(--tl), 0 4px 12px rgba(0,0,0,.15)'
-                                  : '0 0 0 4px rgba(255,255,255,.9), 0 4px 12px rgba(0,0,0,.13)',
+                                  ? '0 0 0 2px #fff, 0 0 0 4px var(--tl)'
+                                  : '0 0 0 3px rgba(255,255,255,.9), 0 2px 6px rgba(0,0,0,.13)',
                                 cursor:'pointer',
                                 flexShrink:0,
                                 overflow:'hidden',
@@ -6542,9 +6542,9 @@ ${message.trim()}` : 'Message / Notes:',
                 return (
                   <div>
                     <span className="vm-color-sec-lbl">Colors</span>
-                    <div style={{display:'flex',flexDirection:'column',gap:14}}>
+                    <div style={{display:'flex',flexDirection:'column',gap:12}}>
                       {pairs.map((pair, i) => (
-                        <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                        <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
                           {pair.map(group => renderGroup(group))}
                         </div>
                       ))}
