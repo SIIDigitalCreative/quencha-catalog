@@ -3492,6 +3492,92 @@ code[class*="sku"],
   border-radius:7px!important;
 }
 
+
+/* FINAL PIXEL MATCH FIX: one SKU badge style for Product Card, Product Page, and SKU Table */
+:root{
+  --sku-bg:#E7F4F0;
+  --sku-color:var(--tl);
+  --sku-radius:8px;
+  --sku-pad-y:5px;
+  --sku-pad-x:10px;
+  --sku-font-size:11px;
+  --sku-font-weight:700;
+  --sku-letter-spacing:.04em;
+}
+
+.sku-badge,
+.c-sku,
+.vm-variant-sku,
+.vm-color-sku,
+.vm-code,
+.vm-meta-code,
+.product-detail-sku,
+.product-card-sku,
+.card-sku,
+.pc-sku,
+.pcard .c-sku,
+.pcard code.c-sku,
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table code.vm-variant-sku,
+.vm-hdr .sku-badge,
+.vm-hdr code,
+.vm-meta-code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:max-content!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:var(--sku-pad-y) var(--sku-pad-x)!important;
+  background:var(--sku-bg)!important;
+  border:0!important;
+  border-radius:var(--sku-radius)!important;
+  color:var(--sku-color)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace!important;
+  font-size:var(--sku-font-size)!important;
+  font-weight:var(--sku-font-weight)!important;
+  line-height:1!important;
+  letter-spacing:var(--sku-letter-spacing)!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  box-shadow:none!important;
+  vertical-align:middle!important;
+}
+
+/* Remove the old table exception. Table SKU must ALSO have same placeholder/padding. */
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table code.vm-variant-sku,
+td .vm-variant-sku{
+  padding:var(--sku-pad-y) var(--sku-pad-x)!important;
+  background:var(--sku-bg)!important;
+  border-radius:var(--sku-radius)!important;
+  font-size:var(--sku-font-size)!important;
+  font-weight:var(--sku-font-weight)!important;
+  line-height:1!important;
+  letter-spacing:var(--sku-letter-spacing)!important;
+}
+
+/* Card SKU must not be enlarged by product card rules */
+.pcard .c-sku,
+.c-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* Copied state should not resize */
+.vm-variant-sku.copyable,
+.c-sku.copyable,
+.vm-color-sku.copyable{
+  padding:var(--sku-pad-y) var(--sku-pad-x)!important;
+  border-radius:var(--sku-radius)!important;
+  font-size:var(--sku-font-size)!important;
+  font-weight:var(--sku-font-weight)!important;
+  line-height:1!important;
+}
+
 `
  
  
@@ -6220,10 +6306,10 @@ ${message.trim()}` : 'Message / Notes:',
                           title="Click to enlarge"
                         />
                       ) : (
-                        <code className="vm-meta-code">{vp.barcode}</code>
+                        <code className="sku-badge vm-meta-code">{vp.barcode}</code>
                       )}
                       {vp.barcode && vp.barcodeImage && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block'}}>{vp.barcode}</code>
+                        <code className="sku-badge vm-meta-code" style={{marginTop:4,display:'block'}}>{vp.barcode}</code>
                       )}
                     </div>
                   )}
@@ -6240,7 +6326,7 @@ ${message.trim()}` : 'Message / Notes:',
                         />
                       )}
                       {vp.qrCode && (
-                        <code className="vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{vp.qrCode}</code>
+                        <code className="sku-badge vm-meta-code" style={{marginTop:4,display:'block',wordBreak:'break-all',fontSize:10}}>{vp.qrCode}</code>
                       )}
                     </div>
                   )}
