@@ -2081,6 +2081,86 @@ button{touch-action:manipulation}
   align-self:flex-start!important;
   width:fit-content!important;
 }
+
+/* FINAL FIX: compact color buttons + consistent rounded tables + shorter link label */
+.vm-color-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+.vm-color-item{
+  min-height:52px!important;
+  padding:8px 6px!important;
+  border-radius:16px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  background:#fff!important;
+}
+.vm-color-swatch{
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  border-width:2px!important;
+  box-shadow:0 3px 9px rgba(0,0,0,.10)!important;
+}
+.vm-color-info{
+  width:100%!important;
+  display:block!important;
+  min-width:0!important;
+  text-align:center!important;
+}
+.vm-color-name{
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+}
+.vm-color-sku{
+  display:none!important;
+}
+.vm-color-item.color-active{
+  border-color:var(--tl)!important;
+  box-shadow:0 0 0 1px var(--tl)!important;
+}
+.vm-color-sec-lbl{
+  margin-bottom:8px!important;
+}
+
+.vm-variant-table-card,
+.dimensions-card,
+.vm-dim-card,
+.vm-table-card{
+  border-radius:18px!important;
+  overflow:hidden!important;
+}
+.vm-variant-table-wrap,
+.vm-table-wrap{
+  border-radius:14px!important;
+  overflow:hidden!important;
+}
+.vm-variant-table th:first-child,
+.vm-table th:first-child{
+  border-top-left-radius:14px!important;
+}
+.vm-variant-table th:last-child,
+.vm-table th:last-child{
+  border-top-right-radius:14px!important;
+}
+
+@media(max-width:700px){
+  .vm-color-grid{gap:8px!important;}
+  .vm-color-item{min-height:50px!important;padding:7px 5px!important;border-radius:15px!important;gap:4px!important;}
+  .vm-color-swatch{width:26px!important;height:26px!important;flex-basis:26px!important;}
+  .vm-color-name{font-size:10px!important;line-height:1.12!important;}
+}
+
 `
  
  
@@ -4840,7 +4920,7 @@ ${message.trim()}` : 'Message / Notes:',
                   <PencilIcon/>
                 </button>
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
-                  {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Copy Product Link'}
+                  {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
                 </button>
                 <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal(); openInquiry(product) }}>📩 Bulk Inquiry</button>
               </div>
