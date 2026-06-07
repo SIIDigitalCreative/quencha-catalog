@@ -2747,6 +2747,117 @@ button[aria-label="close"]{
   }
 }
 
+
+/* FINAL FIX: Dimensions section now truly uses Color SKU / Barcode table system */
+.vm-dimensions-card.vm-variant-table-card{
+  background: var(--sf4) !important;
+  border: 1px solid rgba(185,220,210,.48) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+}
+
+.vm-dimensions-card .vm-meta-lbl{
+  margin: 0 0 8px 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: var(--tl) !important;
+  opacity: .7 !important;
+}
+
+.vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(185,220,210,.45) !important;
+  background: #fff !important;
+  -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table{
+  width: 100% !important;
+  min-width: 420px !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  font-size: 13px !important;
+  margin: 0 !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table th{
+  background: var(--tl) !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  text-align: left !important;
+  font-size: 10px !important;
+  letter-spacing: .08em !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table td{
+  padding: 9px 12px !important;
+  border-bottom: 1px solid rgba(185,220,210,.32) !important;
+  vertical-align: middle !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--gr) !important;
+  background: transparent !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table tr:last-child td{
+  border-bottom: none !important;
+}
+
+.vm-dimensions-card .vm-dim-primary{
+  font-weight: 800 !important;
+  color: var(--bk) !important;
+}
+
+@media (max-width:700px){
+  .vm-dimensions-card.vm-variant-table-card{
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .vm-dimensions-card .vm-meta-lbl{
+    margin-bottom: 8px !important;
+    font-size: 10px !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{
+    border-radius: 8px !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table{
+    min-width: 390px !important;
+    width: 100% !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table th{
+    padding: 7px 10px !important;
+    font-size: 9px !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table td{
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
 `
  
  
@@ -5437,10 +5548,10 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="vm-meta-row">
                   {vp.dimensions && typeof vp.dimensions==='object' &&
                     vp.dimensions.rows?.some(r=>r.some(c=>c.trim())) && (
-                    <div className="vm-meta-item vm-dimensions-card" style={{flex:'1 1 100%'}}>
+                    <div className="vm-variant-table-card vm-dimensions-card" style={{flex:'1 1 100%'}}>
                       <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
-                      <div className="vm-dim-table-wrap">
-                        <table className="vm-dim-table">
+                      <div className="vm-variant-table-wrap vm-dim-table-wrap">
+                        <table className="vm-variant-table vm-dim-table">
                           {vp.dimensions.headers.some(h=>h.trim()) && (
                             <thead>
                               <tr>
