@@ -6493,7 +6493,7 @@ ${message.trim()}` : 'Message / Notes:',
               {vp.colors.length > 0 && (
                 <div>
                   <span className="vm-color-sec-lbl">Colors</span>
-                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px 16px'}}>
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px 12px'}}>
                     {groupColorsByCollection(vp.colors, colorCollections).map(group=>{
                       const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
                       return (
@@ -6504,7 +6504,7 @@ ${message.trim()}` : 'Message / Notes:',
                               <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>
                             )}
                           </div>
-                          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                          <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
                             {group.colors.map(clr=>{
                               const linkedImageIndexes = findImageIndexesForColor(vp, clr)
                               const hasLinkedImage = linkedImageIndexes.length > 0
