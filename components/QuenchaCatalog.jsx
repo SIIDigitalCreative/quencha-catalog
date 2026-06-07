@@ -3107,6 +3107,119 @@ button[aria-label="close"]{
   margin:0!important;
 }
 
+
+/* FINAL FIX: Product card SKU same size as product detail SKU */
+.c-sku,
+.product-card-sku,
+.card-sku,
+.pc-sku{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:8px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* Product detail SKU remains the standard small badge */
+.product-detail-sku,
+.sku-badge,
+.sku-pill,
+.vm-code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:8px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+
+/* FINAL FIX: One SKU format across the whole site
+   Master style copied from the SKU badge under the product name on the product page. */
+.c-sku,
+.vm-code,
+.vm-variant-sku,
+.vm-color-sku,
+.vm-meta-code,
+.sku-badge,
+.sku-pill,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.product-detail-sku,
+code[class*="sku"],
+[class*="sku"] code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:8px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  text-transform:uppercase!important;
+}
+
+/* Product card SKU should not grow larger than the product page SKU */
+.c-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* SKU inside Color SKU / Barcode table should use the same font and size,
+   but without the pill background so the table stays clean. */
+.vm-variant-sku{
+  padding:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  letter-spacing:.04em!important;
+  color:var(--tl)!important;
+}
+
+/* Keep copied state same size */
+.vm-variant-sku.copyable,
+.c-sku.copyable,
+.vm-color-sku.copyable{
+  font-size:11px!important;
+  font-weight:700!important;
+}
+
 `
  
  
