@@ -2279,6 +2279,96 @@ button{touch-action:manipulation}
   .vm-color-item{border-radius:var(--qnh-link-radius)!important;}
 }
 
+
+/* FINAL FIX: Color buttons use the same rounded corner radius as Product Link button */
+.vm-color-item,
+.color-btn,
+.color-card,
+.collection-color-btn,
+.collection-color-card,
+.product-color-btn,
+.product-color-card,
+.vm-color-grid button,
+.vm-color-grid .vm-color-item,
+.vm-color-grid .color-item,
+.vm-color-grid [class*="color"]{
+  border-radius: 14px !important;
+}
+
+
+/* FINAL FIX: Global button radius system
+   Use the same rounded corner style as Product Link button across the whole site. */
+:root{
+  --btn-radius: 14px;
+}
+
+button,
+.tb-inq,
+.tb-edit-btn,
+.tb-menu-btn,
+.tb-search-btn,
+.tb-clear,
+.fb,
+.pc,
+.filter-pill,
+.clear-filters,
+.mob-filter-btn,
+.drawer-close,
+.sort-sel,
+.vbtn,
+.pcard,
+.c-sku,
+.c-more,
+.c-badge,
+.vm-badge,
+.vm-inq-btn,
+.vm-link-btn,
+.vm-pencil-btn,
+.vm-thumb,
+.vm-color-item,
+.vm-variant-table-card,
+.vm-variant-table-wrap,
+.vm-table-wrap,
+.vm-table-card,
+.pw-submit,
+.pw-cancel,
+.add-btn,
+.collection-add-set,
+.collection-edit-set,
+.collection-set-editor-close,
+.m-close,
+.f-in,
+.f-sel,
+.f-ta,
+.pw-in,
+.badge-tag,
+.price-pill,
+.color-btn,
+.color-card,
+.collection-color-btn,
+.collection-color-card,
+.product-color-btn,
+.product-color-card,
+.vm-actions button,
+.m-footer button,
+.em-tab,
+[class*="btn"],
+[class*="button"],
+[class*="pill"]{
+  border-radius: var(--btn-radius) !important;
+}
+
+/* Keep true circular controls circular */
+.tb-edit-btn,
+.tb-search-btn,
+.tb-clear,
+.m-close,
+.pw-eye,
+.vm-pencil-btn,
+.drawer-close{
+  border-radius: 50% !important;
+}
+
 `
  
  
