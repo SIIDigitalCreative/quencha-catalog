@@ -420,7 +420,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-table tr:hover td{background:rgba(185,220,210,.08)}
  
 /* COLOR SKU / BARCODE TABLE */
-.vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:hidden}
+.vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:visible}
 .vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch}
 .vm-variant-table{width:100%;border-collapse:collapse;min-width:420px;font-size:13px}
 .vm-variant-table th{background:var(--tl);color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;white-space:nowrap}
@@ -866,7 +866,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-visual-dot{width:54px;height:54px;border-radius:50%;border:4px solid rgba(255,255,255,.82);box-shadow:0 12px 28px rgba(0,0,0,.10);margin-left:-10px}
 .quench-visual-dot:first-child{margin-left:0}
  
-.quench-modal{max-width:1040px;width:min(1040px,calc(100vw - 28px));max-height:min(92vh,900px);overflow:hidden}
+.quench-modal{max-width:1040px;width:min(1040px,calc(100vw - 28px));max-height:min(92vh,900px);overflow:auto}
 .quench-head{background:linear-gradient(135deg,rgba(185,220,210,.45),rgba(255,255,255,.96));border-bottom:1px solid rgba(39,153,137,.12)}
 .quench-progress{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
 .quench-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:rgba(58,58,58,.50);border:none;background:transparent;padding:0;font-family:var(--fn);cursor:pointer;transition:var(--tr)}
@@ -1039,7 +1039,7 @@ button{touch-action:manipulation}
  
 /* Modal consistency */
 .modal-bg{padding:18px!important;background:rgba(39,153,137,.16)!important;backdrop-filter:blur(7px)!important}
-.modal{box-shadow:var(--q-shadow-float)!important;overflow:hidden!important}
+.modal{box-shadow:var(--q-shadow-float)!important;overflow:visible!important}
 .m-hdr{background:linear-gradient(135deg,rgba(185,220,210,.40),rgba(255,255,255,.96))!important;border-bottom:1px solid rgba(39,153,137,.12)!important;padding:24px 28px!important}
 .m-body{padding:24px 28px!important;gap:18px!important}
 .m-footer{padding:16px 24px!important;border-top:1px solid rgba(39,153,137,.12)!important;background:rgba(255,255,255,.94)!important}
