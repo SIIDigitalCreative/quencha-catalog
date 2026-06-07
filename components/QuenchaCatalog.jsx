@@ -2391,8 +2391,8 @@ button[aria-label="close"]{
 /* FINAL FIX: Semi-rounded sitewide radius system
    Softer than the previous over-rounded version. */
 :root{
-  --radius-main: 14px;
-  --radius-soft: 16px;
+  --radius-main: 10px;
+  --radius-soft: 12px;
 }
 
 /* Main rounded surfaces and controls */
