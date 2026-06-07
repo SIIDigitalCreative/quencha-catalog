@@ -3853,6 +3853,54 @@ td .vm-variant-sku{
   letter-spacing:.04em!important;
 }
 
+
+/* FINAL FIX: SKU table product code should match SKU font only, with no placeholder/padding */
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table code.vm-variant-sku,
+.vm-variant-sku,
+td .vm-variant-sku{
+  display:inline!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:auto!important;
+  min-height:0!important;
+
+  padding:0!important;
+  margin:0!important;
+
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+
+  color:var(--tl)!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  vertical-align:baseline!important;
+}
+
+/* Keep product card and product page SKU badge unchanged */
+.product-detail-sku:not(.vm-variant-sku),
+.c-sku:not(.vm-variant-sku){
+  display:inline-block!important;
+  padding:2px 8px!important;
+  background:rgba(39,153,137,.10)!important;
+  border-radius:4px!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+  color:var(--tl)!important;
+}
+
 `
  
  
