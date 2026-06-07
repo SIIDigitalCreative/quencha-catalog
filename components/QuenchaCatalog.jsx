@@ -1482,7 +1482,7 @@ button{touch-action:manipulation}
   .quench-chip{font-size:12px!important;min-height:44px!important;text-align:center!important;justify-content:center!important}
  
   /* Reliable mobile modal scrolling: overlay scrolls as full page */
-  .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
+  .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
   .modal{width:100vw!important;max-width:none!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;border:none!important;overflow:visible!important;display:block!important}
   .m-hdr{position:relative!important;border-radius:0!important;padding:28px 70px 24px 24px!important}
   .m-body{overflow:visible!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
@@ -2875,15 +2875,16 @@ button[aria-label="close"]{
   width: 100% !important;
   max-width: 100% !important;
   margin: 0 !important;
-  overflow-x: hidden !important;
+  overflow-x: auto !important;
   overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
   box-sizing: border-box !important;
 }
 
 .vm-dimensions-card .vm-dim-table.vm-variant-table{
-  width: 100% !important;
-  min-width: 0 !important;
-  table-layout: fixed !important;
+  width: auto !important;
+  min-width: 420px !important;
+  table-layout: auto !important;
   margin: 0 !important;
   border-collapse: collapse !important;
 }
@@ -2897,15 +2898,14 @@ button[aria-label="close"]{
   white-space: nowrap !important;
 }
 
-/* Make 4-column dimensions fit perfectly on mobile without horizontal drifting */
 .vm-dimensions-card .vm-dim-table.vm-variant-table th:first-child,
 .vm-dimensions-card .vm-dim-table.vm-variant-table td:first-child{
-  width: 36% !important;
+  width: auto !important;
 }
 
 .vm-dimensions-card .vm-dim-table.vm-variant-table th:not(:first-child),
 .vm-dimensions-card .vm-dim-table.vm-variant-table td:not(:first-child){
-  width: 21.33% !important;
+  width: auto !important;
 }
 
 @media (max-width:700px){
@@ -2916,13 +2916,15 @@ button[aria-label="close"]{
   .vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{
     width: 100% !important;
     max-width: 100% !important;
-    overflow-x: hidden !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .vm-dimensions-card .vm-dim-table.vm-variant-table{
-    width: 100% !important;
-    min-width: 0 !important;
-    table-layout: fixed !important;
+    width: auto !important;
+    min-width: 420px !important;
+    table-layout: auto !important;
+  }
   }
 
   .vm-dimensions-card .vm-dim-table.vm-variant-table th,
