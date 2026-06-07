@@ -2506,6 +2506,22 @@ button[aria-label="close"]{
   border-radius: 50% !important;
 }
 
+
+/* FINAL FIX: Product card image placeholders use the same radius system as the cards */
+.c-img-wrap,
+.c-img-wrap img,
+.c-img-ph,
+.pcard .c-img-wrap,
+.pcard .c-img-wrap img{
+  border-radius: var(--radius-soft) var(--radius-soft) 0 0 !important;
+}
+
+/* Empty product placeholder cards should also match the same corner style */
+.c-img-wrap:has(.c-img-ph),
+.pcard .c-img-wrap:has(.c-img-ph){
+  border-radius: var(--radius-soft) var(--radius-soft) 0 0 !important;
+}
+
 `
  
  
