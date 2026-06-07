@@ -6489,7 +6489,7 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 )}
               </div>
-              {/* Color swatches — 2 columns of collections */}
+              {/* Color swatches — 2 columns of collections, max 4 dots each */}
               {vp.colors.length > 0 && (() => {
                 const groups = groupColorsByCollection(vp.colors, colorCollections)
                 const pairs = []
@@ -6502,8 +6502,8 @@ ${message.trim()}` : 'Message / Notes:',
                         <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0,lineHeight:1.4}}>{group.name}</span>
                         {activeInGroup && <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>}
                       </div>
-                      <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
-                        {group.colors.map(clr => {
+                      <div style={{display:'flex',flexWrap:'nowrap',gap:10,overflow:'hidden'}}>
+                        {group.colors.slice(0,4).map(clr => {
                           const colorKey = getColorKey(clr)
                           const isActive = activeVmColorKey === colorKey
                           const hasLinkedImage = findImageIndexesForColor(vp, clr).length > 0
