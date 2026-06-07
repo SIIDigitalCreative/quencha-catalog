@@ -3220,6 +3220,67 @@ code[class*="sku"],
   font-weight:700!important;
 }
 
+
+/* FINAL FIX: All SKU badges copy the exact product page SKU badge shape, padding, and corner radius */
+.c-sku,
+.vm-code,
+.vm-color-sku,
+.vm-meta-code,
+.sku-badge,
+.sku-pill,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.product-detail-sku,
+code[class*="sku"],
+[class*="sku"] code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:5px 10px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:8px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  text-transform:uppercase!important;
+}
+
+/* Card SKU should use the same badge, not a bigger pill */
+.c-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* Table SKU keeps same font, but no badge fill inside table cells */
+.vm-variant-sku{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:fit-content!important;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  text-transform:uppercase!important;
+}
+
 `
  
  
