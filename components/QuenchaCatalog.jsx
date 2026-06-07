@@ -6493,50 +6493,51 @@ ${message.trim()}` : 'Message / Notes:',
               {vp.colors.length > 0 && (
                 <div>
                   <span className="vm-color-sec-lbl">Colors</span>
-                  {groupColorsByCollection(vp.colors, colorCollections).map(group=>{
-                    const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
-                    return (
-                      <div key={group.name} style={{marginBottom:8}}>
-                        <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:6}}>
-                          <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0}}>{group.name}</span>
-                          {activeInGroup && (
-                            <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>
-                          )}
-                          <div style={{flex:1,height:1,background:'rgba(185,220,210,.3)'}}/>
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px 16px'}}>
+                    {groupColorsByCollection(vp.colors, colorCollections).map(group=>{
+                      const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
+                      return (
+                        <div key={group.name}>
+                          <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:6}}>
+                            <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0}}>{group.name}</span>
+                            {activeInGroup && (
+                              <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>
+                            )}
+                          </div>
+                          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                            {group.colors.map(clr=>{
+                              const linkedImageIndexes = findImageIndexesForColor(vp, clr)
+                              const hasLinkedImage = linkedImageIndexes.length > 0
+                              const colorKey = getColorKey(clr)
+                              const isActive = activeVmColorKey === colorKey
+                              return (
+                                <button
+                                  key={clr.sku}
+                                  onClick={()=>{
+                                    setVmColorKey(isActive ? '' : colorKey)
+                                    setVmImg(0)
+                                    if (typeof window !== 'undefined' && window.innerWidth <= 700) {
+                                      setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
+                                    }
+                                  }}
+                                  title={clr.name}
+                                  style={{
+                                    width:28,height:28,borderRadius:'50%',
+                                    background:swatchBackground(clr),
+                                    border: isActive ? '2.5px solid var(--tl)' : '2px solid rgba(255,255,255,.85)',
+                                    boxShadow: isActive ? '0 0 0 2px var(--tl)' : '0 1px 4px rgba(0,0,0,.18)',
+                                    cursor:'pointer',padding:0,flexShrink:0,
+                                    outline:'none',transition:'box-shadow .15s,border .15s',
+                                    opacity: hasLinkedImage ? 1 : 0.85,
+                                  }}
+                                />
+                              )
+                            })}
+                          </div>
                         </div>
-                        <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
-                          {group.colors.map(clr=>{
-                            const linkedImageIndexes = findImageIndexesForColor(vp, clr)
-                            const hasLinkedImage = linkedImageIndexes.length > 0
-                            const colorKey = getColorKey(clr)
-                            const isActive = activeVmColorKey === colorKey
-                            return (
-                              <button
-                                key={clr.sku}
-                                onClick={()=>{
-                                  setVmColorKey(isActive ? '' : colorKey)
-                                  setVmImg(0)
-                                  if (typeof window !== 'undefined' && window.innerWidth <= 700) {
-                                    setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
-                                  }
-                                }}
-                                title={clr.name}
-                                style={{
-                                  width:28,height:28,borderRadius:'50%',
-                                  background:swatchBackground(clr),
-                                  border: isActive ? '2.5px solid var(--tl)' : '2px solid rgba(255,255,255,.85)',
-                                  boxShadow: isActive ? '0 0 0 2px var(--tl)' : '0 1px 4px rgba(0,0,0,.18)',
-                                  cursor:'pointer',padding:0,flexShrink:0,
-                                  outline:'none',transition:'box-shadow .15s,border .15s',
-                                  opacity: hasLinkedImage ? 1 : 0.85,
-                                }}
-                              />
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
+                  </div>
                 </div>
               )}
               {vp.youtube && getYouTubeId(vp.youtube) && (
