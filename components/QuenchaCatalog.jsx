@@ -2280,7 +2280,48 @@ button{touch-action:manipulation}
 }
 
 
-/* FINAL FIX: Color buttons use the same rounded corner radius as Product Link button */
+
+/* Keep true circular controls circular */
+.tb-edit-btn,
+.tb-search-btn,
+.tb-clear,
+.m-close,
+.pw-eye,
+.vm-pencil-btn,
+.drawer-close{
+  border-radius: 50% !important;
+}
+
+
+/* FINAL FIX: Unified radius system using Dimensions table corner radius */
+:root{
+  --radius-main: 24px;
+}
+
+/* Main rounded surfaces and controls */
+.modal,
+.pw-modal,
+.hero,
+.pcard,
+.c-img-wrap,
+.vm-main-wrap,
+.vm-variant-table-card,
+.vm-variant-table-wrap,
+.vm-table-wrap,
+.vm-table-card,
+.vm-actions button,
+.vm-link-btn,
+.vm-inq-btn,
+.filter-pill,
+.fb,
+.pc,
+.clear-filters,
+.sort-sel,
+.vbtns,
+.vbtn,
+.tb-search,
+.tb-inq,
+.price-pill,
 .vm-color-item,
 .color-btn,
 .color-card,
@@ -2288,11 +2329,66 @@ button{touch-action:manipulation}
 .collection-color-card,
 .product-color-btn,
 .product-color-card,
+.collection-item,
+.collection-set-editor,
+.collection-name,
+.collection-add-set,
+.collection-edit-set,
+.f-in,
+.f-sel,
+.f-ta,
+.pw-in,
+.pw-submit,
+.add-btn,
+.c-sku,
+.vm-code,
+.sku-badge,
+.sku-pill,
+.product-card-sku,
+.product-detail-sku,
 .vm-color-grid button,
 .vm-color-grid .vm-color-item,
 .vm-color-grid .color-item,
-.vm-color-grid [class*="color"]{
-  border-radius: 14px !important;
+[class*="card"],
+[class*="panel"],
+[class*="table-card"],
+[class*="table-wrap"]{
+  border-radius: var(--radius-main) !important;
+}
+
+/* Keep pill-style elements as pills */
+.c-badge,
+.vm-badge,
+.badge-tag,
+.c-more,
+.ext-tag,
+.cat-cnt,
+.h-chip,
+.filter-pill-count,
+.fb-cnt,
+.collection-color-chip{
+  border-radius: 999px !important;
+}
+
+/* Keep circular controls and dots circular */
+.tb-edit-btn,
+.tb-menu-btn,
+.tb-search-btn,
+.tb-clear,
+.m-close,
+.drawer-close,
+.vm-pencil-btn,
+.pw-eye,
+.fb-dot,
+.filter-pill-dot,
+.c-dot,
+.vm-swatch,
+.vm-variant-swatch,
+.vm-color-swatch,
+.collection-color-chip i,
+button[aria-label="Close"],
+button[aria-label="close"]{
+  border-radius: 50% !important;
 }
 
 `
