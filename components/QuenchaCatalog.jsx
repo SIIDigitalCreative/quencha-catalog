@@ -2858,6 +2858,86 @@ button[aria-label="close"]{
   }
 }
 
+
+/* FINAL FIX: Dimensions inner table alignment
+   Keep the Dimensions section visually matching Color SKU, but prevent inner placeholders from shifting/offscreen. */
+.vm-dimensions-card.vm-variant-table-card{
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow: hidden !important;
+}
+
+.vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table{
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+  margin: 0 !important;
+  border-collapse: collapse !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table th,
+.vm-dimensions-card .vm-dim-table.vm-variant-table td{
+  box-sizing: border-box !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+/* Make 4-column dimensions fit perfectly on mobile without horizontal drifting */
+.vm-dimensions-card .vm-dim-table.vm-variant-table th:first-child,
+.vm-dimensions-card .vm-dim-table.vm-variant-table td:first-child{
+  width: 36% !important;
+}
+
+.vm-dimensions-card .vm-dim-table.vm-variant-table th:not(:first-child),
+.vm-dimensions-card .vm-dim-table.vm-variant-table td:not(:first-child){
+  width: 21.33% !important;
+}
+
+@media (max-width:700px){
+  .vm-dimensions-card.vm-variant-table-card{
+    padding: 12px !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table{
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table th,
+  .vm-dimensions-card .vm-dim-table.vm-variant-table td{
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+
+  .vm-dimensions-card .vm-dim-table.vm-variant-table th{
+    font-size: 9px !important;
+    letter-spacing: .08em !important;
+  }
+}
+
 `
  
  
