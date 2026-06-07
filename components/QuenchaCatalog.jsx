@@ -6502,7 +6502,7 @@ ${message.trim()}` : 'Message / Notes:',
                         <span style={{fontSize:9,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 7px',borderRadius:999,flexShrink:0,lineHeight:1.4,whiteSpace:'nowrap'}}>{group.name}</span>
                         {activeInGroup && <span style={{fontSize:10,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',minWidth:0}}>{activeInGroup.name}</span>}
                       </div>
-                      <div style={{display:'flex',flexWrap:'nowrap',gap:6,alignItems:'center'}}>
+                      <div style={{display:'flex',flexWrap:'nowrap',gap:12,alignItems:'center'}}>
                         {group.colors.slice(0,4).map(clr => {
                           const colorKey = getColorKey(clr)
                           const isActive = activeVmColorKey === colorKey
