@@ -3578,6 +3578,89 @@ td .vm-variant-sku{
   line-height:1!important;
 }
 
+
+/* FINAL CHECKED FIX: Every SKU copies the exact product-page SKU under the product name.
+   Source of truth: font-size 11px, weight 700, padding 2px 8px, radius 4px. */
+.sku-badge,
+.product-detail-sku,
+.c-sku,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.vm-variant-sku,
+.vm-color-sku,
+.vm-code,
+.vm-meta-code,
+code[class*="sku"],
+[class*="sku"] code{
+  display:inline-block!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:max-content!important;
+  height:auto!important;
+  min-height:0!important;
+
+  padding:2px 8px!important;
+  margin:0!important;
+
+  background:rgba(39,153,137,.1)!important;
+  border:0!important;
+  border-radius:4px!important;
+  box-shadow:none!important;
+
+  color:var(--tl)!important;
+  font-family:monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  vertical-align:middle!important;
+}
+
+/* Product detail keeps the same spacing under the product name */
+.product-detail-sku{
+  margin-top:5px!important;
+}
+
+/* Product card SKU must use the exact same dimensions, no larger pill */
+.c-sku,
+.pcard .c-sku,
+.pcard .sku-badge{
+  align-self:flex-start!important;
+  padding:2px 8px!important;
+  border-radius:4px!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+}
+
+/* Color SKU / Barcode table SKU must use the exact same placeholder and padding */
+.vm-variant-table .vm-variant-sku,
+.vm-variant-table .sku-badge,
+td .vm-variant-sku{
+  padding:2px 8px!important;
+  border-radius:4px!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  background:rgba(39,153,137,.1)!important;
+}
+
+/* Copied state must not resize */
+.vm-variant-sku.copyable,
+.c-sku.copyable,
+.product-detail-sku.copyable,
+.vm-color-sku.copyable{
+  padding:2px 8px!important;
+  border-radius:4px!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+}
+
 `
  
  
@@ -6133,8 +6216,8 @@ ${message.trim()}` : 'Message / Notes:',
                 <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.2}}>{vp.name}</div>
                 {getSkuBase(vp) && (
                   <code
+                    className="sku-badge product-detail-sku copyable"
                     onClick={()=>copy(getSkuBase(vp))}
-                    style={{fontSize:11,fontWeight:700,fontFamily:'monospace',background:'rgba(39,153,137,.1)',color:'var(--tl)',borderRadius:4,padding:'2px 8px',marginTop:5,display:'inline-block',letterSpacing:'.04em',cursor:'pointer',transition:'background .15s'}}
                     title="Click to copy SKU"
                   >
                     {copied===getSkuBase(vp) ? '✓ Copied!' : getSkuBase(vp)}
