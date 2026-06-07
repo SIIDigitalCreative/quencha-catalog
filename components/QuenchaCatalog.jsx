@@ -347,7 +347,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-desc{font-size:12px;color:var(--gr);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .c-badges{display:flex;flex-wrap:wrap;gap:4px}
 .c-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(185,220,210,.35);color:var(--tl)}
-.c-colors{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.c-colors{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .c-dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.8),0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
 .c-more{font-size:10px;font-weight:700;color:var(--gr);background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:999px;padding:1px 6px}
  
