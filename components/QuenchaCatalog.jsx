@@ -2165,8 +2165,8 @@ button{touch-action:manipulation}
 /* FINAL FIX: product detail table corners match Product Link button */
 .vm-variant-table-card,
 .vm-dimensions-card{
-  border-radius:14px!important;
-  overflow:hidden!important;
+  border-radius:12px!important;
+  overflow:visible!important;
 }
 .vm-variant-table-wrap,
 .vm-dim-table-wrap{
@@ -2756,7 +2756,7 @@ button[aria-label="close"]{
   border: 1px solid rgba(185,220,210,.48) !important;
   border-radius: 12px !important;
   padding: 12px !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   gap: 0 !important;
   align-items: stretch !important;
 }
@@ -2842,6 +2842,8 @@ button[aria-label="close"]{
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .vm-dimensions-card .vm-dim-table.vm-variant-table{
@@ -2953,7 +2955,7 @@ button[aria-label="close"]{
   background:var(--sf4)!important;
   border:1px solid rgba(185,220,210,.48)!important;
   border-radius:12px!important;
-  overflow:hidden!important;
+  overflow:visible!important;
   display:block!important;
 }
 
@@ -2978,38 +2980,39 @@ button[aria-label="close"]{
   box-sizing:border-box!important;
   width:100%!important;
   max-width:100%!important;
-  min-width:0!important;
   margin:0!important;
   padding:0!important;
   background:#fff!important;
   border:1px solid rgba(185,220,210,.45)!important;
   border-radius:8px!important;
-  overflow:hidden!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
 }
 
 .m-body .vm-dimensions-card .vm-dim-table,
 .modal .vm-dimensions-card .vm-dim-table,
 .vm-dimensions-card .vm-dim-table{
   box-sizing:border-box!important;
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
+  width:auto!important;
+  min-width:420px!important;
+  max-width:none!important;
   margin:0!important;
   padding:0!important;
-  table-layout:fixed!important;
+  table-layout:auto!important;
   border-collapse:collapse!important;
   border-spacing:0!important;
 }
 
 .vm-dimensions-card .vm-dim-table th:nth-child(1),
-.vm-dimensions-card .vm-dim-table td:nth-child(1){width:38%!important;}
+.vm-dimensions-card .vm-dim-table td:nth-child(1){width:auto!important;}
 
 .vm-dimensions-card .vm-dim-table th:nth-child(2),
 .vm-dimensions-card .vm-dim-table td:nth-child(2),
 .vm-dimensions-card .vm-dim-table th:nth-child(3),
 .vm-dimensions-card .vm-dim-table td:nth-child(3),
 .vm-dimensions-card .vm-dim-table th:nth-child(4),
-.vm-dimensions-card .vm-dim-table td:nth-child(4){width:20.666%!important;}
+.vm-dimensions-card .vm-dim-table td:nth-child(4){width:auto!important;}
 
 .m-body .vm-dimensions-card .vm-dim-table th,
 .modal .vm-dimensions-card .vm-dim-table th,
@@ -3017,16 +3020,14 @@ button[aria-label="close"]{
   box-sizing:border-box!important;
   background:var(--tl)!important;
   color:#fff!important;
-  padding:8px 10px!important;
+  padding:8px 12px!important;
   text-align:left!important;
-  font-size:9px!important;
+  font-size:10px!important;
   line-height:1.2!important;
   letter-spacing:.08em!important;
   font-weight:800!important;
   text-transform:uppercase!important;
   white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
 }
 
 .m-body .vm-dimensions-card .vm-dim-table td,
