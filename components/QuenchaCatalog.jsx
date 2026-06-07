@@ -3342,6 +3342,68 @@ code[class*="sku"],
   text-transform:uppercase!important;
 }
 
+
+/* FINAL FIX: SKU placeholder corner copied from product page reference
+   Rounded rectangle only, not pill-rounded. */
+.c-sku,
+.pc-sku,
+.card-sku,
+.product-card-sku,
+.product-detail-sku,
+.sku-badge,
+.sku-pill,
+.vm-code,
+.vm-color-sku,
+.vm-meta-code,
+code[class*="sku"],
+[class*="sku"] code{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:fit-content!important;
+  max-width:100%!important;
+  padding:8px 18px!important;
+  background:#E7F4F0!important;
+  border:none!important;
+  border-radius:10px!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  text-transform:uppercase!important;
+}
+
+/* Product card SKU should use same placeholder shape and never stretch */
+.c-sku{
+  align-self:flex-start!important;
+  margin:0!important;
+}
+
+/* Table SKU keeps same font/size, but no filled placeholder inside table cells */
+.vm-variant-sku{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:fit-content!important;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  color:var(--tl)!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  text-transform:uppercase!important;
+}
+
 `
  
  
