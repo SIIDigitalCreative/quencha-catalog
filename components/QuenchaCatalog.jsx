@@ -348,7 +348,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-badges{display:flex;flex-wrap:wrap;gap:4px}
 .c-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(185,220,210,.35);color:var(--tl)}
 .c-colors{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.c-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0}
+.c-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
 .c-more{font-size:10px;font-weight:700;color:var(--gr);background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:999px;padding:1px 6px}
  
 /* CARD FOOTER — SRP and Packing same size/weight */
@@ -427,7 +427,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
 .vm-variant-table tr:last-child td{border-bottom:none}
 .vm-variant-color{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--bk);white-space:nowrap}
-.vm-variant-swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0}
+.vm-variant-swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
 .vm-variant-sku{font-family:monospace;font-weight:500;color:var(--tl);letter-spacing:.02em;white-space:nowrap}
 .vm-variant-barcode{display:flex;align-items:center;gap:8px;min-height:34px}
 .vm-variant-barcode img{max-width:128px;max-height:38px;object-fit:contain;background:#fff;border-radius:4px;cursor:zoom-in}
@@ -439,7 +439,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-color-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--tl);text-transform:uppercase;margin-bottom:10px;display:block}
 .vm-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .vm-color-item{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:8px;padding:8px 10px;min-width:0}
-.vm-color-swatch{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.vm-color-swatch{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.8);box-shadow:0 1px 4px rgba(0,0,0,.15);overflow:hidden}
 .vm-color-info{display:flex;flex-direction:column;gap:2px;min-width:0}
 .vm-color-name{font-size:12px;font-weight:700;color:var(--bk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vm-color-sku{font-family:monospace;font-size:10px;font-weight:500;color:var(--tl);letter-spacing:.04em;transition:color .15s}
@@ -863,7 +863,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-visual{position:relative;z-index:1;min-height:230px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(185,220,210,.32));border:1px solid rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;padding:26px;overflow:hidden}
 .quench-visual::before{content:'Quenchables';font-size:34px;font-weight:900;color:rgba(39,153,137,.16);letter-spacing:-.04em;position:absolute;top:22px;left:24px}
 .quench-visual::after{content:'Sip · Savor · Go';position:absolute;bottom:22px;right:24px;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:rgba(39,153,137,.34)}
-.quench-visual-dot{width:54px;height:54px;border-radius:50%;border:4px solid rgba(255,255,255,.82);box-shadow:0 12px 28px rgba(0,0,0,.10);margin-left:-10px}
+.quench-visual-dot{width:54px;height:54px;border-radius:50%;border:4px solid rgba(255,255,255,.82);box-shadow:0 12px 28px rgba(0,0,0,.10);margin-left:-10px;overflow:hidden}
 .quench-visual-dot:first-child{margin-left:0}
  
 .quench-modal{max-width:1040px;width:min(1040px,calc(100vw - 28px));max-height:min(92vh,900px);overflow:auto}
@@ -902,7 +902,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-feature-title{font-size:24px;font-weight:900;color:var(--bk);letter-spacing:-.02em;line-height:1.15}
 .quench-feature-sub{font-size:14px;color:rgba(58,58,58,.68);line-height:1.6;margin-top:5px;max-width:560px}
 .quench-color-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
-.quench-color-dot{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(0,0,0,.13)}
+.quench-color-dot{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(0,0,0,.13);overflow:hidden}
 .quench-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .quench-tab{border:1px solid rgba(39,153,137,.18);background:#fff;color:var(--tl);border-radius:999px;padding:8px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;transition:var(--tr)}
 .quench-tab:hover,.quench-tab.on{background:rgba(185,220,210,.45);border-color:var(--tl)}
@@ -4038,9 +4038,10 @@ function normalizeColorVariant(color) {
 function swatchBackground(color) {
   const hexes = getColorHexes(color)
   if (hexes.length <= 1) return hexes[0] || '#B9DCD2'
+  if (hexes.length === 2) return `linear-gradient(to right, ${hexes[0]} 50%, ${hexes[1]} 50%)`
   const step = 100 / hexes.length
   const stops = hexes.map((hex, i) => `${hex} ${i * step}% ${(i + 1) * step}%`).join(', ')
-  return `linear-gradient(90deg, ${stops})`
+  return `linear-gradient(to right, ${stops})`
 }
  
 function getImageSrc(image) {
