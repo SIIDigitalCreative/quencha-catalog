@@ -2293,9 +2293,106 @@ button{touch-action:manipulation}
 }
 
 
-/* FINAL FIX: Unified radius system using Dimensions table corner radius */
+
+/* Main rounded surfaces and controls */
+.modal,
+.pw-modal,
+.hero,
+.pcard,
+.c-img-wrap,
+.vm-main-wrap,
+.vm-variant-table-card,
+.vm-variant-table-wrap,
+.vm-table-wrap,
+.vm-table-card,
+.vm-actions button,
+.vm-link-btn,
+.vm-inq-btn,
+.filter-pill,
+.fb,
+.pc,
+.clear-filters,
+.sort-sel,
+.vbtns,
+.vbtn,
+.tb-search,
+.tb-inq,
+.price-pill,
+.vm-color-item,
+.color-btn,
+.color-card,
+.collection-color-btn,
+.collection-color-card,
+.product-color-btn,
+.product-color-card,
+.collection-item,
+.collection-set-editor,
+.collection-name,
+.collection-add-set,
+.collection-edit-set,
+.f-in,
+.f-sel,
+.f-ta,
+.pw-in,
+.pw-submit,
+.add-btn,
+.c-sku,
+.vm-code,
+.sku-badge,
+.sku-pill,
+.product-card-sku,
+.product-detail-sku,
+.vm-color-grid button,
+.vm-color-grid .vm-color-item,
+.vm-color-grid .color-item,
+[class*="card"],
+[class*="panel"],
+[class*="table-card"],
+[class*="table-wrap"]{
+  border-radius: var(--radius-main) !important;
+}
+
+/* Keep pill-style elements as pills */
+.c-badge,
+.vm-badge,
+.badge-tag,
+.c-more,
+.ext-tag,
+.cat-cnt,
+.h-chip,
+.filter-pill-count,
+.fb-cnt,
+.collection-color-chip{
+  border-radius: 999px !important;
+}
+
+/* Keep circular controls and dots circular */
+.tb-edit-btn,
+.tb-menu-btn,
+.tb-search-btn,
+.tb-clear,
+.m-close,
+.drawer-close,
+.vm-pencil-btn,
+.pw-eye,
+.fb-dot,
+.filter-pill-dot,
+.c-dot,
+.vm-swatch,
+.vm-variant-swatch,
+.vm-color-swatch,
+.collection-color-chip i,
+button[aria-label="Close"],
+button[aria-label="close"]{
+  border-radius: 50% !important;
+}
+
+
+/* FINAL FIX: Semi-rounded sitewide radius system
+   Softer than the previous over-rounded version. */
 :root{
-  --radius-main: 24px;
+  --radius-main: 14px;
+  --radius-soft: 16px;
 }
 
 /* Main rounded surfaces and controls */
@@ -2354,6 +2451,24 @@ button{touch-action:manipulation}
 [class*="table-card"],
 [class*="table-wrap"]{
   border-radius: var(--radius-main) !important;
+}
+
+/* Larger containers can be slightly softer, but not overly round */
+.vm-variant-table-card,
+.vm-table-card,
+.vm-main-wrap,
+.pcard,
+.hero,
+.modal,
+.pw-modal{
+  border-radius: var(--radius-soft) !important;
+}
+
+/* Table interiors should look semi-rounded only */
+.vm-variant-table-wrap,
+.vm-table-wrap{
+  border-radius: var(--radius-main) !important;
+  overflow: hidden !important;
 }
 
 /* Keep pill-style elements as pills */
