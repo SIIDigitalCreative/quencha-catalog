@@ -6489,62 +6489,60 @@ ${message.trim()}` : 'Message / Notes:',
                   </div>
                 )}
               </div>
-              {/* Color swatches — compact, grouped by collection */}
-              {vp.colors.length > 0 && (
-                <div>
-                  <span className="vm-color-sec-lbl">Colors</span>
-                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px 12px'}}>
-                    {groupColorsByCollection(vp.colors, colorCollections).map(group=>{
-                      const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
-                      return (
-                        <div key={group.name}>
-                          <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:6}}>
-                            <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0}}>{group.name}</span>
-                            {activeInGroup && (
-                              <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{activeInGroup.name}</span>
-                            )}
+              {/* Color swatches — compact, grouped by collection, 4 per row */}
+              {vp.colors.length > 0 && (() => {
+                const groups = groupColorsByCollection(vp.colors, colorCollections)
+                return (
+                  <div>
+                    <span className="vm-color-sec-lbl">Colors</span>
+                    <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                      {groups.map(group => {
+                        const activeInGroup = group.colors.find(clr => getColorKey(clr) === activeVmColorKey)
+                        return (
+                          <div key={group.name} style={{display:'flex',alignItems:'center',gap:10}}>
+                            <span style={{fontSize:9,fontWeight:800,letterSpacing:'.14em',textTransform:'uppercase',color:group.color||'var(--gr)',background:`${group.color||'#63666A'}18`,border:`1px solid ${group.color||'#63666A'}33`,padding:'2px 8px',borderRadius:999,flexShrink:0,lineHeight:1.4,minWidth:52,textAlign:'center'}}>{group.name}</span>
+                            {activeInGroup && <span style={{fontSize:11,fontWeight:700,color:'var(--tl)',flexShrink:0}}>{activeInGroup.name}</span>}
+                            <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
+                              {group.colors.map(clr => {
+                                const colorKey = getColorKey(clr)
+                                const isActive = activeVmColorKey === colorKey
+                                const hasLinkedImage = findImageIndexesForColor(vp, clr).length > 0
+                                return (
+                                  <span
+                                    key={clr.sku}
+                                    onClick={()=>{
+                                      setVmColorKey(isActive ? '' : colorKey)
+                                      setVmImg(0)
+                                      if (typeof window !== 'undefined' && window.innerWidth <= 700) {
+                                        setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
+                                      }
+                                    }}
+                                    title={clr.name}
+                                    style={{
+                                      display:'inline-block',
+                                      width:36,height:36,
+                                      borderRadius:'50%',
+                                      background:swatchBackground(clr),
+                                      boxShadow: isActive
+                                        ? '0 0 0 3px #fff, 0 0 0 5px var(--tl), 0 4px 12px rgba(0,0,0,.15)'
+                                        : '0 0 0 4px rgba(255,255,255,.9), 0 4px 12px rgba(0,0,0,.13)',
+                                      cursor:'pointer',
+                                      flexShrink:0,
+                                      overflow:'hidden',
+                                      transition:'box-shadow .15s',
+                                      opacity: hasLinkedImage ? 1 : 0.85,
+                                    }}
+                                  />
+                                )
+                              })}
+                            </div>
                           </div>
-                          <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
-                            {group.colors.map(clr=>{
-                              const linkedImageIndexes = findImageIndexesForColor(vp, clr)
-                              const hasLinkedImage = linkedImageIndexes.length > 0
-                              const colorKey = getColorKey(clr)
-                              const isActive = activeVmColorKey === colorKey
-                              return (
-                                <span
-                                  key={clr.sku}
-                                  onClick={()=>{
-                                    setVmColorKey(isActive ? '' : colorKey)
-                                    setVmImg(0)
-                                    if (typeof window !== 'undefined' && window.innerWidth <= 700) {
-                                      setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
-                                    }
-                                  }}
-                                  title={clr.name}
-                                  style={{
-                                    display:'inline-block',
-                                    width:36,height:36,
-                                    borderRadius:'50%',
-                                    background:swatchBackground(clr),
-                                    boxShadow: isActive
-                                      ? '0 0 0 3px #fff, 0 0 0 5px var(--tl), 0 4px 10px rgba(0,0,0,.15)'
-                                      : '0 0 0 3px rgba(255,255,255,.85), 0 4px 10px rgba(0,0,0,.12)',
-                                    cursor:'pointer',
-                                    flexShrink:0,
-                                    overflow:'hidden',
-                                    transition:'box-shadow .15s',
-                                    opacity: hasLinkedImage ? 1 : 0.8,
-                                  }}
-                                />
-                              )
-                            })}
-                          </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              })()}
               {vp.youtube && getYouTubeId(vp.youtube) && (
                 <YouTubeBlock ytUrl={vp.youtube}/>
               )}
