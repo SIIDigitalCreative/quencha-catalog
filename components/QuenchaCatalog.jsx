@@ -901,7 +901,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .quench-feature-card{border:1px solid rgba(185,220,210,.65);border-radius:16px;background:linear-gradient(135deg,rgba(185,220,210,.22),rgba(255,255,255,.95));padding:22px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;overflow:hidden;position:relative}
 .quench-feature-title{font-size:24px;font-weight:900;color:var(--bk);letter-spacing:-.02em;line-height:1.15}
 .quench-feature-sub{font-size:14px;color:rgba(58,58,58,.68);line-height:1.6;margin-top:5px;max-width:560px}
-.quench-color-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.quench-color-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:18px}
 .quench-color-dot{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.85),0 4px 14px rgba(0,0,0,.13);overflow:hidden}
 .quench-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .quench-tab{border:1px solid rgba(39,153,137,.18);background:#fff;color:var(--tl);border-radius:999px;padding:8px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;transition:var(--tr)}
