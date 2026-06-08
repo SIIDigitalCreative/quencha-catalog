@@ -258,8 +258,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .fb-cnt{min-width:28px;height:22px;padding:1px 7px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.10);color:var(--tl);font-size:11px;font-weight:900;flex-shrink:0}
 .fb.on .fb-cnt{background:rgba(45,204,211,.18);border-color:rgba(39,153,137,.10);color:var(--tl)}
 .sb-div{border:none;border-top:1px solid rgba(39,153,137,.12);margin:6px 16px}
-.pc-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 10px}
-.pc{font-size:11px;font-weight:700;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(39,153,137,.16);color:rgba(58,58,58,.68);cursor:pointer;transition:var(--tr);font-family:var(--fn);box-shadow:0 2px 8px rgba(39,153,137,.04);min-height:38px;display:flex;align-items:center;justify-content:center}
+.pc-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px 12px 14px}
+.pc{font-size:11px;font-weight:700;padding:8px 10px;border-radius:999px!important;background:rgba(255,255,255,.62);border:1px solid rgba(39,153,137,.16)!important;color:rgba(58,58,58,.68);cursor:pointer;transition:var(--tr);font-family:var(--fn);box-shadow:0 2px 8px rgba(39,153,137,.04);min-height:38px;height:38px;display:flex;align-items:center;justify-content:center;width:100%;text-align:center}
 .pc:hover{border-color:var(--tl);color:var(--tl);background:#fff}
 .pc.on{background:rgba(45,204,211,.15);border-color:var(--tl);color:var(--tl)}
 .filter-pill-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px 12px 10px}
@@ -1909,7 +1909,28 @@ button{touch-action:manipulation}
     background:rgba(45,204,211,.18)!important;
   }
 
-  .qnh-sidebar .fb-dot{
+  
+/* Desktop sidebar price range matches mobile */
+.qnh-sidebar .pc-wrap{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  padding:4px 12px 14px!important;
+}
+.qnh-sidebar .pc{
+  width:100%!important;
+  height:38px!important;
+  min-height:38px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:8px 10px!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
+
+.qnh-sidebar .fb-dot{
     width:10px!important;
     height:10px!important;
     flex:0 0 10px!important;
@@ -6204,7 +6225,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="pc-wrap">
           {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
             const on = filterPMin===o.mn && filterPMax===o.mx
-            return <button key={o.l} className={`pc ${on?'on':''}`} style={{borderRadius:'999px',minHeight:'38px',padding:'8px 14px',border:on?'1.5px solid var(--tl)':'1.5px solid rgba(39,153,137,.16)',background:on?'rgba(255,255,255,.72)':'rgba(255,255,255,.62)',color:on?'var(--tl)':'rgba(58,58,58,.68)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--fn)',fontSize:'11px',fontWeight:700,cursor:'pointer'}} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
+            return <button key={o.l} className={`pc ${on?'on':''}`} style={{borderRadius:'999px',minHeight:'38px',height:'38px',padding:'8px 10px',border:on?'1.5px solid var(--tl)':'1.5px solid rgba(39,153,137,.16)',background:on?'rgba(255,255,255,.72)':'rgba(255,255,255,.62)',color:on?'var(--tl)':'rgba(58,58,58,.68)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--fn)',fontSize:'11px',fontWeight:700,cursor:'pointer',width:'100%'}} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
           })}
         </div>
       </div>
