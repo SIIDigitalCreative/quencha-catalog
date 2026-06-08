@@ -2143,7 +2143,7 @@ button{touch-action:manipulation}
 .vm-variant-table-wrap,
 .vm-table-wrap{
   border-radius:14px!important;
-  overflow:hidden!important;
+  overflow:auto!important;
 }
 .vm-variant-table th:first-child,
 .vm-table th:first-child{
@@ -2166,7 +2166,7 @@ button{touch-action:manipulation}
 .vm-variant-table-card,
 .vm-dimensions-card{
   border-radius:14px!important;
-  overflow:hidden!important;
+  overflow:visible!important;
 }
 .vm-variant-table-wrap,
 .vm-dim-table-wrap{
@@ -2246,14 +2246,18 @@ button{touch-action:manipulation}
 .vm-table-wrap,
 .vm-dim-table-wrap{
   border-radius:var(--qnh-link-radius)!important;
-  overflow:hidden!important;
+  overflow:visible!important;
+}
+.vm-variant-table-wrap,
+.vm-table-wrap,
+.vm-dim-table-wrap{
+  overflow:auto!important;
 }
 .vm-variant-table,
 .vm-table,
 .vm-dim-table{
   border-collapse:separate!important;
   border-spacing:0!important;
-  overflow:hidden!important;
 }
 .vm-variant-table th:first-child,
 .vm-table th:first-child,
@@ -2754,7 +2758,7 @@ button[aria-label="close"]{
   border: 1px solid rgba(185,220,210,.48) !important;
   border-radius: 12px !important;
   padding: 12px !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   gap: 0 !important;
   align-items: stretch !important;
 }
@@ -2953,7 +2957,7 @@ button[aria-label="close"]{
   background:var(--sf4)!important;
   border:1px solid rgba(185,220,210,.48)!important;
   border-radius:12px!important;
-  overflow:hidden!important;
+  overflow:visible!important;
   display:block!important;
 }
 
