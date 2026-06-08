@@ -249,21 +249,21 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .sb-sub{font-size:11px;color:rgba(39,153,137,.6)}
 .sb-sec{padding:12px 12px 4px}
 .sb-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(39,153,137,.55);text-transform:uppercase;display:block;padding:4px 8px 8px}
-.fb{display:flex;width:100%;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.62);cursor:pointer;color:rgba(58,58,58,.68);font-family:var(--fn);font-size:12px;font-weight:800;transition:var(--tr);text-align:left;margin-bottom:4px;box-shadow:0 2px 8px rgba(39,153,137,.04)}
-.fb:hover{background:#fff;border-color:rgba(39,153,137,.34);color:var(--tl);transform:translateY(-1px)}
-.fb.on{background:rgba(45,204,211,.16);border-color:var(--tl)!important;color:var(--tl);box-shadow:0 3px 12px rgba(39,153,137,.10)}
+.fb{display:flex;width:100%;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;min-height:42px;height:42px;border-radius:14px;border:1.5px solid transparent;background:#fff;cursor:pointer;color:rgba(58,58,58,.7);font-family:var(--fn);font-size:13px;font-weight:600;transition:var(--tr);text-align:left;margin-bottom:6px;box-shadow:0 1px 4px rgba(39,153,137,.06)}
+.fb:hover{background:#fff;color:var(--tl)}
+.fb.on{background:#fff;border-color:var(--tl)!important;color:var(--tl);font-weight:700}
 .fb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .fb-ico{font-size:13px;flex-shrink:0}
 .fb-lbl{flex:1}
-.fb-cnt{font-size:10px;font-weight:900;padding:2px 7px;border-radius:999px;background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.10);color:var(--tl);min-width:26px;text-align:center;flex-shrink:0}
-.fb.on .fb-cnt{background:rgba(255,255,255,.76);border-color:rgba(39,153,137,.16)}
+.fb-cnt{min-width:28px;height:22px;padding:1px 7px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.10);color:var(--tl);font-size:11px;font-weight:900;flex-shrink:0}
+.fb.on .fb-cnt{background:rgba(45,204,211,.18);border-color:rgba(39,153,137,.10);color:var(--tl)}
 .sb-div{border:none;border-top:1px solid rgba(39,153,137,.12);margin:6px 16px}
 .pc-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 10px}
 .pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.48);border:1px solid rgba(39,153,137,.12);color:rgba(58,58,58,.62);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
 .pc:hover{border-color:var(--tl);color:var(--tl);background:#fff}
 .pc.on{background:rgba(45,204,211,.15);border-color:var(--tl);color:var(--tl)}
 .filter-pill-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px 12px 10px}
-.filter-pill{min-height:38px;border-radius:999px;border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.62);color:rgba(58,58,58,.68);font-family:var(--fn);font-size:11px;font-weight:800;line-height:1.1;padding:7px 9px;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:space-between;gap:7px;text-align:left;box-shadow:0 2px 8px rgba(39,153,137,.04)}
+.filter-pill{min-height:38px;border-radius:999px!important;border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.62);color:rgba(58,58,58,.68);font-family:var(--fn);font-size:11px;font-weight:800;line-height:1.1;padding:7px 9px;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:space-between;gap:7px;text-align:left;box-shadow:0 2px 8px rgba(39,153,137,.04)}
 .filter-pill:hover{background:#fff;border-color:rgba(39,153,137,.34);color:var(--tl);transform:translateY(-1px)}
 .filter-pill.on{background:rgba(45,204,211,.16);border-color:var(--tl);color:var(--tl);box-shadow:0 3px 12px rgba(39,153,137,.10)}
 .filter-pill-l{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden}
@@ -1531,7 +1531,7 @@ button{touch-action:manipulation}
   .vm-color-item{
     min-height:74px!important;
     padding:8px 5px!important;
-    border-radius:14px!important;
+    border-radius:999px!important;
     display:flex!important;
     flex-direction:column!important;
     align-items:center!important;
@@ -1724,6 +1724,200 @@ button{touch-action:manipulation}
     background:#E6F4F1!important;
     padding-top:44px!important;
   }
+
+/* Desktop sidebar matches mobile exactly */
+.qnh-sidebar {
+  background:#E6F4F1;
+}
+
+  .qnh-sidebar .sb-sec{
+    padding:12px 12px 4px!important;
+  }
+
+  .qnh-sidebar .sb-lbl{
+    display:block!important;
+    padding:4px 8px 8px!important;
+    font-size:10px!important;
+    line-height:1.15!important;
+    font-weight:900!important;
+    letter-spacing:.14em!important;
+    color:rgba(39,153,137,.62)!important;
+  }
+
+  .qnh-sidebar .filter-pill-wrap{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    padding:4px 12px 10px!important;
+    width:100%!important;
+  }
+
+  .qnh-sidebar .filter-pill{
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    border-radius:999px!important;
+    padding:7px 9px!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:7px!important;
+    text-align:left!important;
+    background:rgba(255,255,255,.62)!important;
+    border:1px solid rgba(39,153,137,.16)!important;
+    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
+    color:rgba(58,58,58,.68)!important;
+    overflow:hidden!important;
+    transform:none!important;
+  }
+
+  .qnh-sidebar .filter-pill:hover,
+  .qnh-sidebar .filter-pill.on{
+    background:rgba(255,255,255,.72)!important;
+    border-color:var(--tl)!important;
+    color:var(--tl)!important;
+    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
+    transform:none!important;
+  }
+
+  .qnh-sidebar .filter-pill.full{
+    grid-column:1/-1!important;
+    height:42px!important;
+    min-height:42px!important;
+    padding:8px 12px!important;
+  }
+
+  .qnh-sidebar .filter-pill-l,
+  .qnh-sidebar .filter-pill.full .filter-pill-l{
+    width:auto!important;
+    min-width:0!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:7px!important;
+    overflow:hidden!important;
+  }
+
+  .qnh-sidebar .filter-pill-ico{
+    display:none!important;
+  }
+
+  .qnh-sidebar .filter-pill-dot{
+    width:10px!important;
+    height:10px!important;
+    flex:0 0 10px!important;
+    border-radius:999px!important;
+    border:2px solid rgba(255,255,255,.8)!important;
+    box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+  }
+
+  .qnh-sidebar .filter-pill-label,
+  .qnh-sidebar .filter-pill.full .filter-pill-label{
+    display:block!important;
+    width:auto!important;
+    max-width:100%!important;
+    color:inherit!important;
+    font-size:11px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .qnh-sidebar .filter-pill-count{
+    min-width:28px!important;
+    height:22px!important;
+    padding:1px 7px!important;
+    border-radius:999px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(39,153,137,.08)!important;
+    border:1px solid rgba(39,153,137,.10)!important;
+    color:var(--tl)!important;
+    font-size:11px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    flex-shrink:0!important;
+  }
+
+  .qnh-sidebar .filter-pill.on .filter-pill-count{
+    background:rgba(45,204,211,.18)!important;
+    border-color:rgba(39,153,137,.10)!important;
+  }
+
+  .qnh-sidebar .manage-pill{
+    grid-column:1/-1!important;
+    height:38px!important;
+    min-height:38px!important;
+    justify-content:center!important;
+    border-style:dashed!important;
+  }
+
+  .qnh-sidebar .sb-div{
+    margin:8px 16px!important;
+    border-top-color:rgba(39,153,137,.12)!important;
+  }
+
+  .qnh-sidebar .fb{
+    width:100%!important;
+    height:42px!important;
+    min-height:42px!important;
+    border-radius:999px!important;
+    padding:8px 12px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:8px!important;
+    background:rgba(255,255,255,.62)!important;
+    border:1px solid rgba(39,153,137,.16)!important;
+    box-shadow:0 2px 8px rgba(39,153,137,.04)!important;
+    color:rgba(58,58,58,.68)!important;
+    margin-bottom:6px!important;
+    transform:none!important;
+  }
+
+  .qnh-sidebar .fb:hover,
+  .qnh-sidebar .fb.on{
+    background:rgba(255,255,255,.72)!important;
+    border-color:var(--tl)!important;
+    color:var(--tl)!important;
+    box-shadow:0 2px 10px rgba(39,153,137,.08)!important;
+  }
+
+  .qnh-sidebar .fb-cnt{
+    min-width:28px!important;
+    height:22px!important;
+    padding:1px 7px!important;
+    border-radius:999px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(39,153,137,.08)!important;
+    border:1px solid rgba(39,153,137,.10)!important;
+    color:var(--tl)!important;
+    font-size:11px!important;
+    font-weight:900!important;
+    flex-shrink:0!important;
+  }
+
+  .qnh-sidebar .fb.on .fb-cnt{
+    background:rgba(45,204,211,.18)!important;
+  }
+
+  .qnh-sidebar .fb-dot{
+    width:10px!important;
+    height:10px!important;
+    flex:0 0 10px!important;
+    border-radius:999px!important;
+    border:2px solid rgba(255,255,255,.8)!important;
+    box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+  }
+
 
   .mob-drawer .sb-sec{
     padding:12px 12px 4px!important;
@@ -1947,7 +2141,8 @@ button{touch-action:manipulation}
     height:42px!important;
     padding:8px 12px!important;
     margin:0 0 7px!important;
-    border-radius:14px!important;
+    border-radius:999px!important;
+    border:1.5px solid transparent!important;
     display:flex!important;
     align-items:center!important;
     justify-content:space-between!important;
@@ -2312,8 +2507,6 @@ button{touch-action:manipulation}
 .vm-actions button,
 .vm-link-btn,
 .vm-inq-btn,
-.filter-pill,
-.fb,
 .pc,
 .clear-filters,
 .sort-sel,
@@ -2354,6 +2547,10 @@ button{touch-action:manipulation}
 [class*="table-card"],
 [class*="table-wrap"]{
   border-radius: var(--radius-main) !important;
+}
+/* Pills stay pill-shaped */
+.filter-pill{
+  border-radius: 999px !important;
 }
 
 /* Keep pill-style elements as pills */
@@ -2397,6 +2594,7 @@ button[aria-label="close"]{
 :root{
   --radius-main: 10px;
   --radius-soft: 12px;
+  --radius-pill: 999px;
 }
 
 /* Main rounded surfaces and controls */
@@ -2413,8 +2611,6 @@ button[aria-label="close"]{
 .vm-actions button,
 .vm-link-btn,
 .vm-inq-btn,
-.filter-pill,
-.fb,
 .pc,
 .clear-filters,
 .sort-sel,
@@ -2455,6 +2651,10 @@ button[aria-label="close"]{
 [class*="table-card"],
 [class*="table-wrap"]{
   border-radius: var(--radius-main) !important;
+}
+/* Pills stay pill-shaped */
+.filter-pill{
+  border-radius: 999px !important;
 }
 
 /* Larger containers can be slightly softer, but not overly round */
@@ -3920,6 +4120,11 @@ td .vm-variant-sku{
 .vm-dimensions-card .vm-dim-table.vm-variant-table{min-width:100%!important;width:max-content!important;}
 .vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{min-width:0!important;width:100%!important;}
 
+/* FINAL OVERRIDE: filter pills must always be 999px */
+.filter-pill,.filter-pill.on,.filter-pill:hover,.filter-pill.full{
+  border-radius: 999px !important;
+}
+
 `
  
  
@@ -4711,10 +4916,9 @@ function hasEmbeddedDataImages(value) {
 export default function QuenchaCatalog() {
   useEffect(() => {
     const id = 'qnh-styles'
-    if (!document.getElementById(id)) {
-      const s = document.createElement('style'); s.id = id; s.textContent = CSS
-      document.head.appendChild(s)
-    }
+    let s = document.getElementById(id)
+    if (!s) { s = document.createElement('style'); s.id = id; document.head.appendChild(s) }
+    s.textContent = CSS
   }, [])
  
   // ── DATA ──
@@ -5951,11 +6155,11 @@ ${message.trim()}` : 'Message / Notes:',
       </div>
       <div className="sb-sec">
         <span className="sb-lbl">Extension</span>
-        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderLeftColor:filterExt==='all'?'var(--cy)':'transparent'}} onClick={()=>{setFilterExt('all'); closeMobileSidebar()}}>
+        <button className={`fb ${filterExt==='all'?'on':''}`} style={{borderRadius:'999px',border:filterExt==='all'?'1.5px solid var(--tl)':'1.5px solid rgba(39,153,137,.16)',background:filterExt==='all'?'rgba(255,255,255,.72)':'rgba(255,255,255,.62)',color:filterExt==='all'?'var(--tl)':'rgba(58,58,58,.68)',height:'42px',minHeight:'42px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 12px',boxShadow:filterExt==='all'?'0 2px 10px rgba(39,153,137,.08)':'0 2px 8px rgba(39,153,137,.04)',marginBottom:'6px',width:'100%',cursor:'pointer',fontFamily:'var(--fn)',fontSize:'12px',fontWeight:800,transition:'var(--tr)'}} onClick={()=>{setFilterExt('all'); closeMobileSidebar()}}>
           <span className="fb-dot" style={{background:'var(--cy)'}}/><span className="fb-lbl">All Products</span><span className="fb-cnt">{counts.ext['all']||0}</span>
         </button>
         {exts.map(o=>(
-          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderLeftColor:filterExt===o.value?o.color:'transparent'}} onClick={()=>{setFilterExt(o.value); closeMobileSidebar()}}>
+          <button key={o.value} className={`fb ${filterExt===o.value?'on':''}`} style={{borderRadius:'999px',border:filterExt===o.value?'1.5px solid var(--tl)':'1.5px solid rgba(39,153,137,.16)',background:filterExt===o.value?'rgba(255,255,255,.72)':'rgba(255,255,255,.62)',color:filterExt===o.value?'var(--tl)':'rgba(58,58,58,.68)',height:'42px',minHeight:'42px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 12px',boxShadow:filterExt===o.value?'0 2px 10px rgba(39,153,137,.08)':'0 2px 8px rgba(39,153,137,.04)',marginBottom:'6px',width:'100%',cursor:'pointer',fontFamily:'var(--fn)',fontSize:'12px',fontWeight:800,transition:'var(--tr)'}} onClick={()=>{setFilterExt(o.value); closeMobileSidebar()}}>
             <span className="fb-dot" style={{background:o.color}}/><span className="fb-lbl">{o.label}</span><span className="fb-cnt">{counts.ext[o.value]||0}</span>
           </button>
         ))}
@@ -5965,12 +6169,12 @@ ${message.trim()}` : 'Message / Notes:',
       <div className="sb-sec">
         <span className="sb-lbl">Category Filter</span>
         <div className="filter-pill-wrap">
-          <button className={`filter-pill full ${!filterCat?'on':''}`} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
+          <button className={`filter-pill full ${!filterCat?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
             <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
             <span className="filter-pill-count">{products.length}</span>
           </button>
           {cats.filter(c=>['sip','savor','go'].includes(c.value)).map(c=>(
-            <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
+            <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
               <span className="filter-pill-l"><span className="filter-pill-label">{{sip:'SIP',savor:'SAVOR',go:'GO'}[c.value] || c.label}</span></span>
               <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
             </button>
@@ -5982,12 +6186,12 @@ ${message.trim()}` : 'Message / Notes:',
       <div className="sb-sec">
         <span className="sb-lbl">Color Collection Filter</span>
         <div className="filter-pill-wrap">
-          <button className={`filter-pill full ${filterColorCollection==='all'?'on':''}`} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
+          <button className={`filter-pill full ${filterColorCollection==='all'?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterColorCollection('all'); closeMobileSidebar()}}>
             <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:'var(--cy)'}}/><span className="filter-pill-label">All Collections</span></span>
             <span className="filter-pill-count">{counts.collection?.all||0}</span>
           </button>
           {colorCollections.map(col=>(
-            <button key={col.value} className={`filter-pill ${filterColorCollection===col.value?'on':''}`} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
+            <button key={col.value} className={`filter-pill ${filterColorCollection===col.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterColorCollection(filterColorCollection===col.value?'all':col.value); closeMobileSidebar()}}>
               <span className="filter-pill-l"><span className="filter-pill-dot" style={{background:col.color||'var(--tl)'}}/><span className="filter-pill-label">{col.label}</span></span>
               <span className="filter-pill-count">{counts.collection?.[col.value]||0}</span>
             </button>
@@ -6000,7 +6204,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="pc-wrap">
           {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
             const on = filterPMin===o.mn && filterPMax===o.mx
-            return <button key={o.l} className={`pc ${on?'on':''}`} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
+            return <button key={o.l} className={`pc ${on?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
           })}
         </div>
       </div>
