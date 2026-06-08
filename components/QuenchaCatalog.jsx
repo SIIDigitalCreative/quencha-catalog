@@ -422,7 +422,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 /* COLOR SKU / BARCODE TABLE */
 .vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:visible;width:100%;box-sizing:border-box}
 .vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box;display:block}
-.vm-variant-table{width:100%;min-width:420px;border-collapse:collapse;font-size:13px}
+.vm-variant-table{width:max-content;min-width:100%;border-collapse:collapse;font-size:13px}
 .vm-variant-table th{background:var(--tl);color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;white-space:nowrap}
 .vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
 .vm-variant-table tr:last-child td{border-bottom:none}
@@ -6632,7 +6632,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="vm-variant-table-card" style={{width:'100%',boxSizing:'border-box'}}>
                   <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
                   <div className="vm-variant-table-wrap vm-scroll-wrap" style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
-                    <table className="vm-variant-table" style={{width:'100%',tableLayout:'auto'}}>
+                    <table className="vm-variant-table" style={{width:'max-content',minWidth:'100%',tableLayout:'auto'}}>
                       {vp.dimensions.headers.some(h=>h.trim()) && (
                         <thead>
                           <tr>
