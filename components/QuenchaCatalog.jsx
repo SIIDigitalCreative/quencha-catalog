@@ -259,7 +259,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .fb.on .fb-cnt{background:rgba(45,204,211,.18);border-color:rgba(39,153,137,.10);color:var(--tl)}
 .sb-div{border:none;border-top:1px solid rgba(39,153,137,.12);margin:6px 16px}
 .pc-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 10px}
-.pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.48);border:1px solid rgba(39,153,137,.12);color:rgba(58,58,58,.62);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
+.pc{font-size:11px;font-weight:700;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(39,153,137,.16);color:rgba(58,58,58,.68);cursor:pointer;transition:var(--tr);font-family:var(--fn);box-shadow:0 2px 8px rgba(39,153,137,.04);min-height:38px;display:flex;align-items:center;justify-content:center}
 .pc:hover{border-color:var(--tl);color:var(--tl);background:#fff}
 .pc.on{background:rgba(45,204,211,.15);border-color:var(--tl);color:var(--tl)}
 .filter-pill-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px 12px 10px}
@@ -6204,7 +6204,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="pc-wrap">
           {[{l:'Under ₱299',mn:0,mx:299},{l:'₱300–799',mn:300,mx:799},{l:'₱800–1,299',mn:800,mx:1299},{l:'₱1,300+',mn:1300,mx:99999}].map(o=>{
             const on = filterPMin===o.mn && filterPMax===o.mx
-            return <button key={o.l} className={`pc ${on?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
+            return <button key={o.l} className={`pc ${on?'on':''}`} style={{borderRadius:'999px',minHeight:'38px',padding:'8px 14px',border:on?'1.5px solid var(--tl)':'1.5px solid rgba(39,153,137,.16)',background:on?'rgba(255,255,255,.72)':'rgba(255,255,255,.62)',color:on?'var(--tl)':'rgba(58,58,58,.68)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--fn)',fontSize:'11px',fontWeight:700,cursor:'pointer'}} onClick={()=>{ if(on){setFilterPMin(null);setFilterPMax(null)}else{setFilterPMin(o.mn);setFilterPMax(o.mx)} closeMobileSidebar() }}>{o.l}</button>
           })}
         </div>
       </div>
