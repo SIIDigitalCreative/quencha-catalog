@@ -5086,6 +5086,7 @@ export default function QuenchaCatalog() {
   const [banners, setBanners] = useState([])
   const [bannerAspect, setBannerAspect] = useState('custom')
   const [bannerEditOpen, setBannerEditOpen] = useState(false)
+  const [showQuenchables, setShowQuenchables] = useState(true)
   const [heroVideoUrl, setHeroVideoUrl] = useState('')
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
@@ -5207,6 +5208,7 @@ export default function QuenchaCatalog() {
   const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
   const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
+  const toggleQuenchables = useCallback((v) => { setShowQuenchables(v); syncSettings({ showQuenchables: v }) }, [syncSettings])
   const { copy, copied } = useCopy()
  
   const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
@@ -6390,8 +6392,18 @@ ${message.trim()}` : 'Message / Notes:',
  
  
  
+          {/* Quenchables toggle — edit mode only */}
+          {editMode && (
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 16px',background:'rgba(245,158,11,.07)',border:'1px solid rgba(245,158,11,.3)',borderRadius:10,marginBottom:8}}>
+              <span style={{fontFamily:'var(--fn)',fontSize:13,fontWeight:700,color:'#92400e'}}>Build Your Quenchables section</span>
+              <button
+                onClick={()=>toggleQuenchables(!showQuenchables)}
+                style={{fontFamily:'var(--fn)',fontSize:12,fontWeight:700,padding:'6px 14px',borderRadius:999,border:'none',background:showQuenchables?'var(--tl)':'rgba(0,0,0,.1)',color:showQuenchables?'#fff':'#666',cursor:'pointer',transition:'var(--tr)'}}
+              >{showQuenchables ? '✓ Visible' : '✕ Hidden'}</button>
+            </div>
+          )}
           {/* Quenchables Builder Entry */}
-          <section className="quench-hero">
+          {showQuenchables && <section className="quench-hero">
             <div>
               <div className="quench-eyebrow">Shop the Set</div>
               <h2 className="quench-title">Build Your Quenchables</h2>
