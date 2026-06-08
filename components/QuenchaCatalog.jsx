@@ -366,7 +366,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
  
 /* MODAL SHARED */
 .modal-bg{position:fixed;inset:0;z-index:500;background:rgba(39,153,137,.15);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{background:var(--wh);border-radius:var(--rl);width:100%;max-width:720px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(39,153,137,.22)}
+.modal{background:var(--wh);border-radius:var(--rl);width:100%;max-width:480px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(39,153,137,.22)}
 .m-hdr{padding:22px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-radius:var(--rl) var(--rl) 0 0;flex-shrink:0}
 .m-close{background:rgba(0,0,0,.07);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:14px;color:var(--gr);transition:var(--tr);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .m-close:hover{background:rgba(0,0,0,.13)}
@@ -420,9 +420,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-table tr:hover td{background:rgba(185,220,210,.08)}
  
 /* COLOR SKU / BARCODE TABLE */
-.vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:visible}
-.vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box}
-.vm-variant-table{width:100%;border-collapse:collapse;font-size:13px}
+.vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:visible;width:100%;box-sizing:border-box}
+.vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box;display:block}
+.vm-variant-table{width:100%;min-width:420px;border-collapse:collapse;font-size:13px}
 .vm-variant-table th{background:var(--tl);color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;white-space:nowrap}
 .vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
 .vm-variant-table tr:last-child td{border-bottom:none}
