@@ -421,8 +421,8 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
  
 /* COLOR SKU / BARCODE TABLE */
 .vm-variant-table-card{background:var(--sf4);border:1px solid rgba(185,220,210,.48);border-radius:12px;padding:12px;overflow:visible}
-.vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch}
-.vm-variant-table{width:100%;border-collapse:collapse;min-width:420px;font-size:13px}
+.vm-variant-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid rgba(185,220,210,.45);background:#fff;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box}
+.vm-variant-table{width:100%;border-collapse:collapse;font-size:13px}
 .vm-variant-table th{background:var(--tl);color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;white-space:nowrap}
 .vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
 .vm-variant-table tr:last-child td{border-bottom:none}
@@ -1655,7 +1655,7 @@ button{touch-action:manipulation}
 /* FINAL FIXES — EDIT SCROLL, SMALLER IMAGE THUMBS, SKU/BARCODE TABLE */
 .vm-thumbs{gap:7px!important;padding:3px 2px 7px!important;scrollbar-width:thin!important}
 .vm-thumb{width:54px!important;height:54px!important;border-radius:8px!important}
-.vm-variant-table{min-width:420px!important}
+.vm-variant-table{width:100%!important;table-layout:fixed!important}
 .vm-variant-table th:nth-child(1){width:36%!important}
 .vm-variant-table th:nth-child(2){width:34%!important}
 .vm-variant-table th:nth-child(3){width:30%!important}
@@ -3909,8 +3909,8 @@ td .vm-variant-sku{
 
 /* SCROLL FIX — last rule wins */
 .vm-scroll-wrap{overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
-.vm-scroll-wrap table{min-width:420px!important;width:auto!important;table-layout:fixed!important;}
-.vm-scroll-wrap table th, .vm-scroll-wrap table td{min-width:100px!important;padding:8px 16px!important;white-space:nowrap!important;}
+.vm-scroll-wrap table{width:100%!important;table-layout:fixed!important;}
+.vm-scroll-wrap table th, .vm-scroll-wrap table td{padding:8px 16px!important;white-space:nowrap!important;}
 
 `
  
