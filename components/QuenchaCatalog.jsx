@@ -370,7 +370,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .m-hdr{padding:22px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-radius:var(--rl) var(--rl) 0 0;flex-shrink:0}
 .m-close{background:rgba(0,0,0,.07);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:14px;color:var(--gr);transition:var(--tr);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .m-close:hover{background:rgba(0,0,0,.13)}
-.m-body{overflow-y:auto;overflow-x:clip;padding:24px 28px;display:flex;flex-direction:column;gap:14px;flex:1}
+.m-body{overflow-y:auto;overflow-x:hidden;padding:24px 28px;display:flex;flex-direction:column;gap:14px;flex:1}
 .m-body::-webkit-scrollbar{width:4px}
 .m-body::-webkit-scrollbar-thumb{background:rgba(185,220,210,.6);border-radius:2px}
 .m-footer{padding:14px 24px;border-top:1px solid rgba(185,220,210,.4);display:flex;align-items:center;gap:10px;background:var(--wh);border-radius:0 0 var(--rl) var(--rl);flex-shrink:0}
