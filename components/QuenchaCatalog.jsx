@@ -249,14 +249,14 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .sb-sub{font-size:11px;color:rgba(39,153,137,.6)}
 .sb-sec{padding:12px 12px 4px}
 .sb-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(39,153,137,.55);text-transform:uppercase;display:block;padding:4px 8px 8px}
-.fb{display:flex;width:100%;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:2px solid transparent;background:transparent;cursor:pointer;color:rgba(58,58,58,.62);font-family:var(--fn);font-size:12px;font-weight:500;transition:var(--tr);text-align:left;margin-bottom:1px}
-.fb:hover{background:rgba(255,255,255,.55);color:var(--tl)}
-.fb.on{background:rgba(255,255,255,.72);color:var(--tl);border-left-color:var(--tl)!important;box-shadow:0 2px 10px rgba(39,153,137,.08)}
+.fb{display:flex;width:100%;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(39,153,137,.16);background:rgba(255,255,255,.62);cursor:pointer;color:rgba(58,58,58,.68);font-family:var(--fn);font-size:12px;font-weight:800;transition:var(--tr);text-align:left;margin-bottom:4px;box-shadow:0 2px 8px rgba(39,153,137,.04)}
+.fb:hover{background:#fff;border-color:rgba(39,153,137,.34);color:var(--tl);transform:translateY(-1px)}
+.fb.on{background:rgba(45,204,211,.16);border-color:var(--tl)!important;color:var(--tl);box-shadow:0 3px 12px rgba(39,153,137,.10)}
 .fb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .fb-ico{font-size:13px;flex-shrink:0}
 .fb-lbl{flex:1}
-.fb-cnt{font-size:10px;padding:1px 6px;border-radius:999px;background:rgba(39,153,137,.08);color:rgba(39,153,137,.65)}
-.fb.on .fb-cnt{background:rgba(45,204,211,.18);color:var(--tl)}
+.fb-cnt{font-size:10px;font-weight:900;padding:2px 7px;border-radius:999px;background:rgba(39,153,137,.08);border:1px solid rgba(39,153,137,.10);color:var(--tl);min-width:26px;text-align:center;flex-shrink:0}
+.fb.on .fb-cnt{background:rgba(255,255,255,.76);border-color:rgba(39,153,137,.16)}
 .sb-div{border:none;border-top:1px solid rgba(39,153,137,.12);margin:6px 16px}
 .pc-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 10px}
 .pc{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.48);border:1px solid rgba(39,153,137,.12);color:rgba(58,58,58,.62);cursor:pointer;transition:var(--tr);font-family:var(--fn)}
