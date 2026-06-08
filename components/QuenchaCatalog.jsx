@@ -370,7 +370,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .m-hdr{padding:22px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-radius:var(--rl) var(--rl) 0 0;flex-shrink:0}
 .m-close{background:rgba(0,0,0,.07);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:14px;color:var(--gr);transition:var(--tr);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .m-close:hover{background:rgba(0,0,0,.13)}
-.m-body{overflow-y:auto;overflow-x:hidden;padding:24px 28px;display:flex;flex-direction:column;gap:14px;flex:1}
+.m-body{overflow-y:auto;overflow-x:auto;padding:24px 28px;display:flex;flex-direction:column;gap:14px;flex:1}
 .m-body::-webkit-scrollbar{width:4px}
 .m-body::-webkit-scrollbar-thumb{background:rgba(185,220,210,.6);border-radius:2px}
 .m-footer{padding:14px 24px;border-top:1px solid rgba(185,220,210,.4);display:flex;align-items:center;gap:10px;background:var(--wh);border-radius:0 0 var(--rl) var(--rl);flex-shrink:0}
@@ -432,7 +432,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-variant-barcode{display:flex;align-items:center;gap:8px;min-height:34px}
 .vm-variant-barcode img{max-width:128px;max-height:38px;object-fit:contain;background:#fff;border-radius:4px;cursor:zoom-in}
 .vm-variant-barcode code{font-family:monospace;font-size:11px;font-weight:800;color:var(--gr);white-space:nowrap}
-@media(max-width:700px){.vm-variant-table-card{padding:10px;margin-top:2px}.vm-variant-table{min-width:390px;font-size:12px}.vm-variant-table th{padding:7px 10px;font-size:9px}.vm-variant-table td{padding:8px 10px;font-size:12px}.vm-variant-barcode img{max-width:110px;max-height:34px}.vm-variant-sku{font-size:11px}}
+@media(max-width:700px){.vm-variant-table-card{padding:10px;margin-top:2px}.vm-variant-table{font-size:12px}.vm-variant-table th{padding:7px 10px;font-size:9px}.vm-variant-table td{padding:8px 10px;font-size:12px}.vm-variant-barcode img{max-width:110px;max-height:34px}.vm-variant-sku{font-size:11px}}
 .vm-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:7px;border:1px solid rgba(0,0,0,.1)}
 .vm-code{font-family:monospace;font-size:11px;color:var(--tl)}
 /* COLOR LIST */
@@ -1485,7 +1485,7 @@ button{touch-action:manipulation}
   .modal-bg{padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;overflow-y:auto!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;background:#fff!important;backdrop-filter:none!important}
   .modal{width:100vw!important;max-width:none!important;min-height:100dvh!important;height:auto!important;max-height:none!important;border-radius:0!important;box-shadow:none!important;border:none!important;overflow:visible!important;display:block!important}
   .m-hdr{position:relative!important;border-radius:0!important;padding:28px 70px 24px 24px!important}
-  .m-body{overflow:visible!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
+  .m-body{overflow-y:auto!important;overflow-x:auto!important;max-height:none!important;padding:20px 18px 110px!important;display:flex!important;flex-direction:column!important;gap:18px!important}
   .m-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:30!important;border-radius:0!important;background:rgba(255,255,255,.96)!important;backdrop-filter:blur(12px)!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;box-shadow:0 -8px 24px rgba(39,153,137,.10)!important}
   .m-close{position:absolute!important;top:18px!important;right:16px!important;width:48px!important;height:48px!important;border-radius:50%!important;font-size:20px!important;z-index:10!important}
   .m-footer-r{width:100%!important;display:grid!important;grid-template-columns:1fr 1.5fr!important;gap:10px!important;margin-left:0!important}
@@ -1684,7 +1684,7 @@ button{touch-action:manipulation}
   .vm-thumbs{gap:7px!important;padding:3px 2px 8px!important}
   .vm-thumb{width:48px!important;height:48px!important;border-radius:8px!important}
   .vm-variant-table-card{padding:10px!important}
-  .vm-variant-table{min-width:360px!important}
+  .vm-variant-table{width:100%!important}
   .vm-variant-table th{font-size:9px!important;padding:7px 8px!important}
   .vm-variant-table td{font-size:11px!important;padding:7px 8px!important}
   .vm-variant-color{gap:6px!important}
@@ -3914,11 +3914,11 @@ td .vm-variant-sku{
 
 /* DEFINITIVE TABLE FULL-WIDTH FIX */
 .vm-variant-table-card,.vm-dimensions-card{width:100%!important;box-sizing:border-box!important;overflow:visible!important;}
-.vm-variant-table-wrap,.vm-dim-table-wrap{width:100%!important;box-sizing:border-box!important;overflow-x:auto!important;display:block!important;}
-.vm-variant-table,.vm-dim-table{width:100%!important;table-layout:fixed!important;min-width:0!important;}
-.vm-variant-table th:nth-child(1),.vm-dim-table th:nth-child(1){width:33.33%!important;}
-.vm-variant-table th:nth-child(2),.vm-dim-table th:nth-child(2){width:33.33%!important;}
-.vm-variant-table th:nth-child(3),.vm-dim-table th:nth-child(3){width:33.33%!important;}
+.vm-variant-table-wrap,.vm-dim-table-wrap{width:100%!important;box-sizing:border-box!important;overflow-x:auto!important;overflow-y:visible!important;display:block!important;-webkit-overflow-scrolling:touch!important;}
+.vm-variant-table,.vm-dim-table{width:100%!important;table-layout:auto!important;min-width:0!important;}
+.vm-variant-table th,.vm-variant-table td,.vm-dim-table th,.vm-dim-table td{width:auto!important;padding:9px 16px!important;white-space:nowrap!important;}
+.vm-dimensions-card .vm-dim-table.vm-variant-table{min-width:0!important;width:100%!important;}
+.vm-dimensions-card .vm-dim-table-wrap.vm-variant-table-wrap{min-width:0!important;width:100%!important;}
 
 `
  
@@ -6632,7 +6632,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <div className="vm-variant-table-card" style={{width:'100%',boxSizing:'border-box'}}>
                   <span className="vm-meta-lbl" style={{marginBottom:8,display:'block'}}>Dimensions</span>
                   <div className="vm-variant-table-wrap vm-scroll-wrap" style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
-                    <table className="vm-variant-table" style={{minWidth:420,width:'100%',tableLayout:'auto'}}>
+                    <table className="vm-variant-table" style={{width:'100%',tableLayout:'auto'}}>
                       {vp.dimensions.headers.some(h=>h.trim()) && (
                         <thead>
                           <tr>
