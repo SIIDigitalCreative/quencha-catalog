@@ -3912,6 +3912,14 @@ td .vm-variant-sku{
 .vm-scroll-wrap table{width:100%!important;table-layout:fixed!important;}
 .vm-scroll-wrap table th, .vm-scroll-wrap table td{padding:8px 16px!important;white-space:nowrap!important;}
 
+/* DEFINITIVE TABLE FULL-WIDTH FIX */
+.vm-variant-table-card,.vm-dimensions-card{width:100%!important;box-sizing:border-box!important;overflow:visible!important;}
+.vm-variant-table-wrap,.vm-dim-table-wrap{width:100%!important;box-sizing:border-box!important;overflow-x:auto!important;display:block!important;}
+.vm-variant-table,.vm-dim-table{width:100%!important;table-layout:fixed!important;min-width:0!important;}
+.vm-variant-table th:nth-child(1),.vm-dim-table th:nth-child(1){width:33.33%!important;}
+.vm-variant-table th:nth-child(2),.vm-dim-table th:nth-child(2){width:33.33%!important;}
+.vm-variant-table th:nth-child(3),.vm-dim-table th:nth-child(3){width:33.33%!important;}
+
 `
  
  
