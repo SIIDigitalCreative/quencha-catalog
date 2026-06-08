@@ -6422,7 +6422,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <span key={c.code} className="quench-visual-dot" style={{background:swatchBackground(c)}} />
               ))}
             </div>
-          </section>
+          </section>}
  
           {/* Toolbar */}
           <div className="toolbar" ref={resultsRef}>
