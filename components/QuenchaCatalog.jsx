@@ -6660,6 +6660,13 @@ ${message.trim()}` : 'Message / Notes:',
               </>
             )
           })()}
+          {showHiddenOnly && filtered.length === 0 && (
+            <div style={{textAlign:'center',padding:'60px 20px',color:'var(--gr)'}}>
+              <div style={{fontSize:40,marginBottom:12}}>🎉</div>
+              <div style={{fontFamily:'var(--fn)',fontWeight:700,fontSize:16,color:'var(--bk)',marginBottom:6}}>No hidden products</div>
+              <div style={{fontFamily:'var(--fn)',fontSize:13}}>All products are visible to visitors.</div>
+            </div>
+          )}
         </main>
       </div>
  
