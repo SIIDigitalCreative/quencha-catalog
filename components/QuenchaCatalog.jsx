@@ -6325,6 +6325,8 @@ ${message.trim()}` : 'Message / Notes:',
       const p = products.find(x => x.id === id)
       if (p) return apiSaveProduct(id, { ...p, hidden })
     }))
+    // Update local state so UI reflects change immediately
+    setProducts(prev => prev.map(p => ids.includes(p.id) ? { ...p, hidden } : p))
     setSelectedIds(new Set())
   }, [selectedIds, products, apiSaveProduct])
 
