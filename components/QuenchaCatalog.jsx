@@ -5035,8 +5035,8 @@ function generateProductSheet(product, brandLogo, colorCollections) {
 
 // ─── INLINE ADD CATEGORY ──────────────────────────────────────────────────────
 function InlineAddCat({ onAdd }) {
-  const [adding, setAdding] = React.useState(false)
-  const [val, setVal] = React.useState('')
+  const [adding, setAdding] = useState(false)
+  const [val, setVal] = useState('')
   if (!adding) return (
     <button type="button" onClick={()=>setAdding(true)}
       style={{padding:'5px 12px',borderRadius:999,border:'1px dashed rgba(39,153,137,.4)',background:'transparent',color:'var(--tl)',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer'}}>
