@@ -4858,6 +4858,48 @@ function DimensionsEditor({ value, onChange }) {
   )
 }
  
+// ─── LOGO IMAGE PROCESSOR ────────────────────────────────────────────────────
+// Compresses PNG/image while preserving transparency
+function processLogoImage(file, maxWidth = 400, maxHeight = 200) {
+  return new Promise((resolve, reject) => {
+    // SVG — no processing needed
+    if (file.type === 'image/svg+xml') {
+      resolve(file)
+      return
+    }
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      // Calculate scaled dimensions
+      let w = img.naturalWidth
+      let h = img.naturalHeight
+      if (w > maxWidth || h > maxHeight) {
+        const ratio = Math.min(maxWidth / w, maxHeight / h)
+        w = Math.round(w * ratio)
+        h = Math.round(h * ratio)
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = w
+      canvas.height = h
+      const ctx = canvas.getContext('2d')
+      // Clear with transparency (NOT white fill) to preserve PNG alpha
+      ctx.clearRect(0, 0, w, h)
+      ctx.drawImage(img, 0, 0, w, h)
+      // Always export as PNG to keep transparency
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) { reject(new Error('Canvas export failed')); return }
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.png'), { type: 'image/png' }))
+        },
+        'image/png'
+      )
+    }
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Image load failed')) }
+    img.src = objectUrl
+  })
+}
+
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
  
  
@@ -5385,9 +5427,12 @@ ${message.trim()}` : 'Message / Notes:',
       e.target.value = ''
       return
     }
-    setBrandUploadErr('Uploading logo...')
+    setBrandUploadErr('Processing logo...')
     try {
-      const url = await uploadImageToBlob(file, { compress: file.type !== 'image/svg+xml' })
+      // Process: compress + preserve PNG transparency
+      const processedFile = await processLogoImage(file)
+      setBrandUploadErr('Uploading logo...')
+      const url = await uploadImageToBlob(processedFile)
       saveBrandLogo(url)
       setBrandUploadErr('')
     } catch (err) {
