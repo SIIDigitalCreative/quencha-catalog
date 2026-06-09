@@ -4523,7 +4523,7 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
                     </div>
                   </div>
  
-                  {(currentBanner?.title || currentBanner?.subtitle || currentBanner?.link) && (
+                  {(currentBanner?.title || currentBanner?.subtitle || (currentBanner?.link && (currentBanner?.clickMode||'anywhere')==='button')) && (
                     <div className="hero-media-caption">
                       <div>
                         {currentBanner.title && <div className="hero-media-title">{currentBanner.title}</div>}
