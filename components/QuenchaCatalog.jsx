@@ -187,15 +187,16 @@ const DEFAULT_EXTS = [
  
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
-.peso{font-family:'Noto Sans',Arial,'Helvetica Neue',sans-serif!important}
+
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap');
+@font-face{font-family:'Satoshi';src:url('https://fonts.gstatic.com/s/notosans/v36/o-0bIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjczw.woff2') format('woff2');unicode-range:U+20B1;font-weight:100 900;font-style:normal;}
 @font-face{font-family:'Satoshi';src:local('Helvetica Neue'),local('Arial'),local('Helvetica');unicode-range:U+20B1;font-weight:100 900;font-style:normal;}
 :root{
   --sf:#B9DCD2;--sf4:rgba(185,220,210,0.4);--sf7:rgba(185,220,210,0.7);
   --cy:#2DCCD3;--cy2:#25b5bb;--tl:#279989;--tl2:#1e8070;
   --gr:#63666A;--wh:#FFFFFF;--bk:#3A3A3A;--bg:#F7FAF9;
-  --fn:'Satoshi','Noto Sans','Inter',-apple-system,sans-serif;
+  --fn:'Satoshi',sans-serif;
   --r:10px;--rl:16px;--tr:.2s ease;
   --nh:60px;--sw:260px;
   --sh:0 2px 12px rgba(39,153,137,.08);
@@ -6573,7 +6574,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div className="c-foot">
             <div className="c-stats">
               <div className="c-stat">
-                <div className="c-stat-val"><span className="peso">₱</span>{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
+                <div className="c-stat-val">₱{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
                 <div className="c-stat-lbl">SRP</div>
               </div>
               <div className="c-stat-divider"/>
@@ -6892,7 +6893,7 @@ ${message.trim()}` : 'Message / Notes:',
                                   {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
                                   <div>
                                     <div className="quench-prod-name">{product.name}</div>
-                                    <div className="quench-prod-meta"><span className="peso">₱</span>{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
+                                    <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
                                   </div>
                                 </div>
                                 <div className="quench-form-row">
@@ -7105,7 +7106,7 @@ ${message.trim()}` : 'Message / Notes:',
               <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
               <p className="vm-desc">{vp.desc}</p>
               <div className="vm-price-row vm-price-row-under-desc">
-                <div><div className="vm-plbl">SRP</div><div className="vm-pval"><span className="peso">₱</span>{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
+                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
                 <div className="vm-pdiv"/>
                 <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
               </div>
