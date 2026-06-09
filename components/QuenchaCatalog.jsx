@@ -6215,7 +6215,7 @@ ${message.trim()}` : 'Message / Notes:',
       return bNew - aNew
     })
     return list
-  }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
+  }, [products, editMode, showHiddenOnly, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
  
   const counts = useMemo(() => {
     const ext = { all: products.length }, cat = {}, collection = { all: products.length }
