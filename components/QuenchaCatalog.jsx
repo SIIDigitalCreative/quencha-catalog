@@ -6475,101 +6475,87 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── PRINT ALL PRODUCTS ──
   const printAllProducts = useCallback(() => {
-    const sheets = filtered.map((p, idx) => {
+    const renderProduct = (p) => {
       const mainImg = getImageSrc(p.images?.[0])
-      const images = (p.images || []).slice(0,4).map(getImageSrc).filter(Boolean)
+      const thumbImgs = (p.images||[]).slice(1,4).map(getImageSrc).filter(Boolean)
       const skuBase = getProductSkuBase(p)
-      const colorRows = (p.colors || []).map(clr => {
+      const colorRows = (p.colors||[]).slice(0,8).map(clr => {
         const hexes = getColorHexes(clr)
-        const swatch = hexes.length === 1
-          ? `background:${hexes[0]}`
-          : `background:linear-gradient(to right,${hexes.join(',')})`
-        return `<tr>
-          <td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
-          <td style="font-family:monospace;color:#279989">${clr.sku||''}</td>
-          <td>${clr.barcode||'—'}</td>
-        </tr>`
+        const swatch = hexes.length===1?`background:${hexes[0]}`:`background:linear-gradient(to right,${hexes.join(',')})`
+        return `<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:4px"></span>${clr.name||''}</td><td style="font-family:monospace;color:#279989">${clr.sku||''}</td><td>${clr.barcode||'—'}</td></tr>`
       }).join('')
-      const dimHeaders = p.dimensions?.headers?.filter(h=>h.trim()) || []
-      const dimRows = p.dimensions?.rows || []
-      const hasDims = dimHeaders.length > 0 && dimRows.length > 0
-      const dimTable = hasDims ? `
-        <div class="section-title">Dimensions</div>
-        <table class="info-table">
-          <thead><tr>${dimHeaders.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-          <tbody>${dimRows.map(row=>`<tr>${dimHeaders.map((_,i)=>`<td>${row[i]||''}</td>`).join('')}</tr>`).join('')}</tbody>
-        </table>` : ''
-      const thumbs = images.slice(1).map(src =>
-        `<img src="${src}" style="width:72px;height:72px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9">`
-      ).join('')
-      return `<div class="page">
-        <div class="header">
-          ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
-          <span class="brand">Product Catalog Sheet</span>
-        </div>
-        <div class="layout">
-          <div class="img-col">
-            ${mainImg ? `<img src="${mainImg}" class="main-img" alt="${p.name}">` : '<div class="main-ph">📦</div>'}
-            ${thumbs ? `<div class="thumbs">${thumbs}</div>` : ''}
+      const thumbHtml = thumbImgs.map(src=>`<img src="${src}" style="width:40px;height:40px;object-fit:contain;border-radius:4px;border:1px solid #e0ede9">`).join('')
+      return `<div class="product">
+        <div class="p-layout">
+          <div class="p-img-col">
+            ${mainImg?`<img src="${mainImg}" class="p-main-img">`:'<div class="p-main-ph">📦</div>'}
+            ${thumbHtml?`<div class="p-thumbs">${thumbHtml}</div>`:''}
           </div>
-          <div>
-            <div class="product-name">${p.name||''}</div>
-            ${skuBase ? `<span class="sku">${skuBase}</span>` : ''}
-            <div class="desc">${p.desc||''}</div>
-            ${p.badges?.length ? `<div class="badges">${p.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>` : ''}
-            <div class="stats">
-              <div class="stat-box"><div class="stat-val">₱${Number(p.srp||0).toLocaleString('en-PH',{minimumFractionDigits:2})}</div><div class="stat-lbl">SRP</div></div>
-              <div class="stat-box"><div class="stat-val">${p.packing||'—'}</div><div class="stat-lbl">Packing</div></div>
+          <div class="p-info">
+            <div class="p-name">${p.name||''}</div>
+            ${skuBase?`<span class="p-sku">${skuBase}</span>`:''}
+            <div class="p-desc">${p.desc||''}</div>
+            ${p.badges?.length?`<div class="p-badges">${p.badges.map(b=>`<span class="p-badge">${b}</span>`).join('')}</div>`:''}
+            <div class="p-stats">
+              <div class="p-stat"><div class="p-stat-val">₱${Number(p.srp||0).toLocaleString('en-PH',{minimumFractionDigits:2})}</div><div class="p-stat-lbl">SRP</div></div>
+              <div class="p-stat"><div class="p-stat-val">${p.packing||'—'}</div><div class="p-stat-lbl">Packing</div></div>
             </div>
-            ${colorRows ? `<div class="section-title">Color SKU / Barcode</div>
-            <table class="info-table"><thead><tr><th>Color</th><th>Product Code</th><th>Barcode</th></tr></thead>
-            <tbody>${colorRows}</tbody></table>` : ''}
-            ${dimTable}
+            ${colorRows?`<div class="p-section-title">Color SKU / Barcode</div><table class="p-table"><thead><tr><th>Color</th><th>Product Code</th><th>Barcode</th></tr></thead><tbody>${colorRows}</tbody></table>`:''}
           </div>
-        </div>
-        <div class="footer">
-          <span>sunbeamslifestyle.com</span>
-          <span>${p.name} — ${skuBase}</span>
-          <span>${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}</span>
         </div>
       </div>`
-    }).join('')
-
+    }
+    const pages = []
+    for (let i = 0; i < filtered.length; i += 2) pages.push(filtered.slice(i, i+2))
+    const pageHtml = pages.map((pair, pi) => `
+      <div class="page">
+        <div class="page-header">
+          ${brandLogo?`<img src="${brandLogo}" class="logo">`:'<span class="brand-name">Quencha</span>'}
+          <span class="brand-name">Product Catalog</span>
+          <span class="page-num">Page ${pi+1} of ${pages.length}</span>
+        </div>
+        <div class="page-body">
+          ${pair.map(renderProduct).join('<div class="divider"></div>')}
+        </div>
+      </div>`).join('')
     const html = `<!DOCTYPE html><html><head>
     <meta charset="UTF-8">
     <title>Quencha Product Catalog — ${filtered.length} Products</title>
     <style>
       *{box-sizing:border-box;margin:0;padding:0}
-      @page{size:A4 portrait;margin:10mm}
-      html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff;width:210mm}
-      .page{width:190mm;height:257mm;overflow:hidden;display:flex;flex-direction:column;page-break-after:always;break-after:page}
+      @page{size:A4 portrait;margin:8mm}
+      html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
+      .page{width:194mm;height:280mm;overflow:hidden;display:flex;flex-direction:column;page-break-after:always;break-after:page}
       .page:last-child{page-break-after:avoid;break-after:avoid}
-      .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:8px;margin-bottom:12px;flex-shrink:0}
-      .logo{height:28px;object-fit:contain}
-      .brand{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
-      .layout{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start;flex:1;min-height:0}
-      .img-col{display:flex;flex-direction:column;gap:6px}
-      .main-img{width:200px;height:200px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9;flex-shrink:0}
-      .main-ph{width:200px;height:200px;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:40px}
-      .thumbs{display:flex;gap:5px;flex-wrap:wrap}
-      .product-name{font-size:16px;font-weight:900;color:#1a1a1a;line-height:1.25;margin-bottom:4px}
-      .sku{font-family:monospace;font-size:10px;background:#e8f5f2;color:#279989;padding:2px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
-      .desc{font-size:10px;color:#444;line-height:1.5;margin-bottom:8px;max-height:48px;overflow:hidden}
-      .badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
-      .badge{font-size:8px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
-      .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-      .stat-box{background:#f5fbf9;border-radius:6px;padding:7px 10px}
-      .stat-val{font-size:15px;font-weight:900;color:#279989}
-      .stat-lbl{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:1px}
-      .section-title{font-size:7px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:6px 0 4px;border-top:1px solid #e0ede9;padding-top:6px}
-      .info-table{width:100%;border-collapse:collapse;font-size:9px}
-      .info-table th{background:#279989;color:#fff;padding:4px 7px;text-align:left;font-size:8px;letter-spacing:.05em;text-transform:uppercase}
-      .info-table td{padding:4px 7px;border-bottom:1px solid #e8f5f2;color:#333}
-      .info-table tr:last-child td{border-bottom:none}
-      .info-table tr:nth-child(even) td{background:#f5fbf9}
-      .footer{margin-top:8px;padding-top:6px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:8px;color:#aaa;flex-shrink:0}
+      .page-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:5px;margin-bottom:8px;flex-shrink:0}
+      .logo{height:22px;object-fit:contain}
+      .brand-name{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#279989}
+      .page-num{font-size:7px;color:#aaa}
+      .page-body{flex:1;display:flex;flex-direction:column;gap:0;min-height:0}
+      .product{flex:1;min-height:0;overflow:hidden;padding:6px 0}
+      .divider{height:1px;background:linear-gradient(to right,transparent,#b9dcd2,transparent);flex-shrink:0;margin:2px 0}
+      .p-layout{display:grid;grid-template-columns:130px 1fr;gap:12px;height:100%}
+      .p-img-col{display:flex;flex-direction:column;gap:5px}
+      .p-main-img{width:130px;height:115px;object-fit:contain;border-radius:7px;border:1px solid #e0ede9;background:#f5fbf9}
+      .p-main-ph{width:130px;height:115px;border-radius:7px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:32px}
+      .p-thumbs{display:flex;gap:4px;flex-wrap:wrap}
+      .p-info{display:flex;flex-direction:column;gap:3px}
+      .p-name{font-size:13px;font-weight:900;color:#1a1a1a;line-height:1.2}
+      .p-sku{font-family:monospace;font-size:8px;background:#e8f5f2;color:#279989;padding:1px 7px;border-radius:999px;display:inline-block;margin-bottom:2px}
+      .p-desc{font-size:8.5px;color:#555;line-height:1.45;max-height:36px;overflow:hidden}
+      .p-badges{display:flex;flex-wrap:wrap;gap:3px}
+      .p-badge{font-size:7px;font-weight:700;padding:1px 6px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+      .p-stats{display:flex;gap:8px}
+      .p-stat{background:#f5fbf9;border-radius:5px;padding:4px 8px;min-width:60px}
+      .p-stat-val{font-size:12px;font-weight:900;color:#279989}
+      .p-stat-lbl{font-size:7px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999}
+      .p-section-title{font-size:6.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#279989;border-top:1px solid #e8f5f2;padding-top:4px;margin-top:2px}
+      .p-table{width:100%;border-collapse:collapse;font-size:8px}
+      .p-table th{background:#279989;color:#fff;padding:3px 6px;text-align:left;font-size:7px;letter-spacing:.05em;text-transform:uppercase}
+      .p-table td{padding:3px 6px;border-bottom:1px solid #f0f8f5}
+      .p-table tr:nth-child(even) td{background:#f8fdfc}
     </style>
-    </head><body>${sheets}</body></html>`
+    </head><body>${pageHtml}</body></html>`
 
     const w = window.open('', '_blank')
     w.document.write(html)
