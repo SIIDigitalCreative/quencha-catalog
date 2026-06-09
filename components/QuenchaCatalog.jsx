@@ -6217,6 +6217,10 @@ ${message.trim()}` : 'Message / Notes:',
     return list
   }, [products, editMode, showHiddenOnly, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
  
+
+  const totalSkuCount = useMemo(() => filtered.reduce((sum, p) => sum + ((p.colors||[]).length || 1), 0), [filtered])
+  const allSkuCount = useMemo(() => products.reduce((sum, p) => sum + ((p.colors||[]).length || 1), 0), [products])
+
   const counts = useMemo(() => {
     const ext = { all: products.length }, cat = {}, collection = { all: products.length }
     products.forEach(p => {
@@ -6251,8 +6255,8 @@ ${message.trim()}` : 'Message / Notes:',
     <>
       <div className="sb-hero">
         <div className="sb-hl">Catalog</div>
-        <div className="sb-total">{products.length}</div>
-        <div className="sb-sub">products</div>
+        <div className="sb-total">{allSkuCount}</div>
+        <div className="sb-sub">SKUs</div>
       </div>
       <div className="sb-sec">
         <span className="sb-lbl">Extension</span>
@@ -6272,7 +6276,7 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="filter-pill-wrap">
           <button className={`filter-pill full ${!filterCat?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
             <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
-            <span className="filter-pill-count">{products.length}</span>
+            <span className="filter-pill-count">{allSkuCount}</span>
           </button>
           {cats.map(c=>(
             <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
@@ -6590,7 +6594,7 @@ ${message.trim()}` : 'Message / Notes:',
 
           {/* Toolbar */}
           <div id="catalog-results" className="toolbar" ref={resultsRef}>
-            <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
+            <span className="res-label">Showing <strong>{filtered.length}</strong> products · <strong>{totalSkuCount}</strong>{totalSkuCount!==allSkuCount?` of ${allSkuCount}`:''} SKUs</span>
             <select className="sort-sel" value={sort} onChange={e=>saveCatalogSort(e.target.value)}>
               <option value="default">Sort: Manual Order</option>
               <option value="sku-asc">SKU: A → Z</option>
@@ -7847,7 +7851,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div style={{display:'flex',alignItems:'center',gap:8}}>
             <span className="edit-dot"/>
             <span className="eb-lbl">Edit Mode</span>
-            <span className="eb-cnt">{products.length} products</span>
+            <span className="eb-cnt">{products.length} products · {allSkuCount} SKUs</span>
           </div>
           <div style={{display:'flex',gap:8}}>
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
