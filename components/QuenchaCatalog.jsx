@@ -5175,6 +5175,8 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
       if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
       if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
+      if (Array.isArray(cleanedSettings.cats) && cleanedSettings.cats.length) setCats(cleanedSettings.cats)
+      if (Array.isArray(cleanedSettings.exts) && cleanedSettings.exts.length) setExts(cleanedSettings.exts)
       if (Array.isArray(cleanedSettings.savedCustomTags))      setSavedCustomTags(cleanedSettings.savedCustomTags)
       setShowQuenchables(cleanedSettings.showQuenchables !== undefined ? cleanedSettings.showQuenchables : true)
       if (Array.isArray(cleanedSettings.colorCollections)) {
@@ -8052,7 +8054,7 @@ ${message.trim()}` : 'Message / Notes:',
               <div/>
               <div className="m-footer-r">
                 <button className="cancel-btn" onClick={()=>setCatMgrOpen(false)}>Cancel</button>
-                <button className="save-btn" onClick={()=>setCatMgrOpen(false)}>✓ Done</button>
+                <button className="save-btn" onClick={()=>{syncSettings({cats});setCatMgrOpen(false)}}>✓ Done</button>
               </div>
             </div>
           </div>
@@ -8098,7 +8100,7 @@ ${message.trim()}` : 'Message / Notes:',
               <div/>
               <div className="m-footer-r">
                 <button className="cancel-btn" onClick={()=>setExtMgrOpen(false)}>Cancel</button>
-                <button className="save-btn" onClick={()=>setExtMgrOpen(false)}>✓ Done</button>
+                <button className="save-btn" onClick={()=>{syncSettings({exts});setExtMgrOpen(false)}}>✓ Done</button>
               </div>
             </div>
           </div>
