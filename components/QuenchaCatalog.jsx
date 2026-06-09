@@ -4859,10 +4859,11 @@ function DimensionsEditor({ value, onChange }) {
 }
  
 // ─── LOGO IMAGE PROCESSOR ────────────────────────────────────────────────────
-// Detects opaque white background and removes it; preserves existing transparency
+// Compresses image. PNG stays PNG (transparency preserved). JPEG/WebP compressed.
 function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
   return new Promise((resolve, reject) => {
     if (file.type === 'image/svg+xml') { resolve(file); return }
+    const isPng = file.type === 'image/png'
     const img = new Image()
     const objectUrl = URL.createObjectURL(file)
     img.onload = () => {
@@ -4874,65 +4875,24 @@ function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
       }
       const canvas = document.createElement('canvas')
       canvas.width = w; canvas.height = h
-      const ctx = canvas.getContext('2d')
+      // MUST use willReadFrequently:false and alpha:true to preserve transparency
+      const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false })
+      // Clear to fully transparent — critical for PNG transparency
       ctx.clearRect(0, 0, w, h)
+      ctx.globalCompositeOperation = 'source-over'
       ctx.drawImage(img, 0, 0, w, h)
-
-      const imageData = ctx.getImageData(0, 0, w, h)
-      const data = imageData.data
-
-      // Check if image has ANY transparent pixels
-      let hasTransparency = false
-      for (let i = 3; i < data.length; i += 4) {
-        if (data[i] < 255) { hasTransparency = true; break }
-      }
-
-      if (!hasTransparency) {
-        // Detect background color from corners
-        const sampleCorner = (x, y) => {
-          const idx = (y * w + x) * 4
-          return [data[idx], data[idx+1], data[idx+2]]
-        }
-        const corners = [
-          sampleCorner(0, 0), sampleCorner(w-1, 0),
-          sampleCorner(0, h-1), sampleCorner(w-1, h-1)
-        ]
-        const avgR = corners.reduce((s,c) => s+c[0], 0) / 4
-        const avgG = corners.reduce((s,c) => s+c[1], 0) / 4
-        const avgB = corners.reduce((s,c) => s+c[2], 0) / 4
-        const isBlackBg = avgR < 40 && avgG < 40 && avgB < 40
-        const isWhiteBg = avgR > 215 && avgG > 215 && avgB > 215
-
-        if (isBlackBg) {
-          // Remove black/near-black background
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2]
-            if (r < 40 && g < 40 && b < 40) {
-              const darkness = 255 - Math.max(r, g, b)
-              data[i+3] = Math.max(0, Math.round((255 - darkness) * 3))
-            }
-          }
-          ctx.putImageData(imageData, 0, 0)
-        } else if (isWhiteBg) {
-          // Remove white/near-white background
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2]
-            if (r > 215 && g > 215 && b > 215) {
-              const brightness = (r + g + b) / 3
-              data[i+3] = Math.max(0, Math.round((255 - brightness) * 3))
-            }
-          }
-          ctx.putImageData(imageData, 0, 0)
-        }
-      }
-      // Has transparency = already good → keep as-is
-
+      // PNG → export as PNG to keep transparency. JPEG/WebP → compress as WebP
+      const mimeType = isPng ? 'image/png' : 'image/webp'
+      const quality = isPng ? undefined : 0.85
       canvas.toBlob(
         (blob) => {
           if (!blob) { reject(new Error('Canvas export failed')); return }
-          resolve(new File([blob], 'logo.png', { type: 'image/png' }))
+          const outName = isPng ? 'logo.png' : 'logo.webp'
+          const outType = isPng ? 'image/png' : 'image/webp'
+          resolve(new File([blob], outName, { type: outType }))
         },
-        'image/png'
+        mimeType,
+        quality
       )
     }
     img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Image load failed')) }
@@ -5467,14 +5427,10 @@ ${message.trim()}` : 'Message / Notes:',
       e.target.value = ''
       return
     }
-    setBrandUploadErr('Uploading logo...')
+    setBrandUploadErr('Uploading...')
     try {
-      // PNG: upload directly — canvas processing can destroy transparency
-      // JPEG/WebP: process through canvas to convert to transparent PNG
-      const fileToUpload = file.type === 'image/png' || file.type === 'image/svg+xml'
-        ? file
-        : await processLogoImage(file)
-      const url = await uploadImageToBlob(fileToUpload)
+      const processed = await processLogoImage(file)
+      const url = await uploadImageToBlob(processed)
       saveBrandLogo(url)
       setBrandUploadErr('')
     } catch (err) {
