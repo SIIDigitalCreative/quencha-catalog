@@ -187,6 +187,7 @@ const DEFAULT_EXTS = [
  
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
+.peso{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif!important}
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap');
 @font-face{font-family:'Satoshi';src:local('Helvetica Neue'),local('Arial'),local('Helvetica');unicode-range:U+20B1;font-weight:100 900;font-style:normal;}
 :root{
@@ -6477,88 +6478,25 @@ ${message.trim()}` : 'Message / Notes:',
 
   // ── PRINT ALL PRODUCTS ──
   const printAllProducts = useCallback(() => {
-    const renderProduct = (p) => {
-      const mainImg = getImageSrc(p.images?.[0])
-      const thumbImgs = (p.images||[]).slice(1,4).map(getImageSrc).filter(Boolean)
-      const skuBase = getProductSkuBase(p)
-      const colorRows = (p.colors||[]).slice(0,8).map(clr => {
-        const hexes = getColorHexes(clr)
-        const swatch = hexes.length===1?`background:${hexes[0]}`:`background:linear-gradient(to right,${hexes.join(',')})`
-        return `<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:4px"></span>${clr.name||''}</td><td style="font-family:monospace;color:#279989">${clr.sku||''}</td><td>${clr.barcode||'—'}</td></tr>`
-      }).join('')
-      const thumbHtml = thumbImgs.map(src=>`<img src="${src}" style="width:40px;height:40px;object-fit:contain;border-radius:4px;border:1px solid #e0ede9">`).join('')
-      return `<div class="product">
-        <div class="p-layout">
-          <div class="p-img-col">
-            ${mainImg?`<img src="${mainImg}" class="p-main-img">`:'<div class="p-main-ph">📦</div>'}
-            ${thumbHtml?`<div class="p-thumbs">${thumbHtml}</div>`:''}
-          </div>
-          <div class="p-info">
-            <div class="p-name">${p.name||''}</div>
-            ${skuBase?`<span class="p-sku">${skuBase}</span>`:''}
-            <div class="p-desc">${p.desc||''}</div>
-            ${p.badges?.length?`<div class="p-badges">${p.badges.map(b=>`<span class="p-badge">${b}</span>`).join('')}</div>`:''}
-            <div class="p-stats">
-              <div class="p-stat"><div class="p-stat-val">₱${Number(p.srp||0).toLocaleString('en-PH',{minimumFractionDigits:2})}</div><div class="p-stat-lbl">SRP</div></div>
-              <div class="p-stat"><div class="p-stat-val">${p.packing||'—'}</div><div class="p-stat-lbl">Packing</div></div>
-            </div>
-            ${colorRows?`<div class="p-section-title">Color SKU / Barcode</div><table class="p-table"><thead><tr><th>Color</th><th>Product Code</th><th>Barcode</th></tr></thead><tbody>${colorRows}</tbody></table>`:''}
-          </div>
-        </div>
-      </div>`
-    }
-    const pages = []
-    for (let i = 0; i < filtered.length; i += 2) pages.push(filtered.slice(i, i+2))
-    const pageHtml = pages.map((pair, pi) => `
-      <div class="page">
-        <div class="page-header">
-          ${brandLogo?`<img src="${brandLogo}" class="logo">`:'<span class="brand-name">Quencha</span>'}
-          <span class="brand-name">Product Catalog</span>
-          <span class="page-num">Page ${pi+1} of ${pages.length}</span>
-        </div>
-        <div class="page-body">
-          ${pair.map(renderProduct).join('<div class="divider"></div>')}
-        </div>
-      </div>`).join('')
-    const html = `<!DOCTYPE html><html><head>
-    <meta charset="UTF-8">
-    <title>Quencha Product Catalog — ${filtered.length} Products</title>
-    <style>
-      *{box-sizing:border-box;margin:0;padding:0}
-      @page{size:A4 portrait;margin:8mm}
-      html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
-      .page{width:194mm;height:280mm;overflow:hidden;display:flex;flex-direction:column;page-break-after:always;break-after:page}
-      .page:last-child{page-break-after:avoid;break-after:avoid}
-      .page-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:5px;margin-bottom:8px;flex-shrink:0}
-      .logo{height:22px;object-fit:contain}
-      .brand-name{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#279989}
-      .page-num{font-size:7px;color:#aaa}
-      .page-body{flex:1;display:flex;flex-direction:column;gap:0;min-height:0}
-      .product{flex:1;min-height:0;overflow:hidden;padding:6px 0}
-      .divider{height:1px;background:linear-gradient(to right,transparent,#b9dcd2,transparent);flex-shrink:0;margin:2px 0}
-      .p-layout{display:grid;grid-template-columns:130px 1fr;gap:12px;height:100%}
-      .p-img-col{display:flex;flex-direction:column;gap:5px}
-      .p-main-img{width:130px;height:115px;object-fit:contain;border-radius:7px;border:1px solid #e0ede9;background:#f5fbf9}
-      .p-main-ph{width:130px;height:115px;border-radius:7px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:32px}
-      .p-thumbs{display:flex;gap:4px;flex-wrap:wrap}
-      .p-info{display:flex;flex-direction:column;gap:3px}
-      .p-name{font-size:13px;font-weight:900;color:#1a1a1a;line-height:1.2}
-      .p-sku{font-family:monospace;font-size:8px;background:#e8f5f2;color:#279989;padding:1px 7px;border-radius:999px;display:inline-block;margin-bottom:2px}
-      .p-desc{font-size:8.5px;color:#555;line-height:1.45;max-height:36px;overflow:hidden}
-      .p-badges{display:flex;flex-wrap:wrap;gap:3px}
-      .p-badge{font-size:7px;font-weight:700;padding:1px 6px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
-      .p-stats{display:flex;gap:8px}
-      .p-stat{background:#f5fbf9;border-radius:5px;padding:4px 8px;min-width:60px}
-      .p-stat-val{font-size:12px;font-weight:900;color:#279989}
-      .p-stat-lbl{font-size:7px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999}
-      .p-section-title{font-size:6.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#279989;border-top:1px solid #e8f5f2;padding-top:4px;margin-top:2px}
-      .p-table{width:100%;border-collapse:collapse;font-size:8px}
-      .p-table th{background:#279989;color:#fff;padding:3px 6px;text-align:left;font-size:7px;letter-spacing:.05em;text-transform:uppercase}
-      .p-table td{padding:3px 6px;border-bottom:1px solid #f0f8f5}
-      .p-table tr:nth-child(even) td{background:#f8fdfc}
-    </style>
-    </head><body>${pageHtml}</body></html>`
+    // Generate each product as a full A4 page using the same layout as single download
+    // Extract the body content from each sheet and combine with page breaks
+    const allBodies = filtered.map((p, idx) => {
+      const sheet = generateProductSheet(p, brandLogo, colorCollections)
+      // Extract everything between <body> and </body>
+      const bodyStart = sheet.indexOf('<body>') + 6
+      const bodyEnd = sheet.lastIndexOf('</body>')
+      const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
+      const isLast = idx === filtered.length - 1
+      return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+    }).join('')
 
+    // Use the CSS from the single product sheet + add page break support
+    const firstSheet = filtered.length > 0 ? generateProductSheet(filtered[0], brandLogo, colorCollections) : ''
+    const headStart = firstSheet.indexOf('<head>') + 6
+    const headEnd = firstSheet.indexOf('</head>')
+    const headContent = firstSheet.slice(headStart, headEnd)
+
+    const html = `<!DOCTYPE html><html><head>${headContent}</head><body>${allBodies}</body></html>`
     const w = window.open('', '_blank')
     w.document.write(html)
     w.document.close()
@@ -6629,7 +6567,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div className="c-foot">
             <div className="c-stats">
               <div className="c-stat">
-                <div className="c-stat-val">₱{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
+                <div className="c-stat-val"><span className="peso">₱</span>{p.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div>
                 <div className="c-stat-lbl">SRP</div>
               </div>
               <div className="c-stat-divider"/>
@@ -6948,7 +6886,7 @@ ${message.trim()}` : 'Message / Notes:',
                                   {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
                                   <div>
                                     <div className="quench-prod-name">{product.name}</div>
-                                    <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
+                                    <div className="quench-prod-meta"><span className="peso">₱</span>{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
                                   </div>
                                 </div>
                                 <div className="quench-form-row">
@@ -7161,7 +7099,7 @@ ${message.trim()}` : 'Message / Notes:',
               <div className="vm-badges">{vp.badges.map(b=><span key={b} className="vm-badge">{b}</span>)}</div>
               <p className="vm-desc">{vp.desc}</p>
               <div className="vm-price-row vm-price-row-under-desc">
-                <div><div className="vm-plbl">SRP</div><div className="vm-pval">₱{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
+                <div><div className="vm-plbl">SRP</div><div className="vm-pval"><span className="peso">₱</span>{vp.srp.toLocaleString('en-PH',{minimumFractionDigits:2})}</div></div>
                 <div className="vm-pdiv"/>
                 <div><div className="vm-plbl">Packing</div><div className="vm-pval">{vp.packing} pcs</div></div>
               </div>
