@@ -4921,6 +4921,105 @@ function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
   })
 }
 
+
+// ─── PRODUCT SHEET GENERATOR ─────────────────────────────────────────────────
+function generateProductSheet(product, brandLogo, colorCollections) {
+  const mainImg = getImageSrc(product.images?.[0])
+  const images = (product.images || []).slice(0,4).map(getImageSrc).filter(Boolean)
+  const skuBase = getProductSkuBase(product)
+  const groups = groupColorsByCollection(product.colors || [], colorCollections)
+  const dimHeaders = product.dimensions?.headers?.filter(h=>h.trim()) || []
+  const dimRows = product.dimensions?.rows || []
+  const hasDims = dimHeaders.length > 0 && dimRows.length > 0
+
+  const colorRows = (product.colors || []).map(clr => {
+    const hexes = getColorHexes(clr)
+    const swatch = hexes.length === 1
+      ? `background:${hexes[0]}`
+      : `background:linear-gradient(to right,${hexes.join(',')})` 
+    return `<tr>
+      <td><span style="display:inline-block;width:16px;height:16px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
+      <td style="font-family:monospace;color:#279989">${clr.sku||''}</td>
+      <td>${clr.barcode||'—'}</td>
+    </tr>`
+  }).join('')
+
+  const dimTable = hasDims ? `
+    <table class="info-table" style="margin-top:12px">
+      <thead><tr>${dimHeaders.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${dimRows.map(row=>`<tr>${dimHeaders.map((_,i)=>`<td>${row[i]||''}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>` : ''
+
+  const thumbs = images.slice(1).map(src =>
+    `<img src="${src}" style="width:80px;height:80px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9">`
+  ).join('')
+
+  const html = `<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+  <title>${product.name} — Quencha Catalog</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff;padding:32px;max-width:820px;margin:0 auto}
+    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:14px;margin-bottom:24px}
+    .logo{height:36px;object-fit:contain}
+    .brand{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
+    .layout{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
+    .main-img{width:300px;height:300px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9}
+    .main-ph{width:300px;height:300px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:60px}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .product-name{font-size:22px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:6px}
+    .sku{font-family:monospace;font-size:12px;background:#e8f5f2;color:#279989;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:12px}
+    .desc{font-size:13px;color:#444;line-height:1.6;margin-bottom:14px}
+    .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+    .badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    .stat-box{background:#f5fbf9;border-radius:10px;padding:12px 16px}
+    .stat-val{font-size:20px;font-weight:900;color:#279989}
+    .stat-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:2px}
+    .section-title{font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:16px 0 8px;border-top:1px solid #e0ede9;padding-top:12px}
+    .info-table{width:100%;border-collapse:collapse;font-size:12px}
+    .info-table th{background:#279989;color:#fff;padding:7px 10px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+    .info-table td{padding:7px 10px;border-bottom:1px solid #e8f5f2;color:#333}
+    .info-table tr:last-child td{border-bottom:none}
+    .info-table tr:nth-child(even) td{background:#f5fbf9}
+    .footer{margin-top:28px;padding-top:12px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:10px;color:#aaa}
+    @media print{body{padding:20px}@page{margin:15mm;size:A4}}
+  </style>
+  </head><body>
+  <div class="header">
+    ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
+    <span class="brand">Product Catalog Sheet</span>
+  </div>
+  <div class="layout">
+    <div>
+      ${mainImg ? `<img src="${mainImg}" class="main-img" alt="${product.name}">` : '<div class="main-ph">📦</div>'}
+      ${thumbs ? `<div class="thumbs">${thumbs}</div>` : ''}
+    </div>
+    <div>
+      <div class="product-name">${product.name||''}</div>
+      ${skuBase ? `<span class="sku">${skuBase}</span>` : ''}
+      <div class="desc">${product.desc||''}</div>
+      ${product.badges?.length ? `<div class="badges">${product.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>` : ''}
+      <div class="stats">
+        <div class="stat-box"><div class="stat-val">₱${Number(product.srp||0).toLocaleString('en-PH',{minimumFractionDigits:2})}</div><div class="stat-lbl">SRP</div></div>
+        <div class="stat-box"><div class="stat-val">${product.packing||'—'}</div><div class="stat-lbl">Packing</div></div>
+      </div>
+      ${colorRows ? `<div class="section-title">Color SKU / Barcode</div>
+      <table class="info-table"><thead><tr><th>Color</th><th>Product Code</th><th>Barcode</th></tr></thead>
+      <tbody>${colorRows}</tbody></table>` : ''}
+      ${dimTable ? `<div class="section-title">Dimensions</div>${dimTable}` : ''}
+    </div>
+  </div>
+  <div class="footer">
+    <span>sunbeamslifestyle.com</span>
+    <span>${product.name} — ${skuBase}</span>
+    <span>${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}</span>
+  </div>
+  <script>window.onload=()=>{window.print()}</script>
+  </body></html>`
+  return html
+}
+
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
  
  
@@ -7095,6 +7194,14 @@ ${message.trim()}` : 'Message / Notes:',
               <div className="vm-actions">
                 <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
+                </button>
+                <button className="vm-link-btn" onClick={()=>{
+                  const html = generateProductSheet(vp, brandLogo, colorCollections)
+                  const w = window.open('','_blank')
+                  w.document.write(html)
+                  w.document.close()
+                }} style={{display:'flex',alignItems:'center',gap:5}}>
+                  ⬇ Download
                 </button>
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
                   {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
