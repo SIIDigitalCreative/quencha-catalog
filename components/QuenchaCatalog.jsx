@@ -5065,6 +5065,7 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
       if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
       if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
+      if (Array.isArray(cleanedSettings.savedCustomTags))      setSavedCustomTags(cleanedSettings.savedCustomTags)
       setShowQuenchables(cleanedSettings.showQuenchables !== undefined ? cleanedSettings.showQuenchables : true)
       if (Array.isArray(cleanedSettings.colorCollections)) {
         setColorCollections(cleanedSettings.colorCollections)
@@ -5158,6 +5159,7 @@ export default function QuenchaCatalog() {
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
   const [brandLogo, setBrandLogo] = useState('')
+  const [savedCustomTags, setSavedCustomTags] = useState([])
   const [brandName, setBrandName] = useState('')
   const [brandTagline, setBrandTagline] = useState('')
   const [brandEditOpen, setBrandEditOpen] = useState(false)
@@ -5276,6 +5278,21 @@ export default function QuenchaCatalog() {
   const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
   const toggleQuenchables = useCallback((v) => { setShowQuenchables(v); syncSettings({ showQuenchables: v }) }, [syncSettings])
+  const saveCustomTag = useCallback((tag) => {
+    setSavedCustomTags(prev => {
+      if (prev.some(t => t.label === tag.label && t.color === tag.color)) return prev
+      const next = [...prev, tag]
+      syncSettings({ savedCustomTags: next })
+      return next
+    })
+  }, [syncSettings])
+  const removeCustomTag = useCallback((label) => {
+    setSavedCustomTags(prev => {
+      const next = prev.filter(t => t.label !== label)
+      syncSettings({ savedCustomTags: next })
+      return next
+    })
+  }, [syncSettings])
   const { copy, copied } = useCopy()
  
   const getFirstSku = useCallback((product = null) => product?.colors?.[0]?.sku || '', [])
@@ -7242,12 +7259,31 @@ ${message.trim()}` : 'Message / Notes:',
                 </div>
                 <div className="f-col">
                   <label className="f-lbl">Custom Tag (right) <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
-                  <input className="f-in" value={ef.customTag} onChange={e=>setEf(f=>({...f,customTag:e.target.value}))} placeholder="e.g. NEW, SALE, HOT…" style={{marginBottom:6}}/>
+                  {savedCustomTags.length > 0 && (
+                    <div style={{display:'flex',flexWrap:'wrap',gap:5,marginBottom:7}}>
+                      {savedCustomTags.map(t=>(
+                        <span key={t.label} onClick={()=>setEf(f=>({...f,customTag:t.label,customTagColor:t.color}))}
+                          style={{fontSize:10,fontWeight:800,padding:'3px 9px',borderRadius:999,background:ef.customTag===t.label?t.color:'rgba(0,0,0,.06)',color:ef.customTag===t.label?'#fff':'rgba(58,58,58,.7)',cursor:'pointer',border:ef.customTag===t.label?`1.5px solid ${t.color}`:'1.5px solid transparent',letterSpacing:'.05em',textTransform:'uppercase',transition:'var(--tr)',display:'flex',alignItems:'center',gap:5}}>
+                          <i style={{width:8,height:8,borderRadius:'50%',background:t.color,flexShrink:0,display:'inline-block'}}/>
+                          {t.label}
+                          <span onClick={e=>{e.stopPropagation();removeCustomTag(t.label)}} style={{marginLeft:2,opacity:.5,fontSize:9,cursor:'pointer'}}>✕</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div style={{display:'flex',gap:6,marginBottom:6}}>
+                    <input className="f-in" value={ef.customTag} onChange={e=>setEf(f=>({...f,customTag:e.target.value}))} placeholder="e.g. NEW, SALE, HOT…" style={{flex:1}}/>
+                    <input type="color" value={ef.customTagColor||'#CB0033'} onChange={e=>setEf(f=>({...f,customTagColor:e.target.value}))} style={{width:36,height:36,border:'1px solid var(--sf7)',borderRadius:6,cursor:'pointer',padding:2,flexShrink:0}}/>
+                  </div>
                   {ef.customTag && (
                     <div style={{display:'flex',alignItems:'center',gap:8}}>
-                      <span style={{fontSize:11,color:'rgba(58,58,58,.6)',fontFamily:'var(--fn)'}}>Tag color:</span>
-                      <input type="color" value={ef.customTagColor||'#CB0033'} onChange={e=>setEf(f=>({...f,customTagColor:e.target.value}))} style={{width:32,height:28,border:'1px solid var(--sf7)',borderRadius:4,cursor:'pointer',padding:2}}/>
                       <span style={{fontSize:11,fontWeight:700,padding:'2px 8px',borderRadius:999,background:ef.customTagColor||'#CB0033',color:'#fff',fontFamily:'var(--fn)',letterSpacing:'.06em',textTransform:'uppercase'}}>{ef.customTag}</span>
+                      {!savedCustomTags.some(t=>t.label===ef.customTag&&t.color===(ef.customTagColor||'#CB0033')) && (
+                        <button onClick={()=>saveCustomTag({label:ef.customTag,color:ef.customTagColor||'#CB0033'})}
+                          style={{fontSize:10,fontWeight:700,padding:'3px 10px',borderRadius:999,border:'1px solid var(--tl)',background:'transparent',color:'var(--tl)',cursor:'pointer',fontFamily:'var(--fn)'}}>
+                          + Save Tag
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
