@@ -4969,7 +4969,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:A4 portrait;margin:16mm 12mm 12mm 12mm}
+    @page{size:A4 portrait;margin:22mm 12mm 12mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     body{width:186mm;min-height:270mm;display:flex;flex-direction:column}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
@@ -6989,7 +6989,7 @@ ${message.trim()}` : 'Message / Notes:',
                   w.document.write(html)
                   w.document.close()
                 }} >
-                  Download
+                  🖨 Print
                 </button>
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
                   {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
@@ -7887,8 +7887,7 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
-            {selectedIds.size > 0 && <button className="eb-add" onClick={()=>printSelectedProducts([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print Selected ({selectedIds.size})</button>}
-            <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print All</button>
+            <button className="eb-add" onClick={()=>selectedIds.size>0?printSelectedProducts([...selectedIds]):printAllProducts()} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>{selectedIds.size>0?`🖨 Print Selected (${selectedIds.size})`:`🖨 Print All`}</button>
             <button className="eb-add" onClick={()=>setShowHiddenOnly(v=>!v)} style={{background:showHiddenOnly?'#6b7280':'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>
               {showHiddenOnly ? '👁 Showing Hidden' : '🙈 Hidden Products'}
             </button>
