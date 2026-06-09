@@ -4506,8 +4506,8 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
                           <div
                             key={b.id}
                             className={`hero-slide ${i===slide?'active':''}`}
-                            onClick={()=>b.link&&onBannerClick(b.link)}
-                            style={{cursor:b.link?'pointer':'default'}}
+                            onClick={()=>b.link&&(b.clickMode||'anywhere')==='anywhere'&&onBannerClick(b.link)}
+                            style={{cursor:b.link&&(b.clickMode||'anywhere')==='anywhere'?'pointer':'default'}}
                           >
                             <img src={b.image} alt={b.alt||`Banner ${i+1}`}/>
                           </div>
@@ -4529,8 +4529,8 @@ function HeroCarousel({ banners = [], aspect, interval, editMode, onEditClick, h
                         {currentBanner.title && <div className="hero-media-title">{currentBanner.title}</div>}
                         {currentBanner.subtitle && <div className="hero-media-subtitle">{currentBanner.subtitle}</div>}
                       </div>
-                      {currentBanner.link && (
-                        <button onClick={()=>onBannerClick(currentBanner.link)} className="hero-media-action">View →</button>
+                      {currentBanner.link && (currentBanner.clickMode||'anywhere')==='button' && (
+                        <button onClick={()=>onBannerClick(currentBanner.link)} className="hero-media-action">Shop Now →</button>
                       )}
                     </div>
                   )}
@@ -8038,6 +8038,19 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
                         <input value={(!b.link||b.link.startsWith('#'))?'':b.link} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="https://…"/>
                         <div style={{fontSize:10,color:'var(--gr)',marginTop:3}}>Select a category, or enter an external URL</div>
                       </div>
+                      {b.link && (
+                        <div>
+                          <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:5}}>Click Interaction</div>
+                          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5}}>
+                            {[{value:'anywhere',label:'🖱 Whole banner clickable'},{value:'button',label:'🔘 Button only'}].map(opt=>(
+                              <button key={opt.value} onClick={()=>onUpdateBanner(b.id,'clickMode',opt.value)}
+                                style={{padding:'6px 8px',borderRadius:6,border:(b.clickMode||'anywhere')===opt.value?'1.5px solid var(--tl)':'1px solid var(--sf7)',background:(b.clickMode||'anywhere')===opt.value?'rgba(39,153,137,.08)':'#fff',color:(b.clickMode||'anywhere')===opt.value?'var(--tl)':'rgba(58,58,58,.7)',fontFamily:'var(--fn)',fontSize:10,fontWeight:700,cursor:'pointer',transition:'var(--tr)'}}>
+                                {opt.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
