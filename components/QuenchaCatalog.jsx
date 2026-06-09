@@ -6307,8 +6307,12 @@ ${message.trim()}` : 'Message / Notes:',
   // ── PRODUCT CARD ──
   const Card = ({ p }) => {
     const mainImg = getImageSrc(p.images?.[0])
-    const colors = p.colors.slice(0, 6)
-    const extra = p.colors.length > 6 ? p.colors.length - 6 : 0
+    const allUniqColors = p.colors.filter((clr, idx, arr) => {
+      const hex = getColorHexes(clr)[0] || ''
+      return arr.findIndex(x => (getColorHexes(x)[0] || '') === hex) === idx
+    })
+    const colors = allUniqColors.slice(0, 6)
+    const extra = allUniqColors.length > 6 ? allUniqColors.length - 6 : 0
     const extEntry = exts.find(x=>x.value===p.ext)
     const extColor = extEntry?.color || EXT_COLORS[p.ext] || 'var(--gr)'
     const showExtTag = !!p.ext && p.ext !== 'core'
