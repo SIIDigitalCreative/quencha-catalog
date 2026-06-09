@@ -4862,7 +4862,30 @@ function DimensionsEditor({ value, onChange }) {
 // Compresses image. PNG stays PNG (transparency preserved). JPEG/WebP compressed.
 function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
   return new Promise((resolve, reject) => {
-    if (file.type === 'image/svg+xml' || file.type === 'image/png') { resolve(file); return }
+    if (file.type === 'image/svg+xml') { resolve(file); return }
+    // PNG → embed inside SVG to guarantee transparency is preserved
+    if (file.type === 'image/png') {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const base64 = e.target.result // data:image/png;base64,...
+        const img = new Image()
+        img.onload = () => {
+          let w = img.naturalWidth, h = img.naturalHeight
+          if (w > maxWidth || h > maxHeight) {
+            const ratio = Math.min(maxWidth / w, maxHeight / h)
+            w = Math.round(w * ratio); h = Math.round(h * ratio)
+          }
+          const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><image href="${base64}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/></svg>`
+          const svgBlob = new Blob([svgStr], { type: 'image/svg+xml' })
+          resolve(new File([svgBlob], 'logo.svg', { type: 'image/svg+xml' }))
+        }
+        img.onerror = () => reject(new Error('Image load failed'))
+        img.src = base64
+      }
+      reader.onerror = () => reject(new Error('File read failed'))
+      reader.readAsDataURL(file)
+      return
+    }
     const isPng = file.type === 'image/png'
     const img = new Image()
     const objectUrl = URL.createObjectURL(file)
