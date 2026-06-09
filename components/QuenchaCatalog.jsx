@@ -7999,9 +7999,17 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
                         <input value={b.subtitle||''} onChange={e=>onUpdateBanner(b.id,'subtitle',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="e.g. Shop the latest collection"/>
                       </div>
                       <div>
-                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>Link (on click)</div>
-                        <input value={b.link||''} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="#sip · #savor · #go · #accessories · or https://…"/>
-                        <div style={{fontSize:10,color:'var(--gr)',marginTop:3}}>Use #sip, #savor, #go, #accessories to filter by category</div>
+                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>On Click — Filter Category</div>
+                        <select value={b.link&&b.link.startsWith('#')?b.link:''} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff',color:'rgba(58,58,58,.8)',cursor:'pointer'}}>
+                          <option value=''>— No filter —</option>
+                          <option value='#sip'>SIP — Drinkware</option>
+                          <option value='#savor'>SAVOR — Lunch &amp; Food</option>
+                          <option value='#go'>GO — Bags &amp; Carry</option>
+                          <option value='#accessories'>Accessories</option>
+                        </select>
+                        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',margin:'7px 0 3px'}}>Or Custom URL</div>
+                        <input value={(!b.link||b.link.startsWith('#'))?'':b.link} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="https://…"/>
+                        <div style={{fontSize:10,color:'var(--gr)',marginTop:3}}>Select a category, or enter an external URL</div>
                       </div>
                     </div>
                   )}
