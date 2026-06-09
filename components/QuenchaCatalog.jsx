@@ -504,18 +504,18 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .collection-set-preview{grid-column:2/3;display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .collection-color-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(185,220,210,.65);background:rgba(247,250,249,.86);border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900;color:var(--gr);line-height:1}
 .collection-color-chip i{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.collection-set-editor{grid-column:1/-1;margin-top:12px;background:#fff;border:1px solid rgba(39,153,137,.18);border-radius:14px;padding:14px;box-shadow:0 5px 18px rgba(39,153,137,.08);overflow-x:auto}
+.collection-set-editor{grid-column:1/-1;margin-top:12px;background:#fff;border:1px solid rgba(39,153,137,.18);border-radius:14px;padding:14px;box-shadow:0 5px 18px rgba(39,153,137,.08);overflow:hidden}
 .collection-set-editor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(185,220,210,.55)}
 .collection-set-editor-kicker{display:block;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:rgba(39,153,137,.65);margin-bottom:2px}
 .collection-set-editor-name{font-size:16px;font-weight:900;color:var(--tl)}
 .collection-set-editor-close{border:none;border-radius:999px;background:rgba(185,220,210,.35);color:var(--tl);width:32px;height:32px;font-size:14px;font-weight:900;cursor:pointer}
-.collection-set-editor-list{display:flex;flex-direction:column;gap:8px}
-.collection-set-row{display:grid;grid-template-columns:54px 34px minmax(130px,1.2fr) 70px minmax(170px,1.3fr) 38px;gap:8px;align-items:center;background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:12px;padding:10px}
+.collection-set-editor-list{display:flex;flex-direction:column;gap:8px;overflow-x:auto;padding-bottom:4px}
+.collection-set-row{display:grid;grid-template-columns:42px 32px minmax(90px,1fr) 56px minmax(90px,1fr) 30px;gap:6px;align-items:center;background:var(--bg);border:1px solid rgba(185,220,210,.65);border-radius:12px;padding:8px;min-width:0}
 .collection-set-row input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
 .collection-set-row input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;background:#fff;outline:none}
 .collection-set-row input[type=text]:focus{border-color:var(--tl)}
 .collection-set-move{display:flex;gap:4px;align-items:center;justify-content:center}.collection-set-move button{width:24px;height:24px;border-radius:7px;border:1px solid rgba(39,153,137,.18);background:#fff;color:var(--tl);font-size:12px;font-weight:900;cursor:pointer}.collection-set-move button:disabled{opacity:.32;cursor:not-allowed}.collection-set-remove{width:32px;height:32px;border-radius:10px;border:1px solid rgba(239,68,68,.18);background:rgba(239,68,68,.08);color:#b91c1c;font-size:15px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}.collection-set-remove:hover{background:rgba(239,68,68,.16)}
-.collection-set-add-inline{display:grid;grid-template-columns:34px minmax(130px,1.2fr) 70px minmax(170px,1.3fr) auto;gap:8px;align-items:center;margin-top:10px;background:rgba(185,220,210,.22);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:10px}
+.collection-set-add-inline{display:grid;grid-template-columns:32px minmax(90px,1fr) 56px minmax(90px,1fr) auto;gap:6px;align-items:center;margin-top:10px;background:rgba(185,220,210,.22);border:1px dashed rgba(39,153,137,.24);border-radius:12px;padding:8px}
 .collection-set-add-inline input[type=color]{width:34px;height:34px;border:none;background:none;padding:2px;cursor:pointer}
 .collection-set-add-inline input[type=text]{min-width:0;font-family:var(--fn);font-size:12px;border:1px solid rgba(185,220,210,.75);border-radius:8px;padding:8px 10px;background:#fff;outline:none}
 .collection-set-add-inline button{background:var(--tl);color:#fff;border:none;border-radius:8px;padding:9px 12px;font-family:var(--fn);font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
