@@ -173,9 +173,9 @@ const CAT_ORDER = ['sip','savor','go','accessories']
 const EXT_COLORS = {core:'#279989',kids:'#5891c4',pets:'#b06820',tech:'#2B4C5E'}
 const CAT_ICONS = {sip:'',savor:'',go:'',accessories:''}
 const DEFAULT_CATS = [
-  {value:'sip',   label:'SIP — Drinkware',     icon:''},
-  {value:'savor', label:'SAVOR — Lunch & Food', icon:''},
-  {value:'go',    label:'GO — Bags & Carry',    icon:''},
+  {value:'sip',   label:'SIP',   icon:''},
+  {value:'savor', label:'SAVOR', icon:''},
+  {value:'go',    label:'GO',    icon:''},
 ]
 const DEFAULT_EXTS = [
   {value:'core',  label:'Quencha',       color:'#279989'},
@@ -6396,7 +6396,7 @@ ${message.trim()}` : 'Message / Notes:',
             <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
             <span className="filter-pill-count">{products.length}</span>
           </button>
-          {cats.filter(c=>['sip','savor','go'].includes(c.value)).map(c=>(
+          {cats.map(c=>(
             <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
               <span className="filter-pill-l"><span className="filter-pill-label">{{sip:'SIP',savor:'SAVOR',go:'GO'}[c.value] || c.label}</span></span>
               <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
