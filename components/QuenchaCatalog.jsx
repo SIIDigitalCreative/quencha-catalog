@@ -321,8 +321,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .pgrid.col-4{grid-template-columns:repeat(4,1fr)}
 .pgrid.col-2{grid-template-columns:repeat(2,1fr)!important}
 .pgrid.col-1{grid-template-columns:1fr!important}
-@media(max-width:900px){.pgrid.col-4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.pgrid.col-4{grid-template-columns:1fr}}
+@media(max-width:1100px){.pgrid.col-4{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.pgrid.col-4{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:480px){.pgrid.col-4,.pgrid.col-2{grid-template-columns:repeat(2,1fr)!important}}
  
 /* PRODUCT CARD */
 .pcard{background:var(--wh);border:1px solid rgba(185,220,210,.4);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:var(--tr);cursor:pointer;display:flex;flex-direction:column;position:relative}
@@ -5056,7 +5057,7 @@ export default function QuenchaCatalog() {
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState(() => savedCatalogPrefsRef.current.sort || 'default')
   const [dragProductId, setDragProductId] = useState(null)
-  const [view, setView] = useState(() => savedCatalogPrefsRef.current.view || (typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4'))
+  const [view, setView] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768 ? 'col-2' : 'col-4')
   const [showMobileFilter, setShowMobileFilter] = useState(false)
   const searchInputRef = useRef(null)
   const resultsRef = useRef(null)
