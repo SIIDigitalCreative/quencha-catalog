@@ -6237,7 +6237,7 @@ ${message.trim()}` : 'Message / Notes:',
  
   const grouped = useMemo(() => {
     const g = {}
-    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; const pCats=Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); pCats.forEach(cv=>{if(!g[p.ext][cv])g[p.ext][cv]=[];g[p.ext][cv].push(p)}) })
+    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; const pCats=Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); if(pCats.length===0){if(!g[p.ext][''])g[p.ext]['']=[]; g[p.ext][''].push(p)} else {pCats.forEach(cv=>{if(!g[p.ext][cv])g[p.ext][cv]=[];g[p.ext][cv].push(p)})} })
     return g
   }, [filtered])
  
