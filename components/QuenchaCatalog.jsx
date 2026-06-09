@@ -5015,7 +5015,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     <span>${product.name} — ${skuBase}</span>
     <span>${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}</span>
   </div>
-  <script>window.onload=()=>{window.print()}</script>
+
   </body></html>`
   return html
 }
@@ -7200,8 +7200,8 @@ ${message.trim()}` : 'Message / Notes:',
                   const w = window.open('','_blank')
                   w.document.write(html)
                   w.document.close()
-                }} style={{display:'flex',alignItems:'center',gap:5}}>
-                  ⬇ Download
+                }} >
+                  Download
                 </button>
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
                   {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
@@ -8079,7 +8079,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div style={{display:'flex',gap:8}}>
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
-            <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ Export CSV</button>
+            <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
             <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
             <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
           </div>
