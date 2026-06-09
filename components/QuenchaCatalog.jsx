@@ -3151,7 +3151,6 @@ button[aria-label="close"]{
     min-width: 420px !important;
     table-layout: auto !important;
   }
-  }
 
   .vm-dimensions-card .vm-dim-table.vm-variant-table th,
   .vm-dimensions-card .vm-dim-table.vm-variant-table td{
