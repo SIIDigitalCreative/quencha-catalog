@@ -4938,10 +4938,15 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     const swatch = hexes.length === 1
       ? `background:${hexes[0]}`
       : `background:linear-gradient(to right,${hexes.join(',')})`
+    const bImg = clr.barcodeImage || clr.barcodeUrl || ''
+    const bNum = clr.barcode || ''
+    const bCell = bImg
+      ? `<img src="${bImg}" style="height:38px;max-width:120px;object-fit:contain;display:block" alt="barcode">${bNum ? `<div style="font-size:8px;color:#666;font-family:monospace;margin-top:2px">${bNum}</div>` : ''}`
+      : bNum ? `<span style="font-family:monospace;font-size:10px">${bNum}</span>` : '—'
     return `<tr>
       <td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
       <td style="font-family:monospace;color:#279989">${clr.sku||''}</td>
-      <td>${clr.barcode||'—'}</td>
+      <td>${bCell}</td>
     </tr>`
   }).join('')
 
