@@ -4999,6 +4999,7 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
       if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
       if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
+      if (cleanedSettings.showQuenchables !== undefined)       setShowQuenchables(cleanedSettings.showQuenchables)
       if (Array.isArray(cleanedSettings.colorCollections)) {
         setColorCollections(cleanedSettings.colorCollections)
       } else if (typeof window !== 'undefined') {
