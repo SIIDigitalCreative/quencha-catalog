@@ -4969,7 +4969,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:A4 portrait;margin:12mm}
+    @page{size:A4 portrait;margin:16mm 12mm 12mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     body{width:186mm;min-height:270mm;display:flex;flex-direction:column}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
@@ -6384,9 +6384,32 @@ ${message.trim()}` : 'Message / Notes:',
 
 
   // ── PRINT ALL PRODUCTS ──
+
+  const printSelectedProducts = useCallback((ids) => {
+    const toPrint = ids.length > 0 ? filtered.filter(p => ids.includes(p.id)) : filtered
+    if (!toPrint.length) return
+    const allBodies = toPrint.map((p, idx) => {
+      const sheet = generateProductSheet(p, brandLogo, colorCollections)
+      const bodyStart = sheet.indexOf('<body>') + 6
+      const bodyEnd = sheet.lastIndexOf('</body>')
+      const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
+      const isLast = idx === toPrint.length - 1
+      return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+    }).join('')
+    const firstSheet = generateProductSheet(toPrint[0], brandLogo, colorCollections)
+    const headContent = firstSheet.slice(firstSheet.indexOf('<head>')+6, firstSheet.indexOf('</head>'))
+    const html = `<!DOCTYPE html><html><head>${headContent}</head><body>${allBodies}</body></html>`
+    const w = window.open('', '_blank')
+    if (!w) { alert('Please allow popups to print.'); return }
+    w.document.write(html)
+    w.document.close()
+  }, [filtered, brandLogo, colorCollections])
+
   const printAllProducts = useCallback(() => {
-    // Generate each product as a full A4 page using the same layout as single download
-    // Extract the body content from each sheet and combine with page breaks
+    printSelectedProducts([])
+  }, [printSelectedProducts])
+
+  const _unused = useCallback(() => {
     const allBodies = filtered.map((p, idx) => {
       const sheet = generateProductSheet(p, brandLogo, colorCollections)
       // Extract everything between <body> and </body>
@@ -7864,7 +7887,8 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
-            <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Print All</button>
+            {selectedIds.size > 0 && <button className="eb-add" onClick={()=>printSelectedProducts([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print Selected ({selectedIds.size})</button>}
+            <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print All</button>
             <button className="eb-add" onClick={()=>setShowHiddenOnly(v=>!v)} style={{background:showHiddenOnly?'#6b7280':'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>
               {showHiddenOnly ? '👁 Showing Hidden' : '🙈 Hidden Products'}
             </button>
