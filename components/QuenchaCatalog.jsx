@@ -5626,7 +5626,7 @@ ${message.trim()}` : 'Message / Notes:',
     }
   }
  
-  const exitEdit = () => { setEditMode(false) }
+  const exitEdit = () => { setEditMode(false); setSelectedIds(new Set()); setShowHiddenOnly(false) }
  
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
