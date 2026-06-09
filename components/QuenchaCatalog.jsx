@@ -4959,39 +4959,42 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff;padding:32px;max-width:820px;margin:0 auto}
-    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:14px;margin-bottom:24px}
-    .logo{height:36px;object-fit:contain}
-    .brand{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
-    .layout{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
-    .main-img{width:300px;height:300px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9}
-    .main-ph{width:300px;height:300px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:60px}
-    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .product-name{font-size:22px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:6px}
-    .sku{font-family:monospace;font-size:12px;background:#e8f5f2;color:#279989;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:12px}
-    .desc{font-size:13px;color:#444;line-height:1.6;margin-bottom:14px}
-    .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-    .badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-    .stat-box{background:#f5fbf9;border-radius:10px;padding:12px 16px}
-    .stat-val{font-size:20px;font-weight:900;color:#279989}
-    .stat-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:2px}
-    .section-title{font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:16px 0 8px;border-top:1px solid #e0ede9;padding-top:12px}
-    .info-table{width:100%;border-collapse:collapse;font-size:12px}
-    .info-table th{background:#279989;color:#fff;padding:7px 10px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
-    .info-table td{padding:7px 10px;border-bottom:1px solid #e8f5f2;color:#333}
+    @page{size:A4 portrait;margin:10mm}
+    html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff;width:210mm}
+    .page{width:190mm;height:257mm;overflow:hidden;display:flex;flex-direction:column}
+    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:8px;margin-bottom:14px;flex-shrink:0}
+    .logo{height:30px;object-fit:contain}
+    .brand{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
+    .layout{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:start;flex:1;min-height:0}
+    .img-col{display:flex;flex-direction:column;gap:7px}
+    .main-img{width:220px;height:220px;object-fit:contain;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9}
+    .main-ph{width:220px;height:220px;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:50px}
+    .thumbs{display:flex;gap:6px;flex-wrap:wrap}
+    .product-name{font-size:18px;font-weight:900;color:#1a1a1a;line-height:1.25;margin-bottom:5px}
+    .sku{font-family:monospace;font-size:11px;background:#e8f5f2;color:#279989;padding:2px 9px;border-radius:999px;display:inline-block;margin-bottom:10px}
+    .desc{font-size:11px;color:#444;line-height:1.55;margin-bottom:10px;max-height:52px;overflow:hidden}
+    .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+    .badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .stat-box{background:#f5fbf9;border-radius:8px;padding:9px 12px}
+    .stat-val{font-size:17px;font-weight:900;color:#279989}
+    .stat-lbl{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:2px}
+    .section-title{font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:8px 0 5px;border-top:1px solid #e0ede9;padding-top:7px}
+    .info-table{width:100%;border-collapse:collapse;font-size:10px}
+    .info-table th{background:#279989;color:#fff;padding:5px 8px;text-align:left;font-size:8px;letter-spacing:.06em;text-transform:uppercase}
+    .info-table td{padding:5px 8px;border-bottom:1px solid #e8f5f2;color:#333}
     .info-table tr:last-child td{border-bottom:none}
     .info-table tr:nth-child(even) td{background:#f5fbf9}
-    .footer{margin-top:28px;padding-top:12px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:10px;color:#aaa}
-    @media print{body{padding:20px}@page{margin:15mm;size:A4}}
+    .footer{margin-top:auto;padding-top:8px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:8px;color:#aaa;flex-shrink:0}
   </style>
   </head><body>
+  <div class="page">
   <div class="header">
     ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
     <span class="brand">Product Catalog Sheet</span>
   </div>
   <div class="layout">
-    <div>
+    <div class="img-col">
       ${mainImg ? `<img src="${mainImg}" class="main-img" alt="${product.name}">` : '<div class="main-ph">📦</div>'}
       ${thumbs ? `<div class="thumbs">${thumbs}</div>` : ''}
     </div>
@@ -6499,14 +6502,13 @@ ${message.trim()}` : 'Message / Notes:',
       const thumbs = images.slice(1).map(src =>
         `<img src="${src}" style="width:72px;height:72px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9">`
       ).join('')
-      const pageBreak = idx < filtered.length - 1 ? 'page-break-after:always' : ''
-      return `<div style="${pageBreak};padding:24px 32px">
+      return `<div class="page">
         <div class="header">
           ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
           <span class="brand">Product Catalog Sheet</span>
         </div>
         <div class="layout">
-          <div>
+          <div class="img-col">
             ${mainImg ? `<img src="${mainImg}" class="main-img" alt="${p.name}">` : '<div class="main-ph">📦</div>'}
             ${thumbs ? `<div class="thumbs">${thumbs}</div>` : ''}
           </div>
@@ -6538,31 +6540,34 @@ ${message.trim()}` : 'Message / Notes:',
     <title>Quencha Product Catalog — ${filtered.length} Products</title>
     <style>
       *{box-sizing:border-box;margin:0;padding:0}
-      body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
-      .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:12px;margin-bottom:20px}
-      .logo{height:32px;object-fit:contain}
-      .brand{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
-      .layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
-      .main-img{width:260px;height:260px;object-fit:contain;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9}
-      .main-ph{width:260px;height:260px;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:50px}
-      .thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-      .product-name{font-size:20px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:5px}
-      .sku{font-family:monospace;font-size:11px;background:#e8f5f2;color:#279989;padding:2px 9px;border-radius:999px;display:inline-block;margin-bottom:10px}
-      .desc{font-size:12px;color:#444;line-height:1.6;margin-bottom:12px}
-      .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-      .badge{font-size:9px;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
-      .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-      .stat-box{background:#f5fbf9;border-radius:8px;padding:10px 14px}
-      .stat-val{font-size:18px;font-weight:900;color:#279989}
-      .stat-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:2px}
-      .section-title{font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:12px 0 6px;border-top:1px solid #e0ede9;padding-top:10px}
-      .info-table{width:100%;border-collapse:collapse;font-size:11px}
-      .info-table th{background:#279989;color:#fff;padding:6px 9px;text-align:left;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
-      .info-table td{padding:6px 9px;border-bottom:1px solid #e8f5f2;color:#333}
+      @page{size:A4 portrait;margin:10mm}
+      html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff;width:210mm}
+      .page{width:190mm;height:257mm;overflow:hidden;display:flex;flex-direction:column;page-break-after:always;break-after:page}
+      .page:last-child{page-break-after:avoid;break-after:avoid}
+      .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:8px;margin-bottom:12px;flex-shrink:0}
+      .logo{height:28px;object-fit:contain}
+      .brand{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
+      .layout{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start;flex:1;min-height:0}
+      .img-col{display:flex;flex-direction:column;gap:6px}
+      .main-img{width:200px;height:200px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9;flex-shrink:0}
+      .main-ph{width:200px;height:200px;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:40px}
+      .thumbs{display:flex;gap:5px;flex-wrap:wrap}
+      .product-name{font-size:16px;font-weight:900;color:#1a1a1a;line-height:1.25;margin-bottom:4px}
+      .sku{font-family:monospace;font-size:10px;background:#e8f5f2;color:#279989;padding:2px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
+      .desc{font-size:10px;color:#444;line-height:1.5;margin-bottom:8px;max-height:48px;overflow:hidden}
+      .badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+      .badge{font-size:8px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+      .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+      .stat-box{background:#f5fbf9;border-radius:6px;padding:7px 10px}
+      .stat-val{font-size:15px;font-weight:900;color:#279989}
+      .stat-lbl{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:1px}
+      .section-title{font-size:7px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:6px 0 4px;border-top:1px solid #e0ede9;padding-top:6px}
+      .info-table{width:100%;border-collapse:collapse;font-size:9px}
+      .info-table th{background:#279989;color:#fff;padding:4px 7px;text-align:left;font-size:8px;letter-spacing:.05em;text-transform:uppercase}
+      .info-table td{padding:4px 7px;border-bottom:1px solid #e8f5f2;color:#333}
       .info-table tr:last-child td{border-bottom:none}
       .info-table tr:nth-child(even) td{background:#f5fbf9}
-      .footer{margin-top:20px;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa}
-      @media print{@page{margin:10mm;size:A4}div[style*="page-break-after"]{break-after:page}}
+      .footer{margin-top:8px;padding-top:6px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:8px;color:#aaa;flex-shrink:0}
     </style>
     </head><body>${sheets}</body></html>`
 
