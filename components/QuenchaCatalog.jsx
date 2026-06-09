@@ -6318,15 +6318,19 @@ ${message.trim()}` : 'Message / Notes:',
  
 
 
-  const batchSetHidden = useCallback(async (hidden) => {
+  const batchSetHidden = useCallback(async (isHidden) => {
     const ids = [...selectedIds]
     if (!ids.length) return
-    await Promise.all(ids.map(id => {
+    // Save each product to API
+    for (const id of ids) {
       const p = products.find(x => x.id === id)
-      if (p) return apiSaveProduct(id, { ...p, hidden })
-    }))
-    // Update local state so UI reflects change immediately
-    setProducts(prev => prev.map(p => ids.includes(p.id) ? { ...p, hidden } : p))
+      if (p) {
+        const updated = { ...p, hidden: isHidden }
+        await apiSaveProduct(id, updated)
+        // Update local state immediately per product
+        setProducts(prev => prev.map(q => q.id === id ? { ...q, hidden: isHidden } : q))
+      }
+    }
     setSelectedIds(new Set())
   }, [selectedIds, products, apiSaveProduct])
 
