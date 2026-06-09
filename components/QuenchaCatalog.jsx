@@ -173,16 +173,16 @@ const CAT_ORDER = ['sip','savor','go','accessories']
 const EXT_COLORS = {core:'#279989',kids:'#5891c4',pets:'#b06820',tech:'#2B4C5E'}
 const CAT_ICONS = {sip:'',savor:'',go:'',accessories:''}
 const DEFAULT_CATS = [
-  {value:'sip',         label:'SIP — Drinkware',      icon:''},
-  {value:'savor',       label:'SAVOR — Lunch & Food',  icon:''},
-  {value:'go',          label:'GO — Bags & Carry',     icon:''},
-  {value:'accessories', label:'Accessories',           icon:''},
+  {value:'sip',   label:'SIP — Drinkware',     icon:''},
+  {value:'savor', label:'SAVOR — Lunch & Food', icon:''},
+  {value:'go',    label:'GO — Bags & Carry',    icon:''},
 ]
 const DEFAULT_EXTS = [
-  {value:'core',  label:'Quencha',  color:'#279989'},
+  {value:'core',  label:'Quencha',       color:'#279989'},
   {value:'kids',  label:'Quencha Kids',  color:'#5891c4'},
   {value:'pets',  label:'Quencha Pets',  color:'#b06820'},
   {value:'tech',  label:'Quencha Tech',  color:'#2B4C5E'},
+  {value:'acs',   label:'Quencha Acs',   color:'#7B6E9E'},
 ]
  
 // ─── CSS ──────────────────────────────────────────────────────────────────────
@@ -6447,13 +6447,25 @@ ${message.trim()}` : 'Message / Notes:',
             onBannerClick={(link)=>{
               if(!link) return
               if(link.startsWith('http')){window.open(link,'_blank');return}
-              // internal: #sip, #savor, #go, #accessories, or product id
-              const el=document.getElementById(link.replace('#',''))
-              if(el){el.scrollIntoView({behavior:'smooth'})}
-              else{
-                const cat=link.replace('#','')
-                const cats=['sip','savor','go','accessories']
-                if(cats.some(c=>c.value===cat)){setFilterCat(cat)}
+              // internal filter links
+              if(link.startsWith('#ext-')){
+                const val=link.replace('#ext-','')
+                setFilterExt(val); setFilterCat(null); setFilterColorCollection('all')
+                document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
+                return
+              }
+              if(link.startsWith('#col-')){
+                const val=link.replace('#col-','')
+                setFilterColorCollection(val); setFilterCat(null); setFilterExt('all')
+                document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
+                return
+              }
+              // category: #sip, #savor, #go, #accessories
+              const cat=link.replace('#','')
+              const validCats=['sip','savor','go']
+              if(validCats.includes(cat)){
+                setFilterCat(cat); setFilterExt('all'); setFilterColorCollection('all')
+                document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
               }
             }}
           />
@@ -6493,7 +6505,7 @@ ${message.trim()}` : 'Message / Notes:',
           </section>}
  
           {/* Toolbar */}
-          <div className="toolbar" ref={resultsRef}>
+          <div id="catalog-results" className="toolbar" ref={resultsRef}>
             <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
             <select className="sort-sel" value={sort} onChange={e=>saveCatalogSort(e.target.value)}>
               <option value="default">Sort: Manual Order</option>
@@ -8002,10 +8014,25 @@ function BannerEditModal({ banners, aspect, interval, onIntervalChange, onAspect
                         <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',marginBottom:3}}>On Click — Filter Category</div>
                         <select value={b.link&&b.link.startsWith('#')?b.link:''} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff',color:'rgba(58,58,58,.8)',cursor:'pointer'}}>
                           <option value=''>— No filter —</option>
-                          <option value='#sip'>SIP — Drinkware</option>
-                          <option value='#savor'>SAVOR — Lunch &amp; Food</option>
-                          <option value='#go'>GO — Bags &amp; Carry</option>
-                          <option value='#accessories'>Accessories</option>
+                          <optgroup label='── Category'>
+                            <option value='#sip'>SIP — Drinkware</option>
+                            <option value='#savor'>SAVOR — Lunch &amp; Food</option>
+                            <option value='#go'>GO — Bags &amp; Carry</option>
+                          </optgroup>
+                          <optgroup label='── Extension'>
+                            <option value='#ext-core'>Quencha</option>
+                            <option value='#ext-kids'>Quencha Kids</option>
+                            <option value='#ext-pets'>Quencha Pets</option>
+                            <option value='#ext-tech'>Quencha Tech</option>
+                            <option value='#ext-acs'>Quencha Acs</option>
+                          </optgroup>
+                          <optgroup label='── Color Collection'>
+                            <option value='#col-OG'>OG</option>
+                            <option value='#col-XPRESS'>XPRESS</option>
+                            <option value='#col-Horizon'>Horizon</option>
+                            <option value='#col-Bloom'>Bloom</option>
+                            <option value='#col-Poply'>Poply</option>
+                          </optgroup>
                         </select>
                         <div style={{fontSize:9,fontWeight:700,letterSpacing:'.08em',color:'var(--tl)',textTransform:'uppercase',margin:'7px 0 3px'}}>Or Custom URL</div>
                         <input value={(!b.link||b.link.startsWith('#'))?'':b.link} onChange={e=>onUpdateBanner(b.id,'link',e.target.value)} style={{width:'100%',fontFamily:'var(--fn)',fontSize:12,border:'1px solid var(--sf7)',borderRadius:5,padding:'5px 8px',outline:'none',background:'#fff'}} placeholder="https://…"/>
