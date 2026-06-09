@@ -1064,7 +1064,7 @@ button{touch-action:manipulation}
 .em-tab.on{background:rgba(185,220,210,.28)!important;border-bottom-color:var(--tl)!important;color:var(--tl)!important}
 .em-panel{padding:20px!important;gap:16px!important;background:linear-gradient(180deg,#fff,rgba(247,250,249,.88))!important}
 .color-collection-panel{background:linear-gradient(180deg,rgba(185,220,210,.36),rgba(247,250,249,.86))!important;padding:18px!important}
-.collection-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
+.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
 .collection-item{grid-template-columns:42px minmax(0,1fr)!important;padding:14px!important;align-items:start!important}
 .collection-item input[type=color]{width:38px!important;height:38px!important;border-radius:50%!important;overflow:hidden!important}
 .collection-actions{grid-column:1/-1!important;display:grid!important;grid-template-columns:auto 1fr auto!important;gap:10px!important;align-items:center!important;margin-top:10px!important}
