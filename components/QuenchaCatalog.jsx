@@ -6321,17 +6321,16 @@ ${message.trim()}` : 'Message / Notes:',
   const batchSetHidden = useCallback(async (isHidden) => {
     const ids = [...selectedIds]
     if (!ids.length) return
-    // Save each product to API
-    for (const id of ids) {
-      const p = products.find(x => x.id === id)
-      if (p) {
-        const updated = { ...p, hidden: isHidden }
-        await apiSaveProduct(id, updated)
-        // Update local state immediately per product
-        setProducts(prev => prev.map(q => q.id === id ? { ...q, hidden: isHidden } : q))
-      }
-    }
+    // Update UI immediately
+    setProducts(prev => prev.map(p => ids.includes(p.id) ? { ...p, hidden: isHidden } : p))
     setSelectedIds(new Set())
+    // Scroll to product results
+    setTimeout(() => document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    // Persist to API in background
+    ids.forEach(id => {
+      const p = products.find(x => x.id === id)
+      if (p) apiSaveProduct(id, { ...p, hidden: isHidden }).catch(console.error)
+    })
   }, [selectedIds, products, apiSaveProduct])
 
   // ── EXPORT CATALOG ──
