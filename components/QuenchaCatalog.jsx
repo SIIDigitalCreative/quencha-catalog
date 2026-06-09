@@ -4862,7 +4862,7 @@ function DimensionsEditor({ value, onChange }) {
 // Compresses image. PNG stays PNG (transparency preserved). JPEG/WebP compressed.
 function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
   return new Promise((resolve, reject) => {
-    if (file.type === 'image/svg+xml') { resolve(file); return }
+    if (file.type === 'image/svg+xml' || file.type === 'image/png') { resolve(file); return }
     const isPng = file.type === 'image/png'
     const img = new Image()
     const objectUrl = URL.createObjectURL(file)
