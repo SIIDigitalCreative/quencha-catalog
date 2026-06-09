@@ -5196,7 +5196,7 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.catalogPrefs && typeof cleanedSettings.catalogPrefs === 'object') {
         const prefs = cleanedSettings.catalogPrefs
         if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
-        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
+        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat ? (Array.isArray(prefs.filterCat) ? prefs.filterCat : [prefs.filterCat]) : [])
         if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
         if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
         if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
@@ -5222,7 +5222,7 @@ export default function QuenchaCatalog() {
  
   // ── FILTERS ──
   const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
-  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
+  const [filterCat, setFilterCat] = useState(() => { const v = savedCatalogPrefsRef.current.filterCat; return v ? (Array.isArray(v) ? v : [v]) : [] })
   const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
@@ -6316,7 +6316,7 @@ ${message.trim()}` : 'Message / Notes:',
       __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
     }))
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
-    if (filterCat) list = list.filter(p => p.cat === filterCat)
+    if (filterCat && filterCat.length > 0) list = list.filter(p => filterCat.includes(p.cat))
     if (filterColorCollection !== 'all') {
       list = list.filter(p => (p.colors || []).some(c => defaultColorCollection(c) === filterColorCollection))
     }
@@ -6392,12 +6392,12 @@ ${message.trim()}` : 'Message / Notes:',
       <div className="sb-sec">
         <span className="sb-lbl">Category Filter</span>
         <div className="filter-pill-wrap">
-          <button className={`filter-pill full ${!filterCat?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
+          <button className={`filter-pill full ${filterCat.length===0?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat([]); closeMobileSidebar()}}>
             <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
             <span className="filter-pill-count">{products.length}</span>
           </button>
           {cats.map(c=>(
-            <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
+            <button key={c.value} className={`filter-pill ${filterCat.includes(c.value)?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>setFilterCat(prev=>prev.includes(c.value)?prev.filter(x=>x!==c.value):[...prev,c.value])}>
               <span className="filter-pill-l"><span className="filter-pill-label">{{sip:'SIP',savor:'SAVOR',go:'GO'}[c.value] || c.label}</span></span>
               <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
             </button>
@@ -6431,8 +6431,8 @@ ${message.trim()}` : 'Message / Notes:',
           })}
         </div>
       </div>
-      {(filterExt!=='all'||filterCat||filterColorCollection!=='all'||filterPMin!==null) && (
-        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
+      {(filterExt!=='all'||filterCat.length>0||filterColorCollection!=='all'||filterPMin!==null) && (
+        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat([]);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
       )}
     </>
     )
@@ -6667,13 +6667,13 @@ ${message.trim()}` : 'Message / Notes:',
               // internal filter links
               if(link.startsWith('#ext-')){
                 const val=link.replace('#ext-','')
-                setFilterExt(val); setFilterCat(null); setFilterColorCollection('all')
+                setFilterExt(val); setFilterCat([]); setFilterColorCollection('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
                 return
               }
               if(link.startsWith('#col-')){
                 const val=link.replace('#col-','')
-                setFilterColorCollection(val); setFilterCat(null); setFilterExt('all')
+                setFilterColorCollection(val); setFilterCat([]); setFilterExt('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
                 return
               }
@@ -6681,7 +6681,7 @@ ${message.trim()}` : 'Message / Notes:',
               const cat=link.replace('#','')
               const validCats=['sip','savor','go']
               if(validCats.includes(cat)){
-                setFilterCat(cat); setFilterExt('all'); setFilterColorCollection('all')
+                setFilterCat([cat]); setFilterExt('all'); setFilterColorCollection('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
               }
             }}
