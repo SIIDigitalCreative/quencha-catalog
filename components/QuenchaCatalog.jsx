@@ -7360,10 +7360,15 @@ ${message.trim()}` : 'Message / Notes:',
                       <div style={{display:'flex',flexWrap:'wrap',gap:6,alignItems:'center'}}>
                         {cats.map(cat=>{
                           const sel = (Array.isArray(ef.cat)?ef.cat:[]).includes(cat.value)
-                          return <button key={cat.value} type="button" onClick={()=>setEf(f=>({...f,cat:sel?(Array.isArray(f.cat)?f.cat:[]).filter(x=>x!==cat.value):[...(Array.isArray(f.cat)?f.cat:[]),cat.value]}))}
-                            style={{padding:'5px 12px',borderRadius:999,border:sel?'1.5px solid var(--tl)':'1px solid rgba(185,220,210,.5)',background:sel?'rgba(39,153,137,.08)':'#fff',color:sel?'var(--tl)':'rgba(58,58,58,.65)',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer',transition:'var(--tr)'}}>
-                            {cat.label}
-                          </button>
+                          return <span key={cat.value} style={{display:'inline-flex',alignItems:'center',borderRadius:999,border:sel?'1.5px solid var(--tl)':'1px solid rgba(185,220,210,.5)',background:sel?'rgba(39,153,137,.08)':'#fff',overflow:'hidden'}}>
+                            <button type="button" onClick={()=>setEf(f=>({...f,cat:sel?(Array.isArray(f.cat)?f.cat:[]).filter(x=>x!==cat.value):[...(Array.isArray(f.cat)?f.cat:[]),cat.value]}))}
+                              style={{padding:'5px 10px',background:'transparent',border:'none',color:sel?'var(--tl)':'rgba(58,58,58,.65)',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer'}}>
+                              {cat.label}
+                            </button>
+                            <button type="button" onClick={e=>{e.stopPropagation();const next=cats.filter(x=>x.value!==cat.value);setCats(next);syncSettings({cats:next})}}
+                              title="Delete category"
+                              style={{padding:'3px 7px 3px 2px',background:'transparent',border:'none',color:'#dc2626',cursor:'pointer',fontSize:10,opacity:.6,lineHeight:1}}>✕</button>
+                          </span>
                         })}
                         {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{padding:'5px 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
                         <InlineAddCat onAdd={(newCat)=>{
@@ -8064,7 +8069,7 @@ ${message.trim()}` : 'Message / Notes:',
                   <input value={c.icon} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,icon:e.target.value}:x))} style={{width:44,textAlign:'center',fontSize:18,border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'4px 0',background:'#fff',outline:'none'}}/>
                   <input value={c.label} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,label:e.target.value}:x))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
                   <input value={c.value} onChange={e=>setCats(cats.map((x,j)=>j===i?{...x,value:e.target.value}:x))} placeholder="value (no spaces)" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>setCats(cats.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                  <button onClick={()=>{const next=cats.filter((_,j)=>j!==i);setCats(next);syncSettings({cats:next})}} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
                 </div>
               ))}
               {/* Add new category */}
@@ -8111,7 +8116,7 @@ ${message.trim()}` : 'Message / Notes:',
                   <input type="color" value={x.color} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,color:e.target.value}:o))} style={{width:32,height:32,border:'none',borderRadius:4,padding:2,cursor:'pointer',background:'none'}}/>
                   <input value={x.label} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,label:e.target.value}:o))} placeholder="Label" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:12,fontWeight:600,background:'#fff',outline:'none',width:'100%'}}/>
                   <input value={x.value} onChange={e=>setExts(exts.map((o,j)=>j===i?{...o,value:e.target.value}:o))} placeholder="key" style={{border:'1px solid rgba(185,220,210,.5)',borderRadius:6,padding:'6px 10px',fontSize:11,color:'var(--gr)',background:'#fff',outline:'none',width:'100%'}}/>
-                  <button onClick={()=>setExts(exts.filter((_,j)=>j!==i))} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                  <button onClick={()=>{const next=exts.filter((_,j)=>j!==i);setExts(next);syncSettings({exts:next})}} style={{width:32,height:32,border:'1px solid #fca5a5',borderRadius:6,background:'#fff',color:'#dc2626',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
                 </div>
               ))}
               <div style={{borderTop:'1px solid rgba(185,220,210,.4)',paddingTop:12,marginTop:4}}>
