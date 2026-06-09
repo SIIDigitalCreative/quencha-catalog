@@ -330,6 +330,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 @media(max-width:480px){.pgrid.col-4,.pgrid.col-2{grid-template-columns:repeat(2,1fr)!important}}
  
 /* PRODUCT CARD */
+.pcard-hidden{opacity:.5;filter:grayscale(.4)}
 .pcard{background:var(--wh);border:1px solid rgba(185,220,210,.4);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:var(--tr);cursor:pointer;display:flex;flex-direction:column;position:relative}
 .pcard:not(.em):hover{transform:translateY(-3px);box-shadow:var(--shh);border-color:rgba(45,204,211,.3)}
 .pcard.em{border:1.5px dashed rgba(245,158,11,.35)}
@@ -1036,6 +1037,7 @@ button{touch-action:manipulation}
 .fb-cnt,.cat-cnt,.collection-set-count{min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
  
 /* Product cards */
+.pcard-hidden{opacity:.5;filter:grayscale(.4)}
 .pcard{overflow:hidden!important;border-color:rgba(39,153,137,.14)!important}
 .c-body{gap:8px!important;padding:16px!important}
 .c-name{font-size:15px!important;line-height:1.25!important}
@@ -2750,6 +2752,7 @@ button[aria-label="close"]{
 
 
 /* FINAL FIX: Clean product card image corner gap */
+.pcard-hidden{opacity:.5;filter:grayscale(.4)}
 .pcard{
   overflow: hidden !important;
   background: #fff !important;
@@ -5300,6 +5303,7 @@ export default function QuenchaCatalog() {
   const [isAuthed, setIsAuthed] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState(new Set())
+  const [showHiddenOnly, setShowHiddenOnly] = useState(false)
  
   // Password modal
   const [pwOpen, setPwOpen] = useState(false)
@@ -6187,6 +6191,7 @@ ${message.trim()}` : 'Message / Notes:',
       __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
     }))
     if (!editMode) list = list.filter(p => !p.hidden)
+    if (editMode && showHiddenOnly) list = list.filter(p => p.hidden)
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
     if (filterCat) list = list.filter(p => { const pCats = Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); return pCats.includes(filterCat) })
     if (filterColorCollection !== 'all') {
@@ -6441,7 +6446,6 @@ ${message.trim()}` : 'Message / Notes:',
         <div className="c-img-wrap">
           {showExtTag && !p.hideExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
           {p.hidden && editMode && <span className="c-etag" style={{background:'#6b7280',right:10,left:'auto',top:10}}>Hidden</span>}
-          {p.hidden && editMode && <span className="c-etag" style={{background:'#6b7280',right:10,left:'auto'}}>Hidden</span>}
           {p.customTag && <span className="c-etag" style={{background:p.customTagColor||'#CB0033',right:10,left:'auto'}}>{p.customTag}</span>}
           {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
         </div>
@@ -7845,6 +7849,9 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
             <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Print All</button>
+            <button className="eb-add" onClick={()=>setShowHiddenOnly(v=>!v)} style={{background:showHiddenOnly?'#6b7280':'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>
+              {showHiddenOnly ? '👁 Showing Hidden' : '🙈 Hidden Products'}
+            </button>
             {selectedIds.size > 0 && <>
               <span style={{fontSize:11,color:'rgba(255,255,255,.5)'}}>{selectedIds.size} selected</span>
               <button className="eb-add" onClick={()=>batchSetHidden(true)} style={{background:'#6b7280'}}>Hide Selected</button>
