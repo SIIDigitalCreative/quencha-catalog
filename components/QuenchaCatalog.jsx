@@ -4999,7 +4999,7 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.brandLogo !== undefined)           setBrandLogo(cleanedSettings.brandLogo || '')
       if (cleanedSettings.brandName !== undefined)           setBrandName(cleanedSettings.brandName || '')
       if (cleanedSettings.brandTagline !== undefined)        setBrandTagline(cleanedSettings.brandTagline || '')
-      if (cleanedSettings.showQuenchables !== undefined)       setShowQuenchables(cleanedSettings.showQuenchables)
+      setShowQuenchables(cleanedSettings.showQuenchables !== undefined ? cleanedSettings.showQuenchables : true)
       if (Array.isArray(cleanedSettings.colorCollections)) {
         setColorCollections(cleanedSettings.colorCollections)
       } else if (typeof window !== 'undefined') {
@@ -5087,7 +5087,7 @@ export default function QuenchaCatalog() {
   const [banners, setBanners] = useState([])
   const [bannerAspect, setBannerAspect] = useState('custom')
   const [bannerEditOpen, setBannerEditOpen] = useState(false)
-  const [showQuenchables, setShowQuenchables] = useState(true)
+  const [showQuenchables, setShowQuenchables] = useState(null)
   const [heroVideoUrl, setHeroVideoUrl] = useState('')
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
@@ -6404,7 +6404,7 @@ ${message.trim()}` : 'Message / Notes:',
             </div>
           )}
           {/* Quenchables Builder Entry */}
-          {showQuenchables && <section className="quench-hero">
+          {showQuenchables === true && <section className="quench-hero">
             <div>
               <div className="quench-eyebrow">Shop the Set</div>
               <h2 className="quench-title">Build Your Quenchables</h2>
