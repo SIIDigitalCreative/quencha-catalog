@@ -5678,13 +5678,13 @@ ${message.trim()}` : 'Message / Notes:',
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
     setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]),srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'',hideExtTag:p.hideExtTag||false,customTag:p.customTag||'',customTagColor:p.customTagColor||'#CB0033' })
+    setEf({ name:p.name,ext:p.ext,cat:Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]),srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'',hideExtTag:p.hideExtTag||false,customTag:p.customTag||'',customTagColor:p.customTagColor||'#CB0033',hidden:p.hidden||false })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
   const openNewProduct = () => {
     setEditTarget(null)
-    setEf({ name:'',ext:'core',cat:[],srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
+    setEf({ name:'',ext:'core',cat:[],srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'',hidden:false })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
@@ -5715,7 +5715,7 @@ ${message.trim()}` : 'Message / Notes:',
       barcodeImage: ef.barcodeImage||'',
       qrCode: ef.qrCode||'',
       qrImage: ef.qrImage||'',
-      youtube: ef.youtube||'', hideExtTag: ef.hideExtTag||false, customTag: ef.customTag||'', customTagColor: ef.customTagColor||'#CB0033'
+      youtube: ef.youtube||'', hideExtTag: ef.hideExtTag||false, customTag: ef.customTag||'', customTagColor: ef.customTagColor||'#CB0033', hidden: ef.hidden||false
     })
  
     try {
@@ -6340,6 +6340,7 @@ ${message.trim()}` : 'Message / Notes:',
       ...p,
       __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
     }))
+    if (!editMode) list = list.filter(p => !p.hidden)
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
     if (filterCat) list = list.filter(p => { const pCats = Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); return pCats.includes(filterCat) })
     if (filterColorCollection !== 'all') {
@@ -6576,6 +6577,8 @@ ${message.trim()}` : 'Message / Notes:',
  
         <div className="c-img-wrap">
           {showExtTag && !p.hideExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
+          {p.hidden && editMode && <span className="c-etag" style={{background:'#6b7280',right:10,left:'auto',top:10}}>Hidden</span>}
+          {p.hidden && editMode && <span className="c-etag" style={{background:'#6b7280',right:10,left:'auto'}}>Hidden</span>}
           {p.customTag && <span className="c-etag" style={{background:p.customTagColor||'#CB0033',right:10,left:'auto'}}>{p.customTag}</span>}
           {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
         </div>
@@ -7437,6 +7440,13 @@ ${message.trim()}` : 'Message / Notes:',
                       onClear={()=>setEf(f=>({...f,qrImage:''}))}
                     />
                   </div>
+                </div>
+                <div className="f-col">
+                  <label className="f-lbl">Visibility</label>
+                  <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',padding:'6px 0'}}>
+                    <input type="checkbox" checked={ef.hidden} onChange={e=>setEf(f=>({...f,hidden:e.target.checked}))} style={{width:16,height:16,accentColor:'#dc2626',cursor:'pointer'}}/>
+                    <span style={{fontSize:12,color:'rgba(58,58,58,.7)',fontFamily:'var(--fn)'}}>Hide this product (not visible to visitors)</span>
+                  </label>
                 </div>
                 <div className="f-col">
                   <label className="f-lbl">Card Tag (left) <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— extension badge</span></label>
