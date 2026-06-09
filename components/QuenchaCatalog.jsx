@@ -401,9 +401,9 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-main-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .vm-main-ph{font-size:80px;opacity:.15}
 .vm-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-top:8px}
-.vm-thumb{width:54px;height:54px;border-radius:6px;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:var(--tr);background:var(--sf4);flex-shrink:0;position:relative}
-.vm-thumb.on{border-color:var(--cy)}
-.vm-thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.vm-thumb{width:72px;height:72px;border-radius:10px;overflow:hidden;border:2px solid rgba(185,220,210,.45);cursor:pointer;transition:var(--tr);background:var(--sf4);flex-shrink:0;position:relative}
+.vm-thumb.on{border-color:var(--tl);box-shadow:0 0 0 3px rgba(39,153,137,.12)}
+.vm-thumb img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:8px}
 .vm-badges{display:flex;flex-wrap:wrap;gap:6px}
 .vm-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(185,220,210,.4);color:var(--tl)}
 .vm-desc{font-size:14px;color:var(--bk);line-height:1.65}
@@ -1050,8 +1050,6 @@ button{touch-action:manipulation}
 /* Product detail modal */
 .vm-main-wrap{border-radius:var(--q-radius-lg)!important;background:var(--q-surface-mint)!important;border:var(--q-border)!important}
 .vm-thumbs{gap:10px!important;padding:4px 2px 8px!important}
-.vm-thumb{border-radius:var(--q-radius-md)!important;border:2px solid rgba(39,153,137,.12)!important}
-.vm-thumb.on{border-color:var(--cy)!important;box-shadow:0 0 0 3px rgba(45,204,211,.12)!important}
 .vm-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
 .vm-color-item{padding:10px 12px!important;border-radius:var(--q-radius-md)!important;background:#fff!important}
 .vm-color-item:hover{border-color:var(--tl)!important;background:rgba(185,220,210,.14)!important}
@@ -1655,7 +1653,7 @@ button{touch-action:manipulation}
  
 /* FINAL FIXES — EDIT SCROLL, SMALLER IMAGE THUMBS, SKU/BARCODE TABLE */
 .vm-thumbs{gap:7px!important;padding:3px 2px 7px!important;scrollbar-width:thin!important}
-.vm-thumb{width:54px!important;height:54px!important;border-radius:8px!important}
+.vm-thumb{width:72px!important;height:72px!important;border-radius:10px!important;overflow:hidden!important}
 .vm-variant-table{width:max-content!important;min-width:100%!important;table-layout:auto!important}
 .vm-variant-table th:nth-child(1){width:36%!important}
 .vm-variant-table th:nth-child(2){width:34%!important}
