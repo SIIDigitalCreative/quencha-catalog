@@ -6352,7 +6352,12 @@ ${message.trim()}` : 'Message / Notes:',
           <div className="c-desc">{p.desc}</div>
           <div className="c-badges">{p.badges.slice(0,3).map(b=><span key={b} className="c-badge">{b}</span>)}</div>
           <div className="c-colors">
-            {colors.map(c=><span key={c.code} className="c-dot" style={{background:swatchBackground(c)}} title={getColorHexes(c).length > 1 ? `${c.name} (${getColorHexes(c).length} colors)` : c.name}/>) }
+            {colors
+                .filter((clr, idx, arr) => {
+                  const hex = getColorHexes(clr)[0] || ''
+                  return arr.findIndex(x => (getColorHexes(x)[0] || '') === hex) === idx
+                })
+                .map(c=><span key={c.code} className="c-dot" style={{background:swatchBackground(c)}} title={getColorHexes(c).length > 1 ? `${c.name} (${getColorHexes(c).length} colors)` : c.name}/>)}
             {extra > 0 && <span className="c-more">+{extra}</span>}
           </div>
           {/* Footer: SRP and Packing same font/size */}
@@ -6830,7 +6835,12 @@ ${message.trim()}` : 'Message / Notes:',
                         {activeInGroup && <span style={{fontSize:10,fontWeight:700,color:'var(--tl)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',minWidth:0}}>{activeInGroup.name}</span>}
                       </div>
                       <div style={{display:'flex',flexWrap:'nowrap',gap:12,alignItems:'center'}}>
-                        {group.colors.slice(0,4).map(clr => {
+                        {group.colors
+                          .filter((clr, idx, arr) => {
+                            const hex = getColorHexes(clr)[0] || ''
+                            return arr.findIndex(x => (getColorHexes(x)[0] || '') === hex) === idx
+                          })
+                          .slice(0,4).map(clr => {
                           const colorKey = getColorKey(clr)
                           const isActive = activeVmColorKey === colorKey
                           const hasLinkedImage = findImageIndexesForColor(vp, clr).length > 0
