@@ -187,14 +187,15 @@ const DEFAULT_EXTS = [
  
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
-.peso{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif!important}
+.peso{font-family:'Noto Sans',Arial,'Helvetica Neue',sans-serif!important}
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap');
 @font-face{font-family:'Satoshi';src:local('Helvetica Neue'),local('Arial'),local('Helvetica');unicode-range:U+20B1;font-weight:100 900;font-style:normal;}
 :root{
   --sf:#B9DCD2;--sf4:rgba(185,220,210,0.4);--sf7:rgba(185,220,210,0.7);
   --cy:#2DCCD3;--cy2:#25b5bb;--tl:#279989;--tl2:#1e8070;
   --gr:#63666A;--wh:#FFFFFF;--bk:#3A3A3A;--bg:#F7FAF9;
-  --fn:'Satoshi','Inter',-apple-system,sans-serif;
+  --fn:'Satoshi','Noto Sans','Inter',-apple-system,sans-serif;
   --r:10px;--rl:16px;--tr:.2s ease;
   --nh:60px;--sw:260px;
   --sh:0 2px 12px rgba(39,153,137,.08);
