@@ -6304,6 +6304,52 @@ ${message.trim()}` : 'Message / Notes:',
     )
   }
  
+
+  // ── EXPORT CATALOG ──
+  const exportCatalog = useCallback(() => {
+    const rows = [
+      ['SKU', 'Name', 'Extension', 'Category', 'Description', 'Badges', 'SRP', 'Packing', 'Colors', 'Color SKUs', 'Collections', 'Dimensions']
+    ]
+    products.forEach(p => {
+      const colorNames = (p.colors||[]).map(c=>c.name).join(' | ')
+      const colorSkus  = (p.colors||[]).map(c=>c.sku).join(' | ')
+      const collections = [...new Set((p.colors||[]).map(c=>c.collection||'Other'))].join(' | ')
+      const ext = exts.find(x=>x.value===p.ext)?.label || p.ext || ''
+      const cat = cats.find(x=>x.value===p.cat)?.label || p.cat || ''
+      // Dimensions: flatten headers + rows into readable text
+      let dimensionsStr = ''
+      if (p.dimensions?.headers?.some(h=>h.trim()) && p.dimensions?.rows?.length) {
+        const headers = p.dimensions.headers.filter(h=>h.trim())
+        const dimRows = p.dimensions.rows.map(row =>
+          headers.map((h,i) => `${h}: ${row[i]||''}`).join(', ')
+        ).join(' | ')
+        dimensionsStr = dimRows
+      }
+      rows.push([
+        p.id || '',
+        p.name || '',
+        ext,
+        cat,
+        (p.desc||'').replace(/,/g,' ').replace(/\n/g,' '),
+        (p.badges||[]).join(' | '),
+        p.srp || '',
+        p.packing || '',
+        colorNames,
+        colorSkus,
+        collections,
+        dimensionsStr,
+      ])
+    })
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `quencha-catalog-${new Date().toISOString().slice(0,10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [products, exts, cats])
+
   // ── PRODUCT CARD ──
   const Card = ({ p }) => {
     const mainImg = getImageSrc(p.images?.[0])
@@ -7867,6 +7913,7 @@ ${message.trim()}` : 'Message / Notes:',
           <div style={{display:'flex',gap:8}}>
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
+            <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ Export CSV</button>
             <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
             <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
           </div>
