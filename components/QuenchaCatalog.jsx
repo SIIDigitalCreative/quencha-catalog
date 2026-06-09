@@ -7531,7 +7531,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <label className="f-lbl">Brand Logo</label>
                 <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
                   <div style={{width:120,height:58,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.06em',flexShrink:0}}>
-                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8,background:'rgba(255,255,255,.08)'}}/> : 'NO LOGO'}
+                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8}}/> : 'NO LOGO'}
                   </div>
                   <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
                     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
