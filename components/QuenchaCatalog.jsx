@@ -5033,6 +5033,31 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   return html
 }
 
+
+// ─── INLINE ADD CATEGORY ──────────────────────────────────────────────────────
+function InlineAddCat({ onAdd }) {
+  const [adding, setAdding] = React.useState(false)
+  const [val, setVal] = React.useState('')
+  if (!adding) return (
+    <button type="button" onClick={()=>setAdding(true)}
+      style={{padding:'5px 12px',borderRadius:999,border:'1px dashed rgba(39,153,137,.4)',background:'transparent',color:'var(--tl)',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer'}}>
+      + New
+    </button>
+  )
+  return (
+    <div style={{display:'flex',gap:5,alignItems:'center'}}>
+      <input autoFocus value={val} onChange={e=>setVal(e.target.value)}
+        onKeyDown={e=>{if(e.key==='Enter'&&val.trim()){onAdd({label:val.trim()});setVal('');setAdding(false)}if(e.key==='Escape'){setAdding(false);setVal('')}}}
+        placeholder="Category name…"
+        style={{padding:'4px 10px',borderRadius:999,border:'1px solid var(--tl)',fontFamily:'var(--fn)',fontSize:11,outline:'none',width:130}}/>
+      <button type="button" onClick={()=>{if(val.trim()){onAdd({label:val.trim()});setVal('');setAdding(false)}}}
+        style={{padding:'4px 10px',borderRadius:999,background:'var(--tl)',color:'#fff',border:'none',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer'}}>Add</button>
+      <button type="button" onClick={()=>{setAdding(false);setVal('')}}
+        style={{padding:'4px 8px',borderRadius:999,background:'none',border:'none',color:'var(--gr)',cursor:'pointer',fontSize:13}}>✕</button>
+    </div>
+  )
+}
+
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
  
  
@@ -5196,7 +5221,8 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.catalogPrefs && typeof cleanedSettings.catalogPrefs === 'object') {
         const prefs = cleanedSettings.catalogPrefs
         if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
-        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
+        // Always start with All Categories selected
+        setFilterCat(null)
         if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
         if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
         if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
@@ -5222,7 +5248,7 @@ export default function QuenchaCatalog() {
  
   // ── FILTERS ──
   const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
-  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
+  const [filterCat, setFilterCat] = useState(null)
   const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
@@ -7341,6 +7367,14 @@ ${message.trim()}` : 'Message / Notes:',
                           </button>
                         })}
                         {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{padding:'5px 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
+                        <InlineAddCat onAdd={(newCat)=>{
+                          const val = newCat.label.toLowerCase().replace(/\s+/g,'-')
+                          const entry = {value:val,label:newCat.label,icon:''}
+                          const next = [...cats, entry]
+                          setCats(next)
+                          syncSettings({cats:next})
+                          setEf(f=>({...f,cat:[...(Array.isArray(f.cat)?f.cat:[]),val]}))
+                        }}/>
                       </div>
                     )}
                   </div>
