@@ -7061,9 +7061,6 @@ ${message.trim()}` : 'Message / Notes:',
                               onClick={()=>{
                                 setVmColorKey(isActive ? '' : colorKey)
                                 setVmImg(0)
-                                if (typeof window !== 'undefined' && window.innerWidth <= 700) {
-                                  setTimeout(() => vmImageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40)
-                                }
                               }}
                               title={clr.name}
                               style={{
