@@ -7530,8 +7530,8 @@ ${message.trim()}` : 'Message / Notes:',
               <div className="f-col">
                 <label className="f-lbl">Brand Logo</label>
                 <div style={{display:'flex',gap:14,alignItems:'center',background:'var(--bg)',border:'1px solid var(--sf7)',borderRadius:10,padding:14}}>
-                  <div style={{width:120,height:58,borderRadius:8,background:'var(--tl)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',color:'#fff',fontSize:12,fontWeight:900,letterSpacing:'.06em',flexShrink:0}}>
-                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain',padding:8}}/> : 'NO LOGO'}
+                  <div style={{width:120,height:58,borderRadius:8,overflow:'hidden',flexShrink:0,position:'relative',backgroundImage:'linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%)',backgroundSize:'12px 12px',backgroundPosition:'0 0,0 6px,6px -6px,-6px 0px',backgroundColor:'#fff',display:'flex',alignItems:'center',justifyContent:'center',color:'#999',fontSize:11,fontWeight:700}}>
+                    {brandLogo ? <img src={brandLogo} alt="Brand logo preview" style={{width:'100%',height:'100%',objectFit:'contain'}}/> : <span style={{fontSize:10,color:'#aaa'}}>NO LOGO</span>}
                   </div>
                   <div style={{display:'flex',flexDirection:'column',gap:8,flex:1}}>
                     <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
