@@ -5524,7 +5524,7 @@ ${message.trim()}` : 'Message / Notes:',
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
     setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'' })
+    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'',hideExtTag:p.hideExtTag||false,customTag:p.customTag||'',customTagColor:p.customTagColor||'#CB0033' })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
@@ -5561,7 +5561,7 @@ ${message.trim()}` : 'Message / Notes:',
       barcodeImage: ef.barcodeImage||'',
       qrCode: ef.qrCode||'',
       qrImage: ef.qrImage||'',
-      youtube: ef.youtube||''
+      youtube: ef.youtube||'', hideExtTag: ef.hideExtTag||false, customTag: ef.customTag||'', customTagColor: ef.customTagColor||'#CB0033'
     })
  
     try {
@@ -6388,7 +6388,8 @@ ${message.trim()}` : 'Message / Notes:',
         {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
  
         <div className="c-img-wrap">
-          {showExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
+          {showExtTag && !p.hideExtTag && <span className="c-etag" style={{background:extColor}}>{extEntry?.label||p.ext}</span>}
+          {p.customTag && <span className="c-etag" style={{background:p.customTagColor||'#CB0033',right:10,left:'auto'}}>{p.customTag}</span>}
           {mainImg ? <img src={mainImg} alt={p.name}/> : <span className="c-img-ph">📦</span>}
         </div>
  
@@ -7231,6 +7232,24 @@ ${message.trim()}` : 'Message / Notes:',
                       onClear={()=>setEf(f=>({...f,qrImage:''}))}
                     />
                   </div>
+                </div>
+                <div className="f-col">
+                  <label className="f-lbl">Card Tag (left) <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— extension badge</span></label>
+                  <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',padding:'6px 0'}}>
+                    <input type="checkbox" checked={ef.hideExtTag} onChange={e=>setEf(f=>({...f,hideExtTag:e.target.checked}))} style={{width:16,height:16,accentColor:'var(--tl)',cursor:'pointer'}}/>
+                    <span style={{fontSize:12,color:'rgba(58,58,58,.7)',fontFamily:'var(--fn)'}}>Hide extension tag on card</span>
+                  </label>
+                </div>
+                <div className="f-col">
+                  <label className="f-lbl">Custom Tag (right) <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
+                  <input className="f-in" value={ef.customTag} onChange={e=>setEf(f=>({...f,customTag:e.target.value}))} placeholder="e.g. NEW, SALE, HOT…" style={{marginBottom:6}}/>
+                  {ef.customTag && (
+                    <div style={{display:'flex',alignItems:'center',gap:8}}>
+                      <span style={{fontSize:11,color:'rgba(58,58,58,.6)',fontFamily:'var(--fn)'}}>Tag color:</span>
+                      <input type="color" value={ef.customTagColor||'#CB0033'} onChange={e=>setEf(f=>({...f,customTagColor:e.target.value}))} style={{width:32,height:28,border:'1px solid var(--sf7)',borderRadius:4,cursor:'pointer',padding:2}}/>
+                      <span style={{fontSize:11,fontWeight:700,padding:'2px 8px',borderRadius:999,background:ef.customTagColor||'#CB0033',color:'#fff',fontFamily:'var(--fn)',letterSpacing:'.06em',textTransform:'uppercase'}}>{ef.customTag}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="f-col">
                   <label className="f-lbl">YouTube Video <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--gr)'}}>— optional</span></label>
