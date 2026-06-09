@@ -5202,7 +5202,6 @@ export default function QuenchaCatalog() {
       if (Array.isArray(cleanedSettings.cats) && cleanedSettings.cats.length) setCats(cleanedSettings.cats)
       if (Array.isArray(cleanedSettings.exts) && cleanedSettings.exts.length) setExts(cleanedSettings.exts)
       if (Array.isArray(cleanedSettings.savedCustomTags))      setSavedCustomTags(cleanedSettings.savedCustomTags)
-      setShowQuenchables(cleanedSettings.showQuenchables !== undefined ? cleanedSettings.showQuenchables : true)
       if (Array.isArray(cleanedSettings.colorCollections)) {
         setColorCollections(cleanedSettings.colorCollections)
       } else if (typeof window !== 'undefined') {
@@ -5268,12 +5267,17 @@ export default function QuenchaCatalog() {
   const vmImageRef = useRef(null)
   const touchImageDragIndexRef = useRef(null)
  
+  const syncSettings = useCallback((patch) => {
+    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
+  }, [])
+
   // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
   // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
  
   // ── AUTH — once unlocked, stays for session ──
   const [isAuthed, setIsAuthed] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState(new Set())
  
   // Password modal
   const [pwOpen, setPwOpen] = useState(false)
@@ -5291,7 +5295,6 @@ export default function QuenchaCatalog() {
   const [banners, setBanners] = useState([])
   const [bannerAspect, setBannerAspect] = useState('custom')
   const [bannerEditOpen, setBannerEditOpen] = useState(false)
-  const [showQuenchables, setShowQuenchables] = useState(null)
   const [heroVideoUrl, setHeroVideoUrl] = useState('')
   const [heroVideoThumbnail, setHeroVideoThumbnail] = useState('')
   const [heroMediaOrder, setHeroMediaOrder] = useState('banner-video')
@@ -5302,74 +5305,7 @@ export default function QuenchaCatalog() {
   const [brandEditOpen, setBrandEditOpen] = useState(false)
   const [brandUploadErr, setBrandUploadErr] = useState('')
  
-  // Quenchables builder
-  const [quenchOpen, setQuenchOpen] = useState(false)
-  const [quenchStep, setQuenchStep] = useState('collection')
-  const [quenchCollection, setQuenchCollection] = useState('Horizon')
-  const [quenchCat, setQuenchCat] = useState('sip')
-  const [quenchItems, setQuenchItems] = useState([])
-  const [quenchQty, setQuenchQty] = useState({})
-  const [quenchColor, setQuenchColor] = useState({})
-  const [quenchMessage, setQuenchMessage] = useState('')
- 
- 
-  const syncSettings = useCallback((patch) => {
-    fetch('/api/settings', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(patch) }).catch(console.error)
-  }, [])
- 
-  const focusSearchResults = useCallback(() => {
-    window.requestAnimationFrame(() => {
-      const target = resultsRef.current
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
-  }, [])
- 
-  const runSearch = useCallback(() => {
-    if (!search.trim()) {
-      searchInputRef.current?.focus()
-      return
-    }
-    focusSearchResults()
-  }, [search, focusSearchResults])
- 
-  const saveCatalogView = useCallback((nextView) => {
-    setView(nextView)
-    if (!catalogPrefsHydrated) return
-    const catalogPrefs = {
-      filterExt,
-      filterCat,
-      filterColorCollection,
-      filterPMin,
-      filterPMax,
-      sort,
-      view: nextView,
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
-    }
-    syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, sort, syncSettings])
- 
-  const saveCatalogSort = useCallback((nextSort) => {
-    setSort(nextSort)
-    if (!catalogPrefsHydrated) return
-    const catalogPrefs = {
-      filterExt,
-      filterCat,
-      filterColorCollection,
-      filterPMin,
-      filterPMax,
-      sort: nextSort,
-      view,
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CATALOG_PREFS_KEY, JSON.stringify(catalogPrefs))
-    }
-    syncSettings({ catalogPrefs })
-  }, [catalogPrefsHydrated, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, view, syncSettings])
- 
+
   // Autosave selected filters, sort, and view layout to shared settings so desktop/mobile stay in sync.
   useEffect(() => {
     if (!catalogPrefsHydrated) return
@@ -5414,7 +5350,6 @@ export default function QuenchaCatalog() {
   const [heroSub, setHeroSub] = useState('Complete product lineup — drinkware, lunch essentials, bags, accessories, kids, pets & tech.')
   const saveHeroTitle = useCallback((v) => { setHeroTitle(v); syncSettings({ heroTitle: v }) }, [syncSettings])
   const saveHeroSub = useCallback((v) => { setHeroSub(v); syncSettings({ heroSub: v }) }, [syncSettings])
-  const toggleQuenchables = useCallback((v) => { setShowQuenchables(v); syncSettings({ showQuenchables: v }) }, [syncSettings])
   const saveCustomTag = useCallback((tag) => {
     setSavedCustomTags(prev => {
       if (prev.some(t => t.label === tag.label && t.color === tag.color)) return prev
@@ -5624,15 +5559,7 @@ ${message.trim()}` : 'Message / Notes:',
   const [inqMessage, setInqMessage] = useState('')
   const [codeLightbox, setCodeLightbox] = useState(null) // {src, label}
  
-  const openInquiry = useCallback((product = null) => {
-    const firstColorCode = product?.colors?.[0]?.code || ''
-    setInqProduct(product)
-    setInqLines([{ colorCode: firstColorCode, packs: '1' }])
-    setInqMessage('')
-    setInqOpen(true)
-  }, [])
- 
-  // Edit form
+
   const [ef, setEf] = useState({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[] })
   const [editTab, setEditTab] = useState('details')
   const [badgeInput, setBadgeInput] = useState('')
@@ -6229,112 +6156,9 @@ ${message.trim()}` : 'Message / Notes:',
  
  
  
-  // ── QUENCHABLES BUILDER ──
-  const quenchCollectionMeta = useMemo(() => {
-    return colorCollections.find(c => c.value === quenchCollection) || DEFAULT_COLOR_COLLECTIONS.find(c => c.value === quenchCollection) || { value: quenchCollection, label: quenchCollection, color: 'var(--tl)' }
-  }, [colorCollections, quenchCollection])
- 
-  const getQuenchColors = useCallback((product, collection = quenchCollection) => {
-    return (product?.colors || []).filter(color => defaultColorCollection(color) === collection)
-  }, [quenchCollection])
- 
-  const quenchAvailableColors = useMemo(() => {
-    return colorCollectionSets?.[quenchCollection] || []
-  }, [colorCollectionSets, quenchCollection])
- 
-  const quenchProducts = useMemo(() => {
-    return products.filter(product => getQuenchColors(product).length > 0)
-  }, [products, getQuenchColors])
- 
-  const quenchProductsByCat = useMemo(() => {
-    return quenchProducts.filter(product => { const pCats=Array.isArray(product.cat)?product.cat:(product.cat?[product.cat]:[]); return pCats.includes(quenchCat) })
-  }, [quenchProducts, quenchCat])
- 
-  const quenchTotals = useMemo(() => {
-    const totalPacks = quenchItems.reduce((sum, item) => sum + Number(item.packs || 0), 0)
-    const totalUnits = quenchItems.reduce((sum, item) => sum + Number(item.units || 0), 0)
-    const totalSrp = quenchItems.reduce((sum, item) => sum + (Number(item.srp || 0) * Number(item.units || 0)), 0)
-    return { totalPacks, totalUnits, totalSrp }
-  }, [quenchItems])
- 
-  const selectedQuenchSkuSet = useMemo(() => {
-    return new Set(quenchItems.map(item => item.sku).filter(Boolean))
-  }, [quenchItems])
- 
-  const startQuenchables = useCallback((collection = quenchCollection) => {
-    setQuenchCollection(collection)
-    setQuenchStep('collection')
-    setQuenchOpen(true)
-  }, [quenchCollection])
- 
-  const addQuenchItem = useCallback((product) => {
-    const colors = getQuenchColors(product)
-    if (!colors.length) return
-    const selectedSku = quenchColor[product.id] || colors[0].sku
-    const selectedColor = colors.find(c => c.sku === selectedSku) || colors[0]
-    const packs = Math.max(1, Number(quenchQty[product.id] || 1))
-    const packing = Number(product.packing || 1)
-    const units = packs * packing
- 
-    setQuenchItems(items => {
-      const alreadySelected = items.some(item => item.sku === selectedColor.sku)
-      if (alreadySelected) return items
-      return [
-        ...items,
-        {
-          id: `${product.id}-${selectedColor.sku}-${Date.now()}`,
-          productId: product.id,
-          productName: product.name,
-          colorName: selectedColor.name,
-          colorCode: selectedColor.code,
-          sku: selectedColor.sku,
-          packs,
-          packing,
-          units,
-          srp: Number(product.srp || 0),
-        }
-      ]
-    })
-    setQuenchStep('review')
-  }, [getQuenchColors, quenchColor, quenchQty])
- 
-  const removeQuenchItem = useCallback((id) => {
-    setQuenchItems(items => items.filter(item => item.id !== id))
-  }, [])
- 
-  const buildQuenchablesHref = useCallback(() => {
-    const collectionLabel = quenchCollectionMeta.label || quenchCollection
-    const subject = `Quenchables Inquiry - ${collectionLabel} Set`
-    const lines = [
-      'Hi Quencha Team,',
-      '',
-      'I would like to inquire about this Quenchables set:',
-      '',
-      `Collection: ${collectionLabel}`,
-      '',
-      'Items:',
-      ...quenchItems.flatMap((item, index) => [
-        `${index + 1}. ${item.productName}`,
-        `   Color: ${item.colorName}`,
-        `   SKU: ${item.sku}`,
-        `   Packs/Cartons: ${item.packs}`,
-        `   Packing: ${item.packing} pcs/carton`,
-        `   Estimated Units: ${item.units} pcs`,
-        `   SRP: ₱${Number(item.srp || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
-        '',
-      ]),
-      `Total Packs/Cartons: ${quenchTotals.totalPacks}`,
-      `Estimated Total Units: ${quenchTotals.totalUnits} pcs`,
-      `Estimated SRP Total: ₱${quenchTotals.totalSrp.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
-      '',
-      quenchMessage ? `Notes: ${quenchMessage}` : 'Notes:',
-      '',
-      'Thank you.'
-    ]
-    return `mailto:design@sunbeamsimpexinc.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
-  }, [quenchCollection, quenchCollectionMeta, quenchItems, quenchMessage, quenchTotals])
- 
-  // ── FILTERED ──
+
+
+
   const filtered = useMemo(() => {
     let list = products.map((p, index) => ({
       ...p,
@@ -6466,6 +6290,17 @@ ${message.trim()}` : 'Message / Notes:',
   }
  
 
+
+  const batchSetHidden = useCallback(async (hidden) => {
+    const ids = [...selectedIds]
+    if (!ids.length) return
+    await Promise.all(ids.map(id => {
+      const p = products.find(x => x.id === id)
+      if (p) return apiSaveProduct(id, { ...p, hidden })
+    }))
+    setSelectedIds(new Set())
+  }, [selectedIds, products, apiSaveProduct])
+
   // ── EXPORT CATALOG ──
   const exportCatalog = useCallback(() => {
     const rows = [
@@ -6573,6 +6408,12 @@ ${message.trim()}` : 'Message / Notes:',
         onDragEnd={() => setDragProductId(null)}
         onClick={editMode ? undefined : () => openProductModal(p)}
       >
+        {editMode && (
+          <span onClick={e=>{e.stopPropagation();setSelectedIds(prev=>{const n=new Set(prev);n.has(p.id)?n.delete(p.id):n.add(p.id);return n})}}
+            style={{position:'absolute',top:8,right:8,zIndex:10,width:22,height:22,borderRadius:4,border:selectedIds.has(p.id)?'2px solid var(--tl)':'2px solid rgba(185,220,210,.6)',background:selectedIds.has(p.id)?'var(--tl)':'#fff',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,color:'#fff',boxShadow:'0 1px 4px rgba(0,0,0,.15)'}}>
+            {selectedIds.has(p.id)?'✓':''}
+          </span>
+        )}
         {editMode && sort === 'default' && <span className="c-drag-handle" title="Drag to rearrange">↕ Drag</span>}
  
         <div className="c-img-wrap">
@@ -6715,41 +6556,7 @@ ${message.trim()}` : 'Message / Notes:',
               }
             }}
           />
- 
- 
- 
-          {/* Quenchables toggle — edit mode only */}
-          {editMode && (
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 16px',background:'rgba(245,158,11,.07)',border:'1px solid rgba(245,158,11,.3)',borderRadius:10,marginBottom:8}}>
-              <span style={{fontFamily:'var(--fn)',fontSize:13,fontWeight:700,color:'#92400e'}}>Build Your Quenchables section</span>
-              <button
-                onClick={()=>toggleQuenchables(!showQuenchables)}
-                style={{fontFamily:'var(--fn)',fontSize:12,fontWeight:700,padding:'6px 14px',borderRadius:999,border:'none',background:showQuenchables?'var(--tl)':'rgba(0,0,0,.1)',color:showQuenchables?'#fff':'#666',cursor:'pointer',transition:'var(--tr)'}}
-              >{showQuenchables ? '✓ Visible' : '✕ Hidden'}</button>
-            </div>
-          )}
-          {/* Quenchables Builder Entry */}
-          {showQuenchables === true && <section className="quench-hero">
-            <div>
-              <div className="quench-eyebrow">Shop the Set</div>
-              <h2 className="quench-title">Build Your Quenchables</h2>
-              <p className="quench-sub">Mix, match, and create your Quencha combo by collection. Choose your tumbler, lunch essentials, bags, and accessories in one set.</p>
-              <div className="quench-actions">
-                <button className="quench-start" onClick={()=>startQuenchables('Horizon')}>Start Building →</button>
-                <div className="quench-mini-collections">
-                  {colorCollections.map(col => (
-                    <button key={col.value} className="quench-chip" onClick={()=>startQuenchables(col.value)}>{col.label}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="quench-visual" aria-hidden="true">
-              {(colorCollectionSets?.Horizon || DEFAULT_COLOR_COLLECTION_SETS.Horizon).slice(0,4).map(c => (
-                <span key={c.code} className="quench-visual-dot" style={{background:swatchBackground(c)}} />
-              ))}
-            </div>
-          </section>}
- 
+
           {/* Toolbar */}
           <div id="catalog-results" className="toolbar" ref={resultsRef}>
             <span className="res-label">Showing <strong>{filtered.length}</strong>{filtered.length!==products.length?` of ${products.length}`:''} products</span>
@@ -6835,159 +6642,7 @@ ${message.trim()}` : 'Message / Notes:',
  
  
       {/* QUENCHABLES BUILDER MODAL */}
-      {quenchOpen && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setQuenchOpen(false)}}>
-          <div className="modal quench-modal">
-            <div className="m-hdr quench-head">
-              <div>
-                <div className="quench-eyebrow">Quenchables</div>
-                <div style={{fontSize:22,fontWeight:900,color:'var(--tl)',lineHeight:1.15}}>Build Your Quencha Combo</div>
-                <div className="quench-progress">
-                  {[['collection','Collection'],['products','Products'],['review','Review'],['inquiry','Inquiry']].map(([key,label], index)=>{
-                    const disabled = key === 'inquiry' && !quenchItems.length
-                    return (
-                      <button type="button" key={key} disabled={disabled} onClick={()=>{ if(!disabled) setQuenchStep(key) }} className={`quench-step ${quenchStep===key?'on':''}`} aria-label={`Go to ${label} step`}>
-                        <span className="quench-step-dot">{index+1}</span>{label}
-                      </button>
-                    )
-                  })}
-                </div>
-                {quenchStep !== 'collection' && (
-                  <button type="button" className="quench-back" onClick={()=>setQuenchStep(quenchStep==='inquiry'?'review':quenchStep==='review'?'products':'collection')}>← Back</button>
-                )}
-              </div>
-              <button className="m-close" onClick={()=>setQuenchOpen(false)}>✕</button>
-            </div>
-            <div className="m-body">
-              <div className={`quench-body ${['review','inquiry'].includes(quenchStep) ? 'no-side' : ''}`}>
-                <aside className="quench-side">
-                  <div className="quench-side-title">Choose Collection</div>
-                  {colorCollections.map(col => {
-                    const setCount = (colorCollectionSets?.[col.value] || []).length
-                    return (
-                      <button key={col.value} className={`quench-collection-btn ${quenchCollection===col.value?'on':''}`} onClick={()=>{setQuenchCollection(col.value);setQuenchStep('collection')}}>
-                        <span className="quench-collection-dot" style={{background:col.color}} />
-                        <span>
-                          <span className="quench-collection-name">{col.label}</span>
-                          <span className="quench-collection-sub">{setCount} color{setCount===1?'':'s'} available</span>
-                        </span>
-                      </button>
-                    )
-                  })}
-                  <div className="quench-set">
-                    <div className="quench-set-title">Your Set</div>
-                    {quenchItems.length ? quenchItems.slice(0,3).map(item=>(
-                      <div key={item.id} className="quench-set-item">
-                        <div>
-                          <div className="quench-set-name">{item.productName}</div>
-                          <div className="quench-set-meta">{item.colorName} · {item.packs} pack{item.packs===1?'':'s'} · {item.units} pcs</div>
-                        </div>
-                      </div>
-                    )) : <div className="quench-empty">No items added yet.</div>}
-                    {quenchItems.length > 3 && <div className="quench-set-meta">+ {quenchItems.length - 3} more item{quenchItems.length - 3 === 1 ? '' : 's'}</div>}
-                  </div>
-                </aside>
-                <div className="quench-main">
-                  {quenchStep === 'collection' && (
-                    <>
-                      <div className="quench-feature-card">
-                        <div>
-                          <div className="quench-feature-title">{quenchCollectionMeta.label} Collection</div>
-                          <div className="quench-feature-sub">Start with a collection vibe, then build a matching set across drinkware, lunch, bags, and accessories.</div>
-                          <div className="quench-color-row">
-                            {quenchAvailableColors.map(color=><span key={color.code} className="quench-color-dot" title={color.name} style={{background:swatchBackground(color)}} />)}
-                          </div>
-                        </div>
-                        <button className="quench-next" onClick={()=>setQuenchStep('products')}>Next: Choose Products →</button>
-                      </div>
-                    </>
-                  )}
-                  {quenchStep === 'products' && (
-                    <>
-                      <div className="quench-tabs">
-                        {cats.map(cat=>(
-                          <button key={cat.value} className={`quench-tab ${quenchCat===cat.value?'on':''}`} onClick={()=>setQuenchCat(cat.value)}>{cat.icon} {cat.label}</button>
-                        ))}
-                      </div>
-                      {quenchProductsByCat.length ? (
-                        <div className="quench-product-grid">
-                          {quenchProductsByCat.map(product => {
-                            const colors = getQuenchColors(product)
-                            const selectedSku = quenchColor[product.id] || colors[0]?.sku || ''
-                            const selectedColor = colors.find(c=>c.sku===selectedSku) || colors[0]
-                            const qty = Math.max(1, Number(quenchQty[product.id] || 1))
-                            const mainImg = getImageSrc(normalizeProductImages(product.images || [])[0])
-                            const alreadyInSet = selectedQuenchSkuSet.has(selectedSku)
-                            return (
-                              <div key={product.id} className={`quench-product ${alreadyInSet ? 'already-selected' : ''}`}>
-                                <div className="quench-prod-top">
-                                  {mainImg ? <img className="quench-prod-img" src={mainImg} alt=""/> : <div className="quench-prod-img"/>}
-                                  <div>
-                                    <div className="quench-prod-name">{product.name}</div>
-                                    <div className="quench-prod-meta">₱{Number(product.srp || 0).toLocaleString('en-PH',{minimumFractionDigits:2})} · {product.packing} pcs/pack</div>
-                                  </div>
-                                </div>
-                                <div className="quench-form-row">
-                                  <select className="quench-select" value={selectedSku} onChange={e=>setQuenchColor(prev=>({...prev,[product.id]:e.target.value}))}>
-                                    {colors.map(color=><option key={color.sku} value={color.sku}>{color.name} · {color.sku}</option>)}
-                                  </select>
-                                  <input className="quench-input" type="number" min="1" value={qty} onChange={e=>setQuenchQty(prev=>({...prev,[product.id]:e.target.value}))} />
-                                </div>
-                                <div className="quench-set-meta">Selected: {selectedColor?.name} · Estimated units: {qty * Number(product.packing || 1)} pcs</div>
-                                {alreadyInSet && <div className="quench-selected-pill">✓ Already in set</div>}
-                                <button className="quench-add" disabled={alreadyInSet} onClick={()=>addQuenchItem(product)}>{alreadyInSet ? 'Already Selected' : 'Add to Quenchables'}</button>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      ) : <div className="quench-empty">No products in this category have {quenchCollectionMeta.label} colors yet.</div>}
-                      <button className="quench-next" onClick={()=>setQuenchStep('review')}>Review Set →</button>
-                    </>
-                  )}
-                  {quenchStep === 'review' && (
-                    <>
-                      <div className="quench-set">
-                        <div className="quench-set-title">Your Quenchables Set</div>
-                        {quenchItems.length ? quenchItems.map(item=>(
-                          <div key={item.id} className="quench-set-item">
-                            <div>
-                              <div className="quench-set-name">{item.productName}</div>
-                              <div className="quench-set-meta">Color: {item.colorName}<br/>SKU: {item.sku}<br/>Packs/Cartons: {item.packs} · Packing: {item.packing} pcs · Units: {item.units} pcs</div>
-                            </div>
-                            <button className="quench-remove" onClick={()=>removeQuenchItem(item.id)}>Remove</button>
-                          </div>
-                        )) : <div className="quench-empty">Add products first to build your Quenchables set.</div>}
-                      </div>
-                      <div className="quench-summary">
-                        <div className="quench-total"><div className="quench-total-val">{quenchItems.length}</div><div className="quench-total-lbl">Items</div></div>
-                        <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalPacks}</div><div className="quench-total-lbl">Packs</div></div>
-                        <div className="quench-total"><div className="quench-total-val">{quenchTotals.totalUnits}</div><div className="quench-total-lbl">Units</div></div>
-                      </div>
-                      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-                        <button className="quench-tab" onClick={()=>setQuenchStep('products')}>+ Add More Products</button>
-                        <button className="quench-next" disabled={!quenchItems.length} onClick={()=>setQuenchStep('inquiry')}>Continue to Inquiry →</button>
-                      </div>
-                    </>
-                  )}
-                  {quenchStep === 'inquiry' && (
-                    <>
-                      <div className="quench-feature-card">
-                        <div>
-                          <div className="quench-feature-title">Send Quenchables Inquiry</div>
-                          <div className="quench-feature-sub">Your email app will open with your selected Quenchables set, SKUs, quantities, packing, and notes.</div>
-                        </div>
-                      </div>
-                      <textarea className="quench-note" value={quenchMessage} onChange={e=>setQuenchMessage(e.target.value)} placeholder="Add notes, target colors, delivery questions, or customer details…" />
-                      <a className="quench-send" href={buildQuenchablesHref()} onClick={e=>{ if(!quenchItems.length) e.preventDefault() }}>📩 Send Quenchables Inquiry</a>
-                      <button className="quench-tab" onClick={()=>setQuenchStep('review')}>← Back to Review</button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
  
       {/* PASSWORD MODAL */}
       {pwOpen && (
@@ -7274,7 +6929,7 @@ ${message.trim()}` : 'Message / Notes:',
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
                   {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
                 </button>
-                <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal(); openInquiry(product) }}>📩 Bulk Inquiry</button>
+                <button className="vm-inq-btn" onClick={()=>{ const product = vp; closeProductModal() }}>📩 Bulk Inquiry</button>
               </div>
             </div>
           </div>
@@ -8168,6 +7823,12 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
             <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Print All</button>
+            {selectedIds.size > 0 && <>
+              <span style={{fontSize:11,color:'rgba(255,255,255,.5)'}}>{selectedIds.size} selected</span>
+              <button className="eb-add" onClick={()=>batchSetHidden(true)} style={{background:'#6b7280'}}>Hide Selected</button>
+              <button className="eb-add" onClick={()=>batchSetHidden(false)} style={{background:'#10b981'}}>Unhide Selected</button>
+              <button className="eb-add" onClick={()=>setSelectedIds(new Set())} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Deselect</button>
+            </>}
             <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
             <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
           </div>
