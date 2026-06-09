@@ -5272,6 +5272,28 @@ export default function QuenchaCatalog() {
   }, [])
 
   // Catalog preferences are autosaved to /api/settings after syncSettings is defined below.
+
+  const focusSearchResults = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      const target = resultsRef.current
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }, [])
+
+  const runSearch = useCallback(() => {
+    if (!search.trim()) { searchInputRef.current?.focus(); return }
+    if (typeof window !== 'undefined' && window.innerWidth <= 700) focusSearchResults()
+  }, [search, focusSearchResults])
+
+  const saveCatalogSort = useCallback((nextSort) => {
+    setSort(nextSort)
+  }, [])
+
+  const saveCatalogView = useCallback((nextView) => {
+    setView(nextView)
+  }, [])
+
+
   // Search text is intentionally not saved so users do not return to a hidden/filtered search state.
  
   // ── AUTH — once unlocked, stays for session ──
