@@ -4859,51 +4859,46 @@ function DimensionsEditor({ value, onChange }) {
 }
  
 // ─── LOGO IMAGE PROCESSOR ────────────────────────────────────────────────────
-// Compresses PNG and removes white/near-white background automatically
-function processLogoImage(file, maxWidth = 600, maxHeight = 300) {
+// Detects opaque white background and removes it; preserves existing transparency
+function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
   return new Promise((resolve, reject) => {
     if (file.type === 'image/svg+xml') { resolve(file); return }
     const img = new Image()
     const objectUrl = URL.createObjectURL(file)
     img.onload = () => {
       URL.revokeObjectURL(objectUrl)
-      let w = img.naturalWidth
-      let h = img.naturalHeight
+      let w = img.naturalWidth, h = img.naturalHeight
       if (w > maxWidth || h > maxHeight) {
         const ratio = Math.min(maxWidth / w, maxHeight / h)
-        w = Math.round(w * ratio)
-        h = Math.round(h * ratio)
+        w = Math.round(w * ratio); h = Math.round(h * ratio)
       }
       const canvas = document.createElement('canvas')
-      canvas.width = w
-      canvas.height = h
+      canvas.width = w; canvas.height = h
       const ctx = canvas.getContext('2d')
       ctx.clearRect(0, 0, w, h)
       ctx.drawImage(img, 0, 0, w, h)
 
-      // Remove white/near-white background
       const imageData = ctx.getImageData(0, 0, w, h)
       const data = imageData.data
-      // Sample corner pixels to detect background color
-      const corners = [
-        [data[0], data[1], data[2]], // top-left
-        [data[(w-1)*4], data[(w-1)*4+1], data[(w-1)*4+2]], // top-right
-        [data[(h-1)*w*4], data[(h-1)*w*4+1], data[(h-1)*w*4+2]], // bottom-left
-      ]
-      const isNearWhite = ([r,g,b]) => r > 230 && g > 230 && b > 230
-      const bgIsWhite = corners.filter(isNearWhite).length >= 2
-      if (bgIsWhite) {
+
+      // Check if image has ANY transparent pixels
+      let hasTransparency = false
+      for (let i = 3; i < data.length; i += 4) {
+        if (data[i] < 255) { hasTransparency = true; break }
+      }
+
+      // No transparency = opaque file (white background baked in) → remove it
+      if (!hasTransparency) {
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i], g = data[i+1], b = data[i+2]
-          if (r > 230 && g > 230 && b > 230) {
-            // Feather the edge: partial transparency based on how white it is
-            const whiteness = Math.min(r, g, b)
-            const alpha = Math.round((255 - whiteness) * 2.5)
-            data[i+3] = Math.min(255, Math.max(0, alpha))
+          if (r > 220 && g > 220 && b > 220) {
+            const brightness = (r + g + b) / 3
+            data[i+3] = Math.max(0, Math.round((255 - brightness) * 3))
           }
         }
         ctx.putImageData(imageData, 0, 0)
       }
+      // Has transparency = already transparent → keep as-is
 
       canvas.toBlob(
         (blob) => {
