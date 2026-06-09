@@ -4859,19 +4859,14 @@ function DimensionsEditor({ value, onChange }) {
 }
  
 // ─── LOGO IMAGE PROCESSOR ────────────────────────────────────────────────────
-// Compresses PNG/image while preserving transparency
-function processLogoImage(file, maxWidth = 400, maxHeight = 200) {
+// Compresses PNG and removes white/near-white background automatically
+function processLogoImage(file, maxWidth = 600, maxHeight = 300) {
   return new Promise((resolve, reject) => {
-    // SVG — no processing needed
-    if (file.type === 'image/svg+xml') {
-      resolve(file)
-      return
-    }
+    if (file.type === 'image/svg+xml') { resolve(file); return }
     const img = new Image()
     const objectUrl = URL.createObjectURL(file)
     img.onload = () => {
       URL.revokeObjectURL(objectUrl)
-      // Calculate scaled dimensions
       let w = img.naturalWidth
       let h = img.naturalHeight
       if (w > maxWidth || h > maxHeight) {
@@ -4883,14 +4878,37 @@ function processLogoImage(file, maxWidth = 400, maxHeight = 200) {
       canvas.width = w
       canvas.height = h
       const ctx = canvas.getContext('2d')
-      // Clear with transparency (NOT white fill) to preserve PNG alpha
       ctx.clearRect(0, 0, w, h)
       ctx.drawImage(img, 0, 0, w, h)
-      // Always export as PNG to keep transparency
+
+      // Remove white/near-white background
+      const imageData = ctx.getImageData(0, 0, w, h)
+      const data = imageData.data
+      // Sample corner pixels to detect background color
+      const corners = [
+        [data[0], data[1], data[2]], // top-left
+        [data[(w-1)*4], data[(w-1)*4+1], data[(w-1)*4+2]], // top-right
+        [data[(h-1)*w*4], data[(h-1)*w*4+1], data[(h-1)*w*4+2]], // bottom-left
+      ]
+      const isNearWhite = ([r,g,b]) => r > 230 && g > 230 && b > 230
+      const bgIsWhite = corners.filter(isNearWhite).length >= 2
+      if (bgIsWhite) {
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i+1], b = data[i+2]
+          if (r > 230 && g > 230 && b > 230) {
+            // Feather the edge: partial transparency based on how white it is
+            const whiteness = Math.min(r, g, b)
+            const alpha = Math.round((255 - whiteness) * 2.5)
+            data[i+3] = Math.min(255, Math.max(0, alpha))
+          }
+        }
+        ctx.putImageData(imageData, 0, 0)
+      }
+
       canvas.toBlob(
         (blob) => {
           if (!blob) { reject(new Error('Canvas export failed')); return }
-          resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.png'), { type: 'image/png' }))
+          resolve(new File([blob], 'logo.png', { type: 'image/png' }))
         },
         'image/png'
       )
