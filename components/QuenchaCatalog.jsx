@@ -4887,18 +4887,45 @@ function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
         if (data[i] < 255) { hasTransparency = true; break }
       }
 
-      // No transparency = opaque file (white background baked in) → remove it
       if (!hasTransparency) {
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i], g = data[i+1], b = data[i+2]
-          if (r > 220 && g > 220 && b > 220) {
-            const brightness = (r + g + b) / 3
-            data[i+3] = Math.max(0, Math.round((255 - brightness) * 3))
-          }
+        // Detect background color from corners
+        const sampleCorner = (x, y) => {
+          const idx = (y * w + x) * 4
+          return [data[idx], data[idx+1], data[idx+2]]
         }
-        ctx.putImageData(imageData, 0, 0)
+        const corners = [
+          sampleCorner(0, 0), sampleCorner(w-1, 0),
+          sampleCorner(0, h-1), sampleCorner(w-1, h-1)
+        ]
+        const avgR = corners.reduce((s,c) => s+c[0], 0) / 4
+        const avgG = corners.reduce((s,c) => s+c[1], 0) / 4
+        const avgB = corners.reduce((s,c) => s+c[2], 0) / 4
+        const isBlackBg = avgR < 40 && avgG < 40 && avgB < 40
+        const isWhiteBg = avgR > 215 && avgG > 215 && avgB > 215
+
+        if (isBlackBg) {
+          // Remove black/near-black background
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2]
+            if (r < 40 && g < 40 && b < 40) {
+              const darkness = 255 - Math.max(r, g, b)
+              data[i+3] = Math.max(0, Math.round((255 - darkness) * 3))
+            }
+          }
+          ctx.putImageData(imageData, 0, 0)
+        } else if (isWhiteBg) {
+          // Remove white/near-white background
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2]
+            if (r > 215 && g > 215 && b > 215) {
+              const brightness = (r + g + b) / 3
+              data[i+3] = Math.max(0, Math.round((255 - brightness) * 3))
+            }
+          }
+          ctx.putImageData(imageData, 0, 0)
+        }
       }
-      // Has transparency = already transparent → keep as-is
+      // Has transparency = already good → keep as-is
 
       canvas.toBlob(
         (blob) => {
@@ -5440,12 +5467,14 @@ ${message.trim()}` : 'Message / Notes:',
       e.target.value = ''
       return
     }
-    setBrandUploadErr('Processing logo...')
+    setBrandUploadErr('Uploading logo...')
     try {
-      // Process: compress + preserve PNG transparency
-      const processedFile = await processLogoImage(file)
-      setBrandUploadErr('Uploading logo...')
-      const url = await uploadImageToBlob(processedFile)
+      // PNG: upload directly — canvas processing can destroy transparency
+      // JPEG/WebP: process through canvas to convert to transparent PNG
+      const fileToUpload = file.type === 'image/png' || file.type === 'image/svg+xml'
+        ? file
+        : await processLogoImage(file)
+      const url = await uploadImageToBlob(fileToUpload)
       saveBrandLogo(url)
       setBrandUploadErr('')
     } catch (err) {
