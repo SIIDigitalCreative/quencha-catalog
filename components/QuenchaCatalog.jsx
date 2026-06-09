@@ -6469,6 +6469,108 @@ ${message.trim()}` : 'Message / Notes:',
     URL.revokeObjectURL(url)
   }, [products, exts, cats])
 
+
+  // ── PRINT ALL PRODUCTS ──
+  const printAllProducts = useCallback(() => {
+    const sheets = filtered.map((p, idx) => {
+      const mainImg = getImageSrc(p.images?.[0])
+      const images = (p.images || []).slice(0,4).map(getImageSrc).filter(Boolean)
+      const skuBase = getProductSkuBase(p)
+      const colorRows = (p.colors || []).map(clr => {
+        const hexes = getColorHexes(clr)
+        const swatch = hexes.length === 1
+          ? `background:${hexes[0]}`
+          : `background:linear-gradient(to right,${hexes.join(',')})`
+        return `<tr>
+          <td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
+          <td style="font-family:monospace;color:#279989">${clr.sku||''}</td>
+          <td>${clr.barcode||'—'}</td>
+        </tr>`
+      }).join('')
+      const dimHeaders = p.dimensions?.headers?.filter(h=>h.trim()) || []
+      const dimRows = p.dimensions?.rows || []
+      const hasDims = dimHeaders.length > 0 && dimRows.length > 0
+      const dimTable = hasDims ? `
+        <div class="section-title">Dimensions</div>
+        <table class="info-table">
+          <thead><tr>${dimHeaders.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>${dimRows.map(row=>`<tr>${dimHeaders.map((_,i)=>`<td>${row[i]||''}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>` : ''
+      const thumbs = images.slice(1).map(src =>
+        `<img src="${src}" style="width:72px;height:72px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9">`
+      ).join('')
+      const pageBreak = idx < filtered.length - 1 ? 'page-break-after:always' : ''
+      return `<div style="${pageBreak};padding:24px 32px">
+        <div class="header">
+          ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
+          <span class="brand">Product Catalog Sheet</span>
+        </div>
+        <div class="layout">
+          <div>
+            ${mainImg ? `<img src="${mainImg}" class="main-img" alt="${p.name}">` : '<div class="main-ph">📦</div>'}
+            ${thumbs ? `<div class="thumbs">${thumbs}</div>` : ''}
+          </div>
+          <div>
+            <div class="product-name">${p.name||''}</div>
+            ${skuBase ? `<span class="sku">${skuBase}</span>` : ''}
+            <div class="desc">${p.desc||''}</div>
+            ${p.badges?.length ? `<div class="badges">${p.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>` : ''}
+            <div class="stats">
+              <div class="stat-box"><div class="stat-val">₱${Number(p.srp||0).toLocaleString('en-PH',{minimumFractionDigits:2})}</div><div class="stat-lbl">SRP</div></div>
+              <div class="stat-box"><div class="stat-val">${p.packing||'—'}</div><div class="stat-lbl">Packing</div></div>
+            </div>
+            ${colorRows ? `<div class="section-title">Color SKU / Barcode</div>
+            <table class="info-table"><thead><tr><th>Color</th><th>Product Code</th><th>Barcode</th></tr></thead>
+            <tbody>${colorRows}</tbody></table>` : ''}
+            ${dimTable}
+          </div>
+        </div>
+        <div class="footer">
+          <span>sunbeamslifestyle.com</span>
+          <span>${p.name} — ${skuBase}</span>
+          <span>${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}</span>
+        </div>
+      </div>`
+    }).join('')
+
+    const html = `<!DOCTYPE html><html><head>
+    <meta charset="UTF-8">
+    <title>Quencha Product Catalog — ${filtered.length} Products</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
+      .header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #279989;padding-bottom:12px;margin-bottom:20px}
+      .logo{height:32px;object-fit:contain}
+      .brand{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#279989}
+      .layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+      .main-img{width:260px;height:260px;object-fit:contain;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9}
+      .main-ph{width:260px;height:260px;border-radius:10px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:50px}
+      .thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+      .product-name{font-size:20px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:5px}
+      .sku{font-family:monospace;font-size:11px;background:#e8f5f2;color:#279989;padding:2px 9px;border-radius:999px;display:inline-block;margin-bottom:10px}
+      .desc{font-size:12px;color:#444;line-height:1.6;margin-bottom:12px}
+      .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+      .badge{font-size:9px;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+      .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+      .stat-box{background:#f5fbf9;border-radius:8px;padding:10px 14px}
+      .stat-val{font-size:18px;font-weight:900;color:#279989}
+      .stat-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-top:2px}
+      .section-title{font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin:12px 0 6px;border-top:1px solid #e0ede9;padding-top:10px}
+      .info-table{width:100%;border-collapse:collapse;font-size:11px}
+      .info-table th{background:#279989;color:#fff;padding:6px 9px;text-align:left;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
+      .info-table td{padding:6px 9px;border-bottom:1px solid #e8f5f2;color:#333}
+      .info-table tr:last-child td{border-bottom:none}
+      .info-table tr:nth-child(even) td{background:#f5fbf9}
+      .footer{margin-top:20px;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa}
+      @media print{@page{margin:10mm;size:A4}div[style*="page-break-after"]{break-after:page}}
+    </style>
+    </head><body>${sheets}</body></html>`
+
+    const w = window.open('', '_blank')
+    w.document.write(html)
+    w.document.close()
+  }, [filtered, brandLogo, colorCollections])
+
   // ── PRODUCT CARD ──
   const Card = ({ p }) => {
     const mainImg = getImageSrc(p.images?.[0])
@@ -8080,6 +8182,7 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
+            <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Print All</button>
             <button className="eb-add" onClick={()=>requestAuth('newProduct')}>+ Add Product</button>
             <button className="eb-exit" onClick={exitEdit}>✓ Save & Exit</button>
           </div>
