@@ -6648,7 +6648,8 @@ ${message.trim()}` : 'Message / Notes:',
             const knownCatVals = cats.map(c=>c.value)
             const allCatKeysInGrouped = [...new Set(Object.values(grouped).flatMap(g=>Object.keys(g)))]
             const unknownCatKeys = allCatKeysInGrouped.filter(k => k !== '' && !knownCatVals.includes(k))
-            const orderedCatKeys = ['', ...knownCatVals, ...unknownCatKeys]
+            // When a category is selected, only render that category's section
+            const orderedCatKeys = filterCat ? [filterCat] : ['', ...knownCatVals, ...unknownCatKeys]
  
             const renderSection = (ext, cat, prods) => {
               if (!prods?.length) return null
