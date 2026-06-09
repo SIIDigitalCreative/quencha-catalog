@@ -6220,6 +6220,11 @@ ${message.trim()}` : 'Message / Notes:',
     if (sort === 'name-asc') list.sort((a,b) => a.name.localeCompare(b.name))
     if (sort === 'sku-asc') list.sort((a,b) => getFirstSku(a).localeCompare(getFirstSku(b)))
     if (sort === 'sku-desc') list.sort((a,b) => getFirstSku(b).localeCompare(getFirstSku(a)))
+    if (sort === 'new-first') list.sort((a,b) => {
+      const aNew = a.customTag ? 1 : 0
+      const bNew = b.customTag ? 1 : 0
+      return bNew - aNew
+    })
     return list
   }, [products, filterExt, filterCat, filterColorCollection, filterPMin, filterPMax, search, sort, getFirstSku])
  
@@ -6587,6 +6592,7 @@ ${message.trim()}` : 'Message / Notes:',
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
               <option value="name-asc">Name: A → Z</option>
+              <option value="new-first">🆕 New First</option>
             </select>
             {editMode && sort === 'default' && <span className="reorder-hint">Drag products to rearrange</span>}
             <div className="vbtns">
