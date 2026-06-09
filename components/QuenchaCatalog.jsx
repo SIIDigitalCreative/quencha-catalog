@@ -5196,7 +5196,7 @@ export default function QuenchaCatalog() {
       if (cleanedSettings.catalogPrefs && typeof cleanedSettings.catalogPrefs === 'object') {
         const prefs = cleanedSettings.catalogPrefs
         if (prefs.filterExt !== undefined) setFilterExt(prefs.filterExt || 'all')
-        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat ? (Array.isArray(prefs.filterCat) ? prefs.filterCat : [prefs.filterCat]) : [])
+        if (prefs.filterCat !== undefined) setFilterCat(prefs.filterCat || null)
         if (prefs.filterColorCollection !== undefined) setFilterColorCollection(prefs.filterColorCollection || 'all')
         if (prefs.filterPMin !== undefined) setFilterPMin(savedNumberOrNull(prefs.filterPMin))
         if (prefs.filterPMax !== undefined) setFilterPMax(savedNumberOrNull(prefs.filterPMax))
@@ -5222,7 +5222,7 @@ export default function QuenchaCatalog() {
  
   // ── FILTERS ──
   const [filterExt, setFilterExt] = useState(() => savedCatalogPrefsRef.current.filterExt || 'all')
-  const [filterCat, setFilterCat] = useState(() => { const v = savedCatalogPrefsRef.current.filterCat; return v ? (Array.isArray(v) ? v : [v]) : [] })
+  const [filterCat, setFilterCat] = useState(() => savedCatalogPrefsRef.current.filterCat || null)
   const [filterColorCollection, setFilterColorCollection] = useState(() => savedCatalogPrefsRef.current.filterColorCollection || 'all')
   const [cats, setCats] = useState(DEFAULT_CATS)
   const [catMgrOpen, setCatMgrOpen] = useState(false)
@@ -5653,13 +5653,13 @@ ${message.trim()}` : 'Message / Notes:',
   // ── EDIT HELPERS ──
   const openEdit = (p) => {
     setEditTarget(p)
-    setEf({ name:p.name,ext:p.ext,cat:p.cat,srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'',hideExtTag:p.hideExtTag||false,customTag:p.customTag||'',customTagColor:p.customTagColor||'#CB0033' })
+    setEf({ name:p.name,ext:p.ext,cat:Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]),srp:p.srp,packing:p.packing,desc:p.desc,badges:[...p.badges],colors:p.colors.map(c=>normalizeColorVariant(c)),images:normalizeProductImages(p.images||[]),dimensions:p.dimensions&&typeof p.dimensions==='object'?{headers:[...p.dimensions.headers],rows:p.dimensions.rows.map(r=>[...r])}:{headers:[''],rows:[['']],},barcode:p.barcode||'',barcodeImage:p.barcodeImage||'',qrCode:p.qrCode||'',qrImage:p.qrImage||'',youtube:p.youtube||'',hideExtTag:p.hideExtTag||false,customTag:p.customTag||'',customTagColor:p.customTagColor||'#CB0033' })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
   const openNewProduct = () => {
     setEditTarget(null)
-    setEf({ name:'',ext:'core',cat:'sip',srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
+    setEf({ name:'',ext:'core',cat:[],srp:'',packing:'',desc:'',badges:[],colors:[],images:[],dimensions:{headers:[''],rows:[['']],},barcode:'',barcodeImage:'',qrCode:'',qrImage:'',youtube:'' })
     setEditTab('details'); setBadgeInput(''); setNewColor({name:'',code:'',hex:'#B9DCD2',hexes:['#B9DCD2'],collection:'OG',sku:''}); setUploadErr(''); setAddingNewExt(false); setAddingNewCat(false)
     setEditOpen(true)
   }
@@ -6222,7 +6222,7 @@ ${message.trim()}` : 'Message / Notes:',
   }, [products, getQuenchColors])
  
   const quenchProductsByCat = useMemo(() => {
-    return quenchProducts.filter(product => product.cat === quenchCat)
+    return quenchProducts.filter(product => { const pCats=Array.isArray(product.cat)?product.cat:(product.cat?[product.cat]:[]); return pCats.includes(quenchCat) })
   }, [quenchProducts, quenchCat])
  
   const quenchTotals = useMemo(() => {
@@ -6316,7 +6316,7 @@ ${message.trim()}` : 'Message / Notes:',
       __manualIndex: Number.isFinite(Number(p.sortOrder)) ? Number(p.sortOrder) : index
     }))
     if (filterExt !== 'all') list = list.filter(p => p.ext === filterExt)
-    if (filterCat && filterCat.length > 0) list = list.filter(p => filterCat.includes(p.cat))
+    if (filterCat) list = list.filter(p => { const pCats = Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); return pCats.includes(filterCat) })
     if (filterColorCollection !== 'all') {
       list = list.filter(p => (p.colors || []).some(c => defaultColorCollection(c) === filterColorCollection))
     }
@@ -6344,7 +6344,7 @@ ${message.trim()}` : 'Message / Notes:',
     const ext = { all: products.length }, cat = {}, collection = { all: products.length }
     products.forEach(p => {
       ext[p.ext] = (ext[p.ext]||0)+1
-      cat[p.cat] = (cat[p.cat]||0)+1
+      const pCatArr = Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); pCatArr.forEach(cv=>{ cat[cv]=(cat[cv]||0)+1 })
  
       const productCollections = new Set((p.colors || []).map(c => defaultColorCollection(c)).filter(Boolean))
       productCollections.forEach(col => {
@@ -6356,7 +6356,7 @@ ${message.trim()}` : 'Message / Notes:',
  
   const grouped = useMemo(() => {
     const g = {}
-    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; if(!g[p.ext][p.cat])g[p.ext][p.cat]=[]; g[p.ext][p.cat].push(p) })
+    filtered.forEach(p => { if(!g[p.ext])g[p.ext]={}; const pCats=Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); pCats.forEach(cv=>{if(!g[p.ext][cv])g[p.ext][cv]=[];g[p.ext][cv].push(p)}) })
     return g
   }, [filtered])
  
@@ -6365,9 +6365,10 @@ ${message.trim()}` : 'Message / Notes:',
     const closeMobileSidebar = () => {
       if (!closeOnSelect) return
       setShowMobileFilter(false)
-      window.setTimeout(() => {
-        focusSearchResults()
-      }, 180)
+      // Only scroll on mobile — desktop sidebar stays fixed, no scroll needed
+      if (typeof window !== 'undefined' && window.innerWidth <= 700) {
+        window.setTimeout(() => { focusSearchResults() }, 180)
+      }
     }
     return (
     <>
@@ -6392,12 +6393,12 @@ ${message.trim()}` : 'Message / Notes:',
       <div className="sb-sec">
         <span className="sb-lbl">Category Filter</span>
         <div className="filter-pill-wrap">
-          <button className={`filter-pill full ${filterCat.length===0?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat([]); closeMobileSidebar()}}>
+          <button className={`filter-pill full ${!filterCat?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(null); closeMobileSidebar()}}>
             <span className="filter-pill-l"><span className="filter-pill-label">All Categories</span></span>
             <span className="filter-pill-count">{products.length}</span>
           </button>
           {cats.map(c=>(
-            <button key={c.value} className={`filter-pill ${filterCat.includes(c.value)?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>setFilterCat(prev=>prev.includes(c.value)?prev.filter(x=>x!==c.value):[...prev,c.value])}>
+            <button key={c.value} className={`filter-pill ${filterCat===c.value?'on':''}`} style={{borderRadius:'999px'}} onClick={()=>{setFilterCat(filterCat===c.value?null:c.value); closeMobileSidebar()}}>
               <span className="filter-pill-l"><span className="filter-pill-label">{{sip:'SIP',savor:'SAVOR',go:'GO'}[c.value] || c.label}</span></span>
               <span className="filter-pill-count">{counts.cat[c.value]||0}</span>
             </button>
@@ -6431,8 +6432,8 @@ ${message.trim()}` : 'Message / Notes:',
           })}
         </div>
       </div>
-      {(filterExt!=='all'||filterCat.length>0||filterColorCollection!=='all'||filterPMin!==null) && (
-        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat([]);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
+      {(filterExt!=='all'||filterCat||filterColorCollection!=='all'||filterPMin!==null) && (
+        <button className="clear-filters" onClick={()=>{setFilterExt('all');setFilterCat(null);setFilterColorCollection('all');setFilterPMin(null);setFilterPMax(null); closeMobileSidebar()}}>✕ Clear filters</button>
       )}
     </>
     )
@@ -6449,7 +6450,7 @@ ${message.trim()}` : 'Message / Notes:',
       const colorSkus  = (p.colors||[]).map(c=>c.sku).join(' | ')
       const collections = [...new Set((p.colors||[]).map(c=>c.collection||'Other'))].join(' | ')
       const ext = exts.find(x=>x.value===p.ext)?.label || p.ext || ''
-      const cat = cats.find(x=>x.value===p.cat)?.label || p.cat || ''
+      const catArr = Array.isArray(p.cat)?p.cat:(p.cat?[p.cat]:[]); const cat = catArr.map(cv=>cats.find(x=>x.value===cv)?.label||cv).join(' | ')
       // Dimensions: flatten headers + rows into readable text
       let dimensionsStr = ''
       if (p.dimensions?.headers?.some(h=>h.trim()) && p.dimensions?.rows?.length) {
@@ -6667,13 +6668,13 @@ ${message.trim()}` : 'Message / Notes:',
               // internal filter links
               if(link.startsWith('#ext-')){
                 const val=link.replace('#ext-','')
-                setFilterExt(val); setFilterCat([]); setFilterColorCollection('all')
+                setFilterExt(val); setFilterCat(null); setFilterColorCollection('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
                 return
               }
               if(link.startsWith('#col-')){
                 const val=link.replace('#col-','')
-                setFilterColorCollection(val); setFilterCat([]); setFilterExt('all')
+                setFilterColorCollection(val); setFilterCat(null); setFilterExt('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
                 return
               }
@@ -6681,7 +6682,7 @@ ${message.trim()}` : 'Message / Notes:',
               const cat=link.replace('#','')
               const validCats=['sip','savor','go']
               if(validCats.includes(cat)){
-                setFilterCat([cat]); setFilterExt('all'); setFilterColorCollection('all')
+                setFilterCat(cat); setFilterExt('all'); setFilterColorCollection('all')
                 document.getElementById('catalog-results')?.scrollIntoView({behavior:'smooth'})
               }
             }}
@@ -7000,7 +7001,7 @@ ${message.trim()}` : 'Message / Notes:',
               <div>
                 {(() => {
                   const extLabel = exts.find(x=>x.value===vp.ext)?.label || vp.ext || ''
-                  const catLabel = cats.find(c=>c.value===vp.cat)?.label || vp.cat || ''
+                  const vpCats = Array.isArray(vp.cat)?vp.cat:(vp.cat?[vp.cat]:[]); const catLabel = vpCats.map(cv=>cats.find(c=>c.value===cv)?.label||cv).join(' · ')
                   const parts = [extLabel, catLabel].filter(Boolean)
                   return parts.length > 0 ? (
                     <div style={{fontSize:10,fontWeight:700,letterSpacing:'.1em',color:'var(--tl)',textTransform:'uppercase',marginBottom:4,opacity:.7}}>{parts.join(' · ')}</div>
@@ -7331,16 +7332,15 @@ ${message.trim()}` : 'Message / Notes:',
                         </div>
                       </div>
                     ) : (
-                      <div style={{display:'flex',gap:6}}>
-                        <select className="f-sel" style={{flex:1}} value={ef.cat} onChange={e=>{
-                          if(e.target.value==='__add_new__'){setAddingNewCat(true)}
-                          else{setEf(f=>({...f,cat:e.target.value}))}
-                        }}>
-                          <option value="">— No Category —</option>
-                          {cats.map(c=><option key={c.value} value={c.value}>{c.label}</option>)}
-                          <option value="__add_new__">+ Add new category…</option>
-                        </select>
-                        {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{flexShrink:0,padding:'0 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
+                      <div style={{display:'flex',flexWrap:'wrap',gap:6,alignItems:'center'}}>
+                        {cats.map(cat=>{
+                          const sel = (Array.isArray(ef.cat)?ef.cat:[]).includes(cat.value)
+                          return <button key={cat.value} type="button" onClick={()=>setEf(f=>({...f,cat:sel?(Array.isArray(f.cat)?f.cat:[]).filter(x=>x!==cat.value):[...(Array.isArray(f.cat)?f.cat:[]),cat.value]}))}
+                            style={{padding:'5px 12px',borderRadius:999,border:sel?'1.5px solid var(--tl)':'1px solid rgba(185,220,210,.5)',background:sel?'rgba(39,153,137,.08)':'#fff',color:sel?'var(--tl)':'rgba(58,58,58,.65)',fontFamily:'var(--fn)',fontSize:11,fontWeight:700,cursor:'pointer',transition:'var(--tr)'}}>
+                            {cat.label}
+                          </button>
+                        })}
+                        {editMode && <button type="button" onClick={()=>setCatMgrOpen(true)} style={{padding:'5px 10px',background:'var(--sf)',border:'1px solid rgba(185,220,210,.6)',borderRadius:6,fontSize:11,fontWeight:700,color:'var(--tl)',cursor:'pointer',whiteSpace:'nowrap'}}>⚙ Manage</button>}
                       </div>
                     )}
                   </div>
