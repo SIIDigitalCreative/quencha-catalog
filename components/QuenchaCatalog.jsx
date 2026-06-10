@@ -5242,6 +5242,13 @@ export default function QuenchaCatalog() {
         }
       }
  
+      // Apply URL params for shareable links
+      const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+      if (urlParams.get('ext')) setFilterExt(urlParams.get('ext'))
+      if (urlParams.get('cat')) setFilterCat(urlParams.get('cat'))
+      if (urlParams.get('col')) setFilterColorCollection(urlParams.get('col'))
+      if (urlParams.get('q')) setSearch(urlParams.get('q'))
+
       setCatalogPrefsHydrated(true)
       setLoading(false)
     }).catch(() => { setProducts([]); setCatalogPrefsHydrated(true); setLoading(false) })
@@ -6382,6 +6389,19 @@ ${message.trim()}` : 'Message / Notes:',
     URL.revokeObjectURL(url)
   }, [products, exts, cats])
 
+
+
+  // ── URL SYNC — shareable filter links ──
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams()
+    if (filterExt && filterExt !== 'all') params.set('ext', filterExt)
+    if (filterCat) params.set('cat', filterCat)
+    if (filterColorCollection && filterColorCollection !== 'all') params.set('col', filterColorCollection)
+    if (search) params.set('q', search)
+    const qs = params.toString()
+    window.history.replaceState(null, '', qs ? '?' + qs : window.location.pathname)
+  }, [filterExt, filterCat, filterColorCollection, search])
 
   // ── PRINT ALL PRODUCTS ──
 
