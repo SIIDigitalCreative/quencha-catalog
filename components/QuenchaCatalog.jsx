@@ -4981,11 +4981,14 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:Letter portrait;margin:0}
+    @page{size:Letter portrait;margin:5mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     html,body{width:100%;min-height:100%;margin:0;padding:0}
     body{margin:0;padding:0}
-    .print-page{width:7.65in;height:10.25in;max-height:10.25in;margin:.28in auto .22in;display:flex;flex-direction:column;padding:0;page-break-after:always;break-after:page;page-break-inside:avoid;break-inside:avoid;overflow:hidden}
+    /* One product = one physical page.
+       Keep the sheet inside the printable area instead of using outer margins,
+       which can create blank pages on iOS/Safari print/PDF preview. */
+    .print-page{width:100%;height:calc(11in - 10mm);max-height:calc(11in - 10mm);margin:0 auto;display:flex;flex-direction:column;padding:0;page-break-after:always;break-after:page;page-break-inside:avoid;break-inside:avoid;overflow:hidden}
     .print-page:last-child{page-break-after:avoid;break-after:auto}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:9px;margin-bottom:12px}
     .logo{height:34px;object-fit:contain;max-width:172px}
@@ -6461,7 +6464,7 @@ ${message.trim()}` : 'Message / Notes:',
     const firstSheet = generateProductSheet(toExport[0], brandLogo, colorCollections)
     const headContent = firstSheet.slice(firstSheet.indexOf('<head>')+6, firstSheet.indexOf('</head>'))
     const safeTitle = String(title || 'quencha-catalog').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'quencha-catalog'
-    const html = `<!DOCTYPE html><html><head>${headContent}<title>${safeTitle}</title><style>@media print{html,body{margin:0!important;padding:0!important}body>.print-page{page-break-after:always!important;break-after:page!important;page-break-inside:avoid!important;break-inside:avoid!important}body>.print-page:last-child{page-break-after:avoid!important;break-after:auto!important}}</style></head><body>${allBodies}<script>window.addEventListener('load',function(){setTimeout(function(){window.focus();window.print();},600);});<\/script></body></html>`
+    const html = `<!DOCTYPE html><html><head>${headContent}<title>${safeTitle}</title><style>@media print{html,body{margin:0!important;padding:0!important}body{overflow:visible!important}body>.print-page{margin:0 auto!important;page-break-after:always!important;break-after:page!important;page-break-before:auto!important;break-before:auto!important;page-break-inside:avoid!important;break-inside:avoid!important}body>.print-page:last-child{page-break-after:avoid!important;break-after:auto!important}}</style></head><body>${allBodies}<script>window.addEventListener('load',function(){setTimeout(function(){window.focus();window.print();},600);});<\/script></body></html>`
     const w = window.open('', '_blank')
     if (!w) { alert('Please allow popups to download PDF.'); return }
     w.document.open()
