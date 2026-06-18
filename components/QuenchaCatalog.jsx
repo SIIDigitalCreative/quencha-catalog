@@ -6472,21 +6472,39 @@ ${message.trim()}` : 'Message / Notes:',
 
       const holder = document.createElement('div')
       holder.style.position = 'fixed'
-      holder.style.left = '-10000px'
+      holder.style.left = '0'
       holder.style.top = '0'
       holder.style.width = '210mm'
+      holder.style.minHeight = '297mm'
       holder.style.background = '#fff'
-      holder.innerHTML = `<style>${styleContent}</style>${allBodies}`
+      holder.style.zIndex = '2147483647'
+      holder.style.pointerEvents = 'none'
+      holder.className = 'pdf-export-holder'
+      holder.innerHTML = `<style>${styleContent}
+.pdf-export-holder{background:#fff}.pdf-export-holder .print-page{margin:0 auto;page-break-after:always;break-after:page}.pdf-export-holder > div:last-child .print-page{page-break-after:avoid;break-after:auto}</style>${allBodies}`
       document.body.appendChild(holder)
+
+      const waitForImages = async (root) => {
+        const imgs = Array.from(root.querySelectorAll('img'))
+        await Promise.all(imgs.map(img => {
+          if (img.complete && img.naturalWidth !== 0) return Promise.resolve()
+          return new Promise(resolve => {
+            img.onload = resolve
+            img.onerror = resolve
+          })
+        }))
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      }
+      await waitForImages(holder)
 
       const cleanName = filename.replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim()
       await html2pdf().set({
         margin: 0,
         filename: cleanName || 'quencha-catalog.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0 },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: holder.scrollWidth, windowHeight: holder.scrollHeight },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'], after: '.print-page' }
       }).from(holder).save()
 
       document.body.removeChild(holder)
