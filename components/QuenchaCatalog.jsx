@@ -4930,8 +4930,19 @@ function processLogoImage(file, maxWidth = 800, maxHeight = 400) {
 
 // ─── PRODUCT SHEET GENERATOR ─────────────────────────────────────────────────
 function generateProductSheet(product, brandLogo, colorCollections) {
-  const mainImg = getImageSrc(product.images?.[0])
-  const allImages = (product.images || []).map(getImageSrc).filter(Boolean)
+  const normalizedImages = normalizeProductImages(product.images || [])
+  const mainImg = getImageSrc(normalizedImages?.[0])
+  const allImages = normalizedImages.map(getImageSrc).filter(Boolean)
+  const colorThumbSources = []
+  const usedThumbSources = new Set()
+  ;(product.colors || []).forEach(color => {
+    const match = normalizedImages.find(img => imageMatchesColor(img, color))
+    const src = getImageSrc(match)
+    if (src && !usedThumbSources.has(src)) {
+      usedThumbSources.add(src)
+      colorThumbSources.push(src)
+    }
+  })
   const skuBase = getProductSkuBase(product)
   const dimHeaders = product.dimensions?.headers?.filter(h=>h.trim()) || []
   const dimRows = product.dimensions?.rows || []
@@ -4960,7 +4971,8 @@ function generateProductSheet(product, brandLogo, colorCollections) {
       <tbody>${dimRows.map(row=>`<tr>${dimHeaders.map((_,i)=>`<td>${row[i]||''}</td>`).join('')}</tr>`).join('')}</tbody>
     </table>` : ''
 
-  const thumbs = allImages.slice(1,5).map(src =>
+  const thumbSources = colorThumbSources.length ? colorThumbSources : allImages.slice(1,5)
+  const thumbs = thumbSources.map(src =>
     `<img src="${src}" style="width:70px;height:70px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9">`
   ).join('')
 
