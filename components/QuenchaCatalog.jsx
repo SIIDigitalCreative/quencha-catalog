@@ -4971,7 +4971,8 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     *{box-sizing:border-box;margin:0;padding:0}
     @page{size:A4 portrait;margin:22mm 12mm 12mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
-    body{width:186mm;min-height:270mm;display:flex;flex-direction:column}
+    body{margin:0}
+    .print-page{width:186mm;min-height:270mm;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:12mm}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
     .logo{height:36px;object-fit:contain;max-width:160px}
     .brand{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#279989}
@@ -5000,6 +5001,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     .footer{margin-top:auto;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa;padding-bottom:0}
   </style>
   </head><body>
+  <div class="print-page">
   <div class="header">
     ${brandLogo ? `<img src="${brandLogo}" class="logo" alt="Brand">` : '<span class="brand">Quencha</span>'}
     <span class="brand">Product Catalog Sheet</span>
@@ -5030,6 +5032,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     
     <span>${product.name} — ${skuBase}</span>
     
+  </div>
   </div>
   </body></html>`
   return html
