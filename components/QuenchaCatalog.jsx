@@ -4969,10 +4969,11 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:A4 portrait;margin:22mm 12mm 12mm 12mm}
+    @page{size:A4 portrait;margin:16mm 12mm 14mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
-    body{margin:0}
-    .print-page{width:186mm;min-height:270mm;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:12mm}
+    body{margin:0;padding:0}
+    .print-page{width:186mm;min-height:255mm;margin:0 auto;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:10mm;page-break-after:always;break-after:page}
+    .print-page:last-child{page-break-after:avoid;break-after:auto}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
     .logo{height:36px;object-fit:contain;max-width:160px}
     .brand{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#279989}
@@ -5029,9 +5030,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     ${dimTable ? `<div><div class="section-title">Dimensions</div>${dimTable}</div>` : ''}
   </div>
   <div class="footer">
-    
     <span>${product.name} — ${skuBase}</span>
-    
   </div>
   </div>
   </body></html>`
@@ -6433,101 +6432,43 @@ ${message.trim()}` : 'Message / Notes:',
   }, [printSelectedProducts])
 
 
-  const loadHtml2Pdf = useCallback(() => {
-    if (typeof window === 'undefined') return Promise.reject(new Error('PDF download is only available in the browser.'))
-    if (window.html2pdf) return Promise.resolve(window.html2pdf)
-    return new Promise((resolve, reject) => {
-      const existing = document.querySelector('script[data-html2pdf="true"]')
-      if (existing) {
-        existing.addEventListener('load', () => resolve(window.html2pdf), { once:true })
-        existing.addEventListener('error', () => reject(new Error('Unable to load PDF generator.')), { once:true })
-        return
-      }
-      const script = document.createElement('script')
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
-      script.async = true
-      script.dataset.html2pdf = 'true'
-      script.onload = () => resolve(window.html2pdf)
-      script.onerror = () => reject(new Error('Unable to load PDF generator. Please check your internet connection and try again.'))
-      document.body.appendChild(script)
-    })
-  }, [])
-
-  const downloadProductsPdf = useCallback(async (items, filename = 'quencha-catalog.pdf') => {
-    const toDownload = Array.isArray(items) ? items.filter(Boolean) : []
-    if (!toDownload.length) return
-    try {
-      const html2pdf = await loadHtml2Pdf()
-      const firstSheet = generateProductSheet(toDownload[0], brandLogo, colorCollections)
-      const styleMatch = firstSheet.match(/<style>([\s\S]*?)<\/style>/i)
-      const styleContent = styleMatch ? styleMatch[1] : ''
-      const allBodies = toDownload.map((p, idx) => {
-        const sheet = generateProductSheet(p, brandLogo, colorCollections)
-        const bodyStart = sheet.indexOf('<body>') + 6
-        const bodyEnd = sheet.lastIndexOf('</body>')
-        const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
-        const isLast = idx === toDownload.length - 1
-        return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
-      }).join('')
-
-      const holder = document.createElement('div')
-      holder.style.position = 'fixed'
-      holder.style.left = '0'
-      holder.style.top = '0'
-      holder.style.width = '210mm'
-      holder.style.minHeight = '297mm'
-      holder.style.background = '#fff'
-      holder.style.zIndex = '2147483647'
-      holder.style.pointerEvents = 'none'
-      holder.className = 'pdf-export-holder'
-      holder.innerHTML = `<style>${styleContent}
-.pdf-export-holder{background:#fff}.pdf-export-holder .print-page{margin:0 auto;page-break-after:always;break-after:page}.pdf-export-holder > div:last-child .print-page{page-break-after:avoid;break-after:auto}</style>${allBodies}`
-      document.body.appendChild(holder)
-
-      const waitForImages = async (root) => {
-        const imgs = Array.from(root.querySelectorAll('img'))
-        await Promise.all(imgs.map(img => {
-          if (img.complete && img.naturalWidth !== 0) return Promise.resolve()
-          return new Promise(resolve => {
-            img.onload = resolve
-            img.onerror = resolve
-          })
-        }))
-        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
-      }
-      await waitForImages(holder)
-
-      const cleanName = filename.replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim()
-      await html2pdf().set({
-        margin: 0,
-        filename: cleanName || 'quencha-catalog.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: holder.scrollWidth, windowHeight: holder.scrollHeight },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], after: '.print-page' }
-      }).from(holder).save()
-
-      document.body.removeChild(holder)
-    } catch (err) {
-      console.error(err)
-      alert(err?.message || 'Unable to download PDF. Please try again.')
-    }
-  }, [brandLogo, colorCollections, loadHtml2Pdf])
+  // ── PDF EXPORT (uses browser print-to-PDF to avoid blank mobile PDF downloads) ──
+  const openProductsPdfWindow = useCallback((items, title = 'quencha-catalog') => {
+    const toExport = Array.isArray(items) ? items.filter(Boolean) : []
+    if (!toExport.length) return
+    const allBodies = toExport.map((p, idx) => {
+      const sheet = generateProductSheet(p, brandLogo, colorCollections)
+      const bodyStart = sheet.indexOf('<body>') + 6
+      const bodyEnd = sheet.lastIndexOf('</body>')
+      const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
+      const isLast = idx === toExport.length - 1
+      return `<div class="pdf-product-page" style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+    }).join('')
+    const firstSheet = generateProductSheet(toExport[0], brandLogo, colorCollections)
+    const headContent = firstSheet.slice(firstSheet.indexOf('<head>')+6, firstSheet.indexOf('</head>'))
+    const safeTitle = String(title || 'quencha-catalog').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'quencha-catalog'
+    const html = `<!DOCTYPE html><html><head>${headContent}<title>${safeTitle}</title><style>@media print{.pdf-product-page{page-break-after:always;break-after:page}.pdf-product-page:last-child{page-break-after:avoid;break-after:auto}}</style></head><body>${allBodies}<script>window.addEventListener('load',function(){setTimeout(function(){window.focus();window.print();},600);});<\/script></body></html>`
+    const w = window.open('', '_blank')
+    if (!w) { alert('Please allow popups to download PDF.'); return }
+    w.document.open()
+    w.document.write(html)
+    w.document.close()
+  }, [brandLogo, colorCollections])
 
   const downloadCurrentProductPdf = useCallback((product) => {
     if (!product) return
     const sku = getSkuBase(product) || product.id || 'product'
-    downloadProductsPdf([product], `quencha-${sku}.pdf`)
-  }, [downloadProductsPdf])
+    openProductsPdfWindow([product], `quencha-${sku}`)
+  }, [openProductsPdfWindow])
 
   const downloadSelectedProductsPdf = useCallback((ids) => {
-    const toDownload = ids.length > 0 ? filtered.filter(p => ids.includes(p.id)) : filtered
-    downloadProductsPdf(toDownload, 'quencha-selected-catalog.pdf')
-  }, [filtered, downloadProductsPdf])
+    const toExport = ids.length > 0 ? filtered.filter(p => ids.includes(p.id)) : filtered
+    openProductsPdfWindow(toExport, 'quencha-selected-catalog')
+  }, [filtered, openProductsPdfWindow])
 
   const downloadAllProductsPdf = useCallback(() => {
-    downloadProductsPdf(filtered, 'quencha-full-catalog.pdf')
-  }, [filtered, downloadProductsPdf])
+    openProductsPdfWindow(filtered, 'quencha-full-catalog')
+  }, [filtered, openProductsPdfWindow])
 
   const _unused = useCallback(() => {
     const allBodies = filtered.map((p, idx) => {
@@ -7014,7 +6955,7 @@ ${message.trim()}` : 'Message / Notes:',
                                     <img
                                       src={variantBarcodeImage}
                                       alt={`${clr.name || 'Color'} barcode`}
-                                      onClick={()=>setCodeLightbox({src:variantBarcodeImage,label:(clr.sku || clr.productCode || 'SKU')})}
+                                      onClick={()=>setCodeLightbox({src:variantBarcodeImage,label:clr.sku || `${clr.name || 'Color'} Barcode`})}
                                       title="Click to enlarge"
                                     />
                                   ) : variantBarcode ? (
@@ -7069,7 +7010,7 @@ ${message.trim()}` : 'Message / Notes:',
                         <img
                           src={vp.barcodeImage}
                           alt="Barcode"
-                          onClick={()=>setCodeLightbox({src:vp.barcodeImage,label:(vp.sku || vp.productCode || 'Barcode')})}
+                          onClick={()=>setCodeLightbox({src:vp.barcodeImage,label:'Barcode'})}
                           style={{maxWidth:'100%',maxHeight:60,objectFit:'contain',marginTop:4,borderRadius:4,cursor:'zoom-in'}}
                           title="Click to enlarge"
                         />
