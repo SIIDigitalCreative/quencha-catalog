@@ -7045,14 +7045,6 @@ ${message.trim()}` : 'Message / Notes:',
                 <button className="vm-pencil-btn" onClick={()=>{ closeProductModal(); requestAuth(viewProduct) }} title="Edit product">
                   <PencilIcon/>
                 </button>
-                <button className="vm-link-btn" onClick={()=>{
-                  const html = generateProductSheet(vp, brandLogo, colorCollections)
-                  const w = window.open('','_blank')
-                  w.document.write(html)
-                  w.document.close()
-                }} >
-                  🖨 Print
-                </button>
                 <button className="vm-link-btn" onClick={()=>downloadCurrentProductPdf(vp)}>
                   ⬇ PDF
                 </button>
@@ -7952,14 +7944,12 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setExtMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Extensions</button>
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
-            <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print All</button>
             <button className="eb-add" onClick={downloadAllProductsPdf} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ PDF All</button>
             <button className="eb-add" onClick={()=>setShowHiddenOnly(v=>!v)} style={{background:showHiddenOnly?'#6b7280':'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>
               {showHiddenOnly ? '👁 Showing Hidden' : '🙈 Hidden Products'}
             </button>
             {selectedIds.size > 0 && <>
               <span style={{fontSize:11,color:'rgba(255,255,255,.5)'}}>{selectedIds.size} selected</span>
-              <button className="eb-add" onClick={()=>printSelectedProducts([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print Selected</button>
               <button className="eb-add" onClick={()=>downloadSelectedProductsPdf([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ PDF Selected</button>
               <button className="eb-add" onClick={()=>batchSetHidden(true)} style={{background:'#6b7280'}}>Hide Selected</button>
               <button className="eb-add" onClick={()=>batchSetHidden(false)} style={{background:'#10b981'}}>Unhide Selected</button>
