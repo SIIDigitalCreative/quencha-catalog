@@ -354,7 +354,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .c-badges{display:flex;flex-wrap:wrap;gap:4px}
 .c-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(185,220,210,.35);color:var(--tl)}
 .c-colors{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.c-dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.8),0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
+.c-dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.8),0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
 .c-more{font-size:10px;font-weight:700;color:var(--gr);background:var(--bg);border:1px solid rgba(185,220,210,.5);border-radius:999px;padding:1px 6px}
  
 /* CARD FOOTER — SRP and Packing same size/weight */
@@ -433,7 +433,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--bk);line-height:1.6;
 .vm-variant-table td{padding:9px 12px;border-bottom:1px solid rgba(185,220,210,.32);vertical-align:middle;font-size:13px;color:var(--gr)}
 .vm-variant-table tr:last-child td{border-bottom:none}
 .vm-variant-color{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--bk);white-space:nowrap}
-.vm-variant-swatch{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
+.vm-variant-swatch{width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden}
 .vm-variant-sku{font-family:monospace;font-weight:500;color:var(--tl);letter-spacing:.02em;white-space:nowrap}
 .vm-variant-barcode{display:flex;align-items:center;gap:8px;min-height:34px}
 .vm-variant-barcode img{max-width:128px;max-height:38px;object-fit:contain;background:#fff;border-radius:4px;cursor:zoom-in}
@@ -4956,10 +4956,10 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     const bImg = clr.barcodeImage || clr.barcodeUrl || ''
     const bNum = clr.barcode || ''
     const bCell = bImg
-      ? `<img src="${bImg}" style="height:38px;max-width:120px;object-fit:contain;display:block" alt="barcode">${bNum ? `<div style="font-size:8px;color:#666;font-family:monospace;margin-top:2px">${bNum}</div>` : ''}`
+      ? `<img src="${bImg}" style="height:28px;max-width:96px;object-fit:contain;display:block" alt="barcode">${bNum ? `<div style="font-size:7px;color:#666;font-family:monospace;margin-top:1px">${bNum}</div>` : ''}`
       : bNum ? `<span style="font-family:monospace;font-size:10px">${bNum}</span>` : '—'
     return `<tr>
-      <td><span style="display:inline-block;width:14px;height:14px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
+      <td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;${swatch};border:1px solid rgba(0,0,0,.1);vertical-align:middle;margin-right:6px"></span>${clr.name||''}</td>
       <td style="font-family:monospace;color:#279989">${clr.sku||''}</td>
       <td>${bCell}</td>
     </tr>`
@@ -4973,7 +4973,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
 
   const thumbSources = colorThumbSources.length ? colorThumbSources : allImages.slice(1,5)
   const thumbs = thumbSources.map(src =>
-    `<img src="${src}" style="width:70px;height:70px;object-fit:contain;border-radius:8px;border:1px solid #e0ede9;background:#f5fbf9">`
+    `<img src="${src}" style="width:44px;height:44px;object-fit:contain;border-radius:6px;border:1px solid #e0ede9;background:#f5fbf9">`
   ).join('')
 
   const html = `<!DOCTYPE html><html><head>
@@ -4981,37 +4981,37 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:A4 portrait;margin:16mm 12mm 14mm 12mm}
+    @page{size:A4 portrait;margin:10mm 8mm 10mm 8mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     body{margin:0;padding:0}
-    .print-page{width:186mm;height:255mm;min-height:0;margin:0 auto;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:10mm;page-break-after:always;break-after:page;overflow:hidden}
+    .print-page{width:194mm;height:277mm;min-height:0;margin:0 auto;display:flex;flex-direction:column;padding-top:6mm;padding-bottom:5mm;page-break-after:always;break-after:page;overflow:hidden}
     .print-page:last-child{page-break-after:avoid;break-after:auto}
-    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
-    .logo{height:36px;object-fit:contain;max-width:160px}
+    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:8px;margin-bottom:12px}
+    .logo{height:30px;object-fit:contain;max-width:150px}
     .brand{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#279989}
-    .top{display:grid;grid-template-columns:260px 1fr;gap:24px;margin-bottom:20px}
-    .img-col{display:flex;flex-direction:column;gap:8px}
-    .main-img{width:260px;height:260px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:block}
-    .main-ph{width:260px;height:260px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:60px}
-    .thumbs{display:flex;gap:7px;flex-wrap:wrap}
+    .top{display:grid;grid-template-columns:238px 1fr;gap:20px;margin-bottom:12px}
+    .img-col{display:flex;flex-direction:column;gap:6px}
+    .main-img{width:238px;height:210px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:block}
+    .main-ph{width:238px;height:210px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:52px}
+    .thumbs{display:flex;gap:5px;flex-wrap:wrap;align-content:flex-start}
     .info{display:flex;flex-direction:column;justify-content:flex-start;gap:0}
-    .product-name{font-size:26px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:8px}
-    .sku{font-family:monospace;font-size:12px;background:#e8f5f2;color:#279989;padding:4px 12px;border-radius:999px;display:inline-block;margin-bottom:14px}
-    .desc{font-size:12px;color:#555;line-height:1.65;margin-bottom:14px}
-    .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-    .badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
+    .product-name{font-size:24px;font-weight:900;color:#1a1a1a;line-height:1.15;margin-bottom:6px}
+    .sku{font-family:monospace;font-size:11px;background:#e8f5f2;color:#279989;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:10px}
+    .desc{font-size:11px;color:#555;line-height:1.45;margin-bottom:10px}
+    .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+    .badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid #b9dcd2;color:#279989;background:#f0faf8}
     .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0}
-    .stat-box{background:#f0faf8;border-radius:10px;padding:12px 16px;border:1px solid #d0ede8}
-    .stat-val{font-size:22px;font-weight:900;color:#279989}
+    .stat-box{background:#f0faf8;border-radius:10px;padding:10px 14px;border:1px solid #d0ede8}
+    .stat-val{font-size:20px;font-weight:900;color:#279989}
     .stat-lbl{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#888;margin-top:3px}
-    .bottom{flex:1;display:grid;grid-template-columns:${hasDims?'1fr 1fr':'1fr'};gap:20px}
-    .section-title{font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #e0ede9}
-    .info-table{width:100%;border-collapse:collapse;font-size:11px}
-    .info-table th{background:#279989;color:#fff;padding:7px 10px;text-align:left;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
-    .info-table td{padding:6px 10px;border-bottom:1px solid #edf7f5;color:#333}
+    .bottom{flex:1;display:grid;grid-template-columns:${hasDims?'1fr 1fr':'1fr'};gap:16px;min-height:0}
+    .section-title{font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#279989;margin-bottom:6px;padding-bottom:5px;border-bottom:2px solid #e0ede9}
+    .info-table{width:100%;border-collapse:collapse;font-size:10px}
+    .info-table th{background:#279989;color:#fff;padding:5px 8px;text-align:left;font-size:8px;letter-spacing:.06em;text-transform:uppercase}
+    .info-table td{padding:3px 8px;border-bottom:1px solid #edf7f5;color:#333;line-height:1.2}
     .info-table tr:last-child td{border-bottom:none}
     .info-table tr:nth-child(even) td{background:#f5fbf9}
-    .footer{margin-top:auto;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa;padding-bottom:0}
+    .footer{margin-top:auto;padding-top:7px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:8px;color:#aaa;padding-bottom:0}
   </style>
   </head><body>
   <div class="print-page">
