@@ -6432,6 +6432,85 @@ ${message.trim()}` : 'Message / Notes:',
     printSelectedProducts([])
   }, [printSelectedProducts])
 
+
+  const loadHtml2Pdf = useCallback(() => {
+    if (typeof window === 'undefined') return Promise.reject(new Error('PDF download is only available in the browser.'))
+    if (window.html2pdf) return Promise.resolve(window.html2pdf)
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-html2pdf="true"]')
+      if (existing) {
+        existing.addEventListener('load', () => resolve(window.html2pdf), { once:true })
+        existing.addEventListener('error', () => reject(new Error('Unable to load PDF generator.')), { once:true })
+        return
+      }
+      const script = document.createElement('script')
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+      script.async = true
+      script.dataset.html2pdf = 'true'
+      script.onload = () => resolve(window.html2pdf)
+      script.onerror = () => reject(new Error('Unable to load PDF generator. Please check your internet connection and try again.'))
+      document.body.appendChild(script)
+    })
+  }, [])
+
+  const downloadProductsPdf = useCallback(async (items, filename = 'quencha-catalog.pdf') => {
+    const toDownload = Array.isArray(items) ? items.filter(Boolean) : []
+    if (!toDownload.length) return
+    try {
+      const html2pdf = await loadHtml2Pdf()
+      const firstSheet = generateProductSheet(toDownload[0], brandLogo, colorCollections)
+      const styleMatch = firstSheet.match(/<style>([\s\S]*?)<\/style>/i)
+      const styleContent = styleMatch ? styleMatch[1] : ''
+      const allBodies = toDownload.map((p, idx) => {
+        const sheet = generateProductSheet(p, brandLogo, colorCollections)
+        const bodyStart = sheet.indexOf('<body>') + 6
+        const bodyEnd = sheet.lastIndexOf('</body>')
+        const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
+        const isLast = idx === toDownload.length - 1
+        return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+      }).join('')
+
+      const holder = document.createElement('div')
+      holder.style.position = 'fixed'
+      holder.style.left = '-10000px'
+      holder.style.top = '0'
+      holder.style.width = '210mm'
+      holder.style.background = '#fff'
+      holder.innerHTML = `<style>${styleContent}</style>${allBodies}`
+      document.body.appendChild(holder)
+
+      const cleanName = filename.replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim()
+      await html2pdf().set({
+        margin: 0,
+        filename: cleanName || 'quencha-catalog.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      }).from(holder).save()
+
+      document.body.removeChild(holder)
+    } catch (err) {
+      console.error(err)
+      alert(err?.message || 'Unable to download PDF. Please try again.')
+    }
+  }, [brandLogo, colorCollections, loadHtml2Pdf])
+
+  const downloadCurrentProductPdf = useCallback((product) => {
+    if (!product) return
+    const sku = getSkuBase(product) || product.id || 'product'
+    downloadProductsPdf([product], `quencha-${sku}.pdf`)
+  }, [downloadProductsPdf])
+
+  const downloadSelectedProductsPdf = useCallback((ids) => {
+    const toDownload = ids.length > 0 ? filtered.filter(p => ids.includes(p.id)) : filtered
+    downloadProductsPdf(toDownload, 'quencha-selected-catalog.pdf')
+  }, [filtered, downloadProductsPdf])
+
+  const downloadAllProductsPdf = useCallback(() => {
+    downloadProductsPdf(filtered, 'quencha-full-catalog.pdf')
+  }, [filtered, downloadProductsPdf])
+
   const _unused = useCallback(() => {
     const allBodies = filtered.map((p, idx) => {
       const sheet = generateProductSheet(p, brandLogo, colorCollections)
@@ -7014,6 +7093,9 @@ ${message.trim()}` : 'Message / Notes:',
                   w.document.close()
                 }} >
                   🖨 Print
+                </button>
+                <button className="vm-link-btn" onClick={()=>downloadCurrentProductPdf(vp)}>
+                  ⬇ PDF
                 </button>
                 <button className="vm-link-btn" onClick={()=>copyProductLink(vp)}>
                   {copied===`${typeof window !== 'undefined' ? window.location.origin : ''}${typeof window !== 'undefined' ? window.location.pathname : ''}?sku=${encodeURIComponent(getSkuBase(vp))}` ? '✓ Link Copied' : '🔗 Product Link'}
@@ -7912,12 +7994,14 @@ ${message.trim()}` : 'Message / Notes:',
             <button className="eb-add" onClick={()=>setCatMgrOpen(true)} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⚙ Categories</button>
             <button className="eb-add" onClick={exportCatalog} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Export CSV</button>
             <button className="eb-add" onClick={printAllProducts} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print All</button>
+            <button className="eb-add" onClick={downloadAllProductsPdf} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ PDF All</button>
             <button className="eb-add" onClick={()=>setShowHiddenOnly(v=>!v)} style={{background:showHiddenOnly?'#6b7280':'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>
               {showHiddenOnly ? '👁 Showing Hidden' : '🙈 Hidden Products'}
             </button>
             {selectedIds.size > 0 && <>
               <span style={{fontSize:11,color:'rgba(255,255,255,.5)'}}>{selectedIds.size} selected</span>
               <button className="eb-add" onClick={()=>printSelectedProducts([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>🖨 Print Selected</button>
+              <button className="eb-add" onClick={()=>downloadSelectedProductsPdf([...selectedIds])} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>⬇ PDF Selected</button>
               <button className="eb-add" onClick={()=>batchSetHidden(true)} style={{background:'#6b7280'}}>Hide Selected</button>
               <button className="eb-add" onClick={()=>batchSetHidden(false)} style={{background:'#10b981'}}>Unhide Selected</button>
               <button className="eb-add" onClick={()=>setSelectedIds(new Set())} style={{background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.2)'}}>Deselect</button>
