@@ -4991,8 +4991,8 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     .brand{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#279989}
     .top{display:grid;grid-template-columns:238px 1fr;gap:20px;margin-bottom:12px}
     .img-col{display:flex;flex-direction:column;gap:6px}
-    .main-img{width:238px;height:210px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:block}
-    .main-ph{width:238px;height:210px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:52px}
+    .main-img{width:238px;height:238px;object-fit:contain;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:block}
+    .main-ph{width:238px;height:238px;border-radius:12px;border:1px solid #e0ede9;background:#f5fbf9;display:flex;align-items:center;justify-content:center;font-size:52px}
     .thumbs{display:flex;gap:5px;flex-wrap:wrap;align-content:flex-start}
     .info{display:flex;flex-direction:column;justify-content:flex-start;gap:0}
     .product-name{font-size:24px;font-weight:900;color:#1a1a1a;line-height:1.15;margin-bottom:6px}
