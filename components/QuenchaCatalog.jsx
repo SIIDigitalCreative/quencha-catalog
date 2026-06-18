@@ -4969,10 +4969,10 @@ function generateProductSheet(product, brandLogo, colorCollections) {
   <title>${product.name} — Quencha Catalog</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    @page{size:A4 portrait;margin:22mm 12mm 12mm 12mm}
+    @page{size:A4 portrait;margin:26mm 12mm 18mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     body{width:186mm;min-height:270mm;display:flex;flex-direction:column}
-    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
+    .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-top:10mm;margin-bottom:16px}
     .logo{height:36px;object-fit:contain;max-width:160px}
     .brand{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#279989}
     .top{display:grid;grid-template-columns:260px 1fr;gap:24px;margin-bottom:20px}
@@ -4997,7 +4997,10 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     .info-table td{padding:6px 10px;border-bottom:1px solid #edf7f5;color:#333}
     .info-table tr:last-child td{border-bottom:none}
     .info-table tr:nth-child(even) td{background:#f5fbf9}
-    .footer{margin-top:auto;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa;padding-bottom:0}
+    .footer{margin-top:auto;padding-top:10px;border-top:1px solid #e0ede9;display:flex;justify-content:space-between;font-size:9px;color:#aaa;padding-bottom:10mm}
+.print-page{page-break-inside:avoid;break-inside:avoid;margin-bottom:18mm}
+.print-page:not(:last-child){page-break-after:always;break-after:page}
+@media print{.print-page{margin-bottom:0}}
   </style>
   </head><body>
   <div class="header">
@@ -5027,7 +5030,6 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     ${dimTable ? `<div><div class="section-title">Dimensions</div>${dimTable}</div>` : ''}
   </div>
   <div class="footer">
-    <span>sunbeamslifestyle.com</span>
     <span>${product.name} — ${skuBase}</span>
     <span>${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}</span>
   </div>
@@ -6414,7 +6416,7 @@ ${message.trim()}` : 'Message / Notes:',
       const bodyEnd = sheet.lastIndexOf('</body>')
       const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
       const isLast = idx === toPrint.length - 1
-      return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+      return `<div class="print-page" style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
     }).join('')
     const firstSheet = generateProductSheet(toPrint[0], brandLogo, colorCollections)
     const headContent = firstSheet.slice(firstSheet.indexOf('<head>')+6, firstSheet.indexOf('</head>'))
@@ -6437,7 +6439,7 @@ ${message.trim()}` : 'Message / Notes:',
       const bodyEnd = sheet.lastIndexOf('</body>')
       const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
       const isLast = idx === filtered.length - 1
-      return `<div style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+      return `<div class="print-page" style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
     }).join('')
 
     // Use the CSS from the single product sheet + add page break support
