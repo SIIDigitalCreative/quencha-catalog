@@ -4972,7 +4972,7 @@ function generateProductSheet(product, brandLogo, colorCollections) {
     @page{size:A4 portrait;margin:16mm 12mm 14mm 12mm}
     html,body{font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;background:#fff}
     body{margin:0;padding:0}
-    .print-page{width:186mm;min-height:255mm;margin:0 auto;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:10mm;page-break-after:always;break-after:page}
+    .print-page{width:186mm;height:255mm;min-height:0;margin:0 auto;display:flex;flex-direction:column;padding-top:12mm;padding-bottom:10mm;page-break-after:always;break-after:page;overflow:hidden}
     .print-page:last-child{page-break-after:avoid;break-after:auto}
     .header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #279989;padding-bottom:10px;margin-bottom:16px}
     .logo{height:36px;object-fit:contain;max-width:160px}
@@ -6436,18 +6436,19 @@ ${message.trim()}` : 'Message / Notes:',
   const openProductsPdfWindow = useCallback((items, title = 'quencha-catalog') => {
     const toExport = Array.isArray(items) ? items.filter(Boolean) : []
     if (!toExport.length) return
-    const allBodies = toExport.map((p, idx) => {
+    const allBodies = toExport.map((p) => {
       const sheet = generateProductSheet(p, brandLogo, colorCollections)
       const bodyStart = sheet.indexOf('<body>') + 6
       const bodyEnd = sheet.lastIndexOf('</body>')
-      const bodyContent = sheet.slice(bodyStart, bodyEnd).trim()
-      const isLast = idx === toExport.length - 1
-      return `<div class="pdf-product-page" style="page-break-after:${isLast?'avoid':'always'};break-after:${isLast?'avoid':'page'}">${bodyContent}</div>`
+      // Use the product sheet's own .print-page as the actual PDF page.
+      // Do not wrap it in another page-break container, because the double page-break
+      // can create an extra blank page per product on iOS/Safari PDF output.
+      return sheet.slice(bodyStart, bodyEnd).trim()
     }).join('')
     const firstSheet = generateProductSheet(toExport[0], brandLogo, colorCollections)
     const headContent = firstSheet.slice(firstSheet.indexOf('<head>')+6, firstSheet.indexOf('</head>'))
     const safeTitle = String(title || 'quencha-catalog').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'quencha-catalog'
-    const html = `<!DOCTYPE html><html><head>${headContent}<title>${safeTitle}</title><style>@media print{.pdf-product-page{page-break-after:always;break-after:page}.pdf-product-page:last-child{page-break-after:avoid;break-after:auto}}</style></head><body>${allBodies}<script>window.addEventListener('load',function(){setTimeout(function(){window.focus();window.print();},600);});<\/script></body></html>`
+    const html = `<!DOCTYPE html><html><head>${headContent}<title>${safeTitle}</title><style>@media print{body>.print-page{page-break-after:always;break-after:page}body>.print-page:last-child{page-break-after:avoid;break-after:auto}}</style></head><body>${allBodies}<script>window.addEventListener('load',function(){setTimeout(function(){window.focus();window.print();},600);});<\/script></body></html>`
     const w = window.open('', '_blank')
     if (!w) { alert('Please allow popups to download PDF.'); return }
     w.document.open()
